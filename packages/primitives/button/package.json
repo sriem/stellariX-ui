@@ -1,31 +1,36 @@
 {
     "name": "@stellarix/button",
     "version": "0.0.1",
-    "description": "Button primitive component for StellarIX UI",
+    "description": "Framework-agnostic button component for StellarIX UI",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
     "sideEffects": false,
     "files": [
-        "dist"
+        "dist/**"
     ],
     "scripts": {
-        "build": "tsup",
+        "build": "tsup --minify",
         "dev": "tsup --watch",
-        "lint": "eslint \"src/**/*.ts*\"",
+        "lint": "eslint src/**/*.ts",
         "test": "vitest run",
-        "test:watch": "vitest",
-        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+        "test:watch": "vitest"
     },
+    "keywords": [
+        "ui",
+        "component",
+        "button",
+        "headless",
+        "framework-agnostic"
+    ],
     "dependencies": {
         "@stellarix/core": "workspace:*",
         "@stellarix/utils": "workspace:*"
     },
     "devDependencies": {
-        "eslint": "^8.46.0",
-        "eslint-config-stellarix": "*",
         "tsup": "^7.2.0",
         "typescript": "^5.1.6",
         "vitest": "^0.34.1"
-    }
+    },
+    "license": "MIT"
 }

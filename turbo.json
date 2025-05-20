@@ -20,13 +20,34 @@
         },
         "test": {
             "dependsOn": [
-                "build"
+                "^build"
             ],
             "inputs": [
                 "src/**/*.tsx",
                 "src/**/*.ts",
                 "test/**/*.ts",
                 "test/**/*.tsx"
+            ],
+            "outputs": []
+        },
+        "test:watch": {
+            "dependsOn": [
+                "^build"
+            ],
+            "cache": false
+        },
+        "test:coverage": {
+            "dependsOn": [
+                "^build"
+            ],
+            "inputs": [
+                "src/**/*.tsx",
+                "src/**/*.ts",
+                "test/**/*.ts",
+                "test/**/*.tsx"
+            ],
+            "outputs": [
+                "coverage/**"
             ]
         }
     }

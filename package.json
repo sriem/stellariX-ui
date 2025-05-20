@@ -3,13 +3,13 @@
     "version": "0.0.1",
     "description": "A next-generation framework-agnostic headless component library",
     "private": true,
-    "homepage": "https://github.com/yourusername/stellariX-ui",
+    "homepage": "https://github.com/sriem/stellariX-ui",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/yourusername/stellariX-ui.git"
+        "url": "git+https://github.com/sriem/stellariX-ui.git"
     },
     "bugs": {
-        "url": "https://github.com/yourusername/stellariX-ui/issues"
+        "url": "https://github.com/sriem/stellariX-ui/issues"
     },
     "keywords": [
         "ui",
@@ -36,19 +36,30 @@
         "build": "turbo run build",
         "dev": "turbo run dev",
         "lint": "turbo run lint",
-        "test": "turbo run test",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
         "format": "prettier --write \"**/*.{ts,tsx,md}\"",
         "prepare": "husky install"
     },
     "devDependencies": {
         "@changesets/cli": "^2.26.2",
+        "@testing-library/jest-dom": "^6.1.0",
+        "@testing-library/react": "^14.0.0",
+        "@testing-library/user-event": "^14.4.3",
+        "@vitejs/plugin-react": "^4.0.4",
+        "axe-core": "^4.7.3",
+        "c8": "^8.0.1",
         "eslint": "^8.46.0",
+        "husky": "^8.0.3",
+        "jsdom": "^22.1.0",
+        "lint-staged": "^13.2.3",
         "prettier": "^3.0.0",
         "turbo": "^1.10.12",
         "typescript": "^5.1.6",
-        "vitest": "^0.34.1",
-        "husky": "^8.0.3",
-        "lint-staged": "^13.2.3"
+        "vite": "^4.4.9",
+        "vite-tsconfig-paths": "^4.2.0",
+        "vitest": "^0.34.1"
     },
     "license": "MIT"
 }
