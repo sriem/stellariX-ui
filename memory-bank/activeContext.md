@@ -1,13 +1,13 @@
 # StellarIX UI - Active Context
 
 ## Current Focus
-- **Phase**: Testing Infrastructure Implementation
-- **Task**: TEST-001 - Testing Infrastructure Setup
+- **Phase**: Component Development
+- **Task**: COMP-001 - Dialog Component Implementation
 - **Priority Areas**: 
-  - Complete testing infrastructure setup
-  - Visual regression testing implementation
-  - Automated CI workflows
-  - Dialog component planning
+  - Dialog component implementation
+  - Accessibility features for Dialog component
+  - Focus management and keyboard interaction
+  - Testing and documentation
 
 ## Key Decisions
 - Using a Memory Bank system for project tracking and context preservation
@@ -15,32 +15,36 @@
 - Using a factory pattern for component creation
 - Implementing framework adapters for cross-framework compatibility
 - Starting with React as the first adapter implementation
-- Following headless component patterns similar to Radix UI and Headless UI
 - Using Vitest as the primary testing framework
 - Using Testing Library for component testing
-- Implementing accessibility testing with axe-core
+- Implementing accessibility testing with jest-axe
+- Using Storybook for component visualization and documentation
+- Using Storyshots for visual regression testing
+- **Always using Context7 for researching component patterns and best practices**
+- Implementing Dialog component as a compound component with subcomponents
+- Using portals for rendering dialog to avoid stacking context issues
 
 ## Open Questions
-- Best approach for visual regression testing (Storybook, Chromatic, etc.)
-- How to structure automated CI workflows with GitHub Actions
-- Best approach for Dialog component implementation (focus management, portal usage)
-- How to implement documentation system (Storybook, custom solution, etc.)
+- Best approach for Dialog component portal implementation
+- Strategy for Dialog component animations
 - Next framework adapter to implement (Vue, Svelte, others)
+- How to implement documentation system (Storybook is set up, but need content approach)
 
 ## Recent Progress
-- Set up Vitest configuration with vitest.config.ts and vitest.setup.ts
-- Created unit tests for Button state management (state.test.ts)
-- Created unit tests for Button logic layer (logic.test.ts)
-- Added React adapter tests (adapter.test.tsx)
-- Created integration tests for Button with React (button-react.test.tsx)
-- Set up accessibility testing with jest-axe (button-a11y.test.tsx)
-- Created comprehensive testing documentation (testing-guide.md)
-- Updated package.json files with testing scripts
-- Enhanced turbo.json for monorepo test configuration
+- Completed testing infrastructure setup with Vitest and Testing Library
+- Implemented unit tests for Button state and logic layers
+- Created integration tests for Button with React adapter
+- Set up accessibility testing with jest-axe
+- Installed and configured Storybook with essential addons
+- Created Button stories for Storybook
+- Implemented visual regression testing with Storyshots
+- Researched Dialog component patterns and accessibility requirements
+- Created creative phase documentation for Dialog component
+- Defined Dialog component API design and interfaces
 
 ## Next Actions
-- Implement visual regression testing when pnpm is available
-- Set up GitHub Actions for automated testing
-- Begin planning Dialog component implementation
-- Research documentation system options
-- Prepare for Vue adapter implementation 
+- Implement Dialog state layer
+- Create Dialog logic layer with focus management and keyboard handling
+- Implement scroll locking utility for Dialog
+- Create dialog portal utility
+- Develop React adapter for Dialog component 

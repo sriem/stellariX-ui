@@ -1,0 +1,28 @@
+{
+    "name": "@types/jest-axe",
+    "version": "3.5.9",
+    "description": "TypeScript definitions for jest-axe",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jest-axe",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "erbridge",
+            "githubUsername": "erbridge",
+            "url": "https://github.com/erbridge"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/jest-axe"
+    },
+    "scripts": {},
+    "dependencies": {
+        "@types/jest": "*",
+        "axe-core": "^3.5.5"
+    },
+    "typesPublisherContentHash": "d9aee4cd3fb72d3833d455d992c3ea159e9d1251d27af8fc208c26d3d8f5535a",
+    "typeScriptVersion": "4.5"
+}

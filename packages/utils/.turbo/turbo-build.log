@@ -1,0 +1,38 @@
+
+> @stellarix/utils@0.0.1 build D:\dev\stellariX-ui\packages\utils
+> tsup --minify
+
+[34mCLI[39m Building entry: src/index.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v7.2.0
+[34mCLI[39m Using tsup config: D:\dev\stellariX-ui\packages\utils\tsup.config.ts
+[34mCLI[39m Target: es2018
+[34mCLI[39m Cleaning output folder
+[34mCJS[39m Build start
+[34mESM[39m Build start
+[32mCJS[39m [1mdist\index.js     [22m[32m3.08 KB[39m
+[32mCJS[39m [1mdist\index.js.map [22m[32m13.17 KB[39m
+[32mCJS[39m ⚡️ Build success in 24ms
+[32mESM[39m [1mdist\index.mjs     [22m[32m2.39 KB[39m
+[32mESM[39m [1mdist\index.mjs.map [22m[32m12.67 KB[39m
+[32mESM[39m ⚡️ Build success in 26ms
+[34mDTS[39m Build start
+error TS5074: Option '--incremental' can only be specified using tsconfig, emitting to single file or when option '--tsBuildInfoFile' is specified.
+
+[31mError: error occured in dts build
+    at Worker.<anonymous> (D:\dev\stellariX-ui\node_modules\.pnpm\tsup@7.2.0_typescript@5.8.3\node_modules\tsup\dist\index.js:2294:26)
+    at Worker.emit (node:events:519:28)
+    at MessagePort.<anonymous> (node:internal/worker:263:53)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:820:20)
+    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)[39m
+[31mDTS[39m [31mBuild error[39m
+[31mRollupError: Failed to compile. Check the logs above.
+    at error (D:\dev\stellariX-ui\node_modules\.pnpm\rollup@3.29.5\node_modules\rollup\dist\shared\rollup.js:353:30)
+    at Object.error (D:\dev\stellariX-ui\node_modules\.pnpm\rollup@3.29.5\node_modules\rollup\dist\shared\rollup.js:1721:20)
+    at Object.error (D:\dev\stellariX-ui\node_modules\.pnpm\rollup@3.29.5\node_modules\rollup\dist\shared\rollup.js:25627:42)
+    at generateDtsFromTs (D:\dev\stellariX-ui\node_modules\.pnpm\tsup@7.2.0_typescript@5.8.3\node_modules\tsup\dist\rollup.js:7512:22)
+    at D:\dev\stellariX-ui\node_modules\.pnpm\tsup@7.2.0_typescript@5.8.3\node_modules\tsup\dist\rollup.js:7519:59
+    at _nullishCoalesce (D:\dev\stellariX-ui\node_modules\.pnpm\tsup@7.2.0_typescript@5.8.3\node_modules\tsup\dist\rollup.js:1:198)
+    at Object.transform (D:\dev\stellariX-ui\node_modules\.pnpm\tsup@7.2.0_typescript@5.8.3\node_modules\tsup\dist\rollup.js:7519:18)
+    at D:\dev\stellariX-ui\node_modules\.pnpm\rollup@3.29.5\node_modules\rollup\dist\shared\rollup.js:1914:40[39m
+ ELIFECYCLE  Command failed with exit code 1.

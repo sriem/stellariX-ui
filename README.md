@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="stelariX_Logo.png" alt="StellarIX UI Logo" width="250">
+</p>
+
 # StellarIX UI
 
 > A next-generation framework-agnostic headless component library

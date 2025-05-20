@@ -1,0 +1,16 @@
+{
+  "name": "turbo-windows-64",
+  "version": "1.13.4",
+  "description": "The windows-64 binary for turbo, a monorepo build system.",
+  "repository": "https://github.com/vercel/turbo",
+  "bugs": "https://github.com/vercel/turbo/issues",
+  "homepage": "https://turbo.build/repo",
+  "license": "MPL-2.0",
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "preferUnplugged": true
+}
