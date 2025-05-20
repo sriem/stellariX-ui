@@ -1,0 +1,27 @@
+{
+    "name": "@stellarix/utils",
+    "version": "0.0.1",
+    "description": "Utility functions for StellarIX UI",
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "lint": "eslint \"src/**/*.ts*\"",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    },
+    "devDependencies": {
+        "eslint": "^8.46.0",
+        "eslint-config-stellarix": "*",
+        "tsup": "^7.2.0",
+        "typescript": "^5.1.6",
+        "vitest": "^0.34.1"
+    }
+}

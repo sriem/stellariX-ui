@@ -1,0 +1,39 @@
+{
+    "name": "@stellarix/react",
+    "version": "0.0.1",
+    "description": "React adapter for StellarIX UI",
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "sideEffects": false,
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "lint": "eslint \"src/**/*.ts*\"",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    },
+    "dependencies": {
+        "@stellarix/core": "workspace:*",
+        "@stellarix/utils": "workspace:*"
+    },
+    "peerDependencies": {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0"
+    },
+    "devDependencies": {
+        "@types/react": "^18.2.0",
+        "@types/react-dom": "^18.2.0",
+        "eslint": "^8.46.0",
+        "eslint-config-stellarix": "*",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "tsup": "^7.2.0",
+        "typescript": "^5.1.6",
+        "vitest": "^0.34.1"
+    }
+}
