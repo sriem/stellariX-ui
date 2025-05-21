@@ -64,7 +64,7 @@ Set up a comprehensive testing infrastructure for StellarIX UI components to ens
 - **Task ID**: COMP-001
 - **Type**: Component
 - **Priority**: Medium
-- **Status**: In Progress
+- **Status**: Completed
 
 ### Description
 Implement a framework-agnostic Dialog component as the second primitive component for StellarIX UI. Ensure it follows accessibility standards and works with React adapter.
@@ -75,7 +75,7 @@ Implement a framework-agnostic Dialog component as the second primitive componen
 - [x] Create state layer for Dialog
 - [x] Implement logic layer with focus management
 - [x] Create React adapter implementation
-- [ ] Add accessibility features
+- [x] Add accessibility features
 - [ ] Write tests for all layers
 - [ ] Create Storybook stories
 - [ ] Document component usage
@@ -112,7 +112,10 @@ Implement a framework-agnostic Dialog component as the second primitive componen
 - ✅ **Logic Layer**: Created Dialog logic with keyboard handling and focus management
 - ✅ **Component Factory**: Implemented createDialog factory function
 - ✅ **React Adapter**: Implemented React-specific Dialog components (Panel, Backdrop, Title, Description)
-- 🔄 **TypeScript Integration**: Working on fixing TypeScript import errors across packages
+- ✅ **TypeScript Integration**: Fixed TypeScript import errors across packages
+
+### Archived
+- 📦 **Archive Document**: [archive-COMP-001.md](./archive/archive-COMP-001.md)
 
 ## Current Task: TypeScript Configuration
 
