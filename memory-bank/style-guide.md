@@ -2,11 +2,21 @@
 
 ## General Guidelines
 
-- **TypeScript First**: Use TypeScript for all code.
+- **TypeScript First**: Use TypeScript 5.0+ for all code.
 - **Explicit Types**: Prefer explicit type annotations over inferred types.
 - **Functional Approach**: Prefer functional programming patterns.
 - **Immutability**: Prefer immutable data structures.
 - **Pure Functions**: Avoid side effects where possible.
+
+## TypeScript Configuration
+
+- **Version**: TypeScript 5.0+ (latest stable version via `npm install -D typescript`)
+- **Target**: ES2017 or higher (required for async/await and other modern features)
+- **Module**: ESNext (for tree-shaking and better code splitting)
+- **ModuleResolution**: NodeNext or Bundler (for proper package exports resolution)
+- **Strict Mode**: Enabled for all TypeScript files
+- **ESLint Integration**: Required with strict configuration
+- **Declaration Files**: Generated for all packages
 
 ## Formatting
 

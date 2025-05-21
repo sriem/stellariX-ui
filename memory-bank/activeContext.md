@@ -1,10 +1,13 @@
 # StellarIX UI - Active Context
 
 ## Current Focus
-- **Phase**: Component Development
-- **Task**: COMP-001 - Dialog Component Implementation
+- **Phase**: Component Development & Infrastructure
+- **Tasks**: 
+  - COMP-001 - Dialog Component Implementation
+  - INFRA-001 - TypeScript Configuration
 - **Priority Areas**: 
   - Dialog component implementation
+  - TypeScript 5.0+ configuration standardization
   - Accessibility features for Dialog component
   - Focus management and keyboard interaction
   - Testing and documentation
@@ -23,12 +26,16 @@
 - **Always using Context7 for researching component patterns and best practices**
 - Implementing Dialog component as a compound component with subcomponents
 - Using portals for rendering dialog to avoid stacking context issues
+- **Using TypeScript 5.0+ with strict mode enabled across all packages**
+- **Standardizing TypeScript configuration for consistent development experience**
 
 ## Open Questions
 - Best approach for Dialog component portal implementation
 - Strategy for Dialog component animations
 - Next framework adapter to implement (Vue, Svelte, others)
 - How to implement documentation system (Storybook is set up, but need content approach)
+- Optimal TypeScript configuration for cross-framework compatibility
+- Best TypeScript path mapping strategy for monorepo packages
 
 ## Recent Progress
 - Completed testing infrastructure setup with Vitest and Testing Library
@@ -41,10 +48,17 @@
 - Researched Dialog component patterns and accessibility requirements
 - Created creative phase documentation for Dialog component
 - Defined Dialog component API design and interfaces
+- Researched latest TypeScript 5.0+ features and best practices
+- Updated style guide with TypeScript standards
+- Established coding conventions for TypeScript usage
 
 ## Next Actions
 - Implement Dialog state layer
 - Create Dialog logic layer with focus management and keyboard handling
 - Implement scroll locking utility for Dialog
 - Create dialog portal utility
-- Develop React adapter for Dialog component 
+- Develop React adapter for Dialog component
+- Create base tsconfig.json with shared settings
+- Configure strict type checking rules
+- Set up module resolution strategy for package exports
+- Configure path mapping for monorepo packages 

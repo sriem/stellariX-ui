@@ -12,6 +12,7 @@ StellarIX UI is a next-generation headless component framework that provides a t
 6. **Comprehensive Component Coverage**: A complete set of UI primitives and compound components covering all common UI patterns.
 7. **Developer-Centric Tooling**: Integrated developer tools, intelligent error messaging, and comprehensive documentation.
 8. **Optimized Bundle Size**: Tree-shakable architecture with micro-bundles for minimal impact on application size.
+9. **TypeScript-First Development**: Built with TypeScript 5.0+ for complete type safety and developer productivity across the entire codebase.
 
 ## Target Developers
 - Frontend developers across the JavaScript ecosystem
@@ -28,7 +29,7 @@ StellarIX UI is a next-generation headless component framework that provides a t
 5. **Performance First**: All design decisions must consider performance implications from the start.
 6. **Minimal Dependencies**: Reduce external dependencies to the absolute minimum.
 7. **Optimized Bundle Size**: Architecture must prioritize tree-shaking and code splitting.
-8. **Type Safety**: Comprehensive TypeScript support throughout the codebase.
+8. **Type Safety**: Comprehensive TypeScript 5.0+ support throughout the codebase with strict type checking.
 9. **Intuitive API Design**: APIs should be predictable and consistent across the library.
 10. **Future Compatibility**: Architecture must be adaptable to emerging frameworks and patterns.
 

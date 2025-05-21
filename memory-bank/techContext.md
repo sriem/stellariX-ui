@@ -71,11 +71,18 @@ const MyButton = createButton({ /* options */ }).connect(reactAdapter);
 ## Technical Specifications
 
 ### Core Technologies
-- **Language**: TypeScript 5.0+
+- **Language**: TypeScript 5.0+ (latest stable version via `npm install -D typescript`)
 - **Build System**: TBD (likely Rollup or Vite)
-- **Testing Framework**: TBD (considering Vitest)
+- **Testing Framework**: Vitest
 - **Package Management**: pnpm with workspace support
-- **Documentation**: TBD (considering Storybook)
+- **Documentation**: Storybook with comprehensive examples
+- **TypeScript Configuration**:
+  - Target: ES2017+ 
+  - Module: ESNext
+  - ModuleResolution: NodeNext or Bundler
+  - Strict: true
+  - Declaration: true
+  - Incremental: true
 
 ### Browser Support
 - Modern evergreen browsers (Chrome, Firefox, Safari, Edge)
