@@ -10,7 +10,8 @@
       "@stellarix/core/*": ["packages/core/src/*"],
       "@stellarix/utils/*": ["packages/utils/src/*"],
       "@stellarix/react/*": ["packages/adapters/react/src/*"],
-      "@stellarix/button/*": ["packages/primitives/button/src/*"]
+      "@stellarix/button/*": ["packages/primitives/button/src/*"],
+      "@stellarix/dialog/*": ["packages/primitives/dialog/src/*"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -50,6 +51,7 @@
     { "path": "./packages/utils" },
     { "path": "./packages/core" },
     { "path": "./packages/adapters/react" },
-    { "path": "./packages/primitives/button" }
+    { "path": "./packages/primitives/button" },
+    { "path": "./packages/primitives/dialog" }
   ]
 } 
