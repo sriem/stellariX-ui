@@ -1,23 +1,55 @@
 {
   "compilerOptions": {
-    "target": "es2018",
+    "target": "es2017",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
     "jsx": "react-jsx",
-    "incremental": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@stellarix/core/*": ["packages/core/src/*"],
+      "@stellarix/utils/*": ["packages/utils/src/*"],
+      "@stellarix/react/*": ["packages/adapters/react/src/*"],
+      "@stellarix/button/*": ["packages/primitives/button/src/*"]
+    },
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "composite": true,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "noEmit": true,
+    "incremental": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "isolatedModules": true
   },
-  "exclude": ["**/node_modules", "**/dist"],
-  "include": []
+  "exclude": ["**/node_modules", "**/dist", "**/examples"],
+  "include": [
+    "vitest.config.ts", 
+    "vitest.setup.ts"
+  ],
+  "references": [
+    { "path": "./packages/utils" },
+    { "path": "./packages/core" },
+    { "path": "./packages/adapters/react" },
+    { "path": "./packages/primitives/button" }
+  ]
 } 

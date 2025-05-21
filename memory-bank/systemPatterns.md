@@ -340,4 +340,108 @@ describe('Component: Button', () => {
     it('supports keyboard navigation');
   });
 });
+```
+
+## TypeScript Project Organization
+
+### TypeScript Configuration Structure
+
+The StellarIX UI monorepo follows a hierarchical TypeScript configuration pattern:
+
+```
+stellariX-ui/
+├── tsconfig.json                # Root configuration with path aliases
+├── packages/
+│   ├── tsconfig.base.json       # Base package configuration
+│   ├── core/
+│   │   └── tsconfig.json        # Extends base config
+│   ├── utils/
+│   │   └── tsconfig.json        # Extends base config
+│   ├── adapters/
+│   │   ├── react/
+│   │   │   └── tsconfig.json    # Extends base config
+│   │   └── ...
+│   └── primitives/
+│       ├── button/
+│       │   └── tsconfig.json    # Extends base config
+│       └── ...
+```
+
+### Module Path Resolution
+
+All imports use path aliases for improved maintainability:
+
+```typescript
+// Without path aliases
+import { createState } from '../../../../core/src/state';
+
+// With path aliases
+import { createState } from '@stellarix/core/state';
+```
+
+### Project References
+
+The project uses TypeScript Project References for build optimization and proper dependency tracking:
+
+```typescript
+// Root tsconfig.json
+{
+  "references": [
+    { "path": "./packages/utils" },
+    { "path": "./packages/core" },
+    { "path": "./packages/adapters/react" },
+    { "path": "./packages/primitives/button" }
+  ]
+}
+
+// Package tsconfig.json
+{
+  "references": [
+    { "path": "../../core" },
+    { "path": "../../utils" }
+  ]
+}
+```
+
+### Declaration Files
+
+TypeScript declaration files are exported from each package:
+
+```typescript
+// Package tsconfig.json
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true
+  }
+}
+```
+
+### Strict Type Checking
+
+All packages use TypeScript's strict type checking options:
+
+```typescript
+// Base tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "useUnknownInCatchVariables": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true
+  }
+}
 ``` 
