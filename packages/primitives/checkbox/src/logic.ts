@@ -36,9 +36,15 @@ export function createCheckboxLogic(
 ): LogicLayer<CheckboxState, CheckboxEvents> {
     // Create a simpler logic layer using the builder approach
     return new LogicLayerBuilder<CheckboxState, CheckboxEvents>()
-        .onEvent('change', (currentState, event: any) => {
-            // The event parameter contains the new checked state
-            const newChecked = currentState.checked; // Use current state since we just updated it
+        .onEvent('change', (currentState, payload: any) => {
+            // For change events, the payload might be the new checked value or an event
+            // If it's an explicit payload with checked value, use that
+            // Otherwise use the current state (since we just updated it)
+            let newChecked = currentState.checked;
+            
+            if (payload && typeof payload === 'object' && 'checked' in payload) {
+                newChecked = payload.checked;
+            }
             
             // Call user callback if provided
             if (options.onChange) {
@@ -50,9 +56,10 @@ export function createCheckboxLogic(
             // Update focus state
             state.setFocused(true);
             
-            // Call user callback if provided - extract event from payload
-            if (options.onFocus && payload && payload.event) {
-                options.onFocus(payload.event);
+            // Call user callback if provided - extract event from payload if needed
+            if (options.onFocus) {
+                const event = payload && payload.event ? payload.event : payload;
+                options.onFocus(event);
             }
             return null;
         })
@@ -60,9 +67,10 @@ export function createCheckboxLogic(
             // Update focus state
             state.setFocused(false);
             
-            // Call user callback if provided - extract event from payload
-            if (options.onBlur && payload && payload.event) {
-                options.onBlur(payload.event);
+            // Call user callback if provided - extract event from payload if needed
+            if (options.onBlur) {
+                const event = payload && payload.event ? payload.event : payload;
+                options.onBlur(event);
             }
             return null;
         })
@@ -130,13 +138,9 @@ export function createCheckboxLogic(
             return null;
         })
         .withInteraction('root', 'onFocus', (currentState, event: FocusEvent) => {
-            // Store the event in a way the event handler can access it
-            (event as any).__eventPayload = { event };
             return 'focus';
         })
         .withInteraction('root', 'onBlur', (currentState, event: FocusEvent) => {
-            // Store the event in a way the event handler can access it
-            (event as any).__eventPayload = { event };
             return 'blur';
         })
         .build();
