@@ -6,6 +6,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 StellarIX UI is a framework-agnostic headless component library that provides a single, consistent component implementation adaptable to React, Vue, Svelte, Solid, Qwik, Angular, and Web Components. The project uses a monorepo structure with pnpm workspaces.
 
+## 🎯 Critical Information Sources
+
+### Where to Find Project Information
+1. **Overall Plan**: `/plan.md` - Complete development plan with ultra-generic architecture
+2. **AI Agent Tasks**: `/AI-AGENT-DEVELOPMENT-PLAN.md` - Detailed 45-task implementation plan
+3. **Architecture Details**: `/memory-bank/architecture.md` - Three-layer architecture specs
+4. **Component Specs**: `/memory-bank/component-catalog.md` - All 30 components with variants
+5. **Development Priorities**: `/memory-bank/development-priorities.md` - Implementation order
+6. **System Patterns**: `/memory-bank/systemPatterns.md` - Coding conventions and patterns
+7. **Style Guide**: `/memory-bank/style-guide.md` - TypeScript and code style requirements
+8. **Testing Guide**: `/memory-bank/testing-guide.md` - Testing approach and coverage goals
+
+### Where to Track Current Work
+1. **Active Context**: `/memory-bank/activeContext.md` - Current development state
+2. **Task Tracking**: Use `TodoWrite` and `TodoRead` tools frequently
+3. **Completed Work**: Update after each feature completion
+4. **Test Results**: Document in component's test directory
+
+### Progress Tracking Rules
+1. **ALWAYS** use TodoWrite/TodoRead tools to track tasks
+2. **NEVER** skip testing after implementing a feature
+3. **UPDATE** activeContext.md after completing each component
+4. **COMMIT** after each successful feature + tests
+
 ## Essential Commands (State-of-the-Art 2025)
 
 ### Development
@@ -25,12 +49,33 @@ pnpm test:ui             # Open Vitest UI for visual testing
 pnpm --filter=@stellarix/[package] test  # Test specific package
 ```
 
-### Code Quality (Modern ESLint 9+ & TypeScript 5.7+)
+### Code Quality & Testing (MANDATORY AFTER EACH FEATURE)
 ```bash
-pnpm lint                 # Run ESLint 9+ with flat config
+# REQUIRED workflow after implementing ANY feature:
+pnpm test                 # Run all tests (MUST pass before commit)
+pnpm test:coverage       # Verify coverage goals (90%+ core, 80%+ components) 
+pnpm lint                 # Run ESLint 9+ with flat config (MUST pass)
+pnpm typecheck           # TypeScript 5.7+ strict checking (MUST pass)
 pnpm format              # Format with Prettier 3.3+
-pnpm typecheck           # TypeScript 5.7+ strict checking
-pnpm typecheck:watch     # Watch mode type checking
+
+# Component-specific testing:
+pnpm --filter=@stellarix/[package] test        # Test specific package
+pnpm --filter=@stellarix/[package] test:a11y   # Accessibility tests (required)
+pnpm --filter=@stellarix/[package] build       # Verify build works
+```
+
+### 🚨 MANDATORY Feature Completion Workflow
+```bash
+# After implementing ANY feature, component, or fix:
+1. pnpm test              # All tests MUST pass
+2. pnpm lint              # No linting errors allowed  
+3. pnpm typecheck         # TypeScript MUST compile
+4. TodoWrite update       # Mark current task as completed
+5. Update activeContext   # Document what was just completed
+6. git add . && git commit -m "feat: [component/feature description]"
+
+# NEVER skip testing - this is a hard requirement
+# NEVER commit without all checks passing
 ```
 
 ### Package-Specific Operations
@@ -39,13 +84,34 @@ pnpm --filter=@stellarix/button build    # Build specific package
 pnpm --filter=@stellarix/core dev        # Run dev mode for specific package
 ```
 
-## Architecture
+## 🏗️ Ultra-Generic Architecture (CRITICAL)
 
-The codebase follows a three-layer architecture:
+### Core Principle: Maximum Adapter Extensibility
+The architecture MUST allow ANY framework adapter to be added without modifying core code. This is the highest priority requirement.
 
-1. **State Layer**: Framework-agnostic reactive state management in `packages/core/src/state.ts`
-2. **Logic Layer**: Business logic and event handling in `packages/core/src/logic.ts`
-3. **Presentation Layer**: Framework-specific adapters in `packages/adapters/`
+### Three-Layer Architecture
+1. **State Layer**: Framework-agnostic reactive state (`packages/core/src/state.ts`)
+2. **Logic Layer**: Pure business logic (`packages/core/src/logic.ts`) 
+3. **Presentation Layer**: Framework-specific adapters (`packages/adapters/`)
+
+### Minimal Adapter Interface (NEVER change this)
+```typescript
+interface FrameworkAdapter {
+  name: string;
+  version: string;
+  createComponent<TState, TLogic>(
+    componentCore: ComponentCore<TState, TLogic>
+  ): any;
+  optimize?: (component: any) => any;
+}
+```
+
+### Framework-Agnostic Rules
+- ❌ NEVER import framework code in `/packages/core/`
+- ❌ NEVER use framework-specific patterns in core
+- ✅ ALWAYS use pure functions in core
+- ✅ ALWAYS make state updates immutable
+- ✅ ALWAYS communicate via events, not direct calls
 
 ### Component Creation Pattern
 ```typescript
@@ -254,3 +320,41 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
 ```
 
 Remember to check memory-bank documentation for detailed architectural decisions and patterns specific to each component.
+
+## 📋 Work Tracking & Current Status
+
+### How to Check Current Status
+```bash
+# Always check current work state:
+TodoRead                 # See active tasks and what's completed
+cat memory-bank/activeContext.md    # Read current development context
+git status              # Check uncommitted changes
+pnpm test               # Verify current state is stable
+```
+
+### Progress Documentation Requirements
+1. **Before Starting Work**: Use `TodoWrite` to create tasks for what you'll implement
+2. **During Work**: Update todos with `in_progress` status
+3. **After Completing Feature**: 
+   - Mark todo as `completed`
+   - Update `memory-bank/activeContext.md` with what was accomplished
+   - Run full test suite and commit if all pass
+
+### Current Work Location Tracking
+- **Active Tasks**: Check `TodoRead` output
+- **Component Status**: `/memory-bank/component-catalog.md` shows all 30 components
+- **Implementation Plan**: `/AI-AGENT-DEVELOPMENT-PLAN.md` has detailed task breakdown
+- **What's Built**: Check `packages/primitives/*/src/` directories
+- **What's Tested**: Look for `*.test.ts` files and run `pnpm test:coverage`
+
+### Implementation Priority Order (from memory-bank)
+**Phase 1 (P0 - Foundation)**: Button, Container, Divider, Spinner, Input, Checkbox, Radio
+**Phase 2 (P1 - Core)**: Toggle, Alert, Badge, Avatar, Textarea, Card, Popover, Tooltip, Dialog, Menu, Tabs, Select, Accordion, ProgressBar
+**Phase 3 (P2 - Standard)**: Slider, Pagination, Breadcrumb, NavigationMenu, Stepper, FileUpload, DatePicker, Table, Calendar
+
+### Testing Requirements Per Component
+- ✅ Unit tests (`src/*.test.ts`) - 90%+ coverage for core, 80%+ for components
+- ✅ Integration tests (`test/*-react.test.tsx`) - Framework adapter testing  
+- ✅ Accessibility tests (`test/*-a11y.test.tsx`) - WCAG 2.1 AA compliance
+- ✅ Build verification (`pnpm build` succeeds)
+- ✅ Type checking (`pnpm typecheck` passes)
