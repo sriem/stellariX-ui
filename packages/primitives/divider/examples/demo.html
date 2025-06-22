@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StellarIX UI - Divider Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #f8fafc;
+        }
+        
+        h1, h2 {
+            color: #1e293b;
+        }
+        
+        .demo-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .demo-item {
+            margin: 2rem 0;
+        }
+        
+        .vertical-demo {
+            display: flex;
+            align-items: center;
+            height: 100px;
+            gap: 2rem;
+        }
+        
+        /* Divider styles based on the component logic */
+        .divider-horizontal {
+            width: 100%;
+            height: 1px;
+            background-color: #e2e8f0;
+            margin: 1rem 0;
+            border: none;
+        }
+        
+        .divider-vertical {
+            height: 100%;
+            width: 1px;
+            background-color: #e2e8f0;
+            margin: 0 1rem;
+        }
+        
+        .divider-dashed {
+            background-color: transparent;
+            border-top: 1px dashed #e2e8f0;
+        }
+        
+        .divider-dotted {
+            background-color: transparent;
+            border-top: 1px dotted #e2e8f0;
+        }
+        
+        .divider-thick {
+            height: 3px;
+            background-color: #3182ce;
+        }
+        
+        .divider-with-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .divider-with-label hr {
+            flex: 1;
+            height: 1px;
+            background-color: #e2e8f0;
+            border: none;
+        }
+        
+        .divider-label {
+            color: #64748b;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+        
+        code {
+            background: #f1f5f9;
+            padding: 0.125rem 0.25rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>StellarIX UI - Component Demos</h1>
+    
+    <div class="demo-section">
+        <h2>Divider Component</h2>
+        
+        <div class="demo-item">
+            <h3>Basic Horizontal Divider</h3>
+            <p>Default divider with <code>orientation="horizontal"</code></p>
+            <hr class="divider-horizontal" role="separator" aria-orientation="horizontal">
+            <p>Content continues after the divider</p>
+        </div>
+        
+        <div class="demo-item">
+            <h3>Dashed Divider</h3>
+            <p>Divider with <code>variant="dashed"</code></p>
+            <hr class="divider-horizontal divider-dashed" role="separator" aria-orientation="horizontal">
+        </div>
+        
+        <div class="demo-item">
+            <h3>Dotted Divider</h3>
+            <p>Divider with <code>variant="dotted"</code></p>
+            <hr class="divider-horizontal divider-dotted" role="separator" aria-orientation="horizontal">
+        </div>
+        
+        <div class="demo-item">
+            <h3>Thick Colored Divider</h3>
+            <p>Divider with <code>thickness="3px" color="#3182ce"</code></p>
+            <hr class="divider-horizontal divider-thick" role="separator" aria-orientation="horizontal">
+        </div>
+        
+        <div class="demo-item">
+            <h3>Divider with Label</h3>
+            <p>Divider with centered label</p>
+            <div class="divider-with-label">
+                <hr role="separator" aria-orientation="horizontal">
+                <span class="divider-label">OR</span>
+                <hr role="separator" aria-orientation="horizontal">
+            </div>
+        </div>
+        
+        <div class="demo-item">
+            <h3>Vertical Divider</h3>
+            <p>Divider with <code>orientation="vertical"</code></p>
+            <div class="vertical-demo">
+                <div>Left content</div>
+                <div class="divider-vertical" role="separator" aria-orientation="vertical"></div>
+                <div>Right content</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Button Component (if implemented)</h2>
+        <p>The button component would appear here once the React adapter is fully connected.</p>
+        
+        <!-- Example of what buttons might look like -->
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+            <button style="background: #3182ce; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                Primary Button
+            </button>
+            <button style="background: #718096; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                Secondary Button
+            </button>
+            <button style="background: transparent; color: #3182ce; border: 1px solid #3182ce; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                Outline Button
+            </button>
+            <button style="background: transparent; color: #3182ce; border: none; padding: 0.5rem 1rem; border-radius: 4px; font-weight: bold; cursor: pointer;">
+                Ghost Button
+            </button>
+        </div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>Component Status</h2>
+        <ul>
+            <li>✅ Button - Core logic implemented</li>
+            <li>✅ Container - Core logic implemented</li>
+            <li>✅ Divider - Fully implemented with tests</li>
+            <li>🚧 Spinner - In progress</li>
+            <li>⏳ Input - Partially implemented</li>
+            <li>⏳ Checkbox - Pending</li>
+            <li>⏳ Radio - Pending</li>
+        </ul>
+    </div>
+</body>
+</html>
