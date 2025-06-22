@@ -41,3 +41,6 @@ next-env.d.ts
 .nextjscollectorignore
 .nextjs-codebase-context.txt
 logs/
+
+# turbo
+.turbo/cache/
