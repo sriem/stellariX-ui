@@ -6,10 +6,13 @@
   },
   "rules": {
     "critical": [
-      "NEVER call state.getState() inside logic layer methods",
-      "NEVER call state.getState() in reactive contexts", 
-      "NEVER call state.getState() in getInteractionHandlers or getA11yProps",
-      "ALWAYS use the state parameter passed to functions in logic layer",
+      "🚨 NEVER call state.getState() ANYWHERE in logic layer files - CAUSES INFINITE LOOPS",
+      "🚨 NEVER call state.getState() in event handlers - FORBIDDEN",
+      "🚨 NEVER call state.getState() in getInteractionHandlers() - FORBIDDEN", 
+      "🚨 NEVER call state.getState() in getA11yProps() - FORBIDDEN",
+      "🚨 NEVER call state.getState() in interactions generator - FORBIDDEN",
+      "ALWAYS use (currentState, handleEvent) parameters in interactions",
+      "ALWAYS use (state) parameter in a11y functions",
       "ALWAYS set dts: false in tsup.config.ts",
       "ALWAYS run tests with timeout protection",
       "ALWAYS create Storybook stories after implementing components"

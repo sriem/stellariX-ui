@@ -1,6 +1,22 @@
 /**
  * Template Component Logic
  * Business logic and event handling
+ * 
+ * 🚨 CRITICAL WARNING: NEVER call state.getState() in this file!
+ * 
+ * ❌ FORBIDDEN PATTERNS:
+ * - const currentState = state.getState(); // CAUSES INFINITE LOOPS!
+ * - state.getState() inside event handlers
+ * - state.getState() inside getA11yProps()
+ * - state.getState() inside getInteractionHandlers()
+ * 
+ * ✅ CORRECT PATTERNS:
+ * - Use (currentState, handleEvent) parameters in interactions
+ * - Use (state) parameter in a11y functions
+ * - Call state setters directly: state.setValue(), state.setActive()
+ * 
+ * WHY: Calling state.getState() in reactive contexts creates circular dependencies
+ * that cause infinite loops and crash the application.
  */
 
 import { createComponentLogic } from '@stellarix/core';

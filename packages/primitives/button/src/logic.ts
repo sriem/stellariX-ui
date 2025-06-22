@@ -12,15 +12,7 @@ export function createButtonLogic(
     return createComponentLogic<ButtonState, ButtonEvents>('Button', {
         events: {
             click: (payload: { event: MouseEvent }) => {
-                const currentState = state.getState();
-                
-                // Don't handle click if disabled or loading
-                if (currentState.disabled || currentState.loading) {
-                    payload.event.preventDefault();
-                    return;
-                }
-                
-                // Call external onClick handler
+                // Call external onClick handler - disabled/loading checks done at interaction level
                 if (options.onClick) {
                     options.onClick(payload.event);
                 }
@@ -43,21 +35,17 @@ export function createButtonLogic(
             },
             
             keydown: (payload: { event: KeyboardEvent }) => {
-                const currentState = state.getState();
-                
-                // Handle Space and Enter keys
+                // Handle Space and Enter keys - disabled/loading checks done at interaction level
                 if (payload.event.key === ' ' || payload.event.key === 'Enter') {
-                    if (!currentState.disabled && !currentState.loading) {
-                        payload.event.preventDefault();
-                        
-                        // Simulate click
-                        if (options.onClick) {
-                            const syntheticEvent = new MouseEvent('click', {
-                                bubbles: true,
-                                cancelable: true
-                            });
-                            options.onClick(syntheticEvent);
-                        }
+                    payload.event.preventDefault();
+                    
+                    // Simulate click
+                    if (options.onClick) {
+                        const syntheticEvent = new MouseEvent('click', {
+                            bubbles: true,
+                            cancelable: true
+                        });
+                        options.onClick(syntheticEvent);
                     }
                 }
             }
@@ -75,25 +63,29 @@ export function createButtonLogic(
         },
         
         interactions: {
-            root: (_currentState) => ({
+            root: (currentState, handleEvent) => ({
                 onClick: (event: MouseEvent) => {
-                    // This will trigger the 'click' event handler
-                    return event;
+                    // Check disabled/loading state here
+                    if (currentState.disabled || currentState.loading) {
+                        event.preventDefault();
+                        return;
+                    }
+                    handleEvent('click', { event });
                 },
                 onFocus: (event: FocusEvent) => {
-                    // This will trigger the 'focus' event handler
-                    return event;
+                    handleEvent('focus', { event });
                 },
                 onBlur: (event: FocusEvent) => {
-                    // This will trigger the 'blur' event handler
-                    return event;
+                    handleEvent('blur', { event });
                 },
                 onKeyDown: (event: KeyboardEvent) => {
-                    // This will trigger the 'keydown' event handler
-                    return event;
+                    // Check disabled/loading state here
+                    if (currentState.disabled || currentState.loading) {
+                        return;
+                    }
+                    handleEvent('keydown', { event });
                 },
                 onMouseDown: (_event: MouseEvent) => {
-                    const currentState = state.getState();
                     if (!currentState.disabled && !currentState.loading) {
                         state.setPressed(true);
                     }

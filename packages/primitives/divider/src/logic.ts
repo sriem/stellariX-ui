@@ -28,14 +28,10 @@ export function createDividerLogic(
         },
         
         getA11yProps: (elementId: string) => {
-            if (!connectedStore || !initialized) return {};
-            
-            const currentState = connectedStore.getState();
-            
+            // Return static props - component should read state directly
             if (elementId === 'root') {
                 const a11yProps: Record<string, any> = {
                     'role': 'separator',
-                    'aria-orientation': currentState.orientation,
                 };
                 
                 // Add label if provided
@@ -56,50 +52,16 @@ export function createDividerLogic(
         },
         
         getInteractionHandlers: (elementId: string) => {
-            if (!connectedStore || !initialized) return {};
-            
-            const currentState = connectedStore.getState();
-            
+            // Return static handlers only - component should read state directly for styling
             if (elementId === 'root') {
-                const styles: Record<string, any> = {};
-                
-                // Apply orientation-specific styles
-                if (currentState.orientation === 'horizontal') {
-                    styles.width = '100%';
-                    styles.height = options.thickness || '1px';
-                    styles.marginTop = options.spacing || '1rem';
-                    styles.marginBottom = options.spacing || '1rem';
-                } else {
-                    styles.height = '100%';
-                    styles.width = options.thickness || '1px';
-                    styles.marginLeft = options.spacing || '1rem';
-                    styles.marginRight = options.spacing || '1rem';
-                }
-                
-                // Apply variant styles
-                if (currentState.variant === 'dashed') {
-                    styles.borderStyle = 'dashed';
-                } else if (currentState.variant === 'dotted') {
-                    styles.borderStyle = 'dotted';
-                }
-                
-                // Apply color if provided
-                if (options.color) {
-                    styles.backgroundColor = options.color;
-                    styles.borderColor = options.color;
-                }
-                
                 return {
-                    style: styles,
-                    'data-orientation': currentState.orientation,
-                    'data-variant': currentState.variant,
-                    'data-has-label': currentState.hasLabel,
+                    // No event handlers for divider - it's a purely visual component
                 };
             }
             
             if (elementId === 'label') {
                 return {
-                    'data-position': currentState.labelPosition,
+                    // No event handlers for label either
                 };
             }
             

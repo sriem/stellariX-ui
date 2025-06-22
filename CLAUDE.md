@@ -376,9 +376,22 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
    - Always add loop counters/timeouts as safeguards
    - No React hooks that cause cascading re-renders
    - ALWAYS test with limited iterations first
-   - **CRITICAL**: In logic layer's `interactions` generator, NEVER call `state.getState()` - use the `state` parameter passed to the function instead to avoid circular dependencies
-   - **FORBIDDEN**: NEVER call `state.getState()` inside ANY logic layer method (getInteractionHandlers, getA11yProps, etc.) - this causes infinite loops
-   - **ALWAYS**: Pass state as a parameter or have components read state directly, never call getState() in reactive contexts
+   
+   **🚨 CRITICAL: state.getState() INFINITE LOOP PREVENTION**:
+   - **FORBIDDEN**: NEVER call `state.getState()` inside ANY logic layer method
+   - **FORBIDDEN**: NEVER call `state.getState()` in event handlers
+   - **FORBIDDEN**: NEVER call `state.getState()` in getInteractionHandlers()
+   - **FORBIDDEN**: NEVER call `state.getState()` in getA11yProps()
+   - **FORBIDDEN**: NEVER call `state.getState()` in interactions generator
+   - **FORBIDDEN**: NEVER call `state.getState()` in reactive contexts
+   
+   **✅ CORRECT PATTERNS**:
+   - Use `(currentState, handleEvent)` parameters in interactions
+   - Use `(state)` parameter in a11y functions  
+   - Call state setters directly: `state.setValue()`, `state.setActive()`
+   - Let components read state directly for dynamic values
+   
+   **WHY**: Calling `state.getState()` in reactive contexts creates circular dependencies that cause infinite loops and crash the application. This has happened 6+ times and MUST be prevented.
 
 3. **Memory Leaks**:
    - Always cleanup subscriptions
