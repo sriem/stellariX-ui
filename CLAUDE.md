@@ -70,13 +70,62 @@ pnpm --filter=@stellarix/[package] build       # Verify build works
 1. pnpm test              # All tests MUST pass
 2. pnpm lint              # No linting errors allowed  
 3. pnpm typecheck         # TypeScript MUST compile
-4. TodoWrite update       # Mark current task as completed
-5. Update activeContext   # Document what was just completed
-6. git add . && git commit -m "feat: [component/feature description]"
+4. Create Storybook story # REQUIRED: Show ALL features and edge cases
+5. TodoWrite update       # Mark current task as completed
+6. Update activeContext   # Document what was just completed
+7. git add . && git commit -m "feat: [component/feature description]"
 
 # NEVER skip testing - this is a hard requirement
 # NEVER commit without all checks passing
+# NEVER skip creating stories - visual testing is mandatory
 ```
+
+### 📖 Storybook Story Requirements (MANDATORY)
+
+After implementing each primitive component, you MUST create a comprehensive Storybook story that:
+
+1. **Shows ALL Component Features**:
+   - Every variant (primary, secondary, outline, etc.)
+   - Every size option (sm, md, lg)
+   - Every state (normal, hover, focus, disabled, loading, error)
+   - Every prop combination that affects behavior
+
+2. **Tests Boundary Conditions**:
+   - Disabled inputs should NOT be interactive
+   - Readonly inputs should display text but NOT allow editing
+   - Loading states should prevent user interaction
+   - Error states should display proper messaging
+   - Required fields should show validation
+
+3. **Story Structure**:
+   ```tsx
+   // Individual stories for each variant/state
+   export const Default = { ... }
+   export const Disabled = { ... }
+   export const Readonly = { ... }
+   export const Loading = { ... }
+   export const Error = { ... }
+   
+   // Showcase story showing ALL variations
+   export const Showcase = {
+     render: () => (
+       // Grid showing all variants, sizes, states
+     )
+   }
+   ```
+
+4. **Interactive Behavior Validation**:
+   - Readonly inputs must have value but prevent changes
+   - Disabled elements must not respond to clicks
+   - Loading states must block interaction
+   - Focus/blur must work correctly
+   - Keyboard navigation must be proper
+
+5. **Edge Case Testing**:
+   - Long text overflow
+   - Empty states
+   - Invalid prop combinations
+   - Accessibility features
 
 ### Package-Specific Operations
 ```bash
@@ -327,6 +376,9 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
    - Always add loop counters/timeouts as safeguards
    - No React hooks that cause cascading re-renders
    - ALWAYS test with limited iterations first
+   - **CRITICAL**: In logic layer's `interactions` generator, NEVER call `state.getState()` - use the `state` parameter passed to the function instead to avoid circular dependencies
+   - **FORBIDDEN**: NEVER call `state.getState()` inside ANY logic layer method (getInteractionHandlers, getA11yProps, etc.) - this causes infinite loops
+   - **ALWAYS**: Pass state as a parameter or have components read state directly, never call getState() in reactive contexts
 
 3. **Memory Leaks**:
    - Always cleanup subscriptions

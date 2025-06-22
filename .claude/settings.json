@@ -1,0 +1,61 @@
+{
+  "project": {
+    "name": "StellarIX UI",
+    "type": "monorepo",
+    "description": "Framework-agnostic headless component library"
+  },
+  "rules": {
+    "critical": [
+      "NEVER call state.getState() inside logic layer methods",
+      "NEVER call state.getState() in reactive contexts", 
+      "NEVER call state.getState() in getInteractionHandlers or getA11yProps",
+      "ALWAYS use the state parameter passed to functions in logic layer",
+      "ALWAYS set dts: false in tsup.config.ts",
+      "ALWAYS run tests with timeout protection",
+      "ALWAYS create Storybook stories after implementing components"
+    ],
+    "forbidden_patterns": [
+      {
+        "pattern": "state.getState()",
+        "context": "inside logic layer methods",
+        "reason": "Causes infinite loops in reactive contexts"
+      },
+      {
+        "pattern": "dts: true",
+        "context": "tsup.config.ts",
+        "reason": "DTS generation fails due to module resolution"
+      },
+      {
+        "pattern": "while(true)",
+        "context": "anywhere without break condition",
+        "reason": "Creates infinite loops"
+      }
+    ],
+    "required_patterns": [
+      {
+        "pattern": "timeout [seconds]s [command]",
+        "context": "when running tests or builds",
+        "reason": "Prevents hanging on infinite loops"
+      },
+      {
+        "pattern": "use state parameter",
+        "context": "logic layer's interactions and a11y generators",
+        "reason": "Avoids circular dependencies"
+      }
+    ]
+  },
+  "testing": {
+    "runner": "vitest",
+    "environment": "happy-dom",
+    "timeout": 30,
+    "coverage": {
+      "core": 90,
+      "components": 80
+    }
+  },
+  "build": {
+    "tool": "tsup",
+    "dts": false,
+    "external": ["@stellarix/core", "@stellarix/utils"]
+  }
+}
