@@ -140,8 +140,8 @@ const createInputComponent = (args) => {
     return (
       <div style={{ width: '100%' }}>
         <input
-          {...handlers}
           {...a11yProps}
+          {...handlers}
           type={state.type}
           style={styles}
           placeholder={args.placeholder}
@@ -149,11 +149,6 @@ const createInputComponent = (args) => {
           readOnly={state.readonly}
           required={state.required}
           value={state.value}
-          onChange={handlers.onChange}
-          onFocus={handlers.onFocus}
-          onBlur={handlers.onBlur}
-          onInput={handlers.onInput}
-          onKeyDown={handlers.onKeyDown}
         />
         {state.error && state.errorMessage && (
           <div style={{ 
@@ -295,8 +290,8 @@ export const Readonly = {
         return (
           <div style={{ width: '100%' }}>
             <input
-              {...handlers}
               {...a11yProps}
+              {...handlers}
               type={state.type}
               style={baseStyles}
               placeholder="Read-only input"
@@ -304,11 +299,6 @@ export const Readonly = {
               readOnly={state.readonly}
               required={state.required}
               value={state.value}
-              onChange={handlers.onChange}
-              onFocus={handlers.onFocus}
-              onBlur={handlers.onBlur}
-              onInput={handlers.onInput}
-              onKeyDown={handlers.onKeyDown}
             />
           </div>
         );
@@ -456,19 +446,14 @@ export const Showcase = {
               
               return (
                 <input
-                  {...handlers}
                   {...a11yProps}
+                  {...handlers}
                   type={state.type}
                   style={styles}
                   disabled={state.disabled}
                   readOnly={state.readonly}
                   required={state.required}
                   value={state.value}
-                  onChange={handlers.onChange}
-                  onFocus={handlers.onFocus}
-                  onBlur={handlers.onBlur}
-                  onInput={handlers.onInput}
-                  onKeyDown={handlers.onKeyDown}
                 />
               );
             };

@@ -18,20 +18,13 @@ export function createInputLogic(
     state: InputStateStore,
     options: InputOptions = {}
 ): LogicLayer<InputState, InputEvents> {
-    // Cache the previous value for change detection
-    let previousValue = state.getState().value;
+    // Cache the previous value for change detection - get it once at initialization
+    let previousValue = '';
     
     return createComponentLogic<InputState, InputEvents>('Input', {
         // Event handlers
         events: {
             change: (payload: { value: string; previousValue: string }) => {
-                const currentState = state.getState();
-                
-                // Don't process if disabled or readonly
-                if (currentState.disabled || currentState.readonly) {
-                    return;
-                }
-                
                 // Update state
                 state.setValue(payload.value);
                 
@@ -42,13 +35,6 @@ export function createInputLogic(
             },
             
             input: (payload: { value: string }) => {
-                const currentState = state.getState();
-                
-                // Don't process if disabled or readonly
-                if (currentState.disabled || currentState.readonly) {
-                    return;
-                }
-                
                 // Update state
                 state.setValue(payload.value);
                 
@@ -79,13 +65,6 @@ export function createInputLogic(
             },
             
             keydown: (payload: { event: KeyboardEvent }) => {
-                const currentState = state.getState();
-                
-                // Don't process if disabled or readonly
-                if (currentState.disabled || currentState.readonly) {
-                    return;
-                }
-                
                 // Handle Enter key for submit
                 if (payload.event.key === 'Enter') {
                     // Trigger submit event with current value
@@ -99,13 +78,6 @@ export function createInputLogic(
             },
             
             submit: (payload: { value: string }) => {
-                const currentState = state.getState();
-                
-                // Don't process if disabled or readonly
-                if (currentState.disabled || currentState.readonly) {
-                    return;
-                }
-                
                 // Submit is handled by the form or parent component
                 // This event is just for notification
             },
@@ -126,6 +98,11 @@ export function createInputLogic(
         interactions: {
             root: (currentState, handleEvent) => ({
                 onChange: (event: Event) => {
+                    // Check state here to avoid processing when disabled/readonly
+                    if (currentState.disabled || currentState.readonly) {
+                        return;
+                    }
+                    
                     const target = event.target as HTMLInputElement;
                     const newValue = target.value;
                     
@@ -139,6 +116,11 @@ export function createInputLogic(
                 },
                 
                 onInput: (event: Event) => {
+                    // Check state here to avoid processing when disabled/readonly
+                    if (currentState.disabled || currentState.readonly) {
+                        return;
+                    }
+                    
                     const target = event.target as HTMLInputElement;
                     handleEvent('input', { value: target.value });
                 },
@@ -155,27 +137,10 @@ export function createInputLogic(
                     handleEvent('keydown', { event });
                     
                     // Handle Enter key for submit
-                    if (event.key === 'Enter') {
+                    if (event.key === 'Enter' && !currentState.disabled && !currentState.readonly) {
                         handleEvent('submit', { value: currentState.value });
                     }
                 },
-                
-                // Additional DOM props for the input element
-                type: currentState.type,
-                value: currentState.value,
-                disabled: currentState.disabled,
-                readOnly: currentState.readonly,
-                required: currentState.required,
-                placeholder: options.placeholder,
-                name: options.name,
-                id: options.id,
-                autoComplete: options.autocomplete,
-                minLength: options.minLength,
-                maxLength: options.maxLength,
-                min: options.min,
-                max: options.max,
-                step: options.step,
-                pattern: options.pattern,
             }),
         },
         
