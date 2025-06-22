@@ -16,6 +16,40 @@ Before starting development, verify:
 
 ---
 
+## Development Principles & Template Usage
+
+### Component Template System
+
+**CRITICAL**: All components in this project MUST use the component template system to ensure consistency and quality.
+
+1. **Template-First Development**:
+   - Never create components from scratch
+   - Always start with: `cp -r templates/component-template packages/primitives/[component-name]`
+   - Follow `/templates/COMPONENT_CREATION_GUIDE.md` for each new component
+
+2. **Continuous Template Improvement**:
+   - After successfully implementing a component with new patterns:
+     - Extract reusable patterns back to the template
+     - Update `/templates/component-template/` with improvements
+     - Document new patterns in the guide
+   - This creates a virtuous cycle of improvement
+
+3. **Testing Safety**:
+   - Always use `timeout 30s pnpm test` to prevent infinite loops
+   - This protects against circular dependencies and runaway tests
+   - If tests timeout, investigate immediately
+
+4. **Pattern Evolution Process**:
+   ```
+   1. Build working component using template
+   2. Identify successful new patterns
+   3. Extract patterns back to template
+   4. Update template documentation
+   5. Next component benefits from improvements
+   ```
+
+---
+
 ## Phase 1: Foundation Setup (Tasks 1-10)
 
 ### Task 1: Clean and Organize Repository
@@ -1979,10 +2013,50 @@ rm test-integration.tsx
 
 ## Phase 2: Core Components Implementation (Tasks 11-30)
 
+### 🚨 CRITICAL: Component Implementation Template Instructions
+
+**ALL COMPONENTS MUST BE CREATED USING THE COMPONENT TEMPLATE**
+
+Before implementing any component in this phase:
+
+1. **Use the Component Template**: 
+   ```bash
+   # ALWAYS start by copying the template
+   cp -r templates/component-template packages/primitives/[component-name]
+   
+   # Example for Container component:
+   cp -r templates/component-template packages/primitives/container
+   ```
+
+2. **Follow the Guide**:
+   - Refer to `/templates/COMPONENT_CREATION_GUIDE.md` for step-by-step instructions
+   - The template provides the correct ultra-generic architecture structure
+   - All files are pre-configured with proper exports and patterns
+
+3. **Test with Timeout**:
+   ```bash
+   # Always test with timeout to prevent infinite loops
+   timeout 30s pnpm test
+   ```
+
+4. **Template Evolution Principle**:
+   - When we create similar components, we should:
+     - First build one working component
+     - Then extract patterns and improvements back to the template
+     - Update `/templates/component-template/` with the new patterns
+     - This ensures continuous improvement and consistency
+
 ### Task 11: Implement Container Component
 **Complexity: 2/5 | Duration: 45 min | Dependencies: Task 10**
 
-[Similar detailed structure for each component following the ultra-generic pattern...]
+**Steps:**
+1. Copy template: `cp -r templates/component-template packages/primitives/container`
+2. Update component name from "Component" to "Container" in all files
+3. Implement Container-specific state, logic, and types
+4. Test with: `timeout 30s pnpm --filter=@stellarix/container test`
+5. Build and verify: `pnpm --filter=@stellarix/container build`
+
+[Continue with Container-specific implementation details...]
 
 ---
 

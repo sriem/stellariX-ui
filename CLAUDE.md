@@ -369,6 +369,53 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
 
 Remember to check memory-bank documentation for detailed architectural decisions and patterns specific to each component.
 
+## 🎯 Component Development Process
+
+### CRITICAL: Template-First Development
+
+**ALWAYS use the component template** when creating new components:
+
+1. **Template Location**: `/templates/component-template/`
+2. **Creation Guide**: `/templates/COMPONENT_CREATION_GUIDE.md`
+3. **Process**:
+   ```bash
+   # 1. Copy template to new component
+   cp -r templates/component-template packages/primitives/[component-name]
+   
+   # 2. Follow the guide to replace placeholders
+   # 3. Implement component-specific logic
+   # 4. Test with timeout protection
+   timeout 30s pnpm test
+   ```
+
+### Template Evolution Process
+
+When we identify patterns that repeat across components:
+
+1. **Build a Working Component First**
+   - Implement the component completely
+   - Ensure all tests pass
+   - Verify the architecture works
+
+2. **Extract the Pattern**
+   - Identify what's common across similar components
+   - Create a template from the working component
+   - Document the specific implementation steps
+
+3. **Update Instructions**
+   - Add the new template to `/templates/`
+   - Update this CLAUDE.md with usage instructions
+   - Create a guide for the specific component type
+
+4. **Examples of Templates to Create**:
+   - Input components (text, number, email, etc.)
+   - Toggle components (checkbox, radio, switch)
+   - Layout components (container, grid, flex)
+   - Overlay components (dialog, popover, tooltip)
+   - Navigation components (menu, tabs, breadcrumb)
+
+This ensures we learn from each implementation and continuously improve our development process.
+
 ## 📋 Work Tracking & Current Status
 
 ### 🚀 Autonomous Development Mode
