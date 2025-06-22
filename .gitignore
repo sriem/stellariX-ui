@@ -44,3 +44,25 @@ logs/
 
 # turbo
 .turbo/cache/
+
+# build artifacts
+dist/
+*.d.ts
+*.d.cts
+*.cjs
+*.cjs.map
+*.js.map
+
+# package specific node_modules
+packages/**/node_modules/
+
+# cache files
+.cache/
+*.cache
+
+# vitest
+results.json
+.vite/
+
+# storybook
+storybook-static/
