@@ -98,4 +98,11 @@ export function memoize<T extends (...args: any[]) => any>(fn: T): T {
         cache.set(key, result);
         return result;
     }) as T;
+}
+
+export function isEmpty(value: any): boolean {
+  if (value == null) return true;
+  if (Array.isArray(value) || typeof value === 'string') return value.length === 0;
+  if (isObject(value)) return Object.keys(value).length === 0;
+  return false;
 } 

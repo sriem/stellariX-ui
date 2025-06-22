@@ -1,2 +1,111 @@
-"use strict";var d=Object.defineProperty;var f=Object.getOwnPropertyDescriptor;var l=Object.getOwnPropertyNames;var u=Object.prototype.hasOwnProperty;var E=(t,e)=>{for(var n in e)d(t,n,{get:e[n],enumerable:!0})},m=(t,e,n,o)=>{if(e&&typeof e=="object"||typeof e=="function")for(let r of l(e))!u.call(t,r)&&r!==n&&d(t,r,{get:()=>e[r],enumerable:!(o=f(e,r))||o.enumerable});return t};var x=t=>m(d({},"__esModule",{value:!0}),t);var L={};E(L,{VERSION:()=>R,createDerivedStore:()=>b,createLogicLayer:()=>I,createStore:()=>g});module.exports=x(L);function g(t){let e=t,n=new Set;return{getState:()=>e,setState:a=>{e=typeof a=="function"?a(e):a,n.forEach(s=>s(e))},subscribe:a=>(n.add(a),()=>{n.delete(a)})}}function b(t,e){let n=g(e(t.getState()));return t.subscribe(o=>{let r=e(o);n.setState(r)}),n}function I(t,e,n={},o={}){let r=(s,i)=>{let c=e[s];if(c){let T=t.getState(),y=c(T,i);y&&t.setState(p=>({...p,...y}))}};return{handleEvent:r,getA11yProps:s=>{let i=n[s];return i?i(t.getState()):{}},getInteractionHandlers:s=>{let i=o[s]||{},c={};return Object.entries(i).forEach(([T,y])=>{c[T]=p=>{let S=y(t.getState(),p);S&&r(S,p)}}),c}}}var R="0.0.1";0&&(module.exports={VERSION,createDerivedStore,createLogicLayer,createStore});
+"use strict";
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/index.ts
+var src_exports = {};
+__export(src_exports, {
+  VERSION: () => VERSION,
+  createDerivedStore: () => createDerivedStore,
+  createLogicLayer: () => createLogicLayer,
+  createStore: () => createStore
+});
+module.exports = __toCommonJS(src_exports);
+
+// src/state.ts
+function createStore(initialState) {
+  let state = initialState;
+  const listeners = /* @__PURE__ */ new Set();
+  const getState = () => state;
+  const setState = (updater) => {
+    state = typeof updater === "function" ? updater(state) : updater;
+    listeners.forEach((listener) => listener(state));
+  };
+  const subscribe = (listener) => {
+    listeners.add(listener);
+    return () => {
+      listeners.delete(listener);
+    };
+  };
+  return {
+    getState,
+    setState,
+    subscribe
+  };
+}
+function createDerivedStore(store, selector) {
+  const derivedStore = createStore(selector(store.getState()));
+  store.subscribe((state) => {
+    const newDerivedState = selector(state);
+    derivedStore.setState(newDerivedState);
+  });
+  return derivedStore;
+}
+
+// src/logic.ts
+function createLogicLayer(store, handlers, a11yConfig = {}, interactionConfig = {}) {
+  const handleEvent = (event, payload) => {
+    const handler = handlers[event];
+    if (handler) {
+      const currentState = store.getState();
+      const stateUpdate = handler(currentState, payload);
+      if (stateUpdate) {
+        store.setState((prev) => ({
+          ...prev,
+          ...stateUpdate
+        }));
+      }
+    }
+  };
+  const getA11yProps = (elementId) => {
+    const a11yGenerator = a11yConfig[elementId];
+    if (a11yGenerator) {
+      return a11yGenerator(store.getState());
+    }
+    return {};
+  };
+  const getInteractionHandlers = (elementId) => {
+    const elementConfig = interactionConfig[elementId] || {};
+    const result = {};
+    Object.entries(elementConfig).forEach(([eventName, eventHandler]) => {
+      result[eventName] = (event) => {
+        const eventType = eventHandler(store.getState(), event);
+        if (eventType) {
+          handleEvent(eventType, event);
+        }
+      };
+    });
+    return result;
+  };
+  return {
+    handleEvent,
+    getA11yProps,
+    getInteractionHandlers
+  };
+}
+
+// src/index.ts
+var VERSION = "0.0.1";
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
+  VERSION,
+  createDerivedStore,
+  createLogicLayer,
+  createStore
+});
 //# sourceMappingURL=index.js.map

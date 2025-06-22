@@ -6,6 +6,5 @@
     "composite": true,
     "emitDeclarationOnly": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["**/*.test.ts", "**/*.spec.ts", "**/*.stories.tsx"]
+  "include": ["src/**/*", "test/**/*"]
 } 

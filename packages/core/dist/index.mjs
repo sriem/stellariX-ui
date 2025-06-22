@@ -1,2 +1,81 @@
-function g(e){let t=e,n=new Set;return{getState:()=>t,setState:r=>{t=typeof r=="function"?r(t):r,n.forEach(o=>o(t))},subscribe:r=>(n.add(r),()=>{n.delete(r)})}}function v(e,t){let n=g(t(e.getState()));return e.subscribe(c=>{let s=t(c);n.setState(s)}),n}function l(e,t,n={},c={}){let s=(o,a)=>{let i=t[o];if(i){let T=e.getState(),y=i(T,a);y&&e.setState(p=>({...p,...y}))}};return{handleEvent:s,getA11yProps:o=>{let a=n[o];return a?a(e.getState()):{}},getInteractionHandlers:o=>{let a=c[o]||{},i={};return Object.entries(a).forEach(([T,y])=>{i[T]=p=>{let d=y(e.getState(),p);d&&s(d,p)}}),i}}}var E="0.0.1";export{E as VERSION,v as createDerivedStore,l as createLogicLayer,g as createStore};
+// src/state.ts
+function createStore(initialState) {
+  let state = initialState;
+  const listeners = /* @__PURE__ */ new Set();
+  const getState = () => state;
+  const setState = (updater) => {
+    state = typeof updater === "function" ? updater(state) : updater;
+    listeners.forEach((listener) => listener(state));
+  };
+  const subscribe = (listener) => {
+    listeners.add(listener);
+    return () => {
+      listeners.delete(listener);
+    };
+  };
+  return {
+    getState,
+    setState,
+    subscribe
+  };
+}
+function createDerivedStore(store, selector) {
+  const derivedStore = createStore(selector(store.getState()));
+  store.subscribe((state) => {
+    const newDerivedState = selector(state);
+    derivedStore.setState(newDerivedState);
+  });
+  return derivedStore;
+}
+
+// src/logic.ts
+function createLogicLayer(store, handlers, a11yConfig = {}, interactionConfig = {}) {
+  const handleEvent = (event, payload) => {
+    const handler = handlers[event];
+    if (handler) {
+      const currentState = store.getState();
+      const stateUpdate = handler(currentState, payload);
+      if (stateUpdate) {
+        store.setState((prev) => ({
+          ...prev,
+          ...stateUpdate
+        }));
+      }
+    }
+  };
+  const getA11yProps = (elementId) => {
+    const a11yGenerator = a11yConfig[elementId];
+    if (a11yGenerator) {
+      return a11yGenerator(store.getState());
+    }
+    return {};
+  };
+  const getInteractionHandlers = (elementId) => {
+    const elementConfig = interactionConfig[elementId] || {};
+    const result = {};
+    Object.entries(elementConfig).forEach(([eventName, eventHandler]) => {
+      result[eventName] = (event) => {
+        const eventType = eventHandler(store.getState(), event);
+        if (eventType) {
+          handleEvent(eventType, event);
+        }
+      };
+    });
+    return result;
+  };
+  return {
+    handleEvent,
+    getA11yProps,
+    getInteractionHandlers
+  };
+}
+
+// src/index.ts
+var VERSION = "0.0.1";
+export {
+  VERSION,
+  createDerivedStore,
+  createLogicLayer,
+  createStore
+};
 //# sourceMappingURL=index.mjs.map

@@ -121,4 +121,33 @@ export function createFocusTrap(container: HTMLElement | null) {
             }
         },
     };
+}
+
+// ARIA utilities
+export function announceToScreenReader(message: string, priority: 'polite' | 'assertive' = 'polite'): void {
+  const announcer = document.createElement('div');
+  announcer.setAttribute('aria-live', priority);
+  announcer.setAttribute('aria-atomic', 'true');
+  announcer.className = 'sr-only';
+  announcer.style.cssText = `
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  `;
+
+  document.body.appendChild(announcer);
+  announcer.textContent = message;
+
+  // Clean up after announcement
+  setTimeout(() => {
+    if (document.body.contains(announcer)) {
+      document.body.removeChild(announcer);
+    }
+  }, 1000);
 } 

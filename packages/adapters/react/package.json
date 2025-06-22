@@ -30,16 +30,15 @@
         "@testing-library/jest-dom": "^6.1.0",
         "@testing-library/react": "^14.0.0",
         "@testing-library/user-event": "^14.4.3",
-        "@types/react": "^18.2.0",
-        "@types/react-dom": "^18.2.0",
-        "eslint": "^8.46.0",
-        "eslint-config-stellarix": "*",
+        "@types/react": "^19.0.0",
+        "@types/react-dom": "^19.0.0",
+        "eslint": "^9.0.0",
         "jsdom": "^22.1.0",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "tsup": "^7.2.0",
-        "typescript": "^5.1.6",
-        "vitest": "^0.34.1"
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "tsup": "^8.0.0",
+        "typescript": "^5.7.0",
+        "vitest": "^2.1.0"
     },
     "license": "MIT"
 }

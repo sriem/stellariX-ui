@@ -1,38 +1,88 @@
 
-> @stellarix/utils@0.0.1 build D:\dev\stellariX-ui\packages\utils
-> tsup --minify
+> @stellarix/utils@0.0.1 build /mnt/d/dev/stellariX-ui/packages/utils
+> tsup
 
-[34mCLI[39m Building entry: src/index.ts
-[34mCLI[39m Using tsconfig: tsconfig.json
-[34mCLI[39m tsup v7.2.0
-[34mCLI[39m Using tsup config: D:\dev\stellariX-ui\packages\utils\tsup.config.ts
-[34mCLI[39m Target: es2018
-[34mCLI[39m Cleaning output folder
-[34mCJS[39m Build start
-[34mESM[39m Build start
-[32mCJS[39m [1mdist\index.js     [22m[32m3.08 KB[39m
-[32mCJS[39m [1mdist\index.js.map [22m[32m13.17 KB[39m
-[32mCJS[39m ⚡️ Build success in 24ms
-[32mESM[39m [1mdist\index.mjs     [22m[32m2.39 KB[39m
-[32mESM[39m [1mdist\index.mjs.map [22m[32m12.67 KB[39m
-[32mESM[39m ⚡️ Build success in 26ms
-[34mDTS[39m Build start
-error TS5074: Option '--incremental' can only be specified using tsconfig, emitting to single file or when option '--tsBuildInfoFile' is specified.
+CLI Building entry: src/index.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.0.0
+CLI Using tsup config: /mnt/d/dev/stellariX-ui/packages/utils/tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+CJS Build start
+ESM Build start
+✘ [ERROR] The symbol "isObject" has already been declared
 
-[31mError: error occured in dts build
-    at Worker.<anonymous> (D:\dev\stellariX-ui\node_modules\.pnpm\tsup@7.2.0_typescript@5.8.3\node_modules\tsup\dist\index.js:2294:26)
-    at Worker.emit (node:events:519:28)
-    at MessagePort.<anonymous> (node:internal/worker:263:53)
-    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:820:20)
-    at MessagePort.<anonymous> (node:internal/per_context/messageport:23:28)[39m
-[31mDTS[39m [31mBuild error[39m
-[31mRollupError: Failed to compile. Check the logs above.
-    at error (D:\dev\stellariX-ui\node_modules\.pnpm\rollup@3.29.5\node_modules\rollup\dist\shared\rollup.js:353:30)
-    at Object.error (D:\dev\stellariX-ui\node_modules\.pnpm\rollup@3.29.5\node_modules\rollup\dist\shared\rollup.js:1721:20)
-    at Object.error (D:\dev\stellariX-ui\node_modules\.pnpm\rollup@3.29.5\node_modules\rollup\dist\shared\rollup.js:25627:42)
-    at generateDtsFromTs (D:\dev\stellariX-ui\node_modules\.pnpm\tsup@7.2.0_typescript@5.8.3\node_modules\tsup\dist\rollup.js:7512:22)
-    at D:\dev\stellariX-ui\node_modules\.pnpm\tsup@7.2.0_typescript@5.8.3\node_modules\tsup\dist\rollup.js:7519:59
-    at _nullishCoalesce (D:\dev\stellariX-ui\node_modules\.pnpm\tsup@7.2.0_typescript@5.8.3\node_modules\tsup\dist\rollup.js:1:198)
-    at Object.transform (D:\dev\stellariX-ui\node_modules\.pnpm\tsup@7.2.0_typescript@5.8.3\node_modules\tsup\dist\rollup.js:7519:18)
-    at D:\dev\stellariX-ui\node_modules\.pnpm\rollup@3.29.5\node_modules\rollup\dist\shared\rollup.js:1914:40[39m
+    src/object.ts:110:9:
+      110 │ function isObject(item: any): item is Record<string, any> {
+          ╵          ~~~~~~~~
+
+  The symbol "isObject" was originally declared here:
+
+    src/object.ts:43:16:
+      43 │ export function isObject(item: any): item is Record<string, any> {
+         ╵                 ~~~~~~~~
+
+  Duplicate top-level function declarations are not allowed in an ECMAScript module. This file is considered to be an ECMAScript module because of the "export" keyword here:
+
+    src/object.ts:103:0:
+      103 │ export function isEmpty(value: any): boolean {
+          ╵ ~~~~~~
+
+✘ [ERROR] The symbol "isObject" has already been declared
+
+    src/object.ts:110:9:
+      110 │ function isObject(item: any): item is Record<string, any> {
+          ╵          ~~~~~~~~
+
+  The symbol "isObject" was originally declared here:
+
+    src/object.ts:43:16:
+      43 │ export function isObject(item: any): item is Record<string, any> {
+         ╵                 ~~~~~~~~
+
+  Duplicate top-level function declarations are not allowed in an ECMAScript module. This file is considered to be an ECMAScript module because of the "export" keyword here:
+
+    src/object.ts:103:0:
+      103 │ export function isEmpty(value: any): boolean {
+          ╵ ~~~~~~
+
+ESM Build failed
+Error: Build failed with 1 error:
+src/object.ts:110:9: ERROR: The symbol "isObject" has already been declared
+    at failureErrorWithLog (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1651:15)
+    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1059:25
+    at runOnEndCallbacks (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1486:45)
+    at buildResponseToResult (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1057:7)
+    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1086:16
+    at responseCallbacks.<computed> (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:704:9)
+    at handleIncomingPacket (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:764:9)
+    at Socket.readFromStdout (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:680:7)
+    at Socket.emit (node:events:517:28)
+    at addChunk (node:internal/streams/readable:368:12)
+CJS Build failed
+DTS Build start
+src/index.ts(6,15): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/utils/src/id.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via './id' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
+    Imported via './id' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
+src/index.ts(7,15): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/utils/src/accessibility.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via './accessibility' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
+    Imported via './accessibility' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
+src/index.ts(8,15): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/utils/src/object.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via './object' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
+    Imported via './object' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
+
+DTS Build error
+RollupError: [plugin dts] src/index.ts: Failed to compile. Check the logs above.
+    at getRollupError (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/parseAst.js:285:41)
+    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/parseAst.js:281:42)
+    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:913:32)
+    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:22252:42)
+    at generateDtsFromTs (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7776:22)
+    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7783:59
+    at _nullishCoalesce (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:1:198)
+    at Object.transform (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7783:18)
+    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:3387:40
  ELIFECYCLE  Command failed with exit code 1.
