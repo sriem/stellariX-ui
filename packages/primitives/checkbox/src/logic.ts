@@ -1,0 +1,143 @@
+/**
+ * Checkbox Component Logic
+ * Business logic and event handling
+ * 
+ * 🚨 CRITICAL WARNING: NEVER call state.getState() in this file!
+ * 
+ * ❌ FORBIDDEN PATTERNS:
+ * - const currentState = state.getState(); // CAUSES INFINITE LOOPS!
+ * - state.getState() inside event handlers
+ * - state.getState() inside getA11yProps()
+ * - state.getState() inside getInteractionHandlers()
+ * 
+ * ✅ CORRECT PATTERNS:
+ * - Use (currentState, handleEvent) parameters in interactions
+ * - Use (state) parameter in a11y functions
+ * - Call state setters directly: state.setChecked(), state.setDisabled()
+ * 
+ * WHY: Calling state.getState() in reactive contexts creates circular dependencies
+ * that cause infinite loops and crash the application.
+ */
+
+import { LogicLayerBuilder } from '@stellarix/core';
+import type { LogicLayer } from '@stellarix/core';
+import type { CheckboxState, CheckboxEvents, CheckboxOptions } from './types';
+import type { CheckboxStateStore } from './state';
+
+/**
+ * Creates the checkbox component logic
+ * @param state State store to connect to
+ * @param options Component options
+ * @returns Logic layer for the component
+ */
+export function createCheckboxLogic(
+    state: CheckboxStateStore,
+    options: CheckboxOptions = {}
+): LogicLayer<CheckboxState, CheckboxEvents> {
+    // Create a simpler logic layer using the builder approach
+    return new LogicLayerBuilder<CheckboxState, CheckboxEvents>()
+        .onEvent('change', (currentState, event: any) => {
+            // The event parameter contains the new checked state
+            const newChecked = currentState.checked; // Use current state since we just updated it
+            
+            // Call user callback if provided
+            if (options.onChange) {
+                options.onChange(newChecked);
+            }
+            return null;
+        })
+        .onEvent('focus', (currentState, payload: any) => {
+            // Update focus state
+            state.setFocused(true);
+            
+            // Call user callback if provided - extract event from payload
+            if (options.onFocus && payload && payload.event) {
+                options.onFocus(payload.event);
+            }
+            return null;
+        })
+        .onEvent('blur', (currentState, payload: any) => {
+            // Update focus state
+            state.setFocused(false);
+            
+            // Call user callback if provided - extract event from payload
+            if (options.onBlur && payload && payload.event) {
+                options.onBlur(payload.event);
+            }
+            return null;
+        })
+        .onEvent('keydown', (currentState, payload: { event: KeyboardEvent }) => {
+            // Handle any additional keydown logic if needed
+            return null;
+        })
+        .withA11y('root', (state) => ({
+            role: 'checkbox',
+            'aria-checked': state.checked === 'indeterminate' ? 'mixed' : state.checked,
+            'aria-disabled': state.disabled ? 'true' : undefined,
+            'aria-required': state.required ? 'true' : undefined,
+            'aria-invalid': state.error ? 'true' : undefined,
+            'aria-describedby': state.error && state.errorMessage ? `${options.id || 'checkbox'}-error` : undefined,
+            tabIndex: state.disabled ? -1 : 0,
+        }))
+        .withInteraction('root', 'onClick', (currentState, event: MouseEvent) => {
+            // Prevent interaction if disabled
+            if (currentState.disabled) {
+                event.preventDefault();
+                return null;
+            }
+            
+            // NEVER call state.getState() - use currentState parameter
+            // Calculate new checked state based on current state
+            const previousChecked = currentState.checked;
+            let newChecked: CheckboxState['checked'];
+            if (previousChecked === 'indeterminate') {
+                newChecked = true;
+            } else {
+                newChecked = !previousChecked;
+            }
+            
+            // Toggle the checkbox using state method
+            state.setChecked(newChecked);
+            
+            // Return the event type to trigger (will call onChange with newChecked)
+            return 'change';
+        })
+        .withInteraction('root', 'onKeyDown', (currentState, event: KeyboardEvent) => {
+            // Prevent interaction if disabled
+            if (currentState.disabled) {
+                return null;
+            }
+            
+            // Handle space key to toggle
+            if (event.code === 'Space') {
+                event.preventDefault();
+                
+                // Calculate new checked state based on current state
+                const previousChecked = currentState.checked;
+                let newChecked: CheckboxState['checked'];
+                if (previousChecked === 'indeterminate') {
+                    newChecked = true;
+                } else {
+                    newChecked = !previousChecked;
+                }
+                
+                // Update the checkbox state
+                state.setChecked(newChecked);
+                
+                // Return the event type to trigger (will call onChange with newChecked)
+                return 'change';
+            }
+            return null;
+        })
+        .withInteraction('root', 'onFocus', (currentState, event: FocusEvent) => {
+            // Store the event in a way the event handler can access it
+            (event as any).__eventPayload = { event };
+            return 'focus';
+        })
+        .withInteraction('root', 'onBlur', (currentState, event: FocusEvent) => {
+            // Store the event in a way the event handler can access it
+            (event as any).__eventPayload = { event };
+            return 'blur';
+        })
+        .build();
+}
