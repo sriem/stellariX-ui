@@ -318,18 +318,29 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
    - No A→B→A import chains
    - No recursive function calls without exit conditions
    - No state subscriptions that trigger themselves
+   - No hooks that call other hooks in a way that creates cycles
 
 2. **Infinite Loops**:
    - No while(true) without break conditions
    - No recursive setState within subscriptions
    - No event handlers that re-trigger the same event
    - Always add loop counters/timeouts as safeguards
+   - No React hooks that cause cascading re-renders
+   - ALWAYS test with limited iterations first
 
 3. **Memory Leaks**:
    - Always cleanup subscriptions
    - Always remove event listeners
    - Always clear intervals/timeouts
    - Use WeakMap/WeakSet for object references
+   - Properly cleanup useEffect dependencies
+
+4. **Testing Safety Rules**:
+   - ALWAYS run tests with system timeout: `timeout 30s command`
+   - NEVER run build/test commands without timeout protection
+   - Add `--bail` flag to test runners to stop on first failure
+   - Use `--maxWorkers=1` to prevent resource exhaustion
+   - If a test hangs, kill it immediately and investigate
 
 #### WORKING WITH FACTS - NOT GUESSES:
 - **DO NOT IMPROVISE** solutions for any error

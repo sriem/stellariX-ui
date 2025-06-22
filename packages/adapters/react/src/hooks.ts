@@ -42,9 +42,9 @@ export function useLogic<S, E extends Record<string, any> = Record<string, any>>
     logicLayer: LogicLayer<S, E>,
     store: Store<S>
 ): ReactLogic<S, E> {
-    // Ensure we have the latest state for re-renders
-    const state = useStore(store);
-
+    // DO NOT call useStore here - it creates circular updates!
+    // The component using this hook should manage state separately
+    
     // Memoize event handler to prevent unnecessary re-renders
     const handleEvent = useCallback(
         (event: keyof E | string, payload?: any) => {
@@ -69,13 +69,12 @@ export function useLogic<S, E extends Record<string, any> = Record<string, any>>
         [logicLayer]
     );
 
-    // Return memoized logic interface
+    // Return memoized logic interface WITHOUT state
     return useMemo(() => ({
-        state,
         handleEvent,
         getA11yProps,
         getInteractionHandlers,
-    }), [state, handleEvent, getA11yProps, getInteractionHandlers]);
+    }), [handleEvent, getA11yProps, getInteractionHandlers]);
 }
 
 /**

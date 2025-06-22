@@ -64,7 +64,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                 
                 // Component metadata
                 metadata: core.metadata,
-            }), [state, logic, ref, className, style, children, restProps]);
+            }), [state, logic.handleEvent, logic.getA11yProps, logic.getInteractionHandlers, ref, className, style, children, restProps]);
 
             // Determine the root element type
             const rootElement = structure.elements.root?.type || 'div';
@@ -74,11 +74,21 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
             const a11yProps = logic.getA11yProps('root');
             const interactionHandlers = logic.getInteractionHandlers('root');
 
-            // Create the element with all props
+            // Create the element with filtered props
+            // Remove internal props that shouldn't be passed to DOM
+            const { 
+                handleEvent, 
+                getA11yProps: _getA11yProps, 
+                getInteractionHandlers: _getInteractionHandlers,
+                metadata: _metadata,
+                state: _state,
+                ...domProps 
+            } = renderProps;
+            
             return createElement(
                 rootElement,
                 {
-                    ...renderProps,
+                    ...domProps,
                     ...a11yProps,
                     ...interactionHandlers,
                     role: rootRole,
