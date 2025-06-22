@@ -6,6 +6,7 @@
 export * from './id';
 export * from './accessibility';
 export * from './object';
+export * from './dom';
 
 // Re-export commonly used utilities
 export {

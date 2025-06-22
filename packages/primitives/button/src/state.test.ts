@@ -1,73 +1,74 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { createButtonState } from './state';
-import type { ButtonState, ButtonOptions } from './types';
+import { describe, it, expect } from 'vitest';
+import { createButtonState } from './state.js';
 
 describe('Button State', () => {
-    let defaultState: ButtonState;
-    let customState: ButtonState;
-
-    const defaultOptions: ButtonOptions = {};
-    const customOptions: ButtonOptions = {
-        defaultDisabled: true,
-        defaultLoading: true,
-        variant: 'secondary',
-        size: 'lg',
-        onClick: () => { },
-    };
-
-    beforeEach(() => {
-        defaultState = createButtonState(defaultOptions);
-        customState = createButtonState(customOptions);
+    it('should create button state with default values', () => {
+        const state = createButtonState({});
+        const currentState = state.getState();
+        
+        expect(currentState.pressed).toBe(false);
+        expect(currentState.focused).toBe(false);
+        expect(currentState.disabled).toBe(false);
+        expect(currentState.loading).toBe(false);
+        expect(currentState.variant).toBe('default');
+        expect(currentState.size).toBe('md');
     });
 
-    it('should initialize default state correctly', () => {
-        expect(defaultState.disabled).toBe(false);
-        expect(defaultState.loading).toBe(false);
-        expect(defaultState.variant).toBe('primary');
-        expect(defaultState.size).toBe('md');
-        expect(defaultState.onClick).toBeUndefined();
+    it('should set disabled state', () => {
+        const state = createButtonState({});
+        
+        state.setDisabled(true);
+        expect(state.getState().disabled).toBe(true);
+        
+        state.setDisabled(false);
+        expect(state.getState().disabled).toBe(false);
     });
 
-    it('should initialize custom state correctly', () => {
-        expect(customState.disabled).toBe(true);
-        expect(customState.loading).toBe(true);
-        expect(customState.variant).toBe('secondary');
-        expect(customState.size).toBe('lg');
-        expect(customState.onClick).toBeDefined();
-        expect(typeof customState.onClick).toBe('function');
+    it('should set loading state', () => {
+        const state = createButtonState({});
+        
+        state.setLoading(true);
+        expect(state.getState().loading).toBe(true);
     });
 
-    it('should update disabled state', () => {
-        defaultState.setDisabled(true);
-        expect(defaultState.disabled).toBe(true);
-
-        defaultState.setDisabled(false);
-        expect(defaultState.disabled).toBe(false);
+    it('should set pressed state', () => {
+        const state = createButtonState({});
+        
+        state.setPressed(true);
+        expect(state.getState().pressed).toBe(true);
     });
 
-    it('should update loading state', () => {
-        defaultState.setLoading(true);
-        expect(defaultState.loading).toBe(true);
-
-        defaultState.setLoading(false);
-        expect(defaultState.loading).toBe(false);
+    it('should set focused state', () => {
+        const state = createButtonState({});
+        
+        state.setFocused(true);
+        expect(state.getState().focused).toBe(true);
     });
 
-    it('should handle onClick callback', () => {
-        const mockFn = vi.fn();
-        const stateWithClick = createButtonState({
-            onClick: mockFn
+    it('should compute interactive state', () => {
+        const state = createButtonState({});
+        
+        expect(state.isInteractive.get()).toBe(true);
+        
+        state.setDisabled(true);
+        expect(state.isInteractive.get()).toBe(false);
+        
+        state.setDisabled(false);
+        state.setLoading(true);
+        expect(state.isInteractive.get()).toBe(false);
+    });
+
+    it('should initialize with options', () => {
+        const state = createButtonState({
+            variant: 'primary',
+            size: 'lg',
+            disabled: true,
+            loading: false
         });
-
-        const event = {} as React.MouseEvent<HTMLButtonElement>;
-        stateWithClick.onClick?.(event);
-
-        expect(mockFn).toHaveBeenCalledTimes(1);
-        expect(mockFn).toHaveBeenCalledWith(event);
+        
+        const currentState = state.getState();
+        expect(currentState.variant).toBe('primary');
+        expect(currentState.size).toBe('lg');
+        expect(currentState.disabled).toBe(true);
     });
-
-    it('should handle null onClick callback', () => {
-        // This should not throw an error
-        expect(() => defaultState.onClick?.({})).not.toThrow();
-    });
-}); 
+});

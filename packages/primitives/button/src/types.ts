@@ -1,150 +1,38 @@
-/**
- * Button Component Types
- */
+// Button component types
+export interface ButtonState {
+    pressed: boolean;
+    focused: boolean;
+    disabled: boolean;
+    loading: boolean;
+    variant: ButtonVariant;
+    size: ButtonSize;
+}
 
-import { BaseComponentOptions, BaseComponentState } from '@stellarix/core';
-
-/**
- * Button variants
- */
-export type ButtonVariant = 'default' | 'primary' | 'secondary' | 'outline' | 'ghost' | 'link';
-
-/**
- * Button sizes
- */
+export type ButtonVariant = 'default' | 'primary' | 'secondary' | 'destructive' | 'ghost' | 'link' | 'icon';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-/**
- * Button state interface
- */
-export interface ButtonState extends BaseComponentState {
-    /**
-     * The button variant
-     */
-    variant: ButtonVariant;
-
-    /**
-     * The button size
-     */
-    size: ButtonSize;
-
-    /**
-     * Whether the button is loading
-     */
-    loading?: boolean;
-
-    /**
-     * Whether the button is disabled
-     */
-    disabled?: boolean;
-
-    /**
-     * Whether the button is in a pressed state
-     */
-    pressed?: boolean;
-
-    /**
-     * ARIA attributes
-     */
-    ariaAttributes?: Record<string, string>;
-}
-
-/**
- * Button events interface
- */
-export interface ButtonEvents {
-    /**
-     * Click event
-     */
-    CLICK: {
-        /**
-         * The original event
-         */
-        originalEvent: MouseEvent | KeyboardEvent;
-    };
-
-    /**
-     * Focus event
-     */
-    FOCUS: {
-        /**
-         * The original event
-         */
-        originalEvent: FocusEvent;
-    };
-
-    /**
-     * Blur event
-     */
-    BLUR: {
-        /**
-         * The original event
-         */
-        originalEvent: FocusEvent;
-    };
-
-    /**
-     * Mouse down event
-     */
-    MOUSE_DOWN: {
-        /**
-         * The original event
-         */
-        originalEvent: MouseEvent;
-    };
-
-    /**
-     * Mouse up event
-     */
-    MOUSE_UP: {
-        /**
-         * The original event
-         */
-        originalEvent: MouseEvent;
-    };
-}
-
-/**
- * Button options interface
- */
-export interface ButtonOptions extends BaseComponentOptions {
-    /**
-     * The button variant
-     * @default 'default'
-     */
+export interface ButtonOptions {
     variant?: ButtonVariant;
-
-    /**
-     * The button size
-     * @default 'md'
-     */
     size?: ButtonSize;
-
-    /**
-     * Whether the button is loading
-     * @default false
-     */
-    loading?: boolean;
-
-    /**
-     * Whether the button is disabled
-     * @default false
-     */
     disabled?: boolean;
+    loading?: boolean;
+    onClick?: (event: MouseEvent) => void;
+    onFocus?: (event: FocusEvent) => void;
+    onBlur?: (event: FocusEvent) => void;
+}
 
-    /**
-     * The button type (HTML button type attribute)
-     * @default 'button'
-     */
+export interface ButtonEvents {
+    click: { event: MouseEvent };
+    focus: { event: FocusEvent };
+    blur: { event: FocusEvent };
+    keydown: { event: KeyboardEvent };
+}
+
+export interface ButtonProps extends ButtonOptions {
+    children?: any;
+    className?: string;
+    id?: string;
     type?: 'button' | 'submit' | 'reset';
-
-    /**
-     * The button ARIA label
-     */
-    ariaLabel?: string;
-
-    /**
-     * Click handler
-     */
-    onClick?: (event: MouseEvent | KeyboardEvent) => void;
+    'aria-label'?: string;
+    'aria-describedby'?: string;
 } 

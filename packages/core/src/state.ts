@@ -60,4 +60,51 @@ export function createDerivedStore<T, U>(
     });
 
     return derivedStore;
+}
+
+/**
+ * Creates a component state store with debugging support
+ * @param name Component name for debugging
+ * @param initialState Initial state
+ * @returns Enhanced store with derive method
+ */
+export function createComponentState<T>(
+    name: string,
+    initialState: T
+): Store<T> & { derive: <U>(selector: (state: T) => U) => { get: () => U; subscribe: (listener: (value: U) => void) => () => void } } {
+    const store = createStore(initialState);
+    
+    // Add debugging in development
+    if (process.env.NODE_ENV === 'development') {
+        store.subscribe((state) => {
+            console.debug(`[${name}] State updated:`, state);
+        });
+    }
+    
+    // Add derive method
+    const derive = <U>(selector: (state: T) => U) => {
+        let derivedValue = selector(store.getState());
+        const derivedListeners = new Set<(value: U) => void>();
+        
+        store.subscribe((newState) => {
+            const newValue = selector(newState);
+            if (!Object.is(newValue, derivedValue)) {
+                derivedValue = newValue;
+                derivedListeners.forEach(listener => listener(derivedValue));
+            }
+        });
+        
+        return {
+            get: () => derivedValue,
+            subscribe: (listener: (value: U) => void) => {
+                derivedListeners.add(listener);
+                return () => derivedListeners.delete(listener);
+            }
+        };
+    };
+    
+    return {
+        ...store,
+        derive
+    };
 } 

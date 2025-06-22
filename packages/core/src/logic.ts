@@ -277,3 +277,101 @@ export interface LogicLayer_Legacy<StateType, EventsType = Record<string, any>> 
   getA11yProps: (elementId: string, state: StateType) => Record<string, any>;
   getInteractionHandlers: (elementId: string) => Record<string, (event: any) => void>;
 }
+
+/**
+ * Component logic configuration for easier component creation
+ */
+export interface ComponentLogicConfig<TState, TEvents> {
+  events?: {
+    [K in keyof TEvents]?: (payload: TEvents[K]) => void;
+  };
+  a11y?: {
+    [elementId: string]: (state: TState) => Record<string, any>;
+  };
+  interactions?: {
+    [elementId: string]: (state: TState) => Record<string, Function>;
+  };
+  onStateChange?: (newState: TState, prevState: TState) => void;
+}
+
+/**
+ * Creates component logic with a simpler API
+ * IMPORTANT: This is a simplified wrapper - avoid complex nested subscriptions
+ */
+export function createComponentLogic<TState, TEvents extends Record<string, any>>(
+  _componentName: string,
+  config: ComponentLogicConfig<TState, TEvents>
+): LogicLayer<TState, TEvents> {
+  // Create a simple logic layer without complex subscriptions
+  const eventHandlers: any = {};
+  const a11yConfig: any = {};
+  const interactionConfig: any = {};
+  
+  // Convert events to handlers
+  if (config.events) {
+    Object.entries(config.events).forEach(([event, handler]) => {
+      eventHandlers[event] = (_state: TState, payload: any) => {
+        if (handler) {
+          handler(payload);
+        }
+        return null;
+      };
+    });
+  }
+  
+  // Set up a11y config
+  if (config.a11y) {
+    Object.entries(config.a11y).forEach(([elementId, generator]) => {
+      a11yConfig[elementId] = generator;
+    });
+  }
+  
+  // Set up interaction config - simplified to avoid circular deps
+  if (config.interactions) {
+    Object.entries(config.interactions).forEach(([elementId, _getHandlers]) => {
+      interactionConfig[elementId] = {};
+      // We'll populate this when we have state
+    });
+  }
+  
+  return createLogicLayer<TState, TEvents>({
+    eventHandlers,
+    a11yConfig,
+    interactionConfig,
+    onInitialize: (store) => {
+      // Set up interactions with actual state
+      if (config.interactions) {
+        Object.entries(config.interactions).forEach(([elementId, getHandlers]) => {
+          const handlers = getHandlers(store.getState());
+          Object.entries(handlers).forEach(([eventName, _handler]) => {
+            if (!interactionConfig[elementId]) {
+              interactionConfig[elementId] = {};
+            }
+            interactionConfig[elementId][eventName] = () => eventName;
+          });
+        });
+      }
+      
+      // Simple state change listener without circular deps
+      if (config.onStateChange) {
+        let prevState = store.getState();
+        const unsubscribe = store.subscribe((newState) => {
+          // Add safety check to prevent infinite loops
+          if (newState !== prevState) {
+            try {
+              config.onStateChange!(newState, prevState);
+              prevState = newState;
+            } catch (error) {
+              console.error('Error in onStateChange:', error);
+            }
+          }
+        });
+        // Store unsubscribe for cleanup
+        (store as any).__logicUnsubscribe = unsubscribe;
+      }
+    },
+    onCleanup: () => {
+      // Cleanup any subscriptions
+    }
+  });
+}

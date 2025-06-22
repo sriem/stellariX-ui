@@ -7,9 +7,10 @@ import type { Store } from './state';
 import type { LogicLayer } from './logic';
 
 /**
- * Framework adapter interface
+ * Legacy Framework adapter interface
+ * @deprecated Use FrameworkAdapter from component.ts instead
  */
-export interface FrameworkAdapter<HostElement = any> {
+export interface LegacyFrameworkAdapter<HostElement = any> {
     /**
      * Adapts a state layer to the framework's reactivity system
      */
@@ -36,9 +37,10 @@ export interface FrameworkAdapter<HostElement = any> {
 }
 
 /**
- * Component factory type
+ * Legacy Component factory type
+ * @deprecated Use ComponentFactory from component.ts instead
  */
-export interface ComponentFactory<
+export interface LegacyComponentFactory<
     StateType,
     EventsType extends Record<string, any> = Record<string, any>,
     OptionsType = Record<string, any>
@@ -56,7 +58,7 @@ export interface ComponentFactory<
     /**
      * Connects the component to a framework
      */
-    connect: <A extends FrameworkAdapter>(adapter: A) => ReturnType<A['createComponent']>;
+    connect: <A extends LegacyFrameworkAdapter>(adapter: A) => ReturnType<A['createComponent']>;
 
     /**
      * Component options
@@ -107,4 +109,4 @@ export interface BaseComponentOptions {
      * Callback when component state changes
      */
     onStateChange?: (state: any) => void;
-} 
+}

@@ -27,6 +27,36 @@ function createDerivedStore(store, selector) {
   });
   return derivedStore;
 }
+function createComponentState(name, initialState) {
+  const store = createStore(initialState);
+  if (process.env.NODE_ENV === "development") {
+    store.subscribe((state) => {
+      console.debug(`[${name}] State updated:`, state);
+    });
+  }
+  const derive = (selector) => {
+    let derivedValue = selector(store.getState());
+    const derivedListeners = /* @__PURE__ */ new Set();
+    store.subscribe((newState) => {
+      const newValue = selector(newState);
+      if (!Object.is(newValue, derivedValue)) {
+        derivedValue = newValue;
+        derivedListeners.forEach((listener) => listener(derivedValue));
+      }
+    });
+    return {
+      get: () => derivedValue,
+      subscribe: (listener) => {
+        derivedListeners.add(listener);
+        return () => derivedListeners.delete(listener);
+      }
+    };
+  };
+  return {
+    ...store,
+    derive
+  };
+}
 
 // src/logic.ts
 function createLogicLayer(config = {}) {
@@ -174,14 +204,228 @@ var LogicLayerBuilder = class {
     return createLogicLayer(this.config);
   }
 };
+function createComponentLogic(_componentName, config) {
+  const eventHandlers = {};
+  const a11yConfig = {};
+  const interactionConfig = {};
+  if (config.events) {
+    Object.entries(config.events).forEach(([event, handler]) => {
+      eventHandlers[event] = (_state, payload) => {
+        if (handler) {
+          handler(payload);
+        }
+        return null;
+      };
+    });
+  }
+  if (config.a11y) {
+    Object.entries(config.a11y).forEach(([elementId, generator]) => {
+      a11yConfig[elementId] = generator;
+    });
+  }
+  if (config.interactions) {
+    Object.entries(config.interactions).forEach(([elementId, _getHandlers]) => {
+      interactionConfig[elementId] = {};
+    });
+  }
+  return createLogicLayer({
+    eventHandlers,
+    a11yConfig,
+    interactionConfig,
+    onInitialize: (store) => {
+      if (config.interactions) {
+        Object.entries(config.interactions).forEach(([elementId, getHandlers]) => {
+          const handlers = getHandlers(store.getState());
+          Object.entries(handlers).forEach(([eventName, _handler]) => {
+            if (!interactionConfig[elementId]) {
+              interactionConfig[elementId] = {};
+            }
+            interactionConfig[elementId][eventName] = () => eventName;
+          });
+        });
+      }
+      if (config.onStateChange) {
+        let prevState = store.getState();
+        const unsubscribe = store.subscribe((newState) => {
+          if (newState !== prevState) {
+            try {
+              config.onStateChange(newState, prevState);
+              prevState = newState;
+            } catch (error) {
+              console.error("Error in onStateChange:", error);
+            }
+          }
+        });
+        store.__logicUnsubscribe = unsubscribe;
+      }
+    },
+    onCleanup: () => {
+    }
+  });
+}
+
+// src/component.ts
+function createComponentFactory(config) {
+  return function componentFactory(options = {}) {
+    const initialState = config.createInitialState(options);
+    const state = createStore(initialState);
+    const logic = config.createLogic(state, options);
+    logic.connect(state);
+    logic.initialize();
+    const metadata = {
+      name: config.name,
+      version: config.version || "1.0.0",
+      ...config.metadata
+    };
+    const connections = /* @__PURE__ */ new Set();
+    const componentCore = {
+      state,
+      logic,
+      metadata,
+      /**
+       * Connect to any framework adapter
+       * This is where the magic happens - one component works with any framework
+       */
+      connect: (adapter) => {
+        try {
+          let frameworkComponent = adapter.createComponent(componentCore);
+          if (adapter.optimize) {
+            frameworkComponent = adapter.optimize(frameworkComponent);
+          }
+          connections.add(() => {
+          });
+          return frameworkComponent;
+        } catch (error) {
+          throw new Error(
+            `Failed to connect ${config.name} to ${adapter.name} adapter: ${error.message}`
+          );
+        }
+      },
+      /**
+       * Clean up component resources
+       */
+      destroy: () => {
+        logic.cleanup();
+        connections.forEach((cleanup) => cleanup());
+        connections.clear();
+        if (config.onDestroy) {
+          config.onDestroy();
+        }
+      }
+    };
+    return componentCore;
+  };
+}
+var ComponentBuilder = class {
+  config = {};
+  /**
+   * Set component name and version
+   */
+  withName(name, version) {
+    this.config.name = name;
+    if (version)
+      this.config.version = version;
+    return this;
+  }
+  /**
+   * Set initial state creator
+   */
+  withInitialState(creator) {
+    this.config.createInitialState = creator;
+    return this;
+  }
+  /**
+   * Set logic creator
+   */
+  withLogic(creator) {
+    this.config.createLogic = creator;
+    return this;
+  }
+  /**
+   * Set component metadata
+   */
+  withMetadata(metadata) {
+    this.config.metadata = metadata;
+    return this;
+  }
+  /**
+   * Set cleanup handler
+   */
+  withCleanup(cleanup) {
+    this.config.onDestroy = cleanup;
+    return this;
+  }
+  /**
+   * Build the component factory
+   */
+  build() {
+    if (!this.config.name) {
+      throw new Error("Component name is required");
+    }
+    if (!this.config.createInitialState) {
+      throw new Error("Initial state creator is required");
+    }
+    if (!this.config.createLogic) {
+      throw new Error("Logic creator is required");
+    }
+    if (!this.config.metadata) {
+      throw new Error("Component metadata is required");
+    }
+    return createComponentFactory(this.config);
+  }
+};
+function createComponentMetadata(config) {
+  return {
+    accessibility: {
+      wcagLevel: "AA",
+      patterns: [],
+      ...config.accessibility
+    },
+    events: {
+      supported: [],
+      required: [],
+      custom: {},
+      ...config.events
+    },
+    structure: {
+      elements: {},
+      ...config.structure
+    }
+  };
+}
+function createPrimitive(name, config) {
+  const core = {
+    state: {},
+    // Will be set by the implementation
+    logic: {},
+    // Will be set by the implementation
+    metadata: {
+      name,
+      version: "0.0.1",
+      ...config.metadata
+    },
+    connect: function(adapter) {
+      return adapter.createComponent(this);
+    },
+    destroy: () => {
+    }
+  };
+  return core;
+}
 
 // src/index.ts
 var VERSION = "0.0.1";
 export {
+  ComponentBuilder,
   LogicLayerBuilder,
   VERSION,
+  createComponentFactory,
+  createComponentLogic,
+  createComponentMetadata,
+  createComponentState,
   createDerivedStore,
   createLogicLayer,
+  createPrimitive,
   createStore
 };
 //# sourceMappingURL=index.mjs.map

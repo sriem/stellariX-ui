@@ -300,6 +300,43 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
 - TypeScript 5.7+ configuration and features
 - Modern accessibility patterns (WCAG 2.2)
 - Latest testing patterns (Vitest 2.x)
+- **Fixing deprecated warnings or errors** - Use Context7 to find modern replacements
+- **Resolving build/compilation issues** - Get state-of-the-art solutions
+
+### 🚨 CRITICAL: Anti-Pattern Prevention & Context7 Mandatory Usage
+
+#### MUST USE CONTEXT7 FOR ALL DEPRECATION WARNINGS - NO EXCEPTIONS:
+- **Vite CJS API deprecation** (e.g., "The CJS build of Vite's Node API is deprecated")
+- **Package deprecation warnings** (e.g., "@humanwhocodes/config-array@0.12.3: Use @eslint/config-array instead")
+- **Any message containing "deprecated"** - STOP and use Context7 immediately
+- **Build tool warnings** - Get proper migration paths from documentation
+- **Test configuration errors** - Find Vitest 2.x solutions via Context7
+
+#### FORBIDDEN PATTERNS - NEVER CREATE:
+1. **Circular Dependencies**: 
+   - No self-referencing imports
+   - No A→B→A import chains
+   - No recursive function calls without exit conditions
+   - No state subscriptions that trigger themselves
+
+2. **Infinite Loops**:
+   - No while(true) without break conditions
+   - No recursive setState within subscriptions
+   - No event handlers that re-trigger the same event
+   - Always add loop counters/timeouts as safeguards
+
+3. **Memory Leaks**:
+   - Always cleanup subscriptions
+   - Always remove event listeners
+   - Always clear intervals/timeouts
+   - Use WeakMap/WeakSet for object references
+
+#### WORKING WITH FACTS - NOT GUESSES:
+- **DO NOT IMPROVISE** solutions for any error
+- **DO NOT GUESS** fixes for deprecation warnings
+- **ALWAYS** use Context7 for factual, documented solutions
+- **ALWAYS** check official documentation before implementing
+- **NEVER** create workarounds without understanding root cause
 
 ### Advanced Implementation Workflow:
 ```bash

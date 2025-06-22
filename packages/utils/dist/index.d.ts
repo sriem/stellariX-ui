@@ -103,10 +103,47 @@ declare function memoize<T extends (...args: any[]) => any>(fn: T): T;
 declare function isEmpty(value: any): boolean;
 
 /**
+ * DOM Utilities
+ * Helper functions for DOM manipulation
+ */
+/**
+ * Checks if the current environment is a browser
+ * @returns True if in a browser environment, false otherwise
+ */
+declare const isBrowser: () => boolean;
+/**
+ * Gets an element by ID with proper typing
+ * @param id Element ID
+ * @returns The element or null if not found
+ */
+declare function getElementById<T extends HTMLElement = HTMLElement>(id: string): T | null;
+/**
+ * Focuses an element with proper error handling
+ * @param element The element to focus
+ * @returns True if focus was successful, false otherwise
+ */
+declare function focusElement(element: HTMLElement | null): boolean;
+/**
+ * Creates a DOM element with attributes and properties
+ * @param tagName HTML tag name
+ * @param attributes Attributes to set
+ * @returns The created element
+ */
+declare function createElement<T extends HTMLElement>(tagName: string, attributes?: Record<string, string>): T;
+/**
+ * Adds a global event listener that can be safely removed
+ * @param eventName Event name
+ * @param handler Event handler
+ * @param options Event listener options
+ * @returns Function to remove the event listener
+ */
+declare function addGlobalEventListener<K extends keyof WindowEventMap>(eventName: K, handler: (event: WindowEventMap[K]) => void, options?: boolean | AddEventListenerOptions): () => void;
+
+/**
  * StellarIX UI Utils
  * Utility functions for the StellarIX UI framework
  */
 
 declare const VERSION = "0.0.1";
 
-export { AriaRole, VERSION, announceToScreenReader, createFocusTrap, deepMerge, generateAriaId, generateComponentId, generateId, generateUniqueId, getButtonA11yProps, getCheckboxA11yProps, getFirstFocusableElement, isEmpty, isObject, memoize, omit, pick };
+export { AriaRole, VERSION, addGlobalEventListener, announceToScreenReader, createElement, createFocusTrap, deepMerge, focusElement, generateAriaId, generateComponentId, generateId, generateUniqueId, getButtonA11yProps, getCheckboxA11yProps, getElementById, getFirstFocusableElement, isBrowser, isEmpty, isObject, memoize, omit, pick };

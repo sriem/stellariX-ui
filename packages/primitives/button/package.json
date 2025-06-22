@@ -2,6 +2,7 @@
     "name": "@stellarix/button",
     "version": "0.0.1",
     "description": "Framework-agnostic button component for StellarIX UI",
+    "type": "module",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
@@ -28,9 +29,9 @@
         "@stellarix/utils": "workspace:*"
     },
     "devDependencies": {
-        "tsup": "^7.2.0",
-        "typescript": "^5.1.6",
-        "vitest": "^0.34.1"
+        "tsup": "^8.0.0",
+        "typescript": "^5.7.2",
+        "vitest": "^2.1.5"
     },
     "license": "MIT"
 }

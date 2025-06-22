@@ -1,68 +1,52 @@
-/**
- * Button Component
- * A framework-agnostic button component
- */
+import { createPrimitive } from '@stellarix/core';
+import { createButtonState } from './state.js';
+import { createButtonLogic } from './logic.js';
+import type { ButtonOptions, ButtonState, ButtonEvents } from './types.js';
 
-import { ComponentFactory } from '@stellarix/core';
-import { createButtonState } from './state';
-import { createButtonLogic } from './logic';
-import { ButtonState, ButtonEvents, ButtonOptions } from './types';
+export function createButton(options: ButtonOptions = {}) {
+    return createPrimitive<ButtonState, ButtonEvents, ButtonOptions>('Button', {
+        initialState: options,
+        logicConfig: options,
+        metadata: {
+            accessibility: {
+                role: 'button',
+                keyboardShortcuts: ['Enter', 'Space'],
+                ariaAttributes: ['aria-pressed', 'aria-disabled', 'aria-busy'],
+                wcagLevel: 'AA',
+                patterns: []
+            },
+            events: {
+                supported: ['click', 'focus', 'blur', 'keydown'],
+                required: [],
+                custom: {}
+            },
+            structure: {
+                elements: {
+                    'root': {
+                        type: 'button',
+                        role: 'button',
+                        optional: false
+                    }
+                }
+            }
+        }
+    });
+}
 
-export * from './types';
+// Create the component factory with proper state and logic
+export function createButtonWithImplementation(options: ButtonOptions = {}) {
+    const core = createButton(options);
+    
+    // Attach the actual implementation
+    core.state = createButtonState(options);
+    core.logic = createButtonLogic(core.state as any, options);
+    
+    return core;
+}
 
-/**
- * Creates a button component
- * @param options Button options
- * @returns Button component factory
- */
-export function createButton(options: ButtonOptions = {}): ComponentFactory<ButtonState, ButtonEvents, ButtonOptions> {
-    // Create state
-    const state = createButtonState(options);
+// Re-export types
+export type { ButtonOptions, ButtonState, ButtonEvents, ButtonProps } from './types.js';
+export type { ButtonStateStore } from './state.js';
 
-    // Create logic
-    const logic = createButtonLogic(state, options);
-
-    // Return component factory
-    return {
-        state,
-        logic,
-        options,
-        connect: (adapter) => adapter.createComponent(state, logic, (props) => {
-            const { state, getA11yProps, getHandlers } = props;
-
-            // Extract data attributes
-            const dataAttrs = Object.entries(state.dataAttributes || {}).reduce((acc, [key, value]) => {
-                acc[`data-${key}`] = value;
-                return acc;
-            }, {} as Record<string, string>);
-
-            // Determine button appearance based on state
-            const variant = state.variant;
-            const size = state.size;
-            const isDisabled = state.disabled;
-            const isLoading = state.loading;
-
-            // Get a11y props and handlers
-            const a11yProps = getA11yProps('button');
-            const handlers = getHandlers('button');
-
-            // Return component implementation
-            return {
-                type: 'button',
-                props: {
-                    ...a11yProps,
-                    ...handlers,
-                    ...dataAttrs,
-                    disabled: isDisabled || isLoading,
-                    type: options.type || 'button',
-                    'data-variant': variant,
-                    'data-size': size,
-                    'data-loading': isLoading ? 'true' : undefined,
-                    'data-disabled': isDisabled ? 'true' : undefined,
-                    'data-pressed': state.pressed ? 'true' : undefined,
-                    'data-focused': state.focused ? 'true' : undefined,
-                },
-            };
-        }),
-    };
-} 
+// Default export for convenience
+export default createButtonWithImplementation;

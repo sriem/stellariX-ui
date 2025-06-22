@@ -1,35 +1,59 @@
-/**
- * Button State Module
- */
+import { createComponentState } from '@stellarix/core';
+import type { ButtonState, ButtonOptions } from './types.js';
 
-import { createStore } from '@stellarix/core';
-import { ButtonState, ButtonOptions } from './types';
-
-/**
- * Creates the button state
- * @param options Button options
- * @returns Button state store
- */
-export function createButtonState(options: ButtonOptions = {}) {
-    // Default values
+export function createButtonState(options: ButtonOptions) {
     const initialState: ButtonState = {
-        variant: options.variant || 'default',
-        size: options.size || 'md',
-        loading: options.loading || false,
-        disabled: options.disabled || false,
         pressed: false,
         focused: false,
-        hovered: false,
-        dataAttributes: {},
-        ariaAttributes: {
-            'aria-label': options.ariaLabel,
-            'aria-disabled': options.disabled ? 'true' : undefined,
-            'aria-pressed': undefined,
-        },
+        disabled: options.disabled || false,
+        loading: options.loading || false,
+        variant: options.variant || 'default',
+        size: options.size || 'md'
     };
 
-    // Create the store
-    const store = createStore<ButtonState>(initialState);
+    const store = createComponentState('Button', initialState);
 
-    return store;
-} 
+    // Extended API for button-specific state management
+    return {
+        ...store,
+        
+        // Button-specific state methods
+        setPressed: (pressed: boolean) => {
+            store.setState(prev => ({ ...prev, pressed }));
+        },
+        
+        setFocused: (focused: boolean) => {
+            store.setState(prev => ({ ...prev, focused }));
+        },
+        
+        setDisabled: (disabled: boolean) => {
+            store.setState(prev => ({ ...prev, disabled }));
+        },
+        
+        setLoading: (loading: boolean) => {
+            store.setState(prev => ({ ...prev, loading }));
+        },
+        
+        setVariant: (variant: ButtonState['variant']) => {
+            store.setState(prev => ({ ...prev, variant }));
+        },
+        
+        setSize: (size: ButtonState['size']) => {
+            store.setState(prev => ({ ...prev, size }));
+        },
+        
+        // Computed properties
+        isInteractive: store.derive(state => !state.disabled && !state.loading),
+        classes: store.derive(state => ({
+            base: 'stellarix-button',
+            variant: `stellarix-button--${state.variant}`,
+            size: `stellarix-button--${state.size}`,
+            disabled: state.disabled ? 'stellarix-button--disabled' : '',
+            loading: state.loading ? 'stellarix-button--loading' : '',
+            pressed: state.pressed ? 'stellarix-button--pressed' : '',
+            focused: state.focused ? 'stellarix-button--focused' : ''
+        }))
+    };
+}
+
+export type ButtonStateStore = ReturnType<typeof createButtonState>;

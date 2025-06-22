@@ -15,6 +15,36 @@ function generateAriaId(prefix = "aria") {
 
 // src/dom.ts
 var isBrowser = () => typeof window !== "undefined";
+function getElementById(id) {
+  return isBrowser() ? document.getElementById(id) : null;
+}
+function focusElement(element) {
+  if (element && typeof element.focus === "function") {
+    try {
+      element.focus();
+      return document.activeElement === element;
+    } catch (e) {
+      return false;
+    }
+  }
+  return false;
+}
+function createElement(tagName, attributes = {}) {
+  const element = document.createElement(tagName);
+  Object.entries(attributes).forEach(([key, value]) => {
+    element.setAttribute(key, value);
+  });
+  return element;
+}
+function addGlobalEventListener(eventName, handler, options) {
+  if (!isBrowser())
+    return () => {
+    };
+  window.addEventListener(eventName, handler, options);
+  return () => {
+    window.removeEventListener(eventName, handler, options);
+  };
+}
 
 // src/accessibility.ts
 var AriaRole = /* @__PURE__ */ ((AriaRole2) => {
@@ -194,16 +224,21 @@ var VERSION = "0.0.1";
 export {
   AriaRole,
   VERSION,
+  addGlobalEventListener,
   announceToScreenReader,
+  createElement,
   createFocusTrap,
   deepMerge,
+  focusElement,
   generateAriaId,
   generateComponentId,
   generateId,
   generateUniqueId,
   getButtonA11yProps,
   getCheckboxA11yProps,
+  getElementById,
   getFirstFocusableElement,
+  isBrowser,
   isEmpty,
   isObject,
   memoize,

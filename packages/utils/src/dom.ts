@@ -54,15 +54,6 @@ export function createElement<T extends HTMLElement>(
     return element;
 }
 
-/**
- * Generates a unique ID with an optional prefix
- * @param prefix Optional prefix for the ID
- * @returns A unique ID string
- */
-export function generateId(prefix: string = 'stellarix'): string {
-    const randomPart = Math.random().toString(36).substring(2, 10);
-    return `${prefix}-${randomPart}`;
-}
 
 /**
  * Adds a global event listener that can be safely removed

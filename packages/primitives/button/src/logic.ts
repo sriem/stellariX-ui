@@ -1,95 +1,110 @@
-/**
- * Button Logic Module
- */
+import { createComponentLogic } from '@stellarix/core';
+import { generateComponentId } from '@stellarix/utils';
+import type { ButtonState, ButtonEvents, ButtonOptions } from './types.js';
+import type { ButtonStateStore } from './state.js';
 
-import { Store, createLogicLayer } from '@stellarix/core';
-import { getButtonA11yProps } from '@stellarix/utils';
-import { ButtonState, ButtonEvents, ButtonOptions } from './types';
-
-/**
- * Creates the button logic
- * @param store Button state store
- * @param options Button options
- * @returns Button logic layer
- */
 export function createButtonLogic(
-    store: Store<ButtonState>,
-    options: ButtonOptions = {}
+    state: ButtonStateStore,
+    options: ButtonOptions
 ) {
-    // Event handlers
-    const handlers = {
-        CLICK: (state: ButtonState, payload: ButtonEvents['CLICK']) => {
-            // Call the onClick callback if provided
-            if (options.onClick && !state.disabled && !state.loading) {
-                options.onClick(payload.originalEvent);
+    const componentId = generateComponentId('button');
+    
+    return createComponentLogic<ButtonState, ButtonEvents>('Button', {
+        events: {
+            click: (payload: { event: MouseEvent }) => {
+                const currentState = state.getState();
+                
+                // Don't handle click if disabled or loading
+                if (currentState.disabled || currentState.loading) {
+                    payload.event.preventDefault();
+                    return;
+                }
+                
+                // Call external onClick handler
+                if (options.onClick) {
+                    options.onClick(payload.event);
+                }
+            },
+            
+            focus: (payload: { event: FocusEvent }) => {
+                state.setFocused(true);
+                
+                if (options.onFocus) {
+                    options.onFocus(payload.event);
+                }
+            },
+            
+            blur: (payload: { event: FocusEvent }) => {
+                state.setFocused(false);
+                
+                if (options.onBlur) {
+                    options.onBlur(payload.event);
+                }
+            },
+            
+            keydown: (payload: { event: KeyboardEvent }) => {
+                const currentState = state.getState();
+                
+                // Handle Space and Enter keys
+                if (payload.event.key === ' ' || payload.event.key === 'Enter') {
+                    if (!currentState.disabled && !currentState.loading) {
+                        payload.event.preventDefault();
+                        
+                        // Simulate click
+                        if (options.onClick) {
+                            const syntheticEvent = new MouseEvent('click', {
+                                bubbles: true,
+                                cancelable: true
+                            });
+                            options.onClick(syntheticEvent);
+                        }
+                    }
+                }
             }
-
-            return null; // No state update needed
         },
-
-        FOCUS: () => {
-            return { focused: true };
-        },
-
-        BLUR: () => {
-            return { focused: false };
-        },
-
-        MOUSE_DOWN: () => {
-            return { pressed: true };
-        },
-
-        MOUSE_UP: () => {
-            return { pressed: false };
-        },
-    };
-
-    // A11y configuration
-    const a11yConfig = {
-        button: (state: ButtonState) => {
-            return {
+        
+        a11y: {
+            root: (state) => ({
                 role: 'button',
-                'aria-disabled': state.disabled ? 'true' : undefined,
-                'aria-pressed': state.pressed ? 'true' : undefined,
-                ...(state.ariaAttributes || {}),
-            };
+                'aria-pressed': state.pressed,
+                'aria-disabled': state.disabled,
+                'aria-busy': state.loading,
+                tabIndex: state.disabled ? -1 : 0,
+                id: componentId
+            })
         },
-    };
-
-    // Interaction configuration
-    const interactionConfig = {
-        button: {
-            onClick: (state: ButtonState, event: MouseEvent) => {
-                if (state.disabled || state.loading) {
-                    event.preventDefault();
-                    return null;
+        
+        interactions: {
+            root: (_currentState) => ({
+                onClick: (event: MouseEvent) => {
+                    // This will trigger the 'click' event handler
+                    return event;
+                },
+                onFocus: (event: FocusEvent) => {
+                    // This will trigger the 'focus' event handler
+                    return event;
+                },
+                onBlur: (event: FocusEvent) => {
+                    // This will trigger the 'blur' event handler
+                    return event;
+                },
+                onKeyDown: (event: KeyboardEvent) => {
+                    // This will trigger the 'keydown' event handler
+                    return event;
+                },
+                onMouseDown: (_event: MouseEvent) => {
+                    const currentState = state.getState();
+                    if (!currentState.disabled && !currentState.loading) {
+                        state.setPressed(true);
+                    }
+                },
+                onMouseUp: (_event: MouseEvent) => {
+                    state.setPressed(false);
+                },
+                onMouseLeave: (_event: MouseEvent) => {
+                    state.setPressed(false);
                 }
-                return 'CLICK';
-            },
-            onKeyDown: (state: ButtonState, event: KeyboardEvent) => {
-                if (state.disabled || state.loading) {
-                    return null;
-                }
-
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    return 'CLICK';
-                }
-
-                return null;
-            },
-            onFocus: () => 'FOCUS',
-            onBlur: () => 'BLUR',
-            onMouseDown: () => 'MOUSE_DOWN',
-            onMouseUp: () => 'MOUSE_UP',
-        },
-    };
-
-    // Create the logic layer
-    return createLogicLayer<ButtonState, ButtonEvents>(
-        store,
-        handlers,
-        a11yConfig,
-        interactionConfig
-    );
-} 
+            })
+        }
+    });
+}
