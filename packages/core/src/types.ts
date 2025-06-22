@@ -18,7 +18,7 @@ export interface FrameworkAdapter<HostElement = any> {
     /**
      * Adapts a logic layer to the framework's event system
      */
-    adaptLogic<S, E>(logicLayer: LogicLayer<S, E>): any;
+    adaptLogic<S, E extends Record<string, any>>(logicLayer: LogicLayer<S, E>): any;
 
     /**
      * Renders a component to a host element
@@ -28,7 +28,7 @@ export interface FrameworkAdapter<HostElement = any> {
     /**
      * Creates a component from state and logic
      */
-    createComponent<S, E>(
+    createComponent<S, E extends Record<string, any>>(
         state: Store<S>,
         logic: LogicLayer<S, E>,
         render: (props: any) => any
@@ -40,7 +40,7 @@ export interface FrameworkAdapter<HostElement = any> {
  */
 export interface ComponentFactory<
     StateType,
-    EventsType = Record<string, any>,
+    EventsType extends Record<string, any> = Record<string, any>,
     OptionsType = Record<string, any>
 > {
     /**

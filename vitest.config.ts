@@ -10,7 +10,7 @@ export default defineConfig({
     ],
     test: {
         globals: true,
-        environment: 'jsdom',
+        environment: 'happy-dom',
         setupFiles: ['./vitest.setup.ts'],
         include: ['packages/**/*.{test,spec}.{ts,tsx}'],
         exclude: ['**/node_modules/**', '**/dist/**', '**/examples/**', './packages/integrations/**'],

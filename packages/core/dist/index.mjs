@@ -29,50 +29,156 @@ function createDerivedStore(store, selector) {
 }
 
 // src/logic.ts
-function createLogicLayer(store, handlers, a11yConfig = {}, interactionConfig = {}) {
+function createLogicLayer(config = {}) {
+  let connectedStore = null;
+  let isInitialized = false;
+  const {
+    eventHandlers = {},
+    a11yConfig = {},
+    interactionConfig = {},
+    onInitialize,
+    onCleanup
+  } = config;
   const handleEvent = (event, payload) => {
-    const handler = handlers[event];
+    if (!connectedStore) {
+      console.warn(`Logic layer not connected. Event "${event}" ignored.`);
+      return;
+    }
+    const handler = eventHandlers[event];
     if (handler) {
-      const currentState = store.getState();
+      const currentState = connectedStore.getState();
       const stateUpdate = handler(currentState, payload);
-      if (stateUpdate) {
-        store.setState((prev) => ({
+      if (stateUpdate && typeof stateUpdate === "object") {
+        connectedStore.setState((prev) => ({
           ...prev,
           ...stateUpdate
         }));
       }
     }
   };
-  const getA11yProps = (elementId, state) => {
+  const getA11yProps = (elementId) => {
+    if (!connectedStore) {
+      return {};
+    }
     const a11yGenerator = a11yConfig[elementId];
     if (a11yGenerator) {
-      return a11yGenerator(state || store.getState());
+      return a11yGenerator(connectedStore.getState());
     }
     return {};
   };
   const getInteractionHandlers = (elementId) => {
+    if (!connectedStore) {
+      return {};
+    }
     const elementConfig = interactionConfig[elementId] || {};
     const result = {};
     Object.entries(elementConfig).forEach(([eventName, eventHandler]) => {
       result[eventName] = (event) => {
-        const eventType = eventHandler(store.getState(), event);
-        if (eventType) {
-          handleEvent(eventType, event);
+        if (connectedStore) {
+          const eventType = eventHandler(connectedStore.getState(), event);
+          if (eventType) {
+            handleEvent(eventType, event);
+          }
         }
       };
     });
     return result;
   };
+  const initialize = () => {
+    if (isInitialized || !connectedStore) {
+      return;
+    }
+    if (onInitialize) {
+      onInitialize(connectedStore);
+    }
+    isInitialized = true;
+  };
+  const cleanup = () => {
+    if (!isInitialized) {
+      return;
+    }
+    if (onCleanup) {
+      onCleanup();
+    }
+    connectedStore = null;
+    isInitialized = false;
+  };
+  const connect = (stateStore) => {
+    if (connectedStore) {
+      cleanup();
+    }
+    connectedStore = stateStore;
+  };
   return {
     handleEvent,
     getA11yProps,
-    getInteractionHandlers
+    getInteractionHandlers,
+    initialize,
+    cleanup,
+    connect
   };
 }
+var LogicLayerBuilder = class {
+  config = {};
+  /**
+   * Add event handler
+   */
+  onEvent(event, handler) {
+    if (!this.config.eventHandlers) {
+      this.config.eventHandlers = {};
+    }
+    this.config.eventHandlers[event] = handler;
+    return this;
+  }
+  /**
+   * Add accessibility config for element
+   */
+  withA11y(elementId, generator) {
+    if (!this.config.a11yConfig) {
+      this.config.a11yConfig = {};
+    }
+    this.config.a11yConfig[elementId] = generator;
+    return this;
+  }
+  /**
+   * Add interaction handler for element
+   */
+  withInteraction(elementId, eventName, handler) {
+    if (!this.config.interactionConfig) {
+      this.config.interactionConfig = {};
+    }
+    if (!this.config.interactionConfig[elementId]) {
+      this.config.interactionConfig[elementId] = {};
+    }
+    this.config.interactionConfig[elementId][eventName] = handler;
+    return this;
+  }
+  /**
+   * Add initialization logic
+   */
+  onInitialize(callback) {
+    this.config.onInitialize = callback;
+    return this;
+  }
+  /**
+   * Add cleanup logic
+   */
+  onCleanup(callback) {
+    this.config.onCleanup = callback;
+    return this;
+  }
+  /**
+   * Build the logic layer
+   */
+  build() {
+    return createLogicLayer(this.config);
+  }
+};
 
 // src/index.ts
 var VERSION = "0.0.1";
 export {
+  LogicLayerBuilder,
   VERSION,
   createDerivedStore,
   createLogicLayer,

@@ -23,29 +23,110 @@ declare function createDerivedStore<T, U>(store: Store<T>, selector: (state: T) 
 
 /**
  * Logic Layer
- * Contains behavioral logic and accessibility requirements
+ * Ultra-generic behavioral logic and accessibility system for any framework
  */
 
-interface LogicLayer<StateType, EventsType = Record<string, any>> {
+/**
+ * Ultra-generic logic interface
+ * Designed to be adaptable to any framework or use case
+ */
+interface LogicLayer<TState = any, TEvents extends Record<string, any> = Record<string, any>> {
+    handleEvent(event: keyof TEvents | string, payload?: any): void;
+    getA11yProps(elementId: string): Record<string, any>;
+    getInteractionHandlers(elementId: string): Record<string, Function>;
+    initialize(): void;
+    cleanup(): void;
+    connect(stateStore: Store<TState>): void;
+}
+/**
+ * Event handler function type
+ */
+type EventHandler<TState, TPayload = any> = (state: TState, payload: TPayload) => Partial<TState> | null | void;
+/**
+ * Accessibility props generator function type
+ */
+type A11yPropsGenerator<TState> = (state: TState) => Record<string, any>;
+/**
+ * Interaction handler generator function type
+ */
+type InteractionHandler<TState> = (state: TState, event: any) => string | null;
+/**
+ * Logic layer configuration
+ */
+interface LogicLayerConfig<TState, TEvents> {
+    /**
+     * Event handlers mapping
+     */
+    eventHandlers?: {
+        [K in keyof TEvents]?: EventHandler<TState, TEvents[K]>;
+    };
+    /**
+     * Accessibility configuration for elements
+     */
+    a11yConfig?: {
+        [elementId: string]: A11yPropsGenerator<TState>;
+    };
+    /**
+     * Interaction configuration for elements
+     */
+    interactionConfig?: {
+        [elementId: string]: {
+            [eventName: string]: InteractionHandler<TState>;
+        };
+    };
+    /**
+     * Custom initialization logic
+     */
+    onInitialize?: (stateStore: Store<TState>) => void;
+    /**
+     * Custom cleanup logic
+     */
+    onCleanup?: () => void;
+}
+/**
+ * Creates an ultra-generic logic layer
+ * Can be adapted to any framework or component system
+ */
+declare function createLogicLayer<TState = any, TEvents extends Record<string, any> = Record<string, any>>(config?: LogicLayerConfig<TState, TEvents>): LogicLayer<TState, TEvents>;
+/**
+ * Logic layer builder for complex configurations
+ */
+declare class LogicLayerBuilder<TState = any, TEvents extends Record<string, any> = Record<string, any>> {
+    private config;
+    /**
+     * Add event handler
+     */
+    onEvent<K extends keyof TEvents>(event: K, handler: EventHandler<TState, TEvents[K]>): this;
+    /**
+     * Add accessibility config for element
+     */
+    withA11y(elementId: string, generator: A11yPropsGenerator<TState>): this;
+    /**
+     * Add interaction handler for element
+     */
+    withInteraction(elementId: string, eventName: string, handler: InteractionHandler<TState>): this;
+    /**
+     * Add initialization logic
+     */
+    onInitialize(callback: (stateStore: Store<TState>) => void): this;
+    /**
+     * Add cleanup logic
+     */
+    onCleanup(callback: () => void): this;
+    /**
+     * Build the logic layer
+     */
+    build(): LogicLayer<TState, TEvents>;
+}
+/**
+ * Legacy compatibility - will be deprecated
+ * @deprecated Use createLogicLayer instead
+ */
+interface LogicLayer_Legacy<StateType, EventsType = Record<string, any>> {
     handleEvent: (event: keyof EventsType, payload?: any) => void;
     getA11yProps: (elementId: string, state: StateType) => Record<string, any>;
     getInteractionHandlers: (elementId: string) => Record<string, (event: any) => void>;
 }
-/**
- * Creates a logic layer connected to a state store
- * @param store The state store to connect to
- * @param handlers Event handlers mapping
- * @returns A logic layer object
- */
-declare function createLogicLayer<StateType, EventsType extends Record<string, any> = Record<string, any>>(store: Store<StateType>, handlers: {
-    [K in keyof EventsType]?: (state: StateType, payload: EventsType[K]) => Partial<StateType> | null;
-}, a11yConfig?: {
-    [elementId: string]: (state: StateType) => Record<string, any>;
-}, interactionConfig?: {
-    [elementId: string]: {
-        [eventName: string]: (state: StateType, event: any) => keyof EventsType | null;
-    };
-}): LogicLayer<StateType, EventsType>;
 
 /**
  * Common Types
@@ -63,7 +144,7 @@ interface FrameworkAdapter<HostElement = any> {
     /**
      * Adapts a logic layer to the framework's event system
      */
-    adaptLogic<S, E>(logicLayer: LogicLayer<S, E>): any;
+    adaptLogic<S, E extends Record<string, any>>(logicLayer: LogicLayer<S, E>): any;
     /**
      * Renders a component to a host element
      */
@@ -71,12 +152,12 @@ interface FrameworkAdapter<HostElement = any> {
     /**
      * Creates a component from state and logic
      */
-    createComponent<S, E>(state: Store<S>, logic: LogicLayer<S, E>, render: (props: any) => any): any;
+    createComponent<S, E extends Record<string, any>>(state: Store<S>, logic: LogicLayer<S, E>, render: (props: any) => any): any;
 }
 /**
  * Component factory type
  */
-interface ComponentFactory<StateType, EventsType = Record<string, any>, OptionsType = Record<string, any>> {
+interface ComponentFactory<StateType, EventsType extends Record<string, any> = Record<string, any>, OptionsType = Record<string, any>> {
     /**
      * Component state store
      */
@@ -140,4 +221,4 @@ interface BaseComponentOptions {
 
 declare const VERSION = "0.0.1";
 
-export { type BaseComponentOptions, type BaseComponentState, type ComponentFactory, type FrameworkAdapter, type LogicLayer, type Store, VERSION, createDerivedStore, createLogicLayer, createStore };
+export { type A11yPropsGenerator, type BaseComponentOptions, type BaseComponentState, type ComponentFactory, type EventHandler, type FrameworkAdapter, type InteractionHandler, type LogicLayer, LogicLayerBuilder, type LogicLayerConfig, type LogicLayer_Legacy, type Store, VERSION, createDerivedStore, createLogicLayer, createStore };
