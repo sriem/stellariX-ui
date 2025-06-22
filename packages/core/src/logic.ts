@@ -3,11 +3,11 @@
  * Contains behavioral logic and accessibility requirements
  */
 
-import { Store } from './state';
+import type { Store } from './state';
 
 export interface LogicLayer<StateType, EventsType = Record<string, any>> {
     handleEvent: (event: keyof EventsType, payload?: any) => void;
-    getA11yProps: (elementId: string) => Record<string, any>;
+    getA11yProps: (elementId: string, state: StateType) => Record<string, any>;
     getInteractionHandlers: (elementId: string) => Record<string, (event: any) => void>;
 }
 
@@ -50,10 +50,10 @@ export function createLogicLayer<
         }
     };
 
-    const getA11yProps = (elementId: string) => {
+    const getA11yProps = (elementId: string, state: StateType) => {
         const a11yGenerator = a11yConfig[elementId];
         if (a11yGenerator) {
-            return a11yGenerator(store.getState());
+            return a11yGenerator(state || store.getState());
         }
         return {};
     };

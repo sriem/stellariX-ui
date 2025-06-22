@@ -10,39 +10,13 @@ CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-CJS dist/index.js     3.13 KB
-CJS dist/index.js.map 6.25 KB
-CJS ⚡️ Build success in 47ms
-ESM dist/index.mjs     2.02 KB
-ESM dist/index.mjs.map 6.19 KB
+ESM dist/index.mjs     2.04 KB
+ESM dist/index.mjs.map 6.25 KB
 ESM ⚡️ Build success in 47ms
+CJS dist/index.js     3.15 KB
+CJS dist/index.js.map 6.31 KB
+CJS ⚡️ Build success in 48ms
 DTS Build start
-src/index.ts(7,15): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/core/src/state.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
-  The file is in the program because:
-    Imported via './state' from file '/mnt/d/dev/stellariX-ui/packages/core/src/index.ts'
-    Imported via './state' from file '/mnt/d/dev/stellariX-ui/packages/core/src/logic.ts'
-    Imported via './state' from file '/mnt/d/dev/stellariX-ui/packages/core/src/types.ts'
-src/index.ts(8,15): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/core/src/logic.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
-  The file is in the program because:
-    Imported via './logic' from file '/mnt/d/dev/stellariX-ui/packages/core/src/index.ts'
-    Imported via './logic' from file '/mnt/d/dev/stellariX-ui/packages/core/src/types.ts'
-src/index.ts(9,15): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/core/src/types.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
-
-Error: error occured in dts build
-    at Worker.<anonymous> (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/index.js:2678:26)
-    at Worker.emit (node:events:517:28)
-    at MessagePort.<anonymous> (node:internal/worker:256:53)
-    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:786:20)
-    at exports.emitMessage (node:internal/per_context/messageport:23:28)
-DTS Build error
-RollupError: [plugin dts] src/index.ts: Failed to compile. Check the logs above.
-    at getRollupError (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/parseAst.js:285:41)
-    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/parseAst.js:281:42)
-    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:913:32)
-    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:22252:42)
-    at generateDtsFromTs (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7776:22)
-    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7783:59
-    at _nullishCoalesce (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:1:198)
-    at Object.transform (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7783:18)
-    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:3387:40
- ELIFECYCLE  Command failed with exit code 1.
+DTS ⚡️ Build success in 5398ms
+DTS dist/index.d.ts  4.08 KB
+DTS dist/index.d.mts 4.08 KB

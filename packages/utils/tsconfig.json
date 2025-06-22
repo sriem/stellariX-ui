@@ -6,5 +6,6 @@
     "composite": true,
     "emitDeclarationOnly": true
   },
-  "include": ["src/**/*", "test/**/*"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts", "test/**/*.tsx"],
+  "files": ["src/index.ts", "src/id.ts", "src/accessibility.ts", "src/object.ts"]
 } 

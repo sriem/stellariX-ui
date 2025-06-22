@@ -10,79 +10,13 @@ CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-✘ [ERROR] The symbol "isObject" has already been declared
-
-    src/object.ts:110:9:
-      110 │ function isObject(item: any): item is Record<string, any> {
-          ╵          ~~~~~~~~
-
-  The symbol "isObject" was originally declared here:
-
-    src/object.ts:43:16:
-      43 │ export function isObject(item: any): item is Record<string, any> {
-         ╵                 ~~~~~~~~
-
-  Duplicate top-level function declarations are not allowed in an ECMAScript module. This file is considered to be an ECMAScript module because of the "export" keyword here:
-
-    src/object.ts:103:0:
-      103 │ export function isEmpty(value: any): boolean {
-          ╵ ~~~~~~
-
-✘ [ERROR] The symbol "isObject" has already been declared
-
-    src/object.ts:110:9:
-      110 │ function isObject(item: any): item is Record<string, any> {
-          ╵          ~~~~~~~~
-
-  The symbol "isObject" was originally declared here:
-
-    src/object.ts:43:16:
-      43 │ export function isObject(item: any): item is Record<string, any> {
-         ╵                 ~~~~~~~~
-
-  Duplicate top-level function declarations are not allowed in an ECMAScript module. This file is considered to be an ECMAScript module because of the "export" keyword here:
-
-    src/object.ts:103:0:
-      103 │ export function isEmpty(value: any): boolean {
-          ╵ ~~~~~~
-
-ESM Build failed
-Error: Build failed with 1 error:
-src/object.ts:110:9: ERROR: The symbol "isObject" has already been declared
-    at failureErrorWithLog (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1651:15)
-    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1059:25
-    at runOnEndCallbacks (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1486:45)
-    at buildResponseToResult (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1057:7)
-    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1086:16
-    at responseCallbacks.<computed> (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:704:9)
-    at handleIncomingPacket (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:764:9)
-    at Socket.readFromStdout (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:680:7)
-    at Socket.emit (node:events:517:28)
-    at addChunk (node:internal/streams/readable:368:12)
-CJS Build failed
+CJS dist/index.js     7.02 KB
+CJS dist/index.js.map 15.17 KB
+CJS ⚡️ Build success in 52ms
+ESM dist/index.mjs     5.44 KB
+ESM dist/index.mjs.map 15.05 KB
+ESM ⚡️ Build success in 53ms
 DTS Build start
-src/index.ts(6,15): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/utils/src/id.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
-  The file is in the program because:
-    Imported via './id' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
-    Imported via './id' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
-src/index.ts(7,15): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/utils/src/accessibility.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
-  The file is in the program because:
-    Imported via './accessibility' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
-    Imported via './accessibility' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
-src/index.ts(8,15): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/utils/src/object.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
-  The file is in the program because:
-    Imported via './object' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
-    Imported via './object' from file '/mnt/d/dev/stellariX-ui/packages/utils/src/index.ts'
-
-DTS Build error
-RollupError: [plugin dts] src/index.ts: Failed to compile. Check the logs above.
-    at getRollupError (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/parseAst.js:285:41)
-    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/parseAst.js:281:42)
-    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:913:32)
-    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:22252:42)
-    at generateDtsFromTs (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7776:22)
-    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7783:59
-    at _nullishCoalesce (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:1:198)
-    at Object.transform (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7783:18)
-    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:3387:40
- ELIFECYCLE  Command failed with exit code 1.
+DTS ⚡️ Build success in 5639ms
+DTS dist/index.d.ts  3.54 KB
+DTS dist/index.d.mts 3.54 KB

@@ -43,10 +43,10 @@ function createLogicLayer(store, handlers, a11yConfig = {}, interactionConfig = 
       }
     }
   };
-  const getA11yProps = (elementId) => {
+  const getA11yProps = (elementId, state) => {
     const a11yGenerator = a11yConfig[elementId];
     if (a11yGenerator) {
-      return a11yGenerator(store.getState());
+      return a11yGenerator(state || store.getState());
     }
     return {};
   };

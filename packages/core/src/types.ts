@@ -3,8 +3,8 @@
  * Type definitions shared across the library
  */
 
-import { Store } from './state';
-import { LogicLayer } from './logic';
+import type { Store } from './state';
+import type { LogicLayer } from './logic';
 
 /**
  * Framework adapter interface
