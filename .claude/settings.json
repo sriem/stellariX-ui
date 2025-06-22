@@ -6,22 +6,40 @@
   },
   "rules": {
     "critical": [
-      "🚨 NEVER call state.getState() ANYWHERE in logic layer files - CAUSES INFINITE LOOPS",
-      "🚨 NEVER call state.getState() in event handlers - FORBIDDEN",
-      "🚨 NEVER call state.getState() in getInteractionHandlers() - FORBIDDEN", 
-      "🚨 NEVER call state.getState() in getA11yProps() - FORBIDDEN",
-      "🚨 NEVER call state.getState() in interactions generator - FORBIDDEN",
-      "ALWAYS use (currentState, handleEvent) parameters in interactions",
-      "ALWAYS use (state) parameter in a11y functions",
+      "🚨🚨🚨 NEVER EVER call state.getState() ANYWHERE in logic layer files - CAUSES INFINITE LOOPS - HARD FORBIDDEN",
+      "🚨🚨🚨 NEVER call state.getState() in event handlers - WILL BREAK EVERYTHING",
+      "🚨🚨🚨 NEVER call state.getState() in withInteraction callbacks - FORBIDDEN", 
+      "🚨🚨🚨 NEVER call state.getState() in getA11yProps() - FORBIDDEN",
+      "🚨🚨🚨 NEVER call state.getState() in interactions generator - FORBIDDEN",
+      "🚨🚨🚨 NEVER call state.getState() in any reactive context - FORBIDDEN",
+      "🚨🚨🚨 NEVER call state.getState() in tests - use callbacks to verify behavior instead",
+      "ALWAYS use (currentState, event) parameters in withInteraction callbacks",
+      "ALWAYS use (state) parameter in withA11y functions",
+      "ALWAYS use LogicLayerBuilder pattern for logic implementations",
+      "ALWAYS handle event payload extraction: const event = payload?.event ? payload.event : payload",
+      "ALWAYS support both direct events and wrapped { event } payloads in onEvent handlers",
       "ALWAYS set dts: false in tsup.config.ts",
       "ALWAYS run tests with timeout protection",
-      "ALWAYS create Storybook stories after implementing components"
+      "ALWAYS create Storybook stories after implementing components",
+      "ALWAYS update vitest.config.ts with path aliases",
+      "ALWAYS extend '../../../tsconfig.json' not tsconfig.base.json",
+      "ALWAYS test interactions via callbacks, not state inspection"
     ],
     "forbidden_patterns": [
       {
         "pattern": "state.getState()",
         "context": "inside logic layer methods",
         "reason": "Causes infinite loops in reactive contexts"
+      },
+      {
+        "pattern": "expect(state.getState()",
+        "context": "in test files",
+        "reason": "Use callback verification instead of state inspection"
+      },
+      {
+        "pattern": "createComponentLogic",
+        "context": "logic layer implementation",
+        "reason": "Use LogicLayerBuilder pattern instead for better control"
       },
       {
         "pattern": "dts: true",
