@@ -63,7 +63,7 @@ cd [component-name]
 ## 🧪 Testing
 
 All components must have:
-- 90%+ test coverage
+- 100% test coverage
 - Accessibility compliance (WCAG 2.2 AA)
 - Storybook stories showing all states
 - No circular dependencies or infinite loops

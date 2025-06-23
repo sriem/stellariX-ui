@@ -256,6 +256,155 @@ Before considering a component complete:
 - [ ] Build succeeds
 - [ ] TypeScript strict mode passes
 
+## 📝 Component README Structure
+
+Every component MUST have a proper README.md following this exact structure:
+
+### README.md Template
+```markdown
+# @stellarix/[component-name]
+
+[One-line description of what this component does]
+
+## Installation
+
+\`\`\`bash
+pnpm add @stellarix/[component-name]
+\`\`\`
+
+## Features
+
+- ✅ [Key feature 1 - be specific!]
+- ✅ [Key feature 2]
+- ✅ Framework-agnostic architecture
+- ✅ Full TypeScript support
+- ✅ Zero runtime dependencies
+- ✅ WCAG 2.2 AA compliant
+
+## Basic Usage
+
+\`\`\`typescript
+import { create[Component] } from '@stellarix/[component-name]';
+import { reactAdapter } from '@stellarix/react';
+
+// Create component instance
+const [component] = create[Component]({
+  // options
+});
+
+// Connect to React
+const React[Component] = [component].connect(reactAdapter);
+
+// Use in your app
+function App() {
+  return <React[Component] />;
+}
+\`\`\`
+
+## API Reference
+
+### Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `value` | `string` | `''` | Initial value |
+| `disabled` | `boolean` | `false` | Disable interaction |
+| `onChange` | `(value: T) => void` | - | Change handler |
+
+### State Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `value` | `string` | Current value |
+| `focused` | `boolean` | Focus state |
+| `disabled` | `boolean` | Disabled state |
+
+### Methods
+
+- `setValue(value: string)` - Update the value
+- `setDisabled(disabled: boolean)` - Toggle disabled state
+- `focus()` - Focus the component
+- `blur()` - Remove focus
+
+### Events
+
+| Event | Payload | Description |
+|-------|---------|-------------|
+| `change` | `{ value: string }` | Fired on value change |
+| `focus` | `{ event: FocusEvent }` | Fired on focus |
+| `blur` | `{ event: FocusEvent }` | Fired on blur |
+
+## Examples
+
+### Basic Example
+
+\`\`\`typescript
+const input = createInput({
+  value: 'Hello',
+  onChange: (value) => console.log('New value:', value)
+});
+\`\`\`
+
+### With Validation
+
+\`\`\`typescript
+const input = createInput({
+  value: '',
+  required: true,
+  pattern: /^[A-Z]/,
+  onChange: (value) => {
+    if (!value.match(/^[A-Z]/)) {
+      input.state.setError(true, 'Must start with uppercase');
+    }
+  }
+});
+\`\`\`
+
+## Accessibility
+
+- **ARIA roles**: `[role]` (when applicable)
+- **Keyboard support**: 
+  - `Tab` - Focus navigation
+  - `[Other keys]` - Specific actions
+- **Screen reader**: Fully compatible with NVDA, JAWS, VoiceOver
+- **Labels**: Supports aria-label, aria-labelledby, aria-describedby
+
+## Framework Adapters
+
+Works with all major frameworks:
+
+- ✅ React 18+ / React 19
+- ✅ Vue 3.5+
+- ✅ Svelte 5+
+- ✅ Solid 1.0+
+- ✅ Qwik
+- ✅ Angular
+- ✅ Web Components
+
+## Browser Support
+
+- Chrome/Edge 90+ (Chromium-based)
+- Firefox 90+
+- Safari 14+
+- Mobile browsers (iOS Safari, Chrome Android)
+
+## Contributing
+
+See [CONTRIBUTING.md](../../../CONTRIBUTING.md) for development setup.
+
+## License
+
+MIT © StellarIX UI
+\`\`\`
+
+### Key Points for Good READMEs
+
+1. **Be Specific**: Don't use generic descriptions
+2. **Show Real Examples**: Use actual code, not placeholders
+3. **Document All Options**: Every option should be in the table
+4. **Include Edge Cases**: Show how to handle errors, validation, etc.
+5. **Accessibility First**: Always document keyboard and screen reader support
+
 ## 🔗 Quick Links
 
 - Component Template: `../../templates/component-template/`
