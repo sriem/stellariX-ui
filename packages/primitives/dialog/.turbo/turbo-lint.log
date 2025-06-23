@@ -1,5 +1,0 @@
-
-> @stellarix-ui/dialog@0.0.1 lint /Users/sriem/dev/stellariX-ui/packages/primitives/dialog
-> eslint "src/**/*.ts*"
-
- ELIFECYCLE  Command failed.
