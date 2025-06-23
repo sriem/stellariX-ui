@@ -43,7 +43,7 @@ next-env.d.ts
 logs/
 
 # turbo
-.turbo/cache/
+.turbo/
 
 # build artifacts
 dist/
