@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 StellarIX UI is a framework-agnostic headless component library that provides a single, consistent component implementation adaptable to React, Vue, Svelte, Solid, Qwik, Angular, and Web Components. The project uses a monorepo structure with pnpm workspaces.
 
+**Main Developer**: This project is primarily developed by Anthropic's Claude Code, monitored and guided by Sergej Riemann.
+
 ## 🎯 DX-First Philosophy
 
 **Developer Experience is our #1 priority**. Every decision should optimize for:
@@ -24,26 +26,21 @@ StellarIX UI is a framework-agnostic headless component library that provides a 
 ## 🎯 Critical Information Sources
 
 ### Where to Find Project Information
-1. **Overall Plan**: `/plan.md` - Complete development plan with ultra-generic architecture
-2. **AI Agent Tasks**: `/AI-AGENT-DEVELOPMENT-PLAN.md` - Detailed 45-task implementation plan
-3. **Architecture Details**: `/memory-bank/architecture.md` - Three-layer architecture specs
-4. **Component Specs**: `/memory-bank/component-catalog.md` - All 30 components with variants
-5. **Development Priorities**: `/memory-bank/development-priorities.md` - Implementation order
-6. **System Patterns**: `/memory-bank/systemPatterns.md` - Coding conventions and patterns
-7. **Style Guide**: `/memory-bank/style-guide.md` - TypeScript and code style requirements
-8. **Testing Guide**: `/memory-bank/testing-guide.md` - Testing approach and coverage goals
+1. **Package Documentation**: Each package has its own README.md and CLAUDE.md files
+2. **Component Specifications**: Defined in each component's types.ts file
+3. **Architecture**: Implemented in `/packages/core/` with state, logic, and component systems
+4. **Testing Patterns**: See existing test files for reference patterns
 
 ### Where to Track Current Work
-1. **Active Context**: `/memory-bank/activeContext.md` - Current development state
-2. **Task Tracking**: Use `TodoWrite` and `TodoRead` tools frequently
-3. **Completed Work**: Update after each feature completion
-4. **Test Results**: Document in component's test directory
+1. **Task Tracking**: Use `TodoWrite` and `TodoRead` tools frequently
+2. **Git History**: Track progress through commits
+3. **Test Results**: Run `pnpm test` to verify current state
+4. **Build Status**: Run `pnpm build` to check all packages
 
 ### Progress Tracking Rules
 1. **ALWAYS** use TodoWrite/TodoRead tools to track tasks
 2. **NEVER** skip testing after implementing a feature
-3. **UPDATE** activeContext.md after completing each component
-4. **COMMIT** after each successful feature + tests
+3. **COMMIT** after each successful feature + tests
 
 ## Essential Commands (State-of-the-Art 2025)
 
@@ -61,7 +58,7 @@ pnpm test                 # Run all tests with Vitest 2.1+
 pnpm test:watch          # Run tests in watch mode with HMR
 pnpm test:coverage       # Run tests with coverage via v8
 pnpm test:ui             # Open Vitest UI for visual testing
-pnpm --filter=@stellarix/[package] test  # Test specific package
+pnpm --filter=@stellarix-ui/[package] test  # Test specific package
 ```
 
 ### Code Quality & Testing (MANDATORY AFTER EACH FEATURE)
@@ -74,9 +71,9 @@ pnpm typecheck           # TypeScript 5.7+ strict checking (MUST pass)
 pnpm format              # Format with Prettier 3.3+
 
 # Component-specific testing:
-pnpm --filter=@stellarix/[package] test        # Test specific package
-pnpm --filter=@stellarix/[package] test:a11y   # Accessibility tests (required)
-pnpm --filter=@stellarix/[package] build       # Verify build works
+pnpm --filter=@stellarix-ui/[package] test        # Test specific package
+pnpm --filter=@stellarix-ui/[package] test:a11y   # Accessibility tests (required)
+pnpm --filter=@stellarix-ui/[package] build       # Verify build works
 ```
 
 ### 🚨 MANDATORY Feature Completion Workflow
@@ -146,8 +143,8 @@ After implementing each primitive component, you MUST create a comprehensive Sto
 
 ### Package-Specific Operations
 ```bash
-pnpm --filter=@stellarix/button build    # Build specific package
-pnpm --filter=@stellarix/core dev        # Run dev mode for specific package
+pnpm --filter=@stellarix-ui/button build    # Build specific package
+pnpm --filter=@stellarix-ui/core dev        # Run dev mode for specific package
 ```
 
 ### Version Management with Changesets
@@ -194,8 +191,8 @@ interface FrameworkAdapter {
 
 ### Component Creation Pattern
 ```typescript
-import { createButton } from '@stellarix/button';
-import { reactAdapter } from '@stellarix/react';
+import { createButton } from '@stellarix-ui/button';
+import { reactAdapter } from '@stellarix-ui/react';
 
 const button = createButton(options);
 const ReactButton = button.connect(reactAdapter);
@@ -206,7 +203,6 @@ const ReactButton = button.connect(reactAdapter);
 - `/packages/utils/` - Shared utilities (accessibility, DOM helpers)
 - `/packages/adapters/` - Framework-specific adapters
 - `/packages/primitives/` - UI primitive components (button, dialog, etc.)
-- `/memory-bank/` - Project documentation and context tracking
 
 ### Component Package Structure
 Each component follows this pattern:
@@ -244,7 +240,7 @@ packages/primitives/[component]/
 ```
 - Ultra-strict mode with exactOptionalPropertyTypes
 - Bundler module resolution for modern tools
-- Path aliases: `@stellarix/core`, `@stellarix/utils`, etc.
+- Path aliases: `@stellarix-ui/core`, `@stellarix-ui/utils`, etc.
 - ESM-first with verbatimModuleSyntax
 
 ### Latest Framework Patterns
@@ -292,7 +288,7 @@ packages/primitives/[component]/
 
 ### Accessibility Standards (WCAG 2.2)
 - WCAG 2.2 AA compliance required (latest standard)
-- Use utilities from `@stellarix/utils/accessibility`
+- Use utilities from `@stellarix-ui/utils/accessibility`
 - Test with jest-axe@10+ for automated checks
 - Follow latest ARIA 1.2 patterns
 
@@ -411,29 +407,29 @@ pnpm changeset publish
 ### Monorepo Considerations
 
 - Changesets automatically handles dependency updates across our package structure:
-  - `@stellarix/core` - Core state and logic systems
-  - `@stellarix/primitives/*` - All UI components (button, select, etc.)
-  - `@stellarix/themes` - Theme system and CSS
-  - `@stellarix/adapters/*` - Framework adapters (react, vue, svelte, etc.)
-- If `@stellarix/core` changes, all dependent packages get version bumps
-- Internal dependencies use workspace protocol: `"@stellarix/core": "workspace:*"`
-- All packages are published under the `stellarix` npm organization
+  - `@stellarix-ui/core` - Core state and logic systems
+  - `@stellarix-ui/primitives/*` - All UI components (button, select, etc.)
+  - `@stellarix-ui/themes` - Theme system and CSS
+  - `@stellarix-ui/adapters/*` - Framework adapters (react, vue, svelte, etc.)
+- If `@stellarix-ui/core` changes, all dependent packages get version bumps
+- Internal dependencies use workspace protocol: `"@stellarix-ui/core": "workspace:*"`
+- All packages are published under the `stellarix-ui` npm organization
 
 ### Package Naming Convention
-All packages follow the `@stellarix/[package-name]` convention:
-- `@stellarix/button` ✅ (NOT `@stellarix/primitives-button`)
-- `@stellarix/react` ✅ (NOT `@stellarix/adapter-react`)
-- `@stellarix/themes` ✅ (single themes package)
+All packages follow the `@stellarix-ui/[package-name]` convention:
+- `@stellarix-ui/button` ✅ (NOT `@stellarix-ui/primitives-button`)
+- `@stellarix-ui/react` ✅ (NOT `@stellarix-ui/adapter-react`)
+- `@stellarix-ui/themes` ✅ (single themes package)
 
 ### Example Changeset Workflow
 
 ```bash
 # 1. Implement new Select component
-pnpm --filter=@stellarix/select test
+pnpm --filter=@stellarix-ui/select test
 
 # 2. Create changeset
 pnpm changeset
-# Select: @stellarix/select
+# Select: @stellarix-ui/select
 # Type: minor
 # Summary: "Add Select component with search and keyboard navigation"
 
@@ -608,7 +604,6 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
 
 Remember to check:
 - `/packages/primitives/CLAUDE.md` for primitive component development
-- `/memory-bank/` documentation for architectural decisions
 
 ## 🎯 Component Development
 
@@ -645,7 +640,6 @@ See `/packages/primitives/CLAUDE.md` for detailed component development guide in
 ```bash
 # Always check current work state:
 TodoRead                 # See active tasks and what's completed
-cat memory-bank/activeContext.md    # Read current development context
 git status              # Check uncommitted changes
 pnpm test               # Verify current state is stable
 ```
@@ -655,7 +649,6 @@ pnpm test               # Verify current state is stable
 2. **During Work**: Update todos with `in_progress` status
 3. **After Completing Feature**: 
    - Mark todo as `completed`
-   - Update `memory-bank/activeContext.md` with what was accomplished
    - Run full test suite and commit if all pass
    - **AUTO-PROCEED** to next tasks if available
 
@@ -668,8 +661,7 @@ while (tasks_remaining_in_AI_AGENT_PLAN):
   3. Implement features following ultra-generic architecture
   4. Run mandatory testing workflow
   5. Commit successful changes
-  6. Update activeContext.md
-  7. CONTINUE to next task batch (NO user input needed)
+  6. CONTINUE to next task batch (NO user input needed)
 
 # Only stop for:
 - Build failures that can't be resolved
@@ -679,12 +671,10 @@ while (tasks_remaining_in_AI_AGENT_PLAN):
 
 ### Current Work Location Tracking
 - **Active Tasks**: Check `TodoRead` output
-- **Component Status**: `/memory-bank/component-catalog.md` shows all 30 components
-- **Implementation Plan**: `/AI-AGENT-DEVELOPMENT-PLAN.md` has detailed task breakdown
 - **What's Built**: Check `packages/primitives/*/src/` directories
 - **What's Tested**: Look for `*.test.ts` files and run `pnpm test:coverage`
 
-### Implementation Priority Order (from memory-bank)
+### Implementation Priority Order
 **Phase 1 (P0 - Foundation)**: Button, Container, Divider, Spinner, Input, Checkbox, Radio
 **Phase 2 (P1 - Core)**: Toggle, Alert, Badge, Avatar, Textarea, Card, Popover, Tooltip, Dialog, Menu, Tabs, Select, Accordion, ProgressBar
 **Phase 3 (P2 - Standard)**: Slider, Pagination, Breadcrumb, NavigationMenu, Stepper, FileUpload, DatePicker, Table, Calendar

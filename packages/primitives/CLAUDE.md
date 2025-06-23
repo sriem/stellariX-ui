@@ -85,7 +85,7 @@ Use your editor's find & replace:
 ### Step 3: Update package.json
 ```json
 {
-  "name": "@stellarix/[component-name]",
+  "name": "@stellarix-ui/[component-name]",
   "description": "[Component description]"
 }
 ```
@@ -190,7 +190,7 @@ timeout 30s pnpm typecheck
 pnpm changeset
 
 # For new components, always use 'minor' version bump
-# Select the component package (e.g., @stellarix/select)
+# Select the component package (e.g., @stellarix-ui/select)
 # Write a clear summary:
 # "Add Select component with search, keyboard navigation, and accessibility support"
 ```
@@ -355,14 +355,14 @@ Every component MUST have a proper README.md following this exact structure:
 
 ### README.md Template
 ```markdown
-# @stellarix/[component-name]
+# @stellarix-ui/[component-name]
 
 [One-line description of what this component does]
 
 ## Installation
 
 \`\`\`bash
-pnpm add @stellarix/[component-name]
+pnpm add @stellarix-ui/[component-name]
 \`\`\`
 
 ## Features
@@ -377,8 +377,8 @@ pnpm add @stellarix/[component-name]
 ## Basic Usage
 
 \`\`\`typescript
-import { create[Component] } from '@stellarix/[component-name]';
-import { reactAdapter } from '@stellarix/react';
+import { create[Component] } from '@stellarix-ui/[component-name]';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const [component] = create[Component]({
