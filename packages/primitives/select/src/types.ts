@@ -1,45 +1,96 @@
 /**
- * Template Component Types
- * Define all TypeScript interfaces for the component
+ * Select Component Types
+ * Define all TypeScript interfaces for the select component
  */
 
 /**
- * Template component state
- * Represents the internal state of the component
+ * Select option interface
  */
-export interface TemplateState {
-    /**
-     * Example: Whether the component is active
-     */
-    active: boolean;
-    
-    /**
-     * Example: Current value
-     */
+export interface SelectOption {
     value: string;
-    
-    /**
-     * Example: Whether the component is disabled
-     */
-    disabled: boolean;
+    label: string;
+    disabled?: boolean;
+    group?: string;
 }
 
 /**
- * Template component options
- * Configuration passed when creating the component
+ * Select component state
+ * Represents the internal state of the component
  */
-export interface TemplateOptions {
+export interface SelectState {
     /**
-     * Initial active state
-     * @default false
+     * Currently selected value
      */
-    active?: boolean;
+    value: string | null;
     
     /**
-     * Initial value
-     * @default ''
+     * Whether the dropdown is open
      */
-    value?: string;
+    open: boolean;
+    
+    /**
+     * Whether the component has focus
+     */
+    focused: boolean;
+    
+    /**
+     * Whether the component is disabled
+     */
+    disabled: boolean;
+    
+    /**
+     * Whether the component is readonly
+     */
+    readonly: boolean;
+    
+    /**
+     * Placeholder text when no value is selected
+     */
+    placeholder: string;
+    
+    /**
+     * Available options
+     */
+    options: SelectOption[];
+    
+    /**
+     * Index of currently highlighted option
+     */
+    highlightedIndex: number;
+    
+    /**
+     * Current search query (for searchable selects)
+     */
+    searchQuery: string;
+    
+    /**
+     * Filtered options based on search
+     */
+    filteredOptions: SelectOption[];
+}
+
+/**
+ * Select component options
+ * Configuration passed when creating the component
+ */
+export interface SelectOptions {
+    /**
+     * Initial selected value
+     * @default null
+     */
+    value?: string | null;
+    
+    /**
+     * Available options to select from
+     * @default []
+     */
+    options?: SelectOption[];
+    
+    /**
+     * Placeholder text
+     * @default 'Select an option'
+     */
+    placeholder?: string;
     
     /**
      * Whether the component is disabled
@@ -48,35 +99,82 @@ export interface TemplateOptions {
     disabled?: boolean;
     
     /**
-     * Callback when value changes
+     * Whether the component is readonly
+     * @default false
      */
-    onChange?: (value: string) => void;
+    readonly?: boolean;
     
     /**
-     * Callback when active state changes
+     * Whether the select is searchable
+     * @default false
      */
-    onActiveChange?: (active: boolean) => void;
+    searchable?: boolean;
+    
+    /**
+     * Whether the selected value can be cleared
+     * @default false
+     */
+    clearable?: boolean;
+    
+    /**
+     * Whether multiple selections are allowed
+     * @default false
+     */
+    multiple?: boolean;
+    
+    /**
+     * Callback when selected value changes
+     */
+    onChange?: (value: string | null) => void;
+    
+    /**
+     * Callback when component receives focus
+     */
+    onFocus?: (event: FocusEvent) => void;
+    
+    /**
+     * Callback when component loses focus
+     */
+    onBlur?: (event: FocusEvent) => void;
+    
+    /**
+     * Callback when search query changes
+     */
+    onSearch?: (query: string) => void;
+    
+    /**
+     * Callback when dropdown opens
+     */
+    onOpen?: () => void;
+    
+    /**
+     * Callback when dropdown closes
+     */
+    onClose?: () => void;
 }
 
 /**
- * Template component events
+ * Select component events
  * Events that can be triggered by the component
  */
-export interface TemplateEvents {
+export interface SelectEvents {
     /**
-     * Fired when the value changes
+     * Fired when the selected value changes
      */
     change: {
-        value: string;
-        previousValue: string;
+        value: string | null;
+        option: SelectOption | null;
     };
     
     /**
-     * Fired when active state changes
+     * Fired when dropdown opens
      */
-    activeChange: {
-        active: boolean;
-    };
+    open: null;
+    
+    /**
+     * Fired when dropdown closes
+     */
+    close: null;
     
     /**
      * Fired when component receives focus
@@ -91,17 +189,59 @@ export interface TemplateEvents {
     blur: {
         event: FocusEvent;
     };
+    
+    /**
+     * Fired when search query changes
+     */
+    search: {
+        query: string;
+    };
+    
+    /**
+     * Fired when an option is selected
+     */
+    optionSelect: {
+        option: SelectOption;
+    };
+    
+    /**
+     * Fired on keyboard navigation
+     */
+    navigate: {
+        direction: 'up' | 'down' | 'first' | 'last';
+        index: number;
+    };
 }
 
 /**
- * Template component props
+ * Select component props
  * Props that can be passed to the component
  */
-export interface TemplateProps extends TemplateOptions {
+export interface SelectProps extends SelectOptions {
     /**
      * Additional CSS class
      */
     className?: string;
+    
+    /**
+     * Component ID
+     */
+    id?: string;
+    
+    /**
+     * ARIA label
+     */
+    'aria-label'?: string;
+    
+    /**
+     * ARIA labelledby
+     */
+    'aria-labelledby'?: string;
+    
+    /**
+     * ARIA describedby
+     */
+    'aria-describedby'?: string;
     
     /**
      * Test ID for testing

@@ -1,85 +1,189 @@
 /**
- * Template Component State Management
- * Ultra-generic state implementation
+ * Select Component State Management
+ * Manages the state for the select component
  */
 
 import { createComponentState } from '@stellarix/core';
-import type { TemplateState, TemplateOptions } from './types';
+import type { SelectState, SelectOptions, SelectOption } from './types.js';
 
 /**
- * Extended state store with component-specific methods
+ * Creates a select state store
  */
-export interface TemplateStateStore {
-    // Core state methods
-    getState: () => TemplateState;
-    setState: (updates: Partial<TemplateState>) => void;
-    subscribe: (listener: (state: TemplateState) => void) => () => void;
-    derive: <U>(selector: (state: TemplateState) => U) => {
-        get: () => U;
-        subscribe: (listener: (value: U) => void) => () => void;
+export function createSelectState(options: SelectOptions) {
+    const initialState: SelectState = {
+        value: options.value || null,
+        open: false,
+        focused: false,
+        disabled: options.disabled || false,
+        readonly: options.readonly || false,
+        placeholder: options.placeholder || 'Select an option',
+        options: options.options || [],
+        highlightedIndex: -1,
+        searchQuery: '',
+        filteredOptions: options.options || []
     };
-    
-    // Component-specific methods
-    setActive: (active: boolean) => void;
-    setValue: (value: string) => void;
-    setDisabled: (disabled: boolean) => void;
-    toggle: () => void;
-    reset: () => void;
-    
-    // Computed properties
-    isInteractive: () => boolean;
-}
 
-/**
- * Creates the template component state
- * @param options Initial options
- * @returns Extended state store
- */
-export function createTemplateState(options: TemplateOptions = {}): TemplateStateStore {
-    // Define initial state
-    const initialState: TemplateState = {
-        active: options.active ?? false,
-        value: options.value ?? '',
-        disabled: options.disabled ?? false,
-    };
-    
-    // Create the core state store
-    const store = createComponentState('Template', initialState);
-    
-    // Extend with component-specific methods
-    const extendedStore: TemplateStateStore = {
+    const store = createComponentState('Select', initialState);
+
+    // Extended API for select-specific state management
+    return {
         ...store,
         
-        // Convenience setters
-        setActive: (active: boolean) => {
-            store.setState({ active });
+        // Select-specific state methods
+        setValue: (value: string | null) => {
+            store.setState((prev) => ({ ...prev, value }));
         },
         
-        setValue: (value: string) => {
-            store.setState({ value });
+        setOpen: (open: boolean) => {
+            store.setState((prev) => ({ ...prev, open }));
+        },
+        
+        setFocused: (focused: boolean) => {
+            store.setState((prev) => ({ ...prev, focused }));
         },
         
         setDisabled: (disabled: boolean) => {
-            store.setState({ disabled });
+            store.setState((prev) => ({ ...prev, disabled }));
         },
         
-        // Toggle active state
-        toggle: () => {
-            const currentState = store.getState();
-            store.setState({ active: !currentState.active });
+        setReadonly: (readonly: boolean) => {
+            store.setState((prev) => ({ ...prev, readonly }));
         },
         
-        // Reset to initial state
-        reset: () => {
-            store.setState(initialState);
+        setOptions: (options: SelectOption[]) => {
+            store.setState((prev) => ({ 
+                ...prev, 
+                options,
+                filteredOptions: options 
+            }));
+        },
+        
+        setHighlightedIndex: (highlightedIndex: number) => {
+            store.setState((prev) => ({ ...prev, highlightedIndex }));
+        },
+        
+        setSearchQuery: (searchQuery: string) => {
+            store.setState((prev) => {
+                const query = String(searchQuery || '');
+                const filteredOptions = query
+                    ? prev.options.filter(option =>
+                        option.label.toLowerCase().includes(query.toLowerCase()) ||
+                        option.value.toLowerCase().includes(query.toLowerCase())
+                      )
+                    : prev.options;
+                    
+                return {
+                    ...prev, 
+                    searchQuery: query,
+                    filteredOptions,
+                    highlightedIndex: filteredOptions.length > 0 ? 0 : -1
+                };
+            });
+        },
+        
+        // Navigation methods
+        navigateUp: () => {
+            store.setState((prev) => {
+                if (prev.filteredOptions.length === 0) return prev;
+                
+                const newIndex = prev.highlightedIndex > 0 
+                    ? prev.highlightedIndex - 1 
+                    : prev.filteredOptions.length - 1;
+                    
+                return { ...prev, highlightedIndex: newIndex };
+            });
+        },
+        
+        navigateDown: () => {
+            store.setState((prev) => {
+                if (prev.filteredOptions.length === 0) return prev;
+                
+                const newIndex = prev.highlightedIndex < prev.filteredOptions.length - 1
+                    ? prev.highlightedIndex + 1
+                    : 0;
+                    
+                return { ...prev, highlightedIndex: newIndex };
+            });
+        },
+        
+        navigateToFirst: () => {
+            store.setState((prev) => {
+                if (prev.filteredOptions.length > 0) {
+                    return { ...prev, highlightedIndex: 0 };
+                }
+                return prev;
+            });
+        },
+        
+        navigateToLast: () => {
+            store.setState((prev) => {
+                if (prev.filteredOptions.length > 0) {
+                    return { 
+                        ...prev, 
+                        highlightedIndex: prev.filteredOptions.length - 1 
+                    };
+                }
+                return prev;
+            });
+        },
+        
+        // Selection methods
+        selectOption: (option: SelectOption) => {
+            store.setState((prev) => ({ 
+                ...prev, 
+                value: option.value,
+                open: false,
+                highlightedIndex: -1,
+                searchQuery: '',
+                filteredOptions: prev.options
+            }));
+        },
+        
+        selectHighlighted: () => {
+            let selectedOption: SelectOption | null = null;
+            
+            store.setState((prev) => {
+                if (prev.highlightedIndex >= 0 && 
+                    prev.highlightedIndex < prev.filteredOptions.length) {
+                    selectedOption = prev.filteredOptions[prev.highlightedIndex];
+                    return { 
+                        ...prev, 
+                        value: selectedOption.value,
+                        open: false,
+                        highlightedIndex: -1,
+                        searchQuery: '',
+                        filteredOptions: prev.options
+                    };
+                }
+                return prev;
+            });
+            
+            return selectedOption;
+        },
+        
+        clearSelection: () => {
+            store.setState((prev) => ({ ...prev, value: null }));
         },
         
         // Computed properties
-        isInteractive: () => {
-            const state = store.getState();
-            return !state.disabled;
-        },
+        isInteractive: store.derive(state => !state.disabled && !state.readonly),
+        selectedOption: store.derive(state => 
+            state.value ? state.options.find(opt => opt.value === state.value) || null : null
+        ),
+        hasValue: store.derive(state => state.value !== null),
+        displayValue: store.derive(state => {
+            if (state.value) {
+                const option = state.options.find(opt => opt.value === state.value);
+                return option ? option.label : '';
+            }
+            return state.searchQuery || '';
+        }),
+        highlightedOption: store.derive(state => 
+            state.highlightedIndex >= 0 && state.highlightedIndex < state.filteredOptions.length
+                ? state.filteredOptions[state.highlightedIndex]
+                : null
+        )
     };
-    
-    return extendedStore;
 }
+
+export type SelectStateStore = ReturnType<typeof createSelectState>;

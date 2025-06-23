@@ -51,7 +51,13 @@ export function createRadio(options: RadioOptions): RadioCore {
     };
 }
 
+// Create the component factory with proper state and logic
+export function createRadioWithImplementation(options: RadioOptions = {}) {
+    const core = createRadio(options);
+    return core;
+}
+
 /**
  * Default export for convenience
  */
-export default createRadio;
+export default createRadioWithImplementation;

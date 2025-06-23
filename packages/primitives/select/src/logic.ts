@@ -1,122 +1,340 @@
 /**
- * Template Component Logic
- * Business logic and event handling
- * 
- * 🚨🚨🚨 ULTRA-CRITICAL WARNING: NEVER call state.getState() in this file!
- * 
- * ❌❌❌ FORBIDDEN PATTERNS - WILL CAUSE INFINITE LOOPS:
- * - const currentState = state.getState(); // 🚨 INFINITE LOOP!
- * - state.getState() inside withInteraction callbacks // 🚨 INFINITE LOOP!
- * - state.getState() inside onEvent handlers // 🚨 INFINITE LOOP!
- * - state.getState() inside withA11y functions // 🚨 INFINITE LOOP!
- * - using createComponentLogic (causes complex circular deps)
- * 
- * ✅✅✅ CORRECT PATTERNS - LEARNED FROM CHECKBOX SUCCESS:
- * - Use LogicLayerBuilder pattern for clean implementation
- * - Use (currentState, event) parameters in withInteraction callbacks
- * - Use (state) parameter in withA11y functions
- * - Handle event payload extraction: const event = payload?.event ? payload.event : payload
- * - Support both direct events and wrapped { event } payloads
- * - Call state setters directly: state.setValue(), state.setActive()
- * - Test via callbacks, not state inspection
- * 
- * WHY: Calling state.getState() in reactive contexts creates circular dependencies
- * that cause infinite loops and crash the application. This has been proven 8+ times.
- * 
- * PROVEN WORKING PATTERN (Checkbox component - 30/30 tests passing):
+ * Select Component Logic
+ * Handles interactions and business logic for the select component
  */
 
 import { LogicLayerBuilder } from '@stellarix/core';
-import type { LogicLayer } from '@stellarix/core';
-import type { TemplateState, TemplateEvents, TemplateOptions } from './types';
-import type { TemplateStateStore } from './state';
+import { generateComponentId } from '@stellarix/utils';
+import type { SelectState, SelectEvents, SelectOptions } from './types.js';
+import type { SelectStateStore } from './state.js';
 
 /**
- * Creates the template component logic using proven LogicLayerBuilder pattern
- * @param state State store to connect to
- * @param options Component options
- * @returns Logic layer for the component
+ * Creates the logic layer for the select component
  */
-export function createTemplateLogic(
-    state: TemplateStateStore,
-    options: TemplateOptions = {}
-): LogicLayer<TemplateState, TemplateEvents> {
-    return new LogicLayerBuilder<TemplateState, TemplateEvents>()
-        .onEvent('change', (currentState, payload: any) => {
-            // Extract value from payload if provided, otherwise use current state
-            let newValue = currentState.value;
-            if (payload && typeof payload === 'object' && 'value' in payload) {
-                newValue = payload.value;
-            }
+export function createSelectLogic(
+    state: SelectStateStore,
+    options: SelectOptions = {}
+) {
+    const componentId = generateComponentId('select');
+    const listboxId = `${componentId}-listbox`;
+    const triggerId = `${componentId}-trigger`;
+
+    return new LogicLayerBuilder<SelectState, SelectEvents>()
+        .onEvent('change', (currentState, payload) => {
+            const value = payload && 'value' in payload ? payload.value : payload;
+            const option = payload && 'option' in payload ? payload.option : null;
             
-            // Update state
-            state.setValue(newValue);
-            
-            // Call user callback if provided
+            state.setValue(value);
             if (options.onChange) {
-                options.onChange(newValue);
-            }
-            return null;
-        })
-        .onEvent('activeChange', (currentState, payload: any) => {
-            // Extract active state from payload
-            let newActive = currentState.active;
-            if (payload && typeof payload === 'object' && 'active' in payload) {
-                newActive = payload.active;
+                options.onChange(value);
             }
             
-            // Update state
-            state.setActive(newActive);
-            
-            // Call user callback if provided
-            if (options.onActiveChange) {
-                options.onActiveChange(newActive);
-            }
             return null;
         })
-        .onEvent('focus', (currentState, payload: any) => {
-            // Handle focus event - extract event from payload if needed
-            if (options.onFocus) {
-                const event = payload && payload.event ? payload.event : payload;
+        
+        .onEvent('open', (currentState, payload) => {
+            if (currentState.disabled || currentState.readonly) return null;
+            
+            state.setOpen(true);
+            state.setHighlightedIndex(0);
+            
+            if (options.onOpen) {
+                options.onOpen();
+            }
+            
+            return null;
+        })
+        
+        .onEvent('close', (currentState, payload) => {
+            state.setOpen(false);
+            state.setHighlightedIndex(-1);
+            
+            if (options.onClose) {
+                options.onClose();
+            }
+            
+            return null;
+        })
+        
+        .onEvent('focus', (currentState, payload) => {
+            const event = payload && 'event' in payload ? payload.event : payload;
+            
+            state.setFocused(true);
+            
+            if (options.onFocus && event) {
                 options.onFocus(event);
             }
+            
             return null;
         })
-        .onEvent('blur', (currentState, payload: any) => {
-            // Handle blur event - extract event from payload if needed
-            if (options.onBlur) {
-                const event = payload && payload.event ? payload.event : payload;
+        
+        .onEvent('blur', (currentState, payload) => {
+            const event = payload && 'event' in payload ? payload.event : payload;
+            
+            state.setFocused(false);
+            state.setOpen(false);
+            
+            if (options.onBlur && event) {
                 options.onBlur(event);
             }
+            
             return null;
         })
-        .withA11y('root', (state) => ({
-            'aria-disabled': state.disabled ? 'true' : undefined,
-            'aria-pressed': state.active ? 'true' : undefined,
-            'aria-label': `Template component with value: ${state.value}`,
+        
+        .onEvent('search', (currentState, payload) => {
+            const query = payload && 'query' in payload ? payload.query : payload;
+            
+            state.setSearchQuery(query || '');
+            
+            if (options.onSearch) {
+                options.onSearch(query || '');
+            }
+            
+            return null;
+        })
+        
+        .onEvent('optionSelect', (currentState, payload) => {
+            const option = payload && 'option' in payload ? payload.option : payload;
+            
+            if (option && !option.disabled) {
+                state.selectOption(option);
+                
+                if (options.onChange) {
+                    options.onChange(option.value);
+                }
+            }
+            
+            return null;
+        })
+        
+        .onEvent('navigate', (currentState, payload) => {
+            const direction = payload && 'direction' in payload ? payload.direction : payload;
+            
+            switch (direction) {
+                case 'up':
+                    state.navigateUp();
+                    break;
+                case 'down':
+                    state.navigateDown();
+                    break;
+                case 'first':
+                    state.navigateToFirst();
+                    break;
+                case 'last':
+                    state.navigateToLast();
+                    break;
+            }
+            
+            return null;
+        })
+        
+        .withA11y('trigger', (state) => ({
+            role: 'combobox',
+            'aria-expanded': state.open,
+            'aria-haspopup': 'listbox',
+            'aria-controls': state.open ? listboxId : undefined,
+            'aria-activedescendant': state.open && state.highlightedIndex >= 0 
+                ? `${componentId}-option-${state.highlightedIndex}`
+                : undefined,
+            'aria-disabled': state.disabled,
+            'aria-readonly': state.readonly,
             tabIndex: state.disabled ? -1 : 0,
+            id: triggerId
         }))
-        .withInteraction('root', 'onClick', (currentState, event: MouseEvent) => {
-            // Prevent interaction if disabled
-            if (currentState.disabled) {
+        
+        .withA11y('listbox', (state) => ({
+            role: 'listbox',
+            id: listboxId,
+            'aria-labelledby': triggerId,
+            'aria-hidden': !state.open
+        }))
+        
+        .withA11y('option', (state) => (index: number) => ({
+            role: 'option',
+            id: `${componentId}-option-${index}`,
+            'aria-selected': state.filteredOptions[index]?.value === state.value,
+            'aria-disabled': state.filteredOptions[index]?.disabled || false
+        }))
+        
+        .withInteraction('trigger', 'onClick', (currentState, event) => {
+            if (currentState.disabled || currentState.readonly) {
                 event.preventDefault();
                 return null;
             }
             
-            // Calculate new active state
-            const newActive = !currentState.active;
-            
-            // Update state
-            state.setActive(newActive);
-            
-            // Return event type to trigger
-            return 'activeChange';
+            if (currentState.open) {
+                state.setOpen(false);
+                return 'close';
+            } else {
+                state.setOpen(true);
+                state.setHighlightedIndex(0);
+                return 'open';
+            }
         })
-        .withInteraction('root', 'onFocus', (currentState, event: FocusEvent) => {
+        
+        .withInteraction('trigger', 'onKeyDown', (currentState, event) => {
+            if (currentState.disabled || currentState.readonly) {
+                event.preventDefault();
+                return null;
+            }
+            
+            switch (event.key) {
+                case 'Enter':
+                case ' ':
+                    event.preventDefault();
+                    if (!currentState.open) {
+                        state.setOpen(true);
+                        state.setHighlightedIndex(0);
+                        return 'open';
+                    } else {
+                        const option = state.selectHighlighted();
+                        if (option && options.onChange) {
+                            options.onChange(option.value);
+                        }
+                        return 'optionSelect';
+                    }
+                    
+                case 'ArrowDown':
+                    event.preventDefault();
+                    if (!currentState.open) {
+                        state.setOpen(true);
+                        state.setHighlightedIndex(0);
+                        return 'open';
+                    } else {
+                        state.navigateDown();
+                        return 'navigate';
+                    }
+                    
+                case 'ArrowUp':
+                    event.preventDefault();
+                    if (!currentState.open) {
+                        state.setOpen(true);
+                        state.setHighlightedIndex(currentState.filteredOptions.length - 1);
+                        return 'open';
+                    } else {
+                        state.navigateUp();
+                        return 'navigate';
+                    }
+                    
+                case 'Home':
+                    if (currentState.open) {
+                        event.preventDefault();
+                        state.navigateToFirst();
+                        return 'navigate';
+                    }
+                    break;
+                    
+                case 'End':
+                    if (currentState.open) {
+                        event.preventDefault();
+                        state.navigateToLast();
+                        return 'navigate';
+                    }
+                    break;
+                    
+                case 'Escape':
+                    if (currentState.open) {
+                        event.preventDefault();
+                        state.setOpen(false);
+                        return 'close';
+                    }
+                    break;
+                    
+                case 'Tab':
+                    if (currentState.open) {
+                        state.setOpen(false);
+                        return 'close';
+                    }
+                    break;
+                    
+                default:
+                    // Handle searchable select typing
+                    if (options.searchable && event.key.length === 1) {
+                        const currentQuery = currentState.searchQuery ?? '';
+                        const newQuery = currentQuery + event.key;
+                        state.setSearchQuery(newQuery);
+                        
+                        if (!currentState.open) {
+                            state.setOpen(true);
+                        }
+                        
+                        if (options.onSearch) {
+                            options.onSearch(newQuery);
+                        }
+                        
+                        return 'search';
+                    }
+                    break;
+            }
+            
+            return null;
+        })
+        
+        .withInteraction('trigger', 'onFocus', (currentState, event) => {
+            state.setFocused(true);
+            
+            if (options.onFocus) {
+                options.onFocus(event);
+            }
+            
             return 'focus';
         })
-        .withInteraction('root', 'onBlur', (currentState, event: FocusEvent) => {
+        
+        .withInteraction('trigger', 'onBlur', (currentState, event) => {
+            // Small delay to allow option selection
+            setTimeout(() => {
+                state.setFocused(false);
+                state.setOpen(false);
+                
+                if (options.onBlur) {
+                    options.onBlur(event);
+                }
+            }, 100);
+            
             return 'blur';
         })
+        
+        .withInteraction('option', 'onClick', (currentState, event) => {
+            // Index should be passed via event.currentTarget.dataset or similar
+            const optionIndex = (event as any).optionIndex ?? 0;
+            if (currentState.filteredOptions[optionIndex] && !currentState.filteredOptions[optionIndex].disabled) {
+                const option = currentState.filteredOptions[optionIndex];
+                state.selectOption(option);
+                
+                if (options.onChange) {
+                    options.onChange(option.value);
+                }
+                
+                return 'optionSelect';
+            }
+            
+            return null;
+        })
+        
+        .withInteraction('option', 'onMouseEnter', (currentState, event) => {
+            // Index should be passed via event.currentTarget.dataset or similar  
+            const optionIndex = (event as any).optionIndex ?? 0;
+            if (currentState.filteredOptions[optionIndex] && !currentState.filteredOptions[optionIndex]?.disabled) {
+                state.setHighlightedIndex(optionIndex);
+            }
+            
+            return null;
+        })
+        
+        .withInteraction('clear', 'onClick', (currentState, event) => {
+            if (options.clearable && !currentState.disabled && !currentState.readonly) {
+                event.stopPropagation();
+                state.clearSelection();
+                
+                if (options.onChange) {
+                    options.onChange(null);
+                }
+                
+                return 'change';
+            }
+            
+            return null;
+        })
+        
         .build();
 }

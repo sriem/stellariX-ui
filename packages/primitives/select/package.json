@@ -1,7 +1,7 @@
 {
-    "name": "@stellarix/template",
-    "version": "0.0.1",
-    "description": "Framework-agnostic template component for StellarIX UI",
+    "name": "@stellarix/select",
+    "version": "0.1.0",
+    "description": "Framework-agnostic dropdown select component with search and keyboard navigation for StellarIX UI",
     "type": "module",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
@@ -20,9 +20,12 @@
     "keywords": [
         "ui",
         "component",
-        "template",
+        "select",
+        "dropdown",
+        "combobox",
         "headless",
-        "framework-agnostic"
+        "framework-agnostic",
+        "accessibility"
     ],
     "dependencies": {
         "@stellarix/core": "workspace:*",

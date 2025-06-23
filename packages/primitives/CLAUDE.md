@@ -2,15 +2,66 @@
 
 This file provides specific guidance for developing primitive components in the StellarIX UI library.
 
-## 🚨 CRITICAL: Component-Specific State Management
+## 🚨 ULTRA-CRITICAL: State Management Rules
 
-**Important**: Core state management rules are defined in `../core/CLAUDE.md`. This section covers primitive-specific patterns.
+These rules MUST be followed to prevent infinite loops and application crashes.
 
-### Component State Patterns
-- Use LogicLayerBuilder for all component logic implementations
-- Follow the proven patterns from reference implementations (Checkbox, Radio, Dialog)
-- Always use function updater pattern for setState: `(prev) => ({ ...prev, field: value })`
-- Never call `state.getState()` in reactive contexts - use provided parameters instead
+### 🚨🚨🚨 setState PARTIAL UPDATE PREVENTION
+
+**FORBIDDEN**: NEVER use partial object updates with setState
+```typescript
+// ❌❌❌ NEVER do this (WILL BREAK):
+store.setState({ field: value }); // FORBIDDEN! Loses all other fields
+state.setState({ field: value }); // FORBIDDEN! Causes NaN/undefined
+
+// ✅ ONLY CORRECT PATTERN FOR setState:
+store.setState((prev: any) => ({ ...prev, field: value }));
+
+// ✅ For multiple fields:
+store.setState((prev: any) => ({ 
+  ...prev, 
+  field1: value1,
+  field2: value2 
+}));
+```
+
+**WHY**: The core setState expects either a full state object or a function updater. Partial objects cause the state to lose all other fields, resulting in NaN/undefined errors.
+
+### 🚨 state.getState() INFINITE LOOP PREVENTION
+
+**FORBIDDEN**: NEVER call `state.getState()` in reactive contexts
+```typescript
+// ❌❌❌ FORBIDDEN - CAUSES INFINITE LOOPS:
+.withInteraction('root', 'onClick', (currentState, event) => {
+    const state = store.getState(); // 🚨 INFINITE LOOP!
+    if (state.disabled) return;     // 🚨 INFINITE LOOP!
+})
+
+// ✅✅✅ CORRECT - PROVEN WORKING PATTERN:
+.withInteraction('root', 'onClick', (currentState, event) => {
+    if (currentState.disabled) return; // ✅ Use parameter
+    state.setChecked(newValue);         // ✅ Call state methods directly
+    return 'change';                    // ✅ Return event type
+})
+```
+
+**FORBIDDEN CONTEXTS**:
+- NEVER in logic layer methods
+- NEVER in event handlers  
+- NEVER in getInteractionHandlers()
+- NEVER in getA11yProps()
+- NEVER in interactions generator
+- NEVER in tests: `expect(state.getState())`
+- NEVER in Storybook: `component.state.getState()`
+
+### 🚨 Critical Primitive-Specific Rules
+- **ALWAYS** use LogicLayerBuilder pattern for all component logic implementations
+- **ALWAYS** handle event payload extraction: `const event = payload?.event ? payload.event : payload`
+- **ALWAYS** support both direct events and wrapped { event } payloads in onEvent handlers
+- **ALWAYS** call onChange callbacks directly in interaction handlers for proper value passing
+- **ALWAYS** test interactions via callbacks, not state inspection
+- **ALWAYS** use subscription pattern in Storybook: useState + useEffect + subscribe
+- **ALWAYS** use function updater pattern for setState: `store.setState((prev) => ({ ...prev, field: value }))`
 
 ## 📋 Component Creation Process
 

@@ -1,71 +1,72 @@
 /**
- * Template Component
- * Main entry point and public API
+ * Select Component
+ * Framework-agnostic dropdown select component with search and keyboard navigation
  */
 
 import { createPrimitive } from '@stellarix/core';
-import { createTemplateState } from './state';
-import { createTemplateLogic } from './logic';
-import type { TemplateOptions, TemplateState, TemplateEvents } from './types';
+import { createSelectState } from './state.js';
+import { createSelectLogic } from './logic.js';
+import type { SelectOptions, SelectState, SelectEvents } from './types.js';
 
 /**
- * Creates a template component factory
- * @param options Component options
- * @returns Component factory
+ * Creates a select component instance
  */
-export function createTemplate(options: TemplateOptions = {}) {
-    return createPrimitive<TemplateState, TemplateEvents, TemplateOptions>('Template', {
+export function createSelect(options: SelectOptions = {}) {
+    return createPrimitive<SelectState, SelectEvents, SelectOptions>('Select', {
         initialState: options,
         logicConfig: options,
         metadata: {
             accessibility: {
-                role: 'button', // Update based on component type
-                keyboardShortcuts: ['Enter', 'Space'],
-                ariaAttributes: ['aria-disabled', 'aria-pressed', 'aria-label'],
-                wcagLevel: 'AA',
-                patterns: []
+                roles: ['combobox', 'listbox', 'option'],
+                keyboardSupport: [
+                    'Enter', 'Space', 'ArrowDown', 'ArrowUp', 
+                    'Home', 'End', 'Escape', 'Tab', 'Type to search'
+                ],
+                ariaAttributes: [
+                    'aria-expanded', 'aria-haspopup', 'aria-controls',
+                    'aria-activedescendant', 'aria-disabled', 'aria-readonly',
+                    'aria-selected', 'aria-labelledby', 'aria-hidden'
+                ],
+                wcagLevel: 'AA'
             },
             events: {
-                supported: ['change', 'activeChange', 'focus', 'blur'],
+                supported: [
+                    'change', 'open', 'close', 'focus', 'blur', 
+                    'search', 'optionSelect', 'navigate'
+                ],
                 required: [],
-                custom: {}
+                bubbles: ['change', 'focus', 'blur']
             },
             structure: {
-                elements: {
-                    'root': {
-                        type: 'div', // Update based on component type
-                        role: 'button',
-                        optional: false
-                    }
-                }
+                elements: ['trigger', 'listbox', 'option', 'clear'],
+                compound: true
             }
         }
     });
 }
 
 /**
- * Create the component with actual implementation
- * This connects the state and logic layers
+ * Create the component with full implementation
  */
-export function createTemplateWithImplementation(options: TemplateOptions = {}) {
-    const core = createTemplate(options);
+export function createSelectWithImplementation(options: SelectOptions = {}) {
+    const core = createSelect(options);
     
     // Attach the actual implementation
-    core.state = createTemplateState(options);
-    core.logic = createTemplateLogic(core.state as any, options);
+    core.state = createSelectState(options);
+    core.logic = createSelectLogic(core.state as any, options);
     
     return core;
 }
 
 // Re-export types
 export type { 
-    TemplateOptions, 
-    TemplateState, 
-    TemplateEvents, 
-    TemplateProps 
-} from './types';
-
-export type { TemplateStateStore } from './state';
+    SelectOptions, 
+    SelectState, 
+    SelectEvents, 
+    SelectProps,
+    SelectOption
+} from './types.js';
+export type { SelectStateStore } from './state.js';
 
 // Default export for convenience
-export default createTemplateWithImplementation;
+export default createSelectWithImplementation;
