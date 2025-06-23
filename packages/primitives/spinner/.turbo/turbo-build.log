@@ -1,0 +1,18 @@
+
+> @stellarix/spinner@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/spinner
+> tsup --minify
+
+CLI Building entry: src/index.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.0.0
+CLI Using tsup config: /mnt/d/dev/stellariX-ui/packages/primitives/spinner/tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+CJS Build start
+ESM Build start
+CJS dist/index.cjs     1.88 KB
+CJS dist/index.cjs.map 9.10 KB
+CJS ⚡️ Build success in 94ms
+ESM dist/index.js     1.36 KB
+ESM dist/index.js.map 8.96 KB
+ESM ⚡️ Build success in 97ms

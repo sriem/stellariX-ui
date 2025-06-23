@@ -1,0 +1,57 @@
+
+> @stellarix/container@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/container
+> tsup --minify
+
+CLI Building entry: src/index.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.0.0
+CLI Using tsup config: /mnt/d/dev/stellariX-ui/packages/primitives/container/tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+CJS Build start
+ESM Build start
+ESM dist/index.js     1.53 KB
+ESM dist/index.js.map 10.05 KB
+ESM ⚡️ Build success in 74ms
+CJS dist/index.cjs     2.05 KB
+CJS dist/index.cjs.map 10.17 KB
+CJS ⚡️ Build success in 76ms
+DTS Build start
+error TS5074: Option '--incremental' can only be specified using tsconfig, emitting to single file or when option '--tsBuildInfoFile' is specified.
+src/index.ts(7,38): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/primitives/container/src/state.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via './state' from file '/mnt/d/dev/stellariX-ui/packages/primitives/container/src/index.ts'
+    Imported via './state' from file '/mnt/d/dev/stellariX-ui/packages/primitives/container/src/logic.ts'
+    Imported via './state' from file '/mnt/d/dev/stellariX-ui/packages/primitives/container/src/index.ts'
+src/index.ts(8,38): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/primitives/container/src/logic.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
+src/index.ts(21,13): error TS2375: Type '{ role: undefined; keyboardShortcuts: never[]; ariaAttributes: never[]; wcagLevel: "AA"; patterns: never[]; }' is not assignable to type 'A11yMetadata' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'role' are incompatible.
+    Type 'undefined' is not assignable to type 'string'.
+src/index.ts(35,21): error TS2375: Type '{ type: string; role: undefined; optional: false; }' is not assignable to type '{ type: string; role?: string; optional?: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'role' are incompatible.
+    Type 'undefined' is not assignable to type 'string'.
+src/index.ts(54,5): error TS2322: Type 'ContainerStateStore' is not assignable to type 'Store<ContainerState>'.
+  Types of property 'setState' are incompatible.
+    Type '(updates: Partial<ContainerState>) => void' is not assignable to type '(updater: ContainerState | ((prev: ContainerState) => ContainerState)) => void'.
+      Types of parameters 'updates' and 'updater' are incompatible.
+        Type 'ContainerState | ((prev: ContainerState) => ContainerState)' is not assignable to type 'Partial<ContainerState>'.
+          Value of type '(prev: ContainerState) => ContainerState' has no properties in common with type 'Partial<ContainerState>'. Did you mean to call it?
+
+Error: error occured in dts build
+    at Worker.<anonymous> (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/index.js:2678:26)
+    at Worker.emit (node:events:517:28)
+    at MessagePort.<anonymous> (node:internal/worker:256:53)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:786:20)
+    at exports.emitMessage (node:internal/per_context/messageport:23:28)
+DTS Build error
+RollupError: [plugin dts] src/index.ts: Failed to compile. Check the logs above.
+    at getRollupError (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/parseAst.js:285:41)
+    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/parseAst.js:281:42)
+    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:913:32)
+    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:22252:42)
+    at generateDtsFromTs (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7776:22)
+    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7783:59
+    at _nullishCoalesce (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:1:198)
+    at Object.transform (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@8.0.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7783:18)
+    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@4.44.0/node_modules/rollup/dist/shared/rollup.js:3387:40
+ ELIFECYCLE  Command failed with exit code 1.

@@ -1,0 +1,22 @@
+
+> @stellarix/utils@0.0.1 build /mnt/d/dev/stellariX-ui/packages/utils
+> tsup
+
+CLI Building entry: src/index.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.0.0
+CLI Using tsup config: /mnt/d/dev/stellariX-ui/packages/utils/tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+CJS Build start
+ESM Build start
+ESM dist/index.mjs     6.31 KB
+ESM dist/index.mjs.map 15.35 KB
+ESM ⚡️ Build success in 59ms
+CJS dist/index.js     8.08 KB
+CJS dist/index.js.map 15.50 KB
+CJS ⚡️ Build success in 61ms
+DTS Build start
+DTS ⚡️ Build success in 5580ms
+DTS dist/index.d.ts  4.93 KB
+DTS dist/index.d.mts 4.93 KB
