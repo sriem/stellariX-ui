@@ -1,5 +1,5 @@
 {
-    "name": "@stellarix/themes",
+    "name": "@stellarix-ui/themes",
     "version": "0.0.1",
     "description": "Beautiful theme system for StellarIX UI components",
     "type": "module",
@@ -27,7 +27,7 @@
         "stellarix"
     ],
     "dependencies": {
-        "@stellarix/core": "workspace:*"
+        "@stellarix-ui/core": "workspace:*"
     },
     "devDependencies": {
         "tsup": "^8.0.0",

@@ -1,5 +1,5 @@
 
-> @stellarix/dialog@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/dialog
+> @stellarix-ui/dialog@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/dialog
 > tsup
 
 CLI Building entry: src/index.ts
@@ -10,31 +10,38 @@ CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-✘ [ERROR] No matching export in "../../utils/src/dom.ts" for import "generateId"
-
-    src/state.ts:7:9:
-      7 │ import { generateId } from '../../../utils/src/dom';
-        ╵          ~~~~~~~~~~
-
-✘ [ERROR] No matching export in "../../utils/src/dom.ts" for import "generateId"
-
-    src/state.ts:7:9:
-      7 │ import { generateId } from '../../../utils/src/dom';
-        ╵          ~~~~~~~~~~
-
-ESM Build failed
-Error: Build failed with 1 error:
-src/state.ts:7:9: ERROR: No matching export in "../../utils/src/dom.ts" for import "generateId"
-    at failureErrorWithLog (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.18.20/node_modules/esbuild/lib/main.js:1649:15)
-    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.18.20/node_modules/esbuild/lib/main.js:1058:25
-    at runOnEndCallbacks (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.18.20/node_modules/esbuild/lib/main.js:1484:45)
-    at buildResponseToResult (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.18.20/node_modules/esbuild/lib/main.js:1056:7)
-    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.18.20/node_modules/esbuild/lib/main.js:1085:16
-    at responseCallbacks.<computed> (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.18.20/node_modules/esbuild/lib/main.js:703:9)
-    at handleIncomingPacket (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.18.20/node_modules/esbuild/lib/main.js:762:9)
-    at Socket.readFromStdout (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/esbuild@0.18.20/node_modules/esbuild/lib/main.js:679:7)
-    at Socket.emit (node:events:517:28)
-    at addChunk (node:internal/streams/readable:368:12)
-CJS Build failed
+CJS dist/index.js     7.45 KB
+CJS dist/index.js.map 16.79 KB
+CJS ⚡️ Build success in 79ms
+ESM dist/index.mjs     6.34 KB
+ESM dist/index.mjs.map 16.71 KB
+ESM ⚡️ Build success in 81ms
 DTS Build start
- ELIFECYCLE  Command failed.
+src/index.ts(6,10): error TS2724: '"@stellarix/core"' has no exported member named 'createComponent'. Did you mean 'createComponentLogic'?
+src/index.ts(7,35): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/primitives/dialog/src/state.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via './state' from file '/mnt/d/dev/stellariX-ui/packages/primitives/dialog/src/index.ts'
+    Imported via './state' from file '/mnt/d/dev/stellariX-ui/packages/primitives/dialog/src/logic.ts'
+    Imported via './state' from file '/mnt/d/dev/stellariX-ui/packages/primitives/dialog/src/index.ts'
+src/index.ts(8,35): error TS6307: File '/mnt/d/dev/stellariX-ui/packages/primitives/dialog/src/logic.ts' is not listed within the file list of project ''. Projects must list all files or use an 'include' pattern.
+  The file is in the program because:
+    Imported via './logic' from file '/mnt/d/dev/stellariX-ui/packages/primitives/dialog/src/index.ts'
+    Imported via './logic' from file '/mnt/d/dev/stellariX-ui/packages/primitives/dialog/src/index.ts'
+
+Error: error occured in dts build
+    at Worker.<anonymous> (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@7.2.0_typescript@5.7.2/node_modules/tsup/dist/index.js:2294:26)
+    at Worker.emit (node:events:517:28)
+    at MessagePort.<anonymous> (node:internal/worker:256:53)
+    at [nodejs.internal.kHybridDispatch] (node:internal/event_target:786:20)
+    at exports.emitMessage (node:internal/per_context/messageport:23:28)
+DTS Build error
+RollupError: Failed to compile. Check the logs above.
+    at error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@3.29.5/node_modules/rollup/dist/shared/rollup.js:353:30)
+    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@3.29.5/node_modules/rollup/dist/shared/rollup.js:1721:20)
+    at Object.error (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@3.29.5/node_modules/rollup/dist/shared/rollup.js:25627:42)
+    at generateDtsFromTs (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@7.2.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7512:22)
+    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@7.2.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7519:59
+    at _nullishCoalesce (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@7.2.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:1:198)
+    at Object.transform (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/tsup@7.2.0_typescript@5.7.2/node_modules/tsup/dist/rollup.js:7519:18)
+    at /mnt/d/dev/stellariX-ui/node_modules/.pnpm/rollup@3.29.5/node_modules/rollup/dist/shared/rollup.js:1914:40
+ ELIFECYCLE  Command failed with exit code 1.

@@ -1,5 +1,5 @@
 
-> @stellarix/radio@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/radio
+> @stellarix-ui/radio@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/radio
 > tsup --minify
 
 CLI Building entry: src/index.ts
@@ -10,9 +10,9 @@ CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-ESM dist/index.js     1.98 KB
-ESM dist/index.js.map 13.55 KB
-ESM ⚡️ Build success in 140ms
-CJS dist/index.cjs     2.49 KB
-CJS dist/index.cjs.map 13.72 KB
-CJS ⚡️ Build success in 152ms
+ESM dist/index.js     2.09 KB
+ESM dist/index.js.map 14.53 KB
+ESM ⚡️ Build success in 64ms
+CJS dist/index.cjs     2.63 KB
+CJS dist/index.cjs.map 14.74 KB
+CJS ⚡️ Build success in 67ms

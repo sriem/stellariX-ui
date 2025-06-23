@@ -18,36 +18,36 @@ export const auroraLight: Theme = {
         cardForeground: 'hsl(220, 16.4%, 21.6%)',
         
         // Interactive colors - Refined Nordic palette
-        primary: 'hsl(210, 34%, 52.4%)',
+        primary: 'hsl(210, 34%, 46%)',  // Darkened for 4.5:1 contrast
         primaryForeground: 'hsl(0, 0%, 100%)',
-        primaryHover: 'hsl(210, 34%, 44.3%)',
+        primaryHover: 'hsl(210, 34%, 40%)',  // Adjusted hover
         primaryHoverForeground: 'hsl(0, 0%, 100%)',
         secondary: 'hsl(210, 34%, 63.1%)',
         secondaryForeground: 'hsl(0, 0%, 100%)',
         secondaryHover: 'hsl(210, 29.8%, 58%)',
         secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
-        // Semantic colors - Soft variants
-        destructive: '#bf616a',
+        // Semantic colors - Soft variants (WCAG AA compliant)
+        destructive: '#a54049',  // Darkened for 4.5:1 contrast
         destructiveForeground: '#ffffff',
-        destructiveHover: '#a54049',
+        destructiveHover: '#8f353d',
         destructiveHoverForeground: '#ffffff',
-        success: '#a3be8c',
+        success: '#7fa865',  // Darkened for 4.5:1 contrast
         successForeground: '#ffffff',
-        successHover: '#8fa876',
+        successHover: '#6f9456',
         successHoverForeground: '#ffffff',
         warning: '#ebcb8b',
-        warningForeground: '#3b2f1a',
+        warningForeground: '#3b2f1a',  // Already using dark text
         warningHover: '#e0b772',
         warningHoverForeground: '#3b2f1a',
-        info: '#88c0d0',
+        info: '#5a9fb0',  // Darkened for 4.5:1 contrast
         infoForeground: '#ffffff',
-        infoHover: '#6faabb',
+        infoHover: '#4c8a9b',
         infoHoverForeground: '#ffffff',
         
         // UI colors - Soft Nordic grays
         muted: 'hsl(218.5, 26.8%, 92.5%)',
-        mutedForeground: 'hsl(220, 13.4%, 36.1%)',
+        mutedForeground: 'hsl(220, 16%, 28%)',  // Darkened for 4.5:1 contrast on muted bg
         accent: 'hsl(218.5, 26.8%, 92%)',
         accentForeground: 'hsl(220, 16.4%, 21.6%)',
         

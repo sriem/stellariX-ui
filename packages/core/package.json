@@ -1,5 +1,5 @@
 {
-    "name": "@stellarix/core",
+    "name": "@stellarix-ui/core",
     "version": "0.0.1",
     "description": "Core framework-agnostic implementation of StellarIX UI",
     "main": "dist/index.js",

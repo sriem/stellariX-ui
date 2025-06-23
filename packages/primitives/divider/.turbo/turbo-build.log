@@ -1,5 +1,5 @@
 
-> @stellarix/divider@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/divider
+> @stellarix-ui/divider@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/divider
 > tsup --minify
 
 CLI Building entry: src/index.ts
@@ -10,13 +10,13 @@ CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-ESM dist/index.js     1.46 KB
-ESM dist/index.js.map 8.92 KB
-ESM ⚡️ Build success in 102ms
-CJS dist/index.cjs     1.98 KB
-CJS dist/index.cjs.map 9.05 KB
-CJS ⚡️ Build success in 105ms
+ESM dist/index.js     3.16 KB
+ESM dist/index.js.map 36.17 KB
+ESM ⚡️ Build success in 245ms
+CJS dist/index.cjs     3.68 KB
+CJS dist/index.cjs.map 36.35 KB
+CJS ⚡️ Build success in 248ms
 DTS Build start
-DTS ⚡️ Build success in 8477ms
+DTS ⚡️ Build success in 11880ms
 DTS dist/index.d.cts 3.63 KB
 DTS dist/index.d.ts  3.63 KB

@@ -1,5 +1,5 @@
 
-> @stellarix/checkbox@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/checkbox
+> @stellarix-ui/checkbox@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/checkbox
 > tsup --minify
 
 CLI Building entry: src/index.ts
@@ -10,9 +10,9 @@ CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-ESM dist/index.js     2.45 KB
-ESM dist/index.js.map 15.18 KB
-ESM ⚡️ Build success in 143ms
-CJS dist/index.cjs     2.97 KB
-CJS dist/index.cjs.map 15.31 KB
-CJS ⚡️ Build success in 150ms
+ESM dist/index.js     2.50 KB
+ESM dist/index.js.map 15.88 KB
+ESM ⚡️ Build success in 79ms
+CJS dist/index.cjs     3.02 KB
+CJS dist/index.cjs.map 16.01 KB
+CJS ⚡️ Build success in 81ms

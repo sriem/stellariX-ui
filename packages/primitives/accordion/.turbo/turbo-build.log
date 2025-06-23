@@ -1,0 +1,18 @@
+
+> @stellarix-ui/accordion@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/accordion
+> tsup --minify
+
+CLI Building entry: src/index.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.0.0
+CLI Using tsup config: /mnt/d/dev/stellariX-ui/packages/primitives/accordion/tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+CJS Build start
+ESM Build start
+ESM dist/index.js     6.32 KB
+ESM dist/index.js.map 30.50 KB
+ESM ⚡️ Build success in 67ms
+CJS dist/index.cjs     6.84 KB
+CJS dist/index.cjs.map 30.63 KB
+CJS ⚡️ Build success in 74ms

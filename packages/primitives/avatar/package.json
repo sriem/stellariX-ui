@@ -1,5 +1,5 @@
 {
-    "name": "@stellarix/avatar",
+    "name": "@stellarix-ui/avatar",
     "version": "0.0.1",
     "description": "Framework-agnostic avatar component for StellarIX UI",
     "type": "module",
@@ -29,8 +29,8 @@
         "framework-agnostic"
     ],
     "dependencies": {
-        "@stellarix/core": "workspace:*",
-        "@stellarix/utils": "workspace:*"
+        "@stellarix-ui/core": "workspace:*",
+        "@stellarix-ui/utils": "workspace:*"
     },
     "devDependencies": {
         "tsup": "^8.0.0",

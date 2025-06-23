@@ -1,5 +1,5 @@
 {
-  "name": "@stellarix/popover",
+  "name": "@stellarix-ui/popover",
   "version": "0.1.0",
   "description": "Popover component for StellarIX UI",
   "main": "dist/index.js",
@@ -20,8 +20,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@stellarix/core": "workspace:*",
-    "@stellarix/utils": "workspace:*"
+    "@stellarix-ui/core": "workspace:*",
+    "@stellarix-ui/utils": "workspace:*"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.0.0",

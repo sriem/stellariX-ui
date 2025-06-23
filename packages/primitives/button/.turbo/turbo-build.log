@@ -1,5 +1,5 @@
 
-> @stellarix/button@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/button
+> @stellarix-ui/button@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/button
 > tsup --minify
 
 CLI Building entry: src/index.ts
@@ -10,9 +10,9 @@ CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-CJS dist/index.cjs     3.32 KB
-CJS dist/index.cjs.map 12.78 KB
-CJS ⚡️ Build success in 70ms
 ESM dist/index.js     2.81 KB
 ESM dist/index.js.map 12.67 KB
-ESM ⚡️ Build success in 73ms
+ESM ⚡️ Build success in 55ms
+CJS dist/index.cjs     3.32 KB
+CJS dist/index.cjs.map 12.78 KB
+CJS ⚡️ Build success in 57ms

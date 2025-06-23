@@ -1,5 +1,5 @@
 {
-    "name": "@stellarix/utils",
+    "name": "@stellarix-ui/utils",
     "version": "0.0.1",
     "description": "Utility functions for StellarIX UI",
     "main": "dist/index.js",

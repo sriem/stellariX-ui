@@ -1,5 +1,5 @@
 {
-    "name": "@stellarix/divider",
+    "name": "@stellarix-ui/divider",
     "version": "0.0.1",
     "description": "Divider primitive for StellarIX UI - Visual separator between content",
     "type": "module",
@@ -25,8 +25,8 @@
         "framework-agnostic"
     ],
     "dependencies": {
-        "@stellarix/core": "workspace:*",
-        "@stellarix/utils": "workspace:*"
+        "@stellarix-ui/core": "workspace:*",
+        "@stellarix-ui/utils": "workspace:*"
     },
     "devDependencies": {
         "@storybook/react-vite": "^8.6.14",

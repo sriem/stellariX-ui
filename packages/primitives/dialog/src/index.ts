@@ -3,7 +3,7 @@
  * Framework-agnostic dialog/modal implementation
  */
 
-import { createComponent } from '@stellarix/core';
+import { createPrimitive } from '@stellarix/core';
 import { createDialogState } from './state';
 import { createDialogLogic } from './logic';
 import type { DialogOptions, DialogState, DialogEvents } from './types';
@@ -14,14 +14,49 @@ import type { DialogOptions, DialogState, DialogEvents } from './types';
  * @returns Dialog component instance
  */
 export function createDialog(options: DialogOptions = {}) {
-    const state = createDialogState(options);
-    const logic = createDialogLogic(state, options);
-    
-    return createComponent<DialogState, DialogEvents>({
-        name: 'Dialog',
-        state,
-        logic,
+    return createPrimitive<DialogState, DialogEvents, DialogOptions>('Dialog', {
+        initialState: options,
+        logicConfig: options,
+        metadata: {
+            accessibility: {
+                role: 'dialog',
+                keyboardShortcuts: ['Escape'],
+                ariaAttributes: ['aria-modal', 'aria-labelledby', 'aria-describedby'],
+                wcagLevel: 'AA',
+                patterns: ['focus-trap']
+            },
+            events: {
+                supported: ['open', 'close', 'backdrop-click'],
+                required: [],
+                custom: {}
+            },
+            structure: {
+                elements: {
+                    'root': {
+                        type: 'div',
+                        role: 'dialog',
+                        optional: false
+                    },
+                    'backdrop': {
+                        type: 'div',
+                        role: 'presentation',
+                        optional: true
+                    }
+                }
+            }
+        }
     });
+}
+
+// Create the component factory with proper state and logic
+export function createDialogWithImplementation(options: DialogOptions = {}) {
+    const core = createDialog(options);
+    
+    // Attach the actual implementation
+    core.state = createDialogState(options);
+    core.logic = createDialogLogic(core.state as any, options);
+    
+    return core;
 }
 
 // Re-export types
@@ -34,4 +69,8 @@ export type {
 
 // Re-export component factory
 export { createDialogState } from './state';
-export { createDialogLogic } from './logic'; 
+export { createDialogLogic } from './logic';
+export type { DialogStateStore } from './state';
+
+// Default export for convenience
+export default createDialogWithImplementation; 

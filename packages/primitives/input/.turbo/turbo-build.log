@@ -1,5 +1,5 @@
 
-> @stellarix/input@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/input
+> @stellarix-ui/input@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/input
 > tsup --minify
 
 CLI Building entry: src/index.ts
@@ -10,9 +10,9 @@ CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-CJS dist/index.cjs     3.98 KB
-CJS dist/index.cjs.map 19.23 KB
-CJS ⚡️ Build success in 119ms
 ESM dist/index.js     3.47 KB
 ESM dist/index.js.map 19.11 KB
-ESM ⚡️ Build success in 127ms
+ESM ⚡️ Build success in 84ms
+CJS dist/index.cjs     3.98 KB
+CJS dist/index.cjs.map 19.23 KB
+CJS ⚡️ Build success in 88ms

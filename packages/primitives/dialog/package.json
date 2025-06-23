@@ -1,5 +1,5 @@
 {
-    "name": "@stellarix/dialog",
+    "name": "@stellarix-ui/dialog",
     "version": "0.0.1",
     "description": "A headless dialog component for StellarIX UI",
     "main": "./dist/index.js",
@@ -22,8 +22,8 @@
         "test:coverage": "vitest run --coverage"
     },
     "dependencies": {
-        "@stellarix/core": "workspace:*",
-        "@stellarix/utils": "workspace:*"
+        "@stellarix-ui/core": "workspace:*",
+        "@stellarix-ui/utils": "workspace:*"
     },
     "devDependencies": {
         "eslint": "^8.46.0",

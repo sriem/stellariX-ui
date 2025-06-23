@@ -3,9 +3,10 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
     entry: ['src/index.ts'],
     format: ['cjs', 'esm'],
-    dts: true,
+    dts: false,
     splitting: false,
     sourcemap: true,
     clean: true,
-    external: ['@stellarix/core', '@stellarix/utils', 'react', 'react-dom'],
+    target: 'es2022',
+    external: ['@stellarix/core', '@stellarix/utils'],
 }); 

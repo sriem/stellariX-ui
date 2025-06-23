@@ -1,5 +1,5 @@
 {
-    "name": "@stellarix/react",
+    "name": "@stellarix-ui/react",
     "version": "0.0.1",
     "description": "React adapter for StellarIX UI",
     "main": "dist/index.js",
@@ -19,8 +19,8 @@
         "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
     },
     "dependencies": {
-        "@stellarix/core": "workspace:*",
-        "@stellarix/utils": "workspace:*"
+        "@stellarix-ui/core": "workspace:*",
+        "@stellarix-ui/utils": "workspace:*"
     },
     "peerDependencies": {
         "react": "^18.0.0",

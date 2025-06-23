@@ -1,5 +1,5 @@
 
-> @stellarix/core@0.0.1 build /mnt/d/dev/stellariX-ui/packages/core
+> @stellarix-ui/core@0.0.1 build /mnt/d/dev/stellariX-ui/packages/core
 > tsup
 
 CLI Building entry: src/index.ts
@@ -10,13 +10,13 @@ CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-ESM dist/index.mjs     10.37 KB
-ESM dist/index.mjs.map 30.92 KB
-ESM ⚡️ Build success in 60ms
 CJS dist/index.js     11.82 KB
 CJS dist/index.js.map 31.01 KB
-CJS ⚡️ Build success in 63ms
+CJS ⚡️ Build success in 48ms
+ESM dist/index.mjs     10.37 KB
+ESM dist/index.mjs.map 30.92 KB
+ESM ⚡️ Build success in 49ms
 DTS Build start
-DTS ⚡️ Build success in 5570ms
+DTS ⚡️ Build success in 4698ms
 DTS dist/index.d.ts  12.99 KB
 DTS dist/index.d.mts 12.99 KB

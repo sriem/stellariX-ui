@@ -73,7 +73,12 @@ const ThemeProvider = ({ theme, children }: { theme: string; children: React.Rea
 
 // Component wrappers with themed styling
 const ThemedButton = ({ variant, size, children, onClick, ...props }: any) => {
-    const [button] = useState(() => createButtonWithImplementation({ variant, size, onClick, ...props }));
+    const [button] = useState(() => createButtonWithImplementation({ 
+        variant, 
+        size, 
+        onClick,  // Pass onClick to the options
+        ...props 
+    }));
     const [state, setState] = useState(() => button.state.getState());
 
     useEffect(() => {
@@ -90,6 +95,7 @@ const ThemedButton = ({ variant, size, children, onClick, ...props }: any) => {
             {...a11yProps}
             {...handlers}
             disabled={state.disabled}
+            onClick={onClick}  // Also add onClick directly to ensure it works
         >
             {children}
         </button>
@@ -244,7 +250,12 @@ const ThemedCheckbox = ({ label, checked, onChange, ...props }: any) => {
 };
 
 const ThemedToggle = ({ label, checked, onChange, ...props }: any) => {
-    const [toggle] = useState(() => createToggleWithImplementation({ label, checked, onChange, ...props }));
+    const [toggle] = useState(() => createToggleWithImplementation({ 
+        label,  // Pass label to options so it's available for aria-label
+        checked, 
+        onChange, 
+        ...props 
+    }));
     const [state, setState] = useState(() => toggle.state.getState());
 
     useEffect(() => {
@@ -261,6 +272,7 @@ const ThemedToggle = ({ label, checked, onChange, ...props }: any) => {
                 className={`sx-toggle ${state.checked ? 'sx-toggle--checked' : ''}`}
                 {...a11yProps}
                 {...handlers}
+                aria-label={label || 'Toggle'}  // Ensure aria-label is set
             >
                 <div className="sx-toggle__track" />
                 <div className="sx-toggle__thumb" />

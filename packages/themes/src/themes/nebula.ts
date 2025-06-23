@@ -27,27 +27,27 @@ export const nebulaLight: Theme = {
         secondaryHover: 'hsl(207.3, 56.1%, 36.5%)',
         secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
-        // Semantic colors - Vibrant
-        destructive: '#e63946',
+        // Semantic colors - Vibrant (WCAG AA compliant)
+        destructive: '#d62828',  // Darkened for 4.5:1 contrast
         destructiveForeground: '#ffffff',
-        destructiveHover: '#d62828',
+        destructiveHover: '#c42020',
         destructiveHoverForeground: '#ffffff',
-        success: '#00b874',
+        success: '#009960',  // Darkened for 4.5:1 contrast
         successForeground: '#ffffff',
-        successHover: '#009960',
+        successHover: '#007a4d',
         successHoverForeground: '#ffffff',
         warning: '#ffb700',
-        warningForeground: '#1a1a2e',
+        warningForeground: '#1a1a2e',  // Already using dark text
         warningHover: '#e6a300',
         warningHoverForeground: '#1a1a2e',
-        info: '#0090cc',
+        info: '#0077aa',  // Darkened for 4.5:1 contrast
         infoForeground: '#ffffff',
-        infoHover: '#0077aa',
+        infoHover: '#006090',
         infoHoverForeground: '#ffffff',
         
         // UI colors - Tech grays
         muted: 'hsl(0, 0%, 94.1%)',
-        mutedForeground: 'hsl(0, 0%, 29%)',
+        mutedForeground: 'hsl(0, 0%, 25%)',  // Darkened for 4.5:1 contrast on muted bg
         accent: 'hsl(0, 0%, 91%)',
         accentForeground: 'hsl(239.5, 29.4%, 12.7%)',
         

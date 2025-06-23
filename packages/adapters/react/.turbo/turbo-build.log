@@ -1,5 +1,5 @@
 
-> @stellarix/react@0.0.1 build /mnt/d/dev/stellariX-ui/packages/adapters/react
+> @stellarix-ui/react@0.0.1 build /mnt/d/dev/stellariX-ui/packages/adapters/react
 > tsup --minify
 
 CLI Building entry: src/index.ts
@@ -10,11 +10,11 @@ CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-CJS dist/index.js     3.89 KB
-CJS dist/index.js.map 19.73 KB
-CJS ⚡️ Build success in 58ms
-ESM dist/index.mjs     3.10 KB
-ESM dist/index.mjs.map 19.46 KB
-ESM ⚡️ Build success in 61ms
+ESM dist/index.mjs     3.23 KB
+ESM dist/index.mjs.map 19.88 KB
+ESM ⚡️ Build success in 67ms
+CJS dist/index.js     4.01 KB
+CJS dist/index.js.map 20.15 KB
+CJS ⚡️ Build success in 69ms
 DTS Build start
  ELIFECYCLE  Command failed.
