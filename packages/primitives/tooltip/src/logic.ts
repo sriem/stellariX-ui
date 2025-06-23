@@ -135,7 +135,7 @@ export function createTooltipLogic(
         }))
         .withA11y('content', (state) => ({
             role: 'tooltip',
-            id: state.content ? `${options.id || 'tooltip'}-content` : undefined,
+            id: `${options.id || 'tooltip'}-content`,
             'aria-hidden': !state.visible ? 'true' : undefined,
         }))
         .withInteraction('trigger', 'onMouseEnter', (currentState, event: MouseEvent) => {

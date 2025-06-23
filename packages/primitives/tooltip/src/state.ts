@@ -25,7 +25,7 @@ import type { TooltipState, TooltipOptions, TooltipPlacement } from './types';
  */
 function createInitialState(options: TooltipOptions = {}): TooltipState {
     return {
-        visible: options.controlled ? (options.visible ?? false) : false,
+        visible: options.visible ?? false,
         placement: options.placement || 'top',
         content: options.content || null,
         focused: false,
