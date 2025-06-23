@@ -4,7 +4,12 @@
  */
 
 import { createMenuState } from './state';
-import { createMenuLogic } from './logic';
+import { 
+    createMenuLogic,
+    handleMenuItemClick,
+    handleMenuItemMouseEnter,
+    getMenuItemA11yProps
+} from './logic';
 import type { MenuOptions, MenuState, MenuEvents, MenuItem } from './types';
 import type { MenuStateStore } from './state';
 import type { LogicLayer } from '@stellarix-ui/core';
@@ -52,3 +57,12 @@ export function createMenu(options: MenuOptions = {}): MenuComponent {
 // Re-export types
 export type { MenuState, MenuOptions, MenuEvents, MenuItem } from './types';
 export type { MenuStateStore } from './state';
+
+// Re-export helper functions
+export { 
+    createMenuState,
+    createMenuLogic,
+    handleMenuItemClick,
+    handleMenuItemMouseEnter,
+    getMenuItemA11yProps
+};

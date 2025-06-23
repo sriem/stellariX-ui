@@ -164,6 +164,10 @@ export function createTabsLogic(
                         const tab = currentState.tabs[currentState.focusedIndex];
                         if (tab && !tab.disabled) {
                             state.setActiveTab(tab.id);
+                            // Trigger onChange callback
+                            if (options.onChange) {
+                                options.onChange(tab.id);
+                            }
                             return 'change';
                         }
                     }
@@ -178,6 +182,10 @@ export function createTabsLogic(
                     const newTab = currentState.tabs[newIndex];
                     if (newTab && !newTab.disabled) {
                         state.setActiveTab(newTab.id);
+                        // Trigger onChange callback
+                        if (options.onChange) {
+                            options.onChange(newTab.id);
+                        }
                         return 'change';
                     }
                 }

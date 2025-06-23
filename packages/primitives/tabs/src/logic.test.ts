@@ -58,7 +58,7 @@ describe('createTabsLogic', () => {
     });
     
     describe('Tab Click Interaction', () => {
-        it('should change active tab on click', () => {
+        it('should change active tab on click', async () => {
             const onChange = vi.fn();
             const state = createTabsState({ tabs: mockTabs });
             const logic = createTabsLogic(state, { onChange });
@@ -66,15 +66,17 @@ describe('createTabsLogic', () => {
             logic.connect(state);
             logic.initialize();
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 1 });
+            // Import helper function and test it directly
+            const { handleTabClick } = await import('./logic');
+            const currentState = { ...state.getState() };
             const mockEvent = createMockEvent('click');
             
-            interactions.onClick(mockEvent);
+            handleTabClick(state, logic, currentState, 1, mockEvent as MouseEvent);
             
             expect(onChange).toHaveBeenCalledWith('tab2');
         });
         
-        it('should not change tab when disabled', () => {
+        it('should not change tab when disabled', async () => {
             const onChange = vi.fn();
             const state = createTabsState({ tabs: mockTabs, disabled: true });
             const logic = createTabsLogic(state, { onChange });
@@ -82,16 +84,17 @@ describe('createTabsLogic', () => {
             logic.connect(state);
             logic.initialize();
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 1 });
+            const { handleTabClick } = await import('./logic');
+            const currentState = { ...state.getState() };
             const mockEvent = createMockEvent('click');
             
-            interactions.onClick(mockEvent);
+            handleTabClick(state, logic, currentState, 1, mockEvent as MouseEvent);
             
             expect(mockEvent.preventDefault).toHaveBeenCalled();
             expect(onChange).not.toHaveBeenCalled();
         });
         
-        it('should not activate disabled tab', () => {
+        it('should not activate disabled tab', async () => {
             const onChange = vi.fn();
             const state = createTabsState({ tabs: mockTabs });
             const logic = createTabsLogic(state, { onChange });
@@ -99,10 +102,11 @@ describe('createTabsLogic', () => {
             logic.connect(state);
             logic.initialize();
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 2 }); // tab3 is disabled
+            const { handleTabClick } = await import('./logic');
+            const currentState = { ...state.getState() };
             const mockEvent = createMockEvent('click');
             
-            interactions.onClick(mockEvent);
+            handleTabClick(state, logic, currentState, 2, mockEvent as MouseEvent); // tab3 is disabled
             
             expect(mockEvent.preventDefault).toHaveBeenCalled();
             expect(onChange).not.toHaveBeenCalled();
@@ -118,7 +122,7 @@ describe('createTabsLogic', () => {
             logic.connect(state);
             logic.initialize();
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 0 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: 'ArrowRight' });
             
             interactions.onKeyDown(mockEvent);
@@ -142,7 +146,7 @@ describe('createTabsLogic', () => {
             // Set focused index to 1
             state.setFocusedIndex(1);
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 1 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: 'ArrowLeft' });
             
             interactions.onKeyDown(mockEvent);
@@ -164,7 +168,7 @@ describe('createTabsLogic', () => {
             
             state.setFocusedIndex(1);
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 1 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: 'ArrowRight' });
             
             interactions.onKeyDown(mockEvent);
@@ -186,7 +190,7 @@ describe('createTabsLogic', () => {
             
             state.setFocusedIndex(3);
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 3 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: 'ArrowRight' });
             
             interactions.onKeyDown(mockEvent);
@@ -207,7 +211,7 @@ describe('createTabsLogic', () => {
             logic.connect(state);
             logic.initialize();
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 0 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: 'ArrowDown' });
             
             interactions.onKeyDown(mockEvent);
@@ -230,7 +234,7 @@ describe('createTabsLogic', () => {
             
             state.setFocusedIndex(1);
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 1 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: 'ArrowUp' });
             
             interactions.onKeyDown(mockEvent);
@@ -254,7 +258,7 @@ describe('createTabsLogic', () => {
             
             state.setFocusedIndex(3);
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 3 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: 'Home' });
             
             interactions.onKeyDown(mockEvent);
@@ -271,7 +275,7 @@ describe('createTabsLogic', () => {
             logic.connect(state);
             logic.initialize();
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 0 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: 'End' });
             
             interactions.onKeyDown(mockEvent);
@@ -293,7 +297,7 @@ describe('createTabsLogic', () => {
             logic.connect(state);
             logic.initialize();
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 0 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: 'ArrowRight' });
             
             interactions.onKeyDown(mockEvent);
@@ -302,13 +306,9 @@ describe('createTabsLogic', () => {
             expect(onChange).not.toHaveBeenCalled();
             
             // But focused index should update
-            const listener = vi.fn();
-            state.subscribe(listener);
-            expect(listener).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    focusedIndex: 1
-                })
-            );
+            // Check the state directly
+            const currentState = state.getState();
+            expect(currentState.focusedIndex).toBe(1);
         });
         
         it('should activate tab on Enter in manual mode', () => {
@@ -324,7 +324,7 @@ describe('createTabsLogic', () => {
             
             state.setFocusedIndex(1);
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 1 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: 'Enter' });
             
             interactions.onKeyDown(mockEvent);
@@ -346,7 +346,7 @@ describe('createTabsLogic', () => {
             
             state.setFocusedIndex(3);
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 3 });
+            const interactions = logic.getInteractionHandlers('root');
             const mockEvent = createMockEvent('keydown', { key: ' ' });
             
             interactions.onKeyDown(mockEvent);
@@ -357,7 +357,7 @@ describe('createTabsLogic', () => {
     });
     
     describe('Focus Management', () => {
-        it('should update focused index on focus', () => {
+        it('should update focused index on focus', async () => {
             const state = createTabsState({ tabs: mockTabs });
             const logic = createTabsLogic(state, {});
             
@@ -368,10 +368,11 @@ describe('createTabsLogic', () => {
             state.subscribe(listener);
             listener.mockClear();
             
-            const interactions = logic.getInteractionHandlers('tab', { index: 2 });
-            const mockEvent = createMockEvent('focus');
+            // Import helper function and test it directly
+            const { handleTabFocus } = await import('./logic');
+            const currentState = { ...state.getState() };
             
-            interactions.onFocus(mockEvent);
+            handleTabFocus(state, logic, currentState, 2);
             
             expect(listener).toHaveBeenCalledWith(
                 expect.objectContaining({
@@ -402,7 +403,7 @@ describe('createTabsLogic', () => {
             });
         });
         
-        it('should provide correct a11y props for tabs', () => {
+        it('should provide correct a11y props for tabs', async () => {
             const state = createTabsState({ 
                 tabs: mockTabs,
                 activeTab: 'tab2'
@@ -414,8 +415,12 @@ describe('createTabsLogic', () => {
             
             state.setFocusedIndex(1);
             
+            // Import helper function
+            const { getTabA11yProps } = await import('./logic');
+            const currentState = { ...state.getState() };
+            
             // Check tab 1 (not active, not focused)
-            const tab1Props = logic.getA11yProps('tab', { index: 0 });
+            const tab1Props = getTabA11yProps(currentState, 0, 'my-tabs');
             expect(tab1Props).toEqual({
                 role: 'tab',
                 'aria-selected': 'false',
@@ -426,7 +431,7 @@ describe('createTabsLogic', () => {
             });
             
             // Check tab 2 (active and focused)
-            const tab2Props = logic.getA11yProps('tab', { index: 1 });
+            const tab2Props = getTabA11yProps(currentState, 1, 'my-tabs');
             expect(tab2Props).toEqual({
                 role: 'tab',
                 'aria-selected': 'true',
@@ -437,7 +442,7 @@ describe('createTabsLogic', () => {
             });
             
             // Check tab 3 (disabled)
-            const tab3Props = logic.getA11yProps('tab', { index: 2 });
+            const tab3Props = getTabA11yProps(currentState, 2, 'my-tabs');
             expect(tab3Props).toEqual({
                 role: 'tab',
                 'aria-selected': 'false',
@@ -448,7 +453,7 @@ describe('createTabsLogic', () => {
             });
         });
         
-        it('should provide correct a11y props for tab panels', () => {
+        it('should provide correct a11y props for tab panels', async () => {
             const state = createTabsState({ 
                 tabs: mockTabs,
                 activeTab: 'tab2'
@@ -458,8 +463,12 @@ describe('createTabsLogic', () => {
             logic.connect(state);
             logic.initialize();
             
+            // Import helper function
+            const { getTabPanelA11yProps } = await import('./logic');
+            const currentState = { ...state.getState() };
+            
             // Check active panel
-            const activePanel = logic.getA11yProps('tabpanel', { tabId: 'tab2' });
+            const activePanel = getTabPanelA11yProps(currentState, 'tab2', 'my-tabs');
             expect(activePanel).toEqual({
                 role: 'tabpanel',
                 'aria-labelledby': 'my-tabs-tab-tab2',
@@ -469,7 +478,7 @@ describe('createTabsLogic', () => {
             });
             
             // Check inactive panel
-            const inactivePanel = logic.getA11yProps('tabpanel', { tabId: 'tab1' });
+            const inactivePanel = getTabPanelA11yProps(currentState, 'tab1', 'my-tabs');
             expect(inactivePanel).toEqual({
                 role: 'tabpanel',
                 'aria-labelledby': 'my-tabs-tab-tab1',

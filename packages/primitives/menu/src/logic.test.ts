@@ -5,8 +5,13 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createMenuState } from './state';
-import { createMenuLogic } from './logic';
-import type { MenuItem, MenuOptions } from './types';
+import { 
+    createMenuLogic,
+    handleMenuItemClick,
+    handleMenuItemMouseEnter,
+    getMenuItemA11yProps
+} from './logic';
+import type { MenuItem, MenuOptions, MenuState } from './types';
 
 describe('createMenuLogic', () => {
     let state: ReturnType<typeof createMenuState>;
@@ -121,7 +126,8 @@ describe('createMenuLogic', () => {
             state.setActiveIndex(0);
             
             // Active item
-            const activeProps = logic.getA11yProps('item', '1');
+            const currentState = state.getState();
+            const activeProps = getMenuItemA11yProps(currentState, '1');
             expect(activeProps).toEqual({
                 role: 'menuitem',
                 'aria-disabled': undefined,
@@ -131,7 +137,7 @@ describe('createMenuLogic', () => {
             });
             
             // Disabled item
-            const disabledProps = logic.getA11yProps('item', '2');
+            const disabledProps = getMenuItemA11yProps(currentState, '2');
             expect(disabledProps).toEqual({
                 role: 'menuitem',
                 'aria-disabled': 'true',
@@ -141,7 +147,7 @@ describe('createMenuLogic', () => {
             });
             
             // Item with submenu
-            const submenuProps = logic.getA11yProps('item', '3');
+            const submenuProps = getMenuItemA11yProps(currentState, '3');
             expect(submenuProps).toEqual({
                 role: 'menuitem',
                 'aria-disabled': undefined,
@@ -173,10 +179,10 @@ describe('createMenuLogic', () => {
             const interactions = logic.getInteractionHandlers('trigger');
             const mockEvent = { key: 'Enter', preventDefault: vi.fn() } as any;
             
-            const event = interactions.onKeyDown(mockEvent);
+            interactions.onKeyDown(mockEvent);
             expect(mockEvent.preventDefault).toHaveBeenCalled();
-            expect(event).toBe('open');
             expect(state.getState().open).toBe(true);
+            expect(options.onOpen).toHaveBeenCalled();
         });
         
         it('should open menu and navigate with arrow keys', () => {
@@ -220,8 +226,7 @@ describe('createMenuLogic', () => {
             
             // Arrow down
             const downEvent = { key: 'ArrowDown', preventDefault: vi.fn() } as any;
-            const navEvent = interactions.onKeyDown(downEvent);
-            expect(navEvent).toBe('navigate');
+            interactions.onKeyDown(downEvent);
             expect(state.getState().activeIndex).toBe(0);
             
             // Arrow down again (skip disabled)
@@ -266,8 +271,7 @@ describe('createMenuLogic', () => {
             const interactions = logic.getInteractionHandlers('menu');
             const enterEvent = { key: 'Enter', preventDefault: vi.fn() } as any;
             
-            const event = interactions.onKeyDown(enterEvent);
-            expect(event).toBe('select');
+            interactions.onKeyDown(enterEvent);
             expect(items[0].onSelect).toHaveBeenCalled();
             expect(options.onSelect).toHaveBeenCalledWith(items[0]);
         });
@@ -302,16 +306,18 @@ describe('createMenuLogic', () => {
             
             // Escape closes menu when not in submenu
             const escapeEvent = { key: 'Escape', preventDefault: vi.fn() } as any;
-            const event = interactions.onKeyDown(escapeEvent);
-            expect(event).toBe('close');
+            interactions.onKeyDown(escapeEvent);
+            expect(state.getState().open).toBe(false);
+            expect(options.onClose).toHaveBeenCalled();
         });
         
         it('should close on tab', () => {
+            state.setOpen(true);
             const interactions = logic.getInteractionHandlers('menu');
             const tabEvent = { key: 'Tab' } as any;
             
-            const event = interactions.onKeyDown(tabEvent);
-            expect(event).toBe('close');
+            interactions.onKeyDown(tabEvent);
+            expect(options.onClose).toHaveBeenCalled();
         });
         
         it('should handle type-ahead search', () => {
@@ -338,18 +344,19 @@ describe('createMenuLogic', () => {
         });
         
         it('should close when focus leaves menu', () => {
+            state.setOpen(true);
             const interactions = logic.getInteractionHandlers('menu');
             const blurEvent = {
                 relatedTarget: document.createElement('div'),
                 currentTarget: document.createElement('div')
             } as any;
             
-            const event = interactions.onBlur(blurEvent);
-            expect(event).toBe('close');
+            interactions.onBlur(blurEvent);
+            expect(options.onClose).toHaveBeenCalled();
         });
     });
     
-    describe('Item Interactions', () => {
+    describe('Item Helper Functions', () => {
         it('should select item on click', () => {
             const items: MenuItem[] = [
                 { id: '1', label: 'Item 1', onSelect: vi.fn() }
@@ -359,8 +366,8 @@ describe('createMenuLogic', () => {
             const interactions = logic.getInteractionHandlers('item');
             const mockEvent = { preventDefault: vi.fn() } as any;
             
-            const event = interactions.onClick(mockEvent, '1');
-            expect(event).toBe('select');
+            const currentState = state.getState();
+            handleMenuItemClick(state, logic, currentState, '1', mockEvent);
             expect(items[0].onSelect).toHaveBeenCalled();
             expect(options.onSelect).toHaveBeenCalledWith(items[0]);
         });
@@ -375,10 +382,10 @@ describe('createMenuLogic', () => {
             ];
             state.setItems(items);
             
-            const interactions = logic.getInteractionHandlers('item');
             const mockEvent = { preventDefault: vi.fn() } as any;
+            const currentState = state.getState();
             
-            interactions.onClick(mockEvent, '1');
+            handleMenuItemClick(state, logic, currentState, '1', mockEvent);
             expect(state.getState().submenuStack).toEqual(['1']);
         });
         
@@ -388,11 +395,10 @@ describe('createMenuLogic', () => {
             ];
             state.setItems(items);
             
-            const interactions = logic.getInteractionHandlers('item');
             const mockEvent = { preventDefault: vi.fn() } as any;
+            const currentState = state.getState();
             
-            const event = interactions.onClick(mockEvent, '1');
-            expect(event).toBeNull();
+            handleMenuItemClick(state, logic, currentState, '1', mockEvent);
             expect(items[0].onSelect).not.toHaveBeenCalled();
         });
         
@@ -403,10 +409,9 @@ describe('createMenuLogic', () => {
             ];
             state.setItems(items);
             
-            const interactions = logic.getInteractionHandlers('item');
-            const mockEvent = {} as any;
+            const currentState = state.getState();
             
-            interactions.onMouseEnter(mockEvent, '2');
+            handleMenuItemMouseEnter(state, logic, currentState, '2');
             expect(state.getState().activeIndex).toBe(1);
         });
     });

@@ -161,21 +161,7 @@ export function createMenuLogic(
             id: options.id ? `${options.id}-menu` : undefined,
             tabIndex: -1,
         }))
-        // Menu item
-        .withA11y('item', (currentState, itemId?: string) => {
-            // Use state methods to get current items
-            const currentItems = state.getCurrentItems();
-            const itemIndex = currentItems.findIndex(item => item.id === itemId);
-            const item = currentItems[itemIndex];
-            
-            return {
-                role: 'menuitem',
-                'aria-disabled': item?.disabled ? 'true' : undefined,
-                'aria-haspopup': item?.items ? 'true' : undefined,
-                'aria-expanded': item?.items && currentState.submenuStack.includes(item.id) ? 'true' : undefined,
-                tabIndex: currentState.activeIndex === itemIndex ? 0 : -1,
-            };
-        })
+        // Menu item - removed, will use helper function instead
         // Trigger interactions
         .withInteraction('trigger', 'onClick', (currentState, event: MouseEvent) => {
             event.preventDefault();
@@ -297,34 +283,86 @@ export function createMenuLogic(
             }
             return 'blur';
         })
-        // Menu item interactions
-        .withInteraction('item', 'onClick', (currentState, event: MouseEvent, itemId?: string) => {
-            event.preventDefault();
-            
-            const currentItems = state.getCurrentItems();
-            const item = currentItems.find(i => i.id === itemId);
-            
-            if (item && !item.disabled) {
-                if (item.items) {
-                    // Enter submenu
-                    state.pushSubmenu(item.id);
-                    state.navigateToFirst();
-                    return null;
-                } else {
-                    selectItem(item);
-                    return 'select';
-                }
-            }
-            return null;
-        })
-        .withInteraction('item', 'onMouseEnter', (currentState, event: MouseEvent, itemId?: string) => {
-            const currentItems = state.getCurrentItems();
-            const itemIndex = currentItems.findIndex(i => i.id === itemId);
-            
-            if (itemIndex !== -1 && !currentItems[itemIndex].disabled) {
-                state.setActiveIndex(itemIndex);
-            }
-            return null;
-        })
+        // Remove item interactions - will use helper functions instead
         .build();
+}
+
+/**
+ * Helper function to handle menu item click
+ * This will be called by framework adapters with item ID
+ */
+export function handleMenuItemClick(
+    state: MenuStateStore,
+    logic: LogicLayer<MenuState, MenuEvents>,
+    currentState: MenuState,
+    itemId: string,
+    event: MouseEvent
+): void {
+    event.preventDefault();
+    
+    const currentItems = state.getCurrentItems();
+    const item = currentItems.find(i => i.id === itemId);
+    
+    if (item && !item.disabled) {
+        if (item.items) {
+            // Enter submenu
+            state.pushSubmenu(item.id);
+            state.navigateToFirst();
+        } else {
+            // Select item
+            if (item.onSelect) {
+                item.onSelect();
+            }
+            logic.handleEvent('select', { item });
+        }
+    }
+}
+
+/**
+ * Helper function to handle menu item mouse enter
+ * This will be called by framework adapters with item ID
+ */
+export function handleMenuItemMouseEnter(
+    state: MenuStateStore,
+    logic: LogicLayer<MenuState, MenuEvents>,
+    currentState: MenuState,
+    itemId: string
+): void {
+    const currentItems = state.getCurrentItems();
+    const itemIndex = currentItems.findIndex(i => i.id === itemId);
+    
+    if (itemIndex !== -1 && !currentItems[itemIndex].disabled) {
+        state.setActiveIndex(itemIndex);
+    }
+}
+
+/**
+ * Helper function to get menu item a11y props
+ * This will be called by framework adapters
+ */
+export function getMenuItemA11yProps(
+    state: MenuState,
+    itemId: string
+): Record<string, any> {
+    // Use helper method to get current items based on submenu stack
+    let currentItems = state.items;
+    for (const submenuId of state.submenuStack) {
+        const item = currentItems.find(i => i.id === submenuId);
+        if (item?.items) {
+            currentItems = item.items;
+        }
+    }
+    
+    const itemIndex = currentItems.findIndex(item => item.id === itemId);
+    const item = currentItems[itemIndex];
+    
+    if (!item) return {};
+    
+    return {
+        role: 'menuitem',
+        'aria-disabled': item.disabled ? 'true' : undefined,
+        'aria-haspopup': item.items ? 'true' : undefined,
+        'aria-expanded': item.items && state.submenuStack.includes(item.id) ? 'true' : undefined,
+        tabIndex: state.activeIndex === itemIndex ? 0 : -1,
+    };
 }

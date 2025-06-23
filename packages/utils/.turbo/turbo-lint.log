@@ -1,4 +1,5 @@
 
-> @stellarix/utils@0.0.1 lint /mnt/d/dev/stellariX-ui/packages/utils
+> @stellarix-ui/utils@0.0.1 lint /Users/sriem/dev/stellariX-ui/packages/utils
 > eslint "src/**/*.ts*"
 
+ ELIFECYCLE  Command failed.

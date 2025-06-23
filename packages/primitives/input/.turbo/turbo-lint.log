@@ -1,4 +1,4 @@
 
-> @stellarix/input@0.0.1 lint /mnt/d/dev/stellariX-ui/packages/primitives/input
+> @stellarix-ui/input@0.0.1 lint /Users/sriem/dev/stellariX-ui/packages/primitives/input
 > eslint src/**/*.ts
 
