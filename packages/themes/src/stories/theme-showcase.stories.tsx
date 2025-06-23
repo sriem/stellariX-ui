@@ -72,8 +72,8 @@ const ThemeProvider = ({ theme, children }: { theme: string; children: React.Rea
 };
 
 // Component wrappers with themed styling
-const ThemedButton = ({ variant, size, children, ...props }: any) => {
-    const [button] = useState(() => createButtonWithImplementation({ variant, size, ...props }));
+const ThemedButton = ({ variant, size, children, onClick, ...props }: any) => {
+    const [button] = useState(() => createButtonWithImplementation({ variant, size, onClick, ...props }));
     const [state, setState] = useState(() => button.state.getState());
 
     useEffect(() => {
@@ -156,8 +156,8 @@ const ThemedAlert = ({ variant, children }: any) => {
     );
 };
 
-const ThemedInput = ({ type = 'text', placeholder, ...props }: any) => {
-    const [input] = useState(() => createInputWithImplementation({ type, placeholder, ...props }));
+const ThemedInput = ({ type = 'text', placeholder, value, onChange, ...props }: any) => {
+    const [input] = useState(() => createInputWithImplementation({ type, placeholder, value, onChange, ...props }));
     const [state, setState] = useState(() => input.state.getState());
 
     useEffect(() => {
@@ -182,8 +182,8 @@ const ThemedInput = ({ type = 'text', placeholder, ...props }: any) => {
     );
 };
 
-const ThemedTextarea = ({ placeholder, rows = 4 }: any) => {
-    const [textarea] = useState(() => createTextareaWithImplementation({ placeholder, rows }));
+const ThemedTextarea = ({ placeholder, rows = 4, value, onChange, ...props }: any) => {
+    const [textarea] = useState(() => createTextareaWithImplementation({ placeholder, rows, value, onChange, ...props }));
     const [state, setState] = useState(() => textarea.state.getState());
 
     useEffect(() => {
@@ -208,8 +208,8 @@ const ThemedTextarea = ({ placeholder, rows = 4 }: any) => {
     );
 };
 
-const ThemedCheckbox = ({ label }: any) => {
-    const [checkbox] = useState(() => createCheckboxWithImplementation({}));
+const ThemedCheckbox = ({ label, checked, onChange, ...props }: any) => {
+    const [checkbox] = useState(() => createCheckboxWithImplementation({ checked, onChange, ...props }));
     const [state, setState] = useState(() => checkbox.state.getState());
 
     useEffect(() => {
@@ -243,8 +243,8 @@ const ThemedCheckbox = ({ label }: any) => {
     );
 };
 
-const ThemedToggle = ({ label }: any) => {
-    const [toggle] = useState(() => createToggleWithImplementation({}));
+const ThemedToggle = ({ label, checked, onChange, ...props }: any) => {
+    const [toggle] = useState(() => createToggleWithImplementation({ checked, onChange, ...props }));
     const [state, setState] = useState(() => toggle.state.getState());
 
     useEffect(() => {
