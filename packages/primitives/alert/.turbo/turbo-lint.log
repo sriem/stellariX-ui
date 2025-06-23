@@ -1,0 +1,4 @@
+
+> @stellarix/alert@0.0.1 lint /mnt/d/dev/stellariX-ui/packages/primitives/alert
+> eslint src/**/*.ts
+

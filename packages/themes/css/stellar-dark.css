@@ -1,0 +1,405 @@
+/* StellarIX UI Theme: stellar-dark */
+/* Auto-generated - Do not edit directly */
+
+:root {
+  --sx-background: #0f172a;
+  --sx-foreground: #f8fafc;
+  --sx-card: #1e293b;
+  --sx-card-foreground: #f8fafc;
+  --sx-primary: #818cf8;
+  --sx-primary-foreground: #0f172a;
+  --sx-secondary: #a78bfa;
+  --sx-secondary-foreground: #0f172a;
+  --sx-destructive: #f87171;
+  --sx-destructive-foreground: #0f172a;
+  --sx-success: #34d399;
+  --sx-success-foreground: #0f172a;
+  --sx-warning: #fbbf24;
+  --sx-warning-foreground: #0f172a;
+  --sx-info: #60a5fa;
+  --sx-info-foreground: #0f172a;
+  --sx-muted: #1e293b;
+  --sx-muted-foreground: #94a3b8;
+  --sx-accent: #334155;
+  --sx-accent-foreground: #f8fafc;
+  --sx-border: #334155;
+  --sx-input: #334155;
+  --sx-ring: #818cf8;
+  --sx-gradient-from: #818cf8;
+  --sx-gradient-via: #a78bfa;
+  --sx-gradient-to: #f472b6;
+  --sx-glass-background: rgba(30, 41, 59, 0.7);
+  --sx-glass-border: rgba(51, 65, 85, 0.8);
+  --sx-glass-blur: 16px;
+  --sx-font-font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --sx-font-font-family-mono: "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --sx-font-font-size-xs: 0.75rem;
+  --sx-font-font-size-sm: 0.875rem;
+  --sx-font-font-size-base: 1rem;
+  --sx-font-font-size-lg: 1.125rem;
+  --sx-font-font-size-xl: 1.25rem;
+  --sx-font-font-size-2xl: 1.5rem;
+  --sx-font-font-size-3xl: 1.875rem;
+  --sx-font-font-size-4xl: 2.25rem;
+  --sx-font-font-weight-thin: 100;
+  --sx-font-font-weight-light: 300;
+  --sx-font-font-weight-normal: 400;
+  --sx-font-font-weight-medium: 500;
+  --sx-font-font-weight-semibold: 600;
+  --sx-font-font-weight-bold: 700;
+  --sx-font-line-height-none: 1;
+  --sx-font-line-height-tight: 1.25;
+  --sx-font-line-height-snug: 1.375;
+  --sx-font-line-height-normal: 1.5;
+  --sx-font-line-height-relaxed: 1.625;
+  --sx-font-line-height-loose: 2;
+  --sx-spacing-0: 0;
+  --sx-spacing-1: 0.25rem;
+  --sx-spacing-2: 0.5rem;
+  --sx-spacing-3: 0.75rem;
+  --sx-spacing-4: 1rem;
+  --sx-spacing-5: 1.25rem;
+  --sx-spacing-6: 1.5rem;
+  --sx-spacing-7: 1.75rem;
+  --sx-spacing-8: 2rem;
+  --sx-spacing-9: 2.25rem;
+  --sx-spacing-10: 2.5rem;
+  --sx-spacing-11: 2.75rem;
+  --sx-spacing-12: 3rem;
+  --sx-spacing-14: 3.5rem;
+  --sx-spacing-16: 4rem;
+  --sx-spacing-20: 5rem;
+  --sx-spacing-24: 6rem;
+  --sx-spacing-28: 7rem;
+  --sx-spacing-32: 8rem;
+  --sx-spacing-36: 9rem;
+  --sx-spacing-40: 10rem;
+  --sx-spacing-44: 11rem;
+  --sx-spacing-48: 12rem;
+  --sx-spacing-52: 13rem;
+  --sx-spacing-56: 14rem;
+  --sx-spacing-60: 15rem;
+  --sx-spacing-64: 16rem;
+  --sx-spacing-72: 18rem;
+  --sx-spacing-80: 20rem;
+  --sx-spacing-96: 24rem;
+  --sx-spacing-px: 1px;
+  --sx-spacing-0_5: 0.125rem;
+  --sx-spacing-1_5: 0.375rem;
+  --sx-spacing-2_5: 0.625rem;
+  --sx-spacing-3_5: 0.875rem;
+  --sx-radius-none: 0;
+  --sx-radius-sm: 0.25rem;
+  --sx-radius: 0.5rem;
+  --sx-radius-md: 0.625rem;
+  --sx-radius-lg: 0.75rem;
+  --sx-radius-xl: 1rem;
+  --sx-radius-2xl: 1.5rem;
+  --sx-radius-3xl: 2rem;
+  --sx-radius-full: 9999px;
+  --sx-shadow-none: none;
+  --sx-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
+  --sx-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.26);
+  --sx-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.26);
+  --sx-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+  --sx-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.24);
+  --sx-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --sx-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --sx-shadow-glow: 0 0 20px rgba(129, 140, 248, 0.3);
+  --sx-shadow-glow-sm: 0 0 10px rgba(129, 140, 248, 0.2);
+  --sx-shadow-glow-lg: 0 0 30px rgba(129, 140, 248, 0.4);
+  --sx-shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --sx-duration-fast: 150ms;
+  --sx-duration-normal: 300ms;
+  --sx-duration-slow: 500ms;
+  --sx-easing-linear: linear;
+  --sx-easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --sx-easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --sx-easing-inOut: cubic-bezier(0.4, 0, 0.2, 1);
+  --sx-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --sx-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Special Effects */
+
+.sx-glass {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+}
+
+.sx-glass-subtle {
+  background: rgba(30, 41, 59, 0.7)66;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(51, 65, 85, 0.8)40;
+}
+
+
+.sx-gradient-border {
+  position: relative;
+  background: #0f172a;
+  border-radius: var(--sx-radius);
+}
+
+.sx-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--sx-radius);
+  padding: 2px;
+  background: linear-gradient(45deg, #818cf8, #a78bfa, #f472b6);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--sx-duration-normal) var(--sx-easing-out);
+}
+
+.sx-gradient-border:hover::before,
+.sx-gradient-border:focus-within::before {
+  opacity: 1;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.sx-gradient-border-animated::before {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+
+.sx-shadow-dynamic {
+  transition: box-shadow var(--sx-duration-normal) var(--sx-easing-spring);
+}
+
+.sx-shadow-dynamic:hover {
+  box-shadow: var(--sx-shadow-lg);
+}
+
+.sx-shadow-dynamic:active {
+  box-shadow: var(--sx-shadow-sm);
+}
+
+.sx-shadow-glow {
+  box-shadow: var(--sx-shadow-glow);
+  transition: box-shadow var(--sx-duration-normal) var(--sx-easing-out);
+}
+
+.sx-shadow-glow:hover {
+  box-shadow: var(--sx-shadow-glow-lg);
+}
+
+
+/* Theme-specific utilities */
+.sx-theme-stellar-dark {
+  color-scheme: dark;
+}
+
+/* Component Base Styles */
+.sx-component {
+  transition: all var(--sx-duration-normal) var(--sx-easing-out);
+}
+
+/* Animation Utilities */
+.sx-animate-fade-in { animation: fadeIn var(--sx-duration-normal) var(--sx-easing-out); }
+.sx-animate-slide-in { animation: slideIn var(--sx-duration-normal) var(--sx-easing-spring); }
+.sx-animate-scale-in { animation: scaleIn var(--sx-duration-fast) var(--sx-easing-spring); }
+.sx-animate-pulse { animation: pulse 2s infinite; }
+.sx-animate-bounce { animation: bounce 1s infinite; }
+
+.sx-animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Gradient Text */
+.sx-gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--sx-gradient-from),
+    var(--sx-gradient-via, var(--sx-gradient-to)),
+    var(--sx-gradient-to)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Focus Styles */
+.sx-focus-ring:focus {
+  outline: 2px solid var(--sx-ring);
+  outline-offset: 2px;
+}
+
+.sx-focus-ring:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Spacing Utilities */
+.sx-p-0 { padding: 0; }
+.sx-p-1 { padding: 0.25rem; }
+.sx-p-2 { padding: 0.5rem; }
+.sx-p-3 { padding: 0.75rem; }
+.sx-p-4 { padding: 1rem; }
+.sx-p-5 { padding: 1.25rem; }
+.sx-p-6 { padding: 1.5rem; }
+.sx-p-7 { padding: 1.75rem; }
+.sx-p-8 { padding: 2rem; }
+.sx-p-9 { padding: 2.25rem; }
+.sx-p-10 { padding: 2.5rem; }
+.sx-p-11 { padding: 2.75rem; }
+.sx-p-12 { padding: 3rem; }
+.sx-p-14 { padding: 3.5rem; }
+.sx-p-16 { padding: 4rem; }
+.sx-p-20 { padding: 5rem; }
+.sx-p-24 { padding: 6rem; }
+.sx-p-28 { padding: 7rem; }
+.sx-p-32 { padding: 8rem; }
+.sx-p-36 { padding: 9rem; }
+.sx-p-40 { padding: 10rem; }
+.sx-p-44 { padding: 11rem; }
+.sx-p-48 { padding: 12rem; }
+.sx-p-52 { padding: 13rem; }
+.sx-p-56 { padding: 14rem; }
+.sx-p-60 { padding: 15rem; }
+.sx-p-64 { padding: 16rem; }
+.sx-p-72 { padding: 18rem; }
+.sx-p-80 { padding: 20rem; }
+.sx-p-96 { padding: 24rem; }
+.sx-p-px { padding: 1px; }
+.sx-p-0_5 { padding: 0.125rem; }
+.sx-p-1_5 { padding: 0.375rem; }
+.sx-p-2_5 { padding: 0.625rem; }
+.sx-p-3_5 { padding: 0.875rem; }
+
+/* Border Radius Utilities */
+.sx-rounded-none { border-radius: 0; }
+.sx-rounded-sm { border-radius: 0.25rem; }
+.sx-rounded { border-radius: 0.5rem; }
+.sx-rounded-md { border-radius: 0.625rem; }
+.sx-rounded-lg { border-radius: 0.75rem; }
+.sx-rounded-xl { border-radius: 1rem; }
+.sx-rounded-2xl { border-radius: 1.5rem; }
+.sx-rounded-3xl { border-radius: 2rem; }
+.sx-rounded-full { border-radius: 9999px; }
+
+/* Shadow Utilities */
+.sx-shadow-none { box-shadow: none; }
+.sx-shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25); }
+.sx-shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.26); }
+.sx-shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.26); }
+.sx-shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.25); }
+.sx-shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.24); }
+.sx-shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+.sx-shadow-inner { box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); }
+.sx-shadow-glow { box-shadow: 0 0 20px rgba(129, 140, 248, 0.3); }
+.sx-shadow-glowSm { box-shadow: 0 0 10px rgba(129, 140, 248, 0.2); }
+.sx-shadow-glowLg { box-shadow: 0 0 30px rgba(129, 140, 248, 0.4); }
+.sx-shadow-glass { box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); }

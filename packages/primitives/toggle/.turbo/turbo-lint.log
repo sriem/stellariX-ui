@@ -1,0 +1,4 @@
+
+> @stellarix/toggle@0.0.1 lint /mnt/d/dev/stellariX-ui/packages/primitives/toggle
+> eslint src/**/*.ts
+

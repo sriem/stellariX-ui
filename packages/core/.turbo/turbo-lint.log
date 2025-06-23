@@ -2,13 +2,3 @@
 > @stellarix/core@0.0.1 lint /mnt/d/dev/stellariX-ui/packages/core
 > eslint "src/**/*.ts*"
 
-
-/mnt/d/dev/stellariX-ui/packages/core/src/logic.ts
-  103:7   warning  Unexpected console statement  no-console
-  365:15  warning  Unexpected console statement  no-console
-
-/mnt/d/dev/stellariX-ui/packages/core/src/state.ts
-  80:13  warning  Unexpected console statement  no-console
-
-✖ 3 problems (0 errors, 3 warnings)
-
