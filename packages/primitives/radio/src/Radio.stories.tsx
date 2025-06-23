@@ -271,15 +271,6 @@ export const RadioGroup: Story = {
           Select an option:
         </h3>
         {options.map((option) => {
-          const radioOption = createRadio({
-            name: 'radio-group',
-            value: option.value,
-            checked: selectedValue === option.value,
-            disabled: option.disabled,
-            onChange: handleChange,
-          });
-          const RadioOption = radioOption.connect(reactAdapter);
-          
           return (
             <label
               key={option.value}
@@ -291,7 +282,13 @@ export const RadioGroup: Story = {
                 opacity: option.disabled ? 0.6 : 1,
               }}
             >
-              <RadioOption />
+              <Radio
+                name="radio-group"
+                value={option.value}
+                checked={selectedValue === option.value}
+                disabled={option.disabled}
+                onChange={handleChange}
+              />
               {option.label}
             </label>
           );
@@ -324,20 +321,17 @@ export const FormExample: Story = {
         <fieldset style={{ border: '1px solid #e5e7eb', padding: '1rem', marginBottom: '1.5rem' }}>
           <legend style={{ fontWeight: 'bold', padding: '0 0.5rem' }}>Plan Type *</legend>
           {['basic', 'pro', 'enterprise'].map((plan) => {
-            const planRadio = createRadio({
-              name: 'plan',
-              value: plan,
-              checked: formData.plan === plan,
-              required: true,
-              onChange: (checked) => {
-                if (checked) setFormData(prev => ({ ...prev, plan }));
-              },
-            });
-            const PlanRadio = planRadio.connect(reactAdapter);
-            
             return (
               <label key={plan} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', cursor: 'pointer' }}>
-                <PlanRadio />
+                <Radio
+                  name="plan"
+                  value={plan}
+                  checked={formData.plan === plan}
+                  required={true}
+                  onChange={(checked) => {
+                    if (checked) setFormData(prev => ({ ...prev, plan }));
+                  }}
+                />
                 {plan.charAt(0).toUpperCase() + plan.slice(1)} Plan
               </label>
             );
@@ -350,19 +344,16 @@ export const FormExample: Story = {
             { value: 'monthly', label: 'Monthly' },
             { value: 'yearly', label: 'Yearly (Save 20%)' },
           ].map((freq) => {
-            const freqRadio = createRadio({
-              name: 'frequency',
-              value: freq.value,
-              checked: formData.frequency === freq.value,
-              onChange: (checked) => {
-                if (checked) setFormData(prev => ({ ...prev, frequency: freq.value }));
-              },
-            });
-            const FreqRadio = freqRadio.connect(reactAdapter);
-            
             return (
               <label key={freq.value} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', cursor: 'pointer' }}>
-                <FreqRadio />
+                <Radio
+                  name="frequency"
+                  value={freq.value}
+                  checked={formData.frequency === freq.value}
+                  onChange={(checked) => {
+                    if (checked) setFormData(prev => ({ ...prev, frequency: freq.value }));
+                  }}
+                />
                 {freq.label}
               </label>
             );
@@ -389,27 +380,23 @@ export const FormExample: Story = {
 // Error State
 export const WithError: Story = {
   render: () => {
-    const errorRadio = createRadio({
-      name: 'error-radio',
-      value: 'option1',
-      id: 'error-radio',
-    });
-    
-    // Set error state
-    React.useEffect(() => {
-      errorRadio.state.setError(true, 'Please select an option');
-    }, []);
-    
-    const RadioWithError = errorRadio.connect(reactAdapter);
+    const [error, setError] = React.useState(true);
+    const [errorMessage] = React.useState('Please select an option');
     
     return (
       <div>
         <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <RadioWithError />
+          <Radio
+            name="error-radio"
+            value="option1"
+            id="error-radio"
+            error={error}
+            errorMessage={errorMessage}
+          />
           <span>Option with Error</span>
         </label>
         <div id="error-radio-error" style={{ color: '#ef4444', fontSize: '14px', marginTop: '4px' }}>
-          Please select an option
+          {errorMessage}
         </div>
       </div>
     );
@@ -434,17 +421,6 @@ export const AccessibilityDemo: Story = {
         </legend>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '8px' }}>
           {options.map((option) => {
-            const accessRadio = createRadio({
-              name: 'accessibility-group',
-              value: option.value,
-              checked: selectedValue === option.value,
-              required: true,
-              onChange: (checked) => {
-                if (checked) setSelectedValue(option.value);
-              },
-            });
-            const AccessRadio = accessRadio.connect(reactAdapter);
-            
             return (
               <label
                 key={option.value}
@@ -455,7 +431,15 @@ export const AccessibilityDemo: Story = {
                   cursor: 'pointer',
                 }}
               >
-                <AccessRadio />
+                <Radio
+                  name="accessibility-group"
+                  value={option.value}
+                  checked={selectedValue === option.value}
+                  required={true}
+                  onChange={(checked) => {
+                    if (checked) setSelectedValue(option.value);
+                  }}
+                />
                 {option.label}
               </label>
             );
@@ -497,19 +481,16 @@ export const Showcase: Story = {
               Size Selection
             </h4>
             {['small', 'medium', 'large'].map((size) => {
-              const sizeRadio = createRadio({
-                name: 'size',
-                value: size,
-                checked: values.size === size,
-                onChange: (checked) => {
-                  if (checked) handleChange('size', size);
-                },
-              });
-              const SizeRadio = sizeRadio.connect(reactAdapter);
-              
               return (
                 <label key={size} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', cursor: 'pointer' }}>
-                  <SizeRadio />
+                  <Radio
+                    name="size"
+                    value={size}
+                    checked={values.size === size}
+                    onChange={(checked) => {
+                      if (checked) handleChange('size', size);
+                    }}
+                  />
                   {size.charAt(0).toUpperCase() + size.slice(1)}
                 </label>
               );
@@ -525,17 +506,6 @@ export const Showcase: Story = {
               { value: 'green', label: 'Green', disabled: false },
               { value: 'red', label: 'Red (Disabled)', disabled: true },
             ].map((color) => {
-              const colorRadio = createRadio({
-                name: 'color',
-                value: color.value,
-                checked: values.color === color.value,
-                disabled: color.disabled,
-                onChange: (checked) => {
-                  if (checked) handleChange('color', color.value);
-                },
-              });
-              const ColorRadio = colorRadio.connect(reactAdapter);
-              
               return (
                 <label 
                   key={color.value} 
@@ -548,7 +518,15 @@ export const Showcase: Story = {
                     opacity: color.disabled ? 0.6 : 1,
                   }}
                 >
-                  <ColorRadio />
+                  <Radio
+                    name="color"
+                    value={color.value}
+                    checked={values.color === color.value}
+                    disabled={color.disabled}
+                    onChange={(checked) => {
+                      if (checked) handleChange('color', color.value);
+                    }}
+                  />
                   {color.label}
                 </label>
               );
@@ -560,20 +538,17 @@ export const Showcase: Story = {
               Priority Level *
             </h4>
             {['low', 'normal', 'high', 'urgent'].map((priority) => {
-              const priorityRadio = createRadio({
-                name: 'priority',
-                value: priority,
-                checked: values.priority === priority,
-                required: true,
-                onChange: (checked) => {
-                  if (checked) handleChange('priority', priority);
-                },
-              });
-              const PriorityRadio = priorityRadio.connect(reactAdapter);
-              
               return (
                 <label key={priority} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', cursor: 'pointer' }}>
-                  <PriorityRadio />
+                  <Radio
+                    name="priority"
+                    value={priority}
+                    checked={values.priority === priority}
+                    required={true}
+                    onChange={(checked) => {
+                      if (checked) handleChange('priority', priority);
+                    }}
+                  />
                   {priority.charAt(0).toUpperCase() + priority.slice(1)}
                 </label>
               );

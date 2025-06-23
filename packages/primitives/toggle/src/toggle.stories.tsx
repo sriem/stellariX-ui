@@ -26,13 +26,30 @@ const ToggleWrapper = React.forwardRef((props: any, ref: any) => {
     }
   }, [props.disabled, toggle]);
   
-  // Connect onChange handler
+  // Track if change is from user interaction
+  const isUserInteractionRef = React.useRef(false);
+  
+  // Connect onChange handler to logic events
+  React.useEffect(() => {
+    if (props.onChange && toggle.logic) {
+      const originalHandleEvent = toggle.logic.handleEvent;
+      toggle.logic.handleEvent = (event, payload) => {
+        if (event === 'change') {
+          isUserInteractionRef.current = true;
+        }
+        return originalHandleEvent.call(toggle.logic, event, payload);
+      };
+    }
+  }, [props.onChange, toggle]);
+  
+  // Subscribe to state changes
   React.useEffect(() => {
     if (props.onChange) {
       const unsubscribe = toggle.state.subscribe((state) => {
-        // Only call onChange if it's a user interaction (not initial state)
-        if (state.checked !== props.checked) {
+        // Only call onChange if it's a user interaction
+        if (isUserInteractionRef.current && state.checked !== props.checked) {
           props.onChange(state.checked);
+          isUserInteractionRef.current = false;
         }
       });
       return unsubscribe;

@@ -8,13 +8,121 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { createSpinnerWithImplementation } from './index';
 import { reactAdapter } from '@stellarix/react';
 
-// Create the React spinner component
-const spinner = createSpinnerWithImplementation();
-const Spinner = spinner.connect(reactAdapter);
+// Create a wrapper component that creates individual Spinner instances
+const SpinnerWrapper = React.forwardRef((props: any, ref: any) => {
+  const [spinner] = React.useState(() => createSpinnerWithImplementation(props));
+  const Component = React.useMemo(() => spinner.connect(reactAdapter), [spinner]);
+  
+  // Add size class for styling
+  const className = `spinner ${props.className || ''} ${props.size ? `spinner-${props.size}` : 'spinner-md'}`.trim();
+  
+  return <Component ref={ref} {...props} className={className} />;
+});
+
+SpinnerWrapper.displayName = 'Spinner';
+
+const Spinner = SpinnerWrapper;
+
+// Decorator to add visual styles to the headless spinner
+const withSpinnerStyles = (Story: any) => {
+  return (
+    <>
+      <style>{`
+        .spinner {
+          display: inline-block;
+          border: 3px solid rgba(0, 0, 0, 0.1);
+          border-radius: 50%;
+          border-top-color: #3b82f6;
+          animation: spin 1s linear infinite;
+        }
+        
+        /* Size variants */
+        .spinner-xs {
+          width: 16px;
+          height: 16px;
+          border-width: 2px;
+        }
+        
+        .spinner-sm {
+          width: 20px;
+          height: 20px;
+          border-width: 2px;
+        }
+        
+        .spinner-md {
+          width: 32px;
+          height: 32px;
+          border-width: 3px;
+        }
+        
+        .spinner-lg {
+          width: 48px;
+          height: 48px;
+          border-width: 4px;
+        }
+        
+        .spinner-xl {
+          width: 64px;
+          height: 64px;
+          border-width: 5px;
+        }
+        
+        /* Animation speeds */
+        .spinner[data-speed="slow"] {
+          animation-duration: 2s;
+        }
+        
+        .spinner[data-speed="normal"] {
+          animation-duration: 1s;
+        }
+        
+        .spinner[data-speed="fast"] {
+          animation-duration: 0.5s;
+        }
+        
+        /* Stopped state */
+        .spinner[aria-busy="false"] {
+          animation-play-state: paused;
+          opacity: 0.5;
+        }
+        
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        
+        /* Color variants */
+        .spinner.spinner-primary {
+          border-top-color: #3b82f6;
+        }
+        
+        .spinner.spinner-success {
+          border-top-color: #10b981;
+        }
+        
+        .spinner.spinner-warning {
+          border-top-color: #f59e0b;
+        }
+        
+        .spinner.spinner-danger {
+          border-top-color: #ef4444;
+        }
+        
+        .spinner.spinner-white {
+          border-color: rgba(255, 255, 255, 0.2);
+          border-top-color: white;
+        }
+      `}</style>
+      <Story />
+    </>
+  );
+};
 
 const meta: Meta<typeof Spinner> = {
   title: 'Primitives/Spinner',
   component: Spinner,
+  decorators: [withSpinnerStyles],
   parameters: {
     layout: 'padded',
     docs: {
