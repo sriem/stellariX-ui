@@ -53,7 +53,7 @@ const createContainerComponent = (args) => {
   const container = createContainerWithImplementation(options);
 
   const ContainerComponent = ({ children }) => {
-    const state = container.state.getState();
+    const [componentState, setComponentState] = React.useState(() => container.state.getState());
     const a11yProps = container.logic.getA11yProps('root');
     const handlers = container.logic.getInteractionHandlers('root');
 
@@ -68,17 +68,14 @@ const createContainerComponent = (args) => {
       else if (args.padding === 'lg') container.state.setPadding('3rem');
     }, [args.maxWidth, args.padding]);
 
-    // Force re-render when state changes
-    const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+    // Subscribe to state changes
     React.useEffect(() => {
-      const unsubscribe = container.state.subscribe(() => {
-        forceUpdate();
-      });
+      const unsubscribe = container.state.subscribe(setComponentState);
       return unsubscribe;
     }, []);
 
-    // Use the computed styles from the state
-    const styles = container.state.getComputedStyles();
+    // Use the computed styles from the component state
+    const styles = componentState.computedStyles || {};
 
     return (
       <div style={styles} {...a11yProps} {...handlers}>

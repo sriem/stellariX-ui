@@ -76,14 +76,20 @@ const createDividerComponent = (args) => {
   // For now, we'll create a simple React component manually
   // In a real implementation, the adapter would handle this
   const DividerComponent = () => {
-    const state = divider.state.getState();
+    const [componentState, setComponentState] = React.useState(() => divider.state.getState());
     const a11yProps = divider.logic.getA11yProps('root');
     const interactionProps = divider.logic.getInteractionHandlers('root');
     
+    // Subscribe to state changes
+    React.useEffect(() => {
+      const unsubscribe = divider.state.subscribe(setComponentState);
+      return unsubscribe;
+    }, []);
+    
     const baseStyles = {
       ...interactionProps.style,
-      backgroundColor: state.variant === 'solid' ? (args.color || '#e2e8f0') : 'transparent',
-      border: state.variant !== 'solid' ? `${args.thickness || '1px'} ${state.variant} ${args.color || '#e2e8f0'}` : 'none',
+      backgroundColor: componentState.variant === 'solid' ? (args.color || '#e2e8f0') : 'transparent',
+      border: componentState.variant !== 'solid' ? `${args.thickness || '1px'} ${componentState.variant} ${args.color || '#e2e8f0'}` : 'none',
     };
 
     if (args.label) {
@@ -94,8 +100,8 @@ const createDividerComponent = (args) => {
             display: 'flex',
             alignItems: 'center',
             gap: '1rem',
-            width: state.orientation === 'horizontal' ? '100%' : 'auto',
-            height: state.orientation === 'vertical' ? '100%' : 'auto',
+            width: componentState.orientation === 'horizontal' ? '100%' : 'auto',
+            height: componentState.orientation === 'vertical' ? '100%' : 'auto',
           }}
         >
           {args.labelPosition !== 'start' && (

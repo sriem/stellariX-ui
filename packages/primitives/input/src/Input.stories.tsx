@@ -77,7 +77,7 @@ const createInputComponent = (args) => {
   });
 
   const InputComponent = () => {
-    const state = input.state.getState();
+    const [componentState, setComponentState] = React.useState(() => input.state.getState());
     const a11yProps = input.logic.getA11yProps('root');
     const handlers = input.logic.getInteractionHandlers('root');
 
@@ -91,12 +91,9 @@ const createInputComponent = (args) => {
       if (args.size) input.state.setSize(args.size);
     }, [args]);
 
-    // Force re-render when state changes
-    const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+    // Subscribe to state changes
     React.useEffect(() => {
-      const unsubscribe = input.state.subscribe(() => {
-        forceUpdate();
-      });
+      const unsubscribe = input.state.subscribe(setComponentState);
       return unsubscribe;
     }, []);
 
@@ -104,9 +101,9 @@ const createInputComponent = (args) => {
       fontFamily: 'sans-serif',
       borderRadius: '4px',
       border: '1px solid',
-      borderColor: state.error ? '#ef4444' : state.focused ? '#3182ce' : '#e5e7eb',
-      backgroundColor: state.disabled ? '#f3f4f6' : 'white',
-      color: state.disabled ? '#9ca3af' : '#111827',
+      borderColor: componentState.error ? '#ef4444' : componentState.focused ? '#3182ce' : '#e5e7eb',
+      backgroundColor: componentState.disabled ? '#f3f4f6' : 'white',
+      color: componentState.disabled ? '#9ca3af' : '#111827',
       outline: 'none',
       transition: 'all 0.2s',
       width: '100%',
@@ -133,8 +130,8 @@ const createInputComponent = (args) => {
 
     const styles = {
       ...baseStyles,
-      ...sizeStyles[state.size || 'md'],
-      cursor: state.disabled ? 'not-allowed' : state.readonly ? 'default' : 'text',
+      ...sizeStyles[componentState.size || 'md'],
+      cursor: componentState.disabled ? 'not-allowed' : componentState.readonly ? 'default' : 'text',
     };
 
     return (
@@ -142,21 +139,21 @@ const createInputComponent = (args) => {
         <input
           {...a11yProps}
           {...handlers}
-          type={state.type}
+          type={componentState.type}
           style={styles}
           placeholder={args.placeholder}
-          disabled={state.disabled}
-          readOnly={state.readonly}
-          required={state.required}
-          value={state.value}
+          disabled={componentState.disabled}
+          readOnly={componentState.readonly}
+          required={componentState.required}
+          value={componentState.value}
         />
-        {state.error && state.errorMessage && (
+        {componentState.error && componentState.errorMessage && (
           <div style={{ 
             color: '#ef4444', 
             fontSize: '0.875rem', 
             marginTop: '0.25rem' 
           }}>
-            {state.errorMessage}
+            {componentState.errorMessage}
           </div>
         )}
       </div>
@@ -258,15 +255,12 @@ export const Readonly = {
       }, []);
       
       const InputComponent = () => {
-        const state = input.state.getState();
+        const [componentState, setComponentState] = React.useState(() => input.state.getState());
         const a11yProps = input.logic.getA11yProps('root');
         const handlers = input.logic.getInteractionHandlers('root');
         
-        const [, forceUpdate] = React.useReducer(x => x + 1, 0);
         React.useEffect(() => {
-          const unsubscribe = input.state.subscribe(() => {
-            forceUpdate();
-          });
+          const unsubscribe = input.state.subscribe(setComponentState);
           return unsubscribe;
         }, []);
         
@@ -274,9 +268,9 @@ export const Readonly = {
           fontFamily: 'sans-serif',
           borderRadius: '4px',
           border: '1px solid',
-          borderColor: state.error ? '#ef4444' : state.focused ? '#3182ce' : '#e5e7eb',
-          backgroundColor: state.disabled ? '#f3f4f6' : 'white',
-          color: state.disabled ? '#9ca3af' : '#111827',
+          borderColor: componentState.error ? '#ef4444' : componentState.focused ? '#3182ce' : '#e5e7eb',
+          backgroundColor: componentState.disabled ? '#f3f4f6' : 'white',
+          color: componentState.disabled ? '#9ca3af' : '#111827',
           outline: 'none',
           transition: 'all 0.2s',
           width: '100%',
@@ -284,7 +278,7 @@ export const Readonly = {
           height: '40px',
           fontSize: '1rem',
           padding: '0 1rem',
-          cursor: state.disabled ? 'not-allowed' : state.readonly ? 'default' : 'text',
+          cursor: componentState.disabled ? 'not-allowed' : componentState.readonly ? 'default' : 'text',
         };
         
         return (
@@ -292,13 +286,13 @@ export const Readonly = {
             <input
               {...a11yProps}
               {...handlers}
-              type={state.type}
+              type={componentState.type}
               style={baseStyles}
               placeholder="Read-only input"
-              disabled={state.disabled}
-              readOnly={state.readonly}
-              required={state.required}
-              value={state.value}
+              disabled={componentState.disabled}
+              readOnly={componentState.readonly}
+              required={componentState.required}
+              value={componentState.value}
             />
           </div>
         );
@@ -416,15 +410,12 @@ export const Showcase = {
             }, []);
             
             const ReadonlyInput = () => {
-              const state = input.state.getState();
+              const [componentState, setComponentState] = React.useState(() => input.state.getState());
               const a11yProps = input.logic.getA11yProps('root');
               const handlers = input.logic.getInteractionHandlers('root');
               
-              const [, forceUpdate] = React.useReducer(x => x + 1, 0);
               React.useEffect(() => {
-                const unsubscribe = input.state.subscribe(() => {
-                  forceUpdate();
-                });
+                const unsubscribe = input.state.subscribe(setComponentState);
                 return unsubscribe;
               }, []);
               
@@ -448,12 +439,12 @@ export const Showcase = {
                 <input
                   {...a11yProps}
                   {...handlers}
-                  type={state.type}
+                  type={componentState.type}
                   style={styles}
-                  disabled={state.disabled}
-                  readOnly={state.readonly}
-                  required={state.required}
-                  value={state.value}
+                  disabled={componentState.disabled}
+                  readOnly={componentState.readonly}
+                  required={componentState.required}
+                  value={componentState.value}
                 />
               );
             };

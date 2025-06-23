@@ -61,7 +61,7 @@ const createSpinnerComponent = (args) => {
   });
 
   const SpinnerComponent = () => {
-    const state = spinner.state.getState();
+    const [componentState, setComponentState] = React.useState(() => spinner.state.getState());
     const a11yProps = spinner.logic.getA11yProps('root');
     const handlers = spinner.logic.getInteractionHandlers('root');
 
@@ -77,12 +77,9 @@ const createSpinnerComponent = (args) => {
       if (args.speed) spinner.state.setSpeed(args.speed);
     }, [args]);
 
-    // Force re-render when state changes
-    const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+    // Subscribe to state changes
     React.useEffect(() => {
-      const unsubscribe = spinner.state.subscribe(() => {
-        forceUpdate();
-      });
+      const unsubscribe = spinner.state.subscribe(setComponentState);
       return unsubscribe;
     }, []);
 
@@ -95,7 +92,7 @@ const createSpinnerComponent = (args) => {
       xl: 48,
     };
 
-    const size = sizeMap[state.size] || 24;
+    const size = sizeMap[componentState.size] || 24;
 
     const spinnerStyles = {
       width: `${size}px`,
@@ -111,9 +108,9 @@ const createSpinnerComponent = (args) => {
       width: '100%',
       height: '100%',
       border: `${Math.max(2, size / 8)}px solid transparent`,
-      borderTopColor: state.color || 'currentColor',
+      borderTopColor: componentState.color || 'currentColor',
       borderRadius: '50%',
-      animation: state.spinning ? `spin ${state.speed}ms linear infinite` : 'none',
+      animation: componentState.spinning ? `spin ${componentState.speed}ms linear infinite` : 'none',
     };
 
     // Add keyframes for animation
@@ -137,8 +134,8 @@ const createSpinnerComponent = (args) => {
         style={spinnerStyles} 
         {...a11yProps} 
         {...handlers}
-        aria-busy={state.spinning}
-        aria-label={state.label}
+        aria-busy={componentState.spinning}
+        aria-label={componentState.label}
       >
         <div style={circleStyles} />
       </div>
