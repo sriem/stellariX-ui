@@ -1,0 +1,7 @@
+
+> @stellarix/ui@0.0.1 storybook /mnt/d/dev/stellariX-ui
+> storybook dev -p 6006
+
+@storybook/core v8.6.14
+
+[?25l[2K[1G[36m?[39m [1mPort 6006 is not available. Would you like to run Storybook on port 6007 instead?[22m [90m›[39m [90m(Y/n)[39m

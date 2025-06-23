@@ -79,6 +79,7 @@ export function createToggleLogic(
         .withA11y('root', (state) => ({
             'aria-checked': state.checked ? 'true' : 'false',
             'aria-disabled': state.disabled ? 'true' : undefined,
+            'aria-label': options.label || 'Toggle switch',
             role: 'switch',
             tabIndex: state.disabled ? -1 : 0,
         }))

@@ -1,284 +1,276 @@
-import React from 'react';
-import { createButtonWithImplementation } from './index';
+/**
+ * Button Component Stories
+ * Comprehensive showcase of all button features and edge cases
+ */
 
-export default {
+import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { createButtonWithImplementation } from './index';
+import { reactAdapter } from '@stellarix/react';
+
+// Create the React button component
+const button = createButtonWithImplementation();
+const Button = button.connect(reactAdapter);
+
+const meta: Meta<typeof Button> = {
   title: 'Primitives/Button',
-  component: 'Button',
+  component: Button,
   parameters: {
+    layout: 'padded',
     docs: {
       description: {
-        component:
-          'A flexible button component with multiple variants, sizes, and states.',
-      },
-    },
-    a11y: {
-      config: {
-        rules: [
-          {
-            id: 'color-contrast',
-            enabled: true,
-          },
-        ],
+        component: `
+A flexible button component with multiple variants, sizes, and states.
+
+## Features
+- ✅ Multiple variants (primary, secondary, outline, ghost)
+- ✅ Three sizes (sm, md, lg)
+- ✅ Disabled state
+- ✅ Loading state
+- ✅ Full accessibility support (WCAG 2.1 AA)
+- ✅ Keyboard navigation
+- ✅ Custom styling support
+
+## Accessibility
+- Uses semantic \`<button>\` element
+- Supports keyboard navigation (Enter/Space)
+- Focus management and visual indicators
+- Screen reader friendly with proper ARIA attributes
+        `,
       },
     },
   },
   argTypes: {
     variant: {
-      control: {
-        type: 'select',
-        options: ['primary', 'secondary', 'outline', 'ghost'],
-      },
+      control: { type: 'select' },
+      options: ['primary', 'secondary', 'outline', 'ghost'],
       description: 'The visual style of the button',
       defaultValue: 'primary',
     },
     size: {
-      control: {
-        type: 'select',
-        options: ['sm', 'md', 'lg'],
-      },
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg'],
       description: 'The size of the button',
       defaultValue: 'md',
     },
     disabled: {
       control: 'boolean',
       description: 'Whether the button is disabled',
-      defaultValue: false,
     },
     loading: {
       control: 'boolean',
       description: 'Whether the button is in loading state',
-      defaultValue: false,
     },
     onClick: { action: 'clicked' },
+    children: {
+      control: 'text',
+      description: 'Button content',
+    },
   },
-  tags: ['autodocs'],
+  args: {
+    children: 'Button',
+  },
 };
 
-// Create component templates
-const createButtonComponent = (args) => {
-  const button = createButtonWithImplementation({
-    variant: args.variant,
-    size: args.size,
-    onClick: args.onClick,
-  });
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-  // For now, we'll create a simple React component that simulates the button
-  // In a real implementation, the React adapter would handle this
-  const ButtonComponent = () => {
-    // Use local state to track button state changes
-    const [buttonState, setButtonState] = React.useState({
-      disabled: false,
-      loading: false,
-      pressed: false,
-      focused: false
-    });
+// Basic Examples
+export const Primary: Story = {
+  args: {
+    variant: 'primary',
+    children: 'Primary Button',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    variant: 'secondary',
+    children: 'Secondary Button',
+  },
+};
+
+export const Outline: Story = {
+  args: {
+    variant: 'outline',
+    children: 'Outline Button',
+  },
+};
+
+export const Ghost: Story = {
+  args: {
+    variant: 'ghost',
+    children: 'Ghost Button',
+  },
+};
+
+// Size Variations
+export const Small: Story = {
+  args: {
+    size: 'sm',
+    children: 'Small Button',
+  },
+};
+
+export const Medium: Story = {
+  args: {
+    size: 'md',
+    children: 'Medium Button',
+  },
+};
+
+export const Large: Story = {
+  args: {
+    size: 'lg',
+    children: 'Large Button',
+  },
+};
+
+// State Variations
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+    children: 'Disabled Button',
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    loading: true,
+    children: 'Loading...',
+  },
+};
+
+// Interactive Examples
+export const WithClickHandler: Story = {
+  render: (args) => {
+    const [clickCount, setClickCount] = React.useState(0);
     
-    const a11yProps = button.logic.getA11yProps('root');
-    const handlers = button.logic.getInteractionHandlers('root');
-    
-    // Set initial state based on args
-    React.useEffect(() => {
-      if (args.disabled !== undefined) {
-        button.state.setDisabled(args.disabled);
-      }
-      if (args.loading !== undefined) {
-        button.state.setLoading(args.loading);
-      }
-    }, [args.disabled, args.loading]);
-
-    // Subscribe to state changes
-    React.useEffect(() => {
-      const unsubscribe = button.state.subscribe((newState) => {
-        setButtonState(newState);
-      });
-      return unsubscribe;
-    }, []);
-
-    // We add basic styling directly here, in a real app you'd use your styling solution
-    const baseStyles = {
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: 'sans-serif',
-      fontWeight: 'bold',
-      borderRadius: '4px',
-      cursor: state.disabled ? 'not-allowed' : 'pointer',
-      opacity: state.disabled ? 0.6 : 1,
-      transition: 'all 0.2s',
-    };
-
-    const variantStyles = {
-      primary: {
-        backgroundColor: '#3182ce',
-        color: 'white',
-        border: 'none',
-      },
-      secondary: {
-        backgroundColor: '#718096',
-        color: 'white',
-        border: 'none',
-      },
-      outline: {
-        backgroundColor: 'transparent',
-        color: '#3182ce',
-        border: '1px solid #3182ce',
-      },
-      ghost: {
-        backgroundColor: 'transparent',
-        color: '#3182ce',
-        border: 'none',
-      },
-    };
-
-    const sizeStyles = {
-      sm: {
-        height: '32px',
-        fontSize: '0.875rem',
-        padding: '0 0.75rem',
-      },
-      md: {
-        height: '40px',
-        fontSize: '1rem',
-        padding: '0 1rem',
-      },
-      lg: {
-        height: '48px',
-        fontSize: '1.125rem',
-        padding: '0 1.5rem',
-      },
-    };
-
-    const styles = {
-      ...baseStyles,
-      ...variantStyles[buttonState.variant || 'primary'],
-      ...sizeStyles[buttonState.size || 'md'],
-    };
-
     return (
-      <button
-        style={styles}
-        disabled={buttonState.disabled}
-        onClick={() => handlers.onClick?.()}
-        {...a11yProps}
-      >
-        {buttonState.loading ? 'Loading...' : args.children || 'Button Text'}
-      </button>
+      <div>
+        <Button 
+          {...args}
+          onClick={() => {
+            setClickCount(prev => prev + 1);
+            args.onClick?.();
+          }}
+        >
+          Clicked {clickCount} times
+        </Button>
+      </div>
     );
-  };
-
-  return <ButtonComponent />;
+  },
 };
 
-// Primary variant
-export const Primary = {
-  render: (args) =>
-    createButtonComponent({
-      ...args,
-      variant: 'primary',
-      children: 'Primary Button',
-    }),
-};
-
-// Secondary variant
-export const Secondary = {
-  render: (args) =>
-    createButtonComponent({
-      ...args,
-      variant: 'secondary',
-      children: 'Secondary Button',
-    }),
-};
-
-// Outline variant
-export const Outline = {
-  render: (args) =>
-    createButtonComponent({
-      ...args,
-      variant: 'outline',
-      children: 'Outline Button',
-    }),
-};
-
-// Ghost variant
-export const Ghost = {
-  render: (args) =>
-    createButtonComponent({
-      ...args,
-      variant: 'ghost',
-      children: 'Ghost Button',
-    }),
-};
-
-// Small size
-export const Small = {
-  render: (args) =>
-    createButtonComponent({
-      ...args,
-      size: 'sm',
-      children: 'Small Button',
-    }),
-};
-
-// Large size
-export const Large = {
-  render: (args) =>
-    createButtonComponent({
-      ...args,
-      size: 'lg',
-      children: 'Large Button',
-    }),
-};
-
-// Disabled state
-export const Disabled = {
-  render: (args) =>
-    createButtonComponent({
-      ...args,
-      disabled: true,
-      children: 'Disabled Button',
-    }),
-};
-
-// Loading state
-export const Loading = {
-  render: (args) =>
-    createButtonComponent({
-      ...args,
-      loading: true,
-    }),
-};
-
-// Button showcase
-export const Showcase = {
+// Comprehensive Showcase
+export const Showcase: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: '2rem' }}>
       <div>
-        <h3>Variants</h3>
+        <h3 style={{ marginBottom: '1rem' }}>Variants</h3>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          {createButtonComponent({ variant: 'primary', children: 'Primary' })}
-          {createButtonComponent({ variant: 'secondary', children: 'Secondary' })}
-          {createButtonComponent({ variant: 'outline', children: 'Outline' })}
-          {createButtonComponent({ variant: 'ghost', children: 'Ghost' })}
+          <Button variant="primary">Primary</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
         </div>
       </div>
       
       <div>
-        <h3>Sizes</h3>
+        <h3 style={{ marginBottom: '1rem' }}>Sizes</h3>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          {createButtonComponent({ size: 'sm', children: 'Small' })}
-          {createButtonComponent({ size: 'md', children: 'Medium' })}
-          {createButtonComponent({ size: 'lg', children: 'Large' })}
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium</Button>
+          <Button size="lg">Large</Button>
         </div>
       </div>
       
       <div>
-        <h3>States</h3>
+        <h3 style={{ marginBottom: '1rem' }}>States</h3>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          {createButtonComponent({ children: 'Normal' })}
-          {createButtonComponent({ disabled: true, children: 'Disabled' })}
-          {createButtonComponent({ loading: true })}
+          <Button>Normal</Button>
+          <Button disabled>Disabled</Button>
+          <Button loading>Loading</Button>
+        </div>
+      </div>
+
+      <div>
+        <h3 style={{ marginBottom: '1rem' }}>All Combinations</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+          {(['primary', 'secondary', 'outline', 'ghost'] as const).map(variant => (
+            <React.Fragment key={variant}>
+              <Button variant={variant} size="sm">{variant} sm</Button>
+              <Button variant={variant} size="md">{variant} md</Button>
+              <Button variant={variant} size="lg">{variant} lg</Button>
+              <Button variant={variant} disabled>{variant} disabled</Button>
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </div>
   ),
+};
+
+// Keyboard Navigation Test
+export const KeyboardNavigation: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <p style={{ marginBottom: '16px', fontSize: '14px', color: '#666' }}>
+        <strong>Keyboard Navigation Test:</strong><br />
+        Use <kbd>Tab</kbd> to navigate between buttons<br />
+        Use <kbd>Enter</kbd> or <kbd>Space</kbd> to activate the focused button
+      </p>
+      
+      {[1, 2, 3, 4].map((num) => (
+        <Button 
+          key={num} 
+          onClick={() => alert(`Button ${num} clicked!`)}
+        >
+          Button {num} (Press Enter/Space to activate)
+        </Button>
+      ))}
+      
+      <Button disabled>
+        Disabled button (Not focusable)
+      </Button>
+    </div>
+  ),
+};
+
+// Stress Test
+export const StressTest: Story = {
+  render: () => {
+    const [lastClicked, setLastClicked] = React.useState<number | null>(null);
+    
+    return (
+      <div>
+        <p style={{ marginBottom: '16px' }}>
+          <strong>Performance Test:</strong> 100 interactive buttons<br />
+          Last clicked: {lastClicked !== null ? `Button ${lastClicked}` : 'None'}
+        </p>
+        
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', 
+          gap: '8px',
+          maxHeight: '400px',
+          overflowY: 'auto',
+          padding: '8px',
+          border: '1px solid #ddd',
+          borderRadius: '4px'
+        }}>
+          {Array.from({ length: 100 }, (_, index) => (
+            <Button
+              key={index}
+              size="sm"
+              variant={index % 4 === 0 ? 'primary' : index % 4 === 1 ? 'secondary' : index % 4 === 2 ? 'outline' : 'ghost'}
+              onClick={() => setLastClicked(index + 1)}
+            >
+              {index + 1}
+            </Button>
+          ))}
+        </div>
+      </div>
+    );
+  },
 };

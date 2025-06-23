@@ -3,13 +3,14 @@
  * Comprehensive showcase of all checkbox features and edge cases
  */
 
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { createCheckboxWithImplementation } from './index';
-import { ReactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix/react';
 
 // Create the React checkbox component
 const checkbox = createCheckboxWithImplementation();
-const Checkbox = checkbox.connect(ReactAdapter);
+const Checkbox = checkbox.connect(reactAdapter);
 
 const meta: Meta<typeof Checkbox> = {
   title: 'Primitives/Checkbox',
@@ -138,7 +139,7 @@ export const WithError: Story = {
       errorCheckbox.state.setError(true, 'This field is required');
     }, []);
     
-    const ErrorCheckbox = errorCheckbox.connect(ReactAdapter);
+    const ErrorCheckbox = errorCheckbox.connect(reactAdapter);
     
     return (
       <div>
@@ -327,5 +328,3 @@ export const StressTest: Story = {
   },
 };
 
-// Add React import at the top
-import React from 'react';

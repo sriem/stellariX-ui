@@ -1,420 +1,469 @@
 /**
  * Radio Component Stories
- * Comprehensive Storybook stories showcasing all features and states
+ * Comprehensive showcase of all radio features and states
  */
 
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { createRadio } from './index';
-import { reactAdapter } from '@stellarix/adapters/react';
-import { useState } from 'react';
+import { reactAdapter } from '@stellarix/react';
 
-// Create Radio component
-const radioCore = createRadio({ name: 'default', value: 'default' });
-const Radio = reactAdapter.createComponent(radioCore);
+// Create the React radio component
+const radio = createRadio({ name: 'default', value: 'default' });
+const Radio = radio.connect(reactAdapter);
 
 const meta: Meta<typeof Radio> = {
-    title: 'Primitives/Radio',
-    component: Radio,
-    parameters: {
-        layout: 'centered',
-        docs: {
-            description: {
-                component: 'A radio input component for selecting one option from a group. Radio buttons are mutually exclusive - only one can be selected at a time.',
-            },
-        },
+  title: 'Primitives/Radio',
+  component: Radio,
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        component: `
+A radio input component for selecting one option from a group.
+
+## Features
+- ✅ Radio buttons are mutually exclusive within a group
+- ✅ Disabled state support
+- ✅ Required field validation
+- ✅ Error state with messages
+- ✅ Full accessibility support (WCAG 2.1 AA)
+- ✅ Keyboard navigation (Space to select)
+- ✅ Form integration
+
+## Accessibility
+- Uses semantic \`role="radio"\`
+- Proper ARIA attributes for states
+- Keyboard accessible with Space key
+- Screen reader friendly labels
+        `,
+      },
     },
-    argTypes: {
-        name: {
-            control: 'text',
-            description: 'Name attribute for radio group (required)',
-        },
-        value: {
-            control: 'text',
-            description: 'Value attribute for this radio option (required)',
-        },
-        checked: {
-            control: 'boolean',
-            description: 'Whether the radio is checked',
-        },
-        disabled: {
-            control: 'boolean',
-            description: 'Whether the radio is disabled',
-        },
-        required: {
-            control: 'boolean',
-            description: 'Whether the radio is required',
-        },
-        id: {
-            control: 'text',
-            description: 'ID attribute for the radio',
-        },
-        className: {
-            control: 'text',
-            description: 'Additional CSS classes',
-        },
-        onChange: {
-            action: 'changed',
-            description: 'Callback when checked state changes',
-        },
-        onFocus: {
-            action: 'focused',
-            description: 'Callback when radio receives focus',
-        },
-        onBlur: {
-            action: 'blurred',
-            description: 'Callback when radio loses focus',
-        },
+  },
+  argTypes: {
+    name: {
+      control: 'text',
+      description: 'Name attribute for radio group (required)',
     },
+    value: {
+      control: 'text',
+      description: 'Value attribute for this radio option (required)',
+    },
+    checked: {
+      control: 'boolean',
+      description: 'Whether the radio is checked',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Whether the radio is disabled',
+    },
+    required: {
+      control: 'boolean',
+      description: 'Whether the radio is required',
+    },
+    id: {
+      control: 'text',
+      description: 'ID attribute for the radio',
+    },
+    className: {
+      control: 'text',
+      description: 'Additional CSS classes',
+    },
+    children: {
+      control: 'text',
+      description: 'Label text for the radio',
+    },
+    onChange: { action: 'changed' },
+    onFocus: { action: 'focused' },
+    onBlur: { action: 'blurred' },
+  },
+  args: {
+    name: 'example-radio',
+    value: 'option1',
+    children: 'Radio Option',
+  },
 };
 
 export default meta;
-type Story = StoryObj<typeof Radio>;
+type Story = StoryObj<typeof meta>;
 
-// Base stories demonstrating core functionality
+// Basic Examples
 export const Default: Story = {
-    args: {
-        name: 'default-radio',
-        value: 'option1',
-        children: 'Default Radio',
-    },
+  args: {
+    children: 'Default Radio',
+  },
 };
 
 export const Checked: Story = {
-    args: {
-        name: 'checked-radio',
-        value: 'option1',
-        checked: true,
-        children: 'Checked Radio',
-    },
+  args: {
+    checked: true,
+    children: 'Checked Radio',
+  },
 };
 
 export const Disabled: Story = {
-    args: {
-        name: 'disabled-radio',
-        value: 'option1',
-        disabled: true,
-        children: 'Disabled Radio',
-    },
+  args: {
+    disabled: true,
+    children: 'Disabled Radio',
+  },
 };
 
 export const DisabledChecked: Story = {
-    args: {
-        name: 'disabled-checked-radio',
-        value: 'option1',
-        disabled: true,
-        checked: true,
-        children: 'Disabled Checked Radio',
-    },
+  args: {
+    disabled: true,
+    checked: true,
+    children: 'Disabled Checked Radio',
+  },
 };
 
 export const Required: Story = {
-    args: {
-        name: 'required-radio',
-        value: 'option1',
-        required: true,
-        children: 'Required Radio',
-    },
+  args: {
+    required: true,
+    children: 'Required Radio *',
+  },
 };
 
-// Interactive group story demonstrating radio group behavior
+// Radio Group Example
 export const RadioGroup: Story = {
-    render: () => {
-        const [selectedValue, setSelectedValue] = useState<string>('option2');
-        
-        const handleChange = (checked: boolean, value: string) => {
-            if (checked) {
-                setSelectedValue(value);
-            }
-        };
+  render: () => {
+    const [selectedValue, setSelectedValue] = React.useState<string>('option2');
+    
+    const handleChange = (checked: boolean, value: string) => {
+      if (checked) {
+        setSelectedValue(value);
+      }
+    };
 
-        const options = [
-            { value: 'option1', label: 'Option 1' },
-            { value: 'option2', label: 'Option 2' },
-            { value: 'option3', label: 'Option 3' },
-            { value: 'option4', label: 'Option 4 (Disabled)', disabled: true },
-        ];
+    const options = [
+      { value: 'option1', label: 'Option 1' },
+      { value: 'option2', label: 'Option 2 (Default)' },
+      { value: 'option3', label: 'Option 3' },
+      { value: 'option4', label: 'Option 4 (Disabled)', disabled: true },
+    ];
 
-        return (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600' }}>
-                    Select an option:
-                </h3>
-                {options.map((option) => {
-                    const radioCore = createRadio({
-                        name: 'radio-group',
-                        value: option.value,
-                        checked: selectedValue === option.value,
-                        disabled: option.disabled,
-                        onChange: handleChange,
-                    });
-                    const RadioOption = reactAdapter.createComponent(radioCore);
-                    
-                    return (
-                        <label
-                            key={option.value}
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                cursor: option.disabled ? 'not-allowed' : 'pointer',
-                                opacity: option.disabled ? 0.6 : 1,
-                            }}
-                        >
-                            <RadioOption />
-                            <span>{option.label}</span>
-                        </label>
-                    );
-                })}
-                <div style={{ marginTop: '12px', padding: '8px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
-                    <strong>Selected:</strong> {selectedValue}
-                </div>
-            </div>
-        );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: 'Radio buttons in a group where only one can be selected at a time. Notice how selecting one automatically deselects the others.',
-            },
-        },
-    },
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600' }}>
+          Select an option:
+        </h3>
+        {options.map((option) => {
+          const radioOption = createRadio({
+            name: 'radio-group',
+            value: option.value,
+            checked: selectedValue === option.value,
+            disabled: option.disabled,
+            onChange: handleChange,
+          });
+          const RadioOption = radioOption.connect(reactAdapter);
+          
+          return (
+            <label
+              key={option.value}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                cursor: option.disabled ? 'not-allowed' : 'pointer',
+                opacity: option.disabled ? 0.6 : 1,
+              }}
+            >
+              <RadioOption />
+              {option.label}
+            </label>
+          );
+        })}
+        <div style={{ marginTop: '12px', padding: '8px', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
+          <strong>Selected:</strong> {selectedValue}
+        </div>
+      </div>
+    );
+  },
 };
 
-// Error state story
-export const WithError: Story = {
-    render: () => {
-        const radioCore = createRadio({
-            name: 'error-radio',
-            value: 'option1',
-            id: 'error-radio',
-        });
+// Form Integration
+export const FormExample: Story = {
+  render: () => {
+    const [formData, setFormData] = React.useState({
+      plan: '',
+      frequency: 'monthly',
+    });
+    
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      alert(`Selected plan: ${formData.plan}\nBilling: ${formData.frequency}`);
+    };
+    
+    return (
+      <form onSubmit={handleSubmit} style={{ maxWidth: '400px', padding: '2rem', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+        <h3 style={{ marginBottom: '1.5rem' }}>Choose Your Plan</h3>
         
-        // Simulate error state
-        radioCore.state.setError(true, 'Please select an option');
-        
-        const RadioWithError = reactAdapter.createComponent(radioCore);
-        
-        return (
-            <div>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <RadioWithError />
-                    <span>Option with Error</span>
-                </label>
-                <div id="error-radio-error" style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>
-                    Please select an option
-                </div>
-            </div>
-        );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: 'Radio with error state and aria-describedby pointing to error message.',
-            },
-        },
-    },
-};
-
-// Accessibility showcase
-export const AccessibilityFeatures: Story = {
-    render: () => {
-        const [selectedValue, setSelectedValue] = useState<string>('');
-        
-        const handleChange = (checked: boolean, value: string) => {
-            if (checked) {
-                setSelectedValue(value);
-            }
-        };
-
-        const options = [
-            { value: 'accessibility1', label: 'Focus with Tab key' },
-            { value: 'accessibility2', label: 'Select with Space key' },
-            { value: 'accessibility3', label: 'Navigate with Arrow keys (future)' },
-        ];
-
-        return (
-            <fieldset style={{ border: '1px solid #ccc', padding: '16px', borderRadius: '4px' }}>
-                <legend style={{ fontWeight: '600', padding: '0 8px' }}>
-                    Accessibility Features (Required)
-                </legend>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '8px' }}>
-                    {options.map((option) => {
-                        const radioCore = createRadio({
-                            name: 'accessibility-group',
-                            value: option.value,
-                            checked: selectedValue === option.value,
-                            required: true,
-                            onChange: handleChange,
-                        });
-                        const RadioOption = reactAdapter.createComponent(radioCore);
-                        
-                        return (
-                            <label
-                                key={option.value}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                <RadioOption />
-                                <span>{option.label}</span>
-                            </label>
-                        );
-                    })}
-                </div>
-                <div style={{ marginTop: '12px', fontSize: '14px', color: '#666' }}>
-                    <p><strong>Keyboard Navigation:</strong></p>
-                    <ul style={{ margin: '4px 0', paddingLeft: '20px' }}>
-                        <li>Tab: Move focus between radio buttons</li>
-                        <li>Space: Select the focused radio button</li>
-                        <li>Arrow keys: Navigate within radio group (future enhancement)</li>
-                    </ul>
-                </div>
-            </fieldset>
-        );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: 'Demonstrates accessibility features including proper ARIA attributes, keyboard navigation, and required field handling.',
-            },
-        },
-    },
-};
-
-// Comprehensive showcase of all states and variations
-export const Showcase: Story = {
-    render: () => {
-        const [groupValues, setGroupValues] = useState<Record<string, string>>({
-            'basic-group': 'option2',
-            'disabled-group': 'disabled2',
-            'required-group': '',
-        });
-        
-        const handleGroupChange = (groupName: string) => (checked: boolean, value: string) => {
-            if (checked) {
-                setGroupValues(prev => ({
-                    ...prev,
-                    [groupName]: value,
-                }));
-            }
-        };
-
-        const createRadioSet = (
-            groupName: string,
-            title: string,
-            options: Array<{ value: string; label: string; disabled?: boolean; required?: boolean }>
-        ) => {
+        <fieldset style={{ border: '1px solid #e5e7eb', padding: '1rem', marginBottom: '1.5rem' }}>
+          <legend style={{ fontWeight: 'bold', padding: '0 0.5rem' }}>Plan Type *</legend>
+          {['basic', 'pro', 'enterprise'].map((plan) => {
+            const planRadio = createRadio({
+              name: 'plan',
+              value: plan,
+              checked: formData.plan === plan,
+              required: true,
+              onChange: (checked) => {
+                if (checked) setFormData(prev => ({ ...prev, plan }));
+              },
+            });
+            const PlanRadio = planRadio.connect(reactAdapter);
+            
             return (
-                <div style={{ border: '1px solid #e0e0e0', borderRadius: '8px', padding: '16px' }}>
-                    <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                        {title}
-                    </h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {options.map((option) => {
-                            const radioCore = createRadio({
-                                name: groupName,
-                                value: option.value,
-                                checked: groupValues[groupName] === option.value,
-                                disabled: option.disabled,
-                                required: option.required,
-                                onChange: handleGroupChange(groupName),
-                            });
-                            const RadioOption = reactAdapter.createComponent(radioCore);
-                            
-                            return (
-                                <label
-                                    key={option.value}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px',
-                                        cursor: option.disabled ? 'not-allowed' : 'pointer',
-                                        opacity: option.disabled ? 0.6 : 1,
-                                        fontSize: '14px',
-                                    }}
-                                >
-                                    <RadioOption />
-                                    <span>{option.label}</span>
-                                </label>
-                            );
-                        })}
-                    </div>
-                    <div style={{ 
-                        marginTop: '8px', 
-                        padding: '6px 8px', 
-                        backgroundColor: '#f8f9fa', 
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        color: '#666'
-                    }}>
-                        Selected: {groupValues[groupName] || 'None'}
-                    </div>
-                </div>
+              <label key={plan} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', cursor: 'pointer' }}>
+                <PlanRadio />
+                {plan.charAt(0).toUpperCase() + plan.slice(1)} Plan
+              </label>
             );
-        };
+          })}
+        </fieldset>
+        
+        <fieldset style={{ border: '1px solid #e5e7eb', padding: '1rem', marginBottom: '1.5rem' }}>
+          <legend style={{ fontWeight: 'bold', padding: '0 0.5rem' }}>Billing Frequency</legend>
+          {[
+            { value: 'monthly', label: 'Monthly' },
+            { value: 'yearly', label: 'Yearly (Save 20%)' },
+          ].map((freq) => {
+            const freqRadio = createRadio({
+              name: 'frequency',
+              value: freq.value,
+              checked: formData.frequency === freq.value,
+              onChange: (checked) => {
+                if (checked) setFormData(prev => ({ ...prev, frequency: freq.value }));
+              },
+            });
+            const FreqRadio = freqRadio.connect(reactAdapter);
+            
+            return (
+              <label key={freq.value} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', cursor: 'pointer' }}>
+                <FreqRadio />
+                {freq.label}
+              </label>
+            );
+          })}
+        </fieldset>
+        
+        <button type="submit" style={{
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          padding: '0.5rem 1rem',
+          borderRadius: '4px',
+          border: 'none',
+          cursor: 'pointer',
+          width: '100%',
+          fontSize: '1rem',
+        }}>
+          Continue
+        </button>
+      </form>
+    );
+  },
+};
 
-        return (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', maxWidth: '1000px' }}>
-                {createRadioSet('basic-group', 'Basic Radio Group', [
-                    { value: 'option1', label: 'First Option' },
-                    { value: 'option2', label: 'Second Option (Pre-selected)' },
-                    { value: 'option3', label: 'Third Option' },
-                ])}
-                
-                {createRadioSet('disabled-group', 'With Disabled Options', [
-                    { value: 'disabled1', label: 'Enabled Option' },
-                    { value: 'disabled2', label: 'Selected & Disabled', disabled: true },
-                    { value: 'disabled3', label: 'Disabled Option', disabled: true },
-                ])}
-                
-                {createRadioSet('required-group', 'Required Field Group', [
-                    { value: 'required1', label: 'Required Option 1', required: true },
-                    { value: 'required2', label: 'Required Option 2', required: true },
-                    { value: 'required3', label: 'Required Option 3', required: true },
-                ])}
-                
-                <div style={{ border: '1px solid #e0e0e0', borderRadius: '8px', padding: '16px' }}>
-                    <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600', color: '#333' }}>
-                        Individual States
-                    </h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        {[
-                            { core: createRadio({ name: 'single1', value: 'unchecked', checked: false }), label: 'Unchecked', disabled: false },
-                            { core: createRadio({ name: 'single2', value: 'checked', checked: true }), label: 'Checked', disabled: false },
-                            { core: createRadio({ name: 'single3', value: 'disabled', disabled: true }), label: 'Disabled', disabled: true },
-                            { core: createRadio({ name: 'single4', value: 'disabled-checked', disabled: true, checked: true }), label: 'Disabled + Checked', disabled: true },
-                        ].map((item, index) => {
-                            const RadioSingle = reactAdapter.createComponent(item.core);
-                            return (
-                                <label
-                                    key={index}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px',
-                                        fontSize: '14px',
-                                        cursor: item.disabled ? 'not-allowed' : 'pointer',
-                                        opacity: item.disabled ? 0.6 : 1,
-                                    }}
-                                >
-                                    <RadioSingle />
-                                    <span>{item.label}</span>
-                                </label>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
-        );
-    },
-    parameters: {
-        docs: {
-            description: {
-                story: 'Complete showcase of all radio button variations, states, and behaviors including groups, disabled states, and individual components.',
-            },
-        },
-    },
+// Error State
+export const WithError: Story = {
+  render: () => {
+    const errorRadio = createRadio({
+      name: 'error-radio',
+      value: 'option1',
+      id: 'error-radio',
+    });
+    
+    // Set error state
+    React.useEffect(() => {
+      errorRadio.state.setError(true, 'Please select an option');
+    }, []);
+    
+    const RadioWithError = errorRadio.connect(reactAdapter);
+    
+    return (
+      <div>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <RadioWithError />
+          <span>Option with Error</span>
+        </label>
+        <div id="error-radio-error" style={{ color: '#ef4444', fontSize: '14px', marginTop: '4px' }}>
+          Please select an option
+        </div>
+      </div>
+    );
+  },
+};
+
+// Accessibility Features
+export const AccessibilityDemo: Story = {
+  render: () => {
+    const [selectedValue, setSelectedValue] = React.useState<string>('');
+    
+    const options = [
+      { value: 'tab', label: 'Navigate with Tab key' },
+      { value: 'space', label: 'Select with Space key' },
+      { value: 'screen-reader', label: 'Accessible to screen readers' },
+    ];
+
+    return (
+      <fieldset style={{ border: '1px solid #e5e7eb', padding: '16px', borderRadius: '4px' }}>
+        <legend style={{ fontWeight: '600', padding: '0 8px' }}>
+          Accessibility Features (Required)
+        </legend>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '8px' }}>
+          {options.map((option) => {
+            const accessRadio = createRadio({
+              name: 'accessibility-group',
+              value: option.value,
+              checked: selectedValue === option.value,
+              required: true,
+              onChange: (checked) => {
+                if (checked) setSelectedValue(option.value);
+              },
+            });
+            const AccessRadio = accessRadio.connect(reactAdapter);
+            
+            return (
+              <label
+                key={option.value}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  cursor: 'pointer',
+                }}
+              >
+                <AccessRadio />
+                {option.label}
+              </label>
+            );
+          })}
+        </div>
+        <div style={{ marginTop: '12px', fontSize: '14px', color: '#6b7280' }}>
+          <p><strong>Keyboard Navigation:</strong></p>
+          <ul style={{ margin: '4px 0', paddingLeft: '20px' }}>
+            <li>Tab: Move focus between radio buttons</li>
+            <li>Space: Select the focused radio button</li>
+            <li>All radios have proper ARIA attributes</li>
+          </ul>
+        </div>
+      </fieldset>
+    );
+  },
+};
+
+// Comprehensive Showcase
+export const Showcase: Story = {
+  render: () => {
+    const [values, setValues] = React.useState<Record<string, string>>({
+      size: 'medium',
+      color: 'blue',
+      priority: 'normal',
+    });
+    
+    const handleChange = (group: string, value: string) => {
+      setValues(prev => ({ ...prev, [group]: value }));
+    };
+
+    return (
+      <div style={{ padding: '2rem' }}>
+        <h2 style={{ marginBottom: '2rem' }}>Radio Component Showcase</h2>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+          <div style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '16px' }}>
+            <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
+              Size Selection
+            </h4>
+            {['small', 'medium', 'large'].map((size) => {
+              const sizeRadio = createRadio({
+                name: 'size',
+                value: size,
+                checked: values.size === size,
+                onChange: (checked) => {
+                  if (checked) handleChange('size', size);
+                },
+              });
+              const SizeRadio = sizeRadio.connect(reactAdapter);
+              
+              return (
+                <label key={size} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', cursor: 'pointer' }}>
+                  <SizeRadio />
+                  {size.charAt(0).toUpperCase() + size.slice(1)}
+                </label>
+              );
+            })}
+          </div>
+          
+          <div style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '16px' }}>
+            <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
+              Color Theme
+            </h4>
+            {[
+              { value: 'blue', label: 'Blue', disabled: false },
+              { value: 'green', label: 'Green', disabled: false },
+              { value: 'red', label: 'Red (Disabled)', disabled: true },
+            ].map((color) => {
+              const colorRadio = createRadio({
+                name: 'color',
+                value: color.value,
+                checked: values.color === color.value,
+                disabled: color.disabled,
+                onChange: (checked) => {
+                  if (checked) handleChange('color', color.value);
+                },
+              });
+              const ColorRadio = colorRadio.connect(reactAdapter);
+              
+              return (
+                <label 
+                  key={color.value} 
+                  style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '8px', 
+                    marginBottom: '8px', 
+                    cursor: color.disabled ? 'not-allowed' : 'pointer',
+                    opacity: color.disabled ? 0.6 : 1,
+                  }}
+                >
+                  <ColorRadio />
+                  {color.label}
+                </label>
+              );
+            })}
+          </div>
+          
+          <div style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '16px' }}>
+            <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '600' }}>
+              Priority Level *
+            </h4>
+            {['low', 'normal', 'high', 'urgent'].map((priority) => {
+              const priorityRadio = createRadio({
+                name: 'priority',
+                value: priority,
+                checked: values.priority === priority,
+                required: true,
+                onChange: (checked) => {
+                  if (checked) handleChange('priority', priority);
+                },
+              });
+              const PriorityRadio = priorityRadio.connect(reactAdapter);
+              
+              return (
+                <label key={priority} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', cursor: 'pointer' }}>
+                  <PriorityRadio />
+                  {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                </label>
+              );
+            })}
+          </div>
+        </div>
+        
+        <div style={{ marginTop: '2rem', padding: '1rem', backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
+          <strong>Current Selections:</strong>
+          <pre style={{ margin: '8px 0 0 0', fontSize: '14px' }}>
+            {JSON.stringify(values, null, 2)}
+          </pre>
+        </div>
+      </div>
+    );
+  },
 };

@@ -75,6 +75,7 @@ describe('Toggle Logic', () => {
         expect(props).toEqual({
             'aria-checked': 'false',
             'aria-disabled': undefined,
+            'aria-label': 'Toggle switch',
             role: 'switch',
             tabIndex: 0,
         });
@@ -87,6 +88,7 @@ describe('Toggle Logic', () => {
         expect(updatedProps).toEqual({
             'aria-checked': 'true',
             'aria-disabled': 'true',
+            'aria-label': 'Toggle switch',
             role: 'switch',
             tabIndex: -1,
         });
@@ -169,5 +171,19 @@ describe('Toggle Logic', () => {
         
         // Callback should not be called after cleanup
         expect(mockOnChange).not.toHaveBeenCalled();
+    });
+    
+    it('should use custom label for aria-label', () => {
+        const customLabel = 'Enable notifications';
+        const customOptions: ToggleOptions = {
+            label: customLabel,
+        };
+        
+        const customLogic = createToggleLogic(stateStore, customOptions);
+        customLogic.connect(stateStore);
+        customLogic.initialize();
+        
+        const props = customLogic.getA11yProps('root');
+        expect(props['aria-label']).toBe(customLabel);
     });
 });

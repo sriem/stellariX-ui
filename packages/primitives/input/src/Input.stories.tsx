@@ -1,463 +1,418 @@
-import React from 'react';
-import { createInputWithImplementation } from './index';
+/**
+ * Input Component Stories
+ * Comprehensive showcase of all input features and edge cases
+ */
 
-export default {
+import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import { createInputWithImplementation } from './index';
+import { reactAdapter } from '@stellarix/react';
+
+// Create the React input component
+const input = createInputWithImplementation();
+const Input = input.connect(reactAdapter);
+
+const meta: Meta<typeof Input> = {
   title: 'Primitives/Input',
-  component: 'Input',
+  component: Input,
   parameters: {
+    layout: 'padded',
     docs: {
       description: {
-        component:
-          'A versatile input component supporting various types, sizes, and states.',
+        component: `
+A versatile input component supporting various types, sizes, and states.
+
+## Features
+- ✅ Multiple input types (text, email, password, number, tel, url, search)
+- ✅ Three sizes (sm, md, lg)
+- ✅ Disabled and readonly states
+- ✅ Error states with messages
+- ✅ Required field validation
+- ✅ Full accessibility support
+- ✅ Keyboard navigation
+- ✅ Form integration
+
+## Accessibility
+- Uses semantic \`<input>\` element
+- Proper ARIA attributes for states
+- Keyboard accessible
+- Screen reader friendly
+        `,
       },
     },
   },
   argTypes: {
     type: {
-      control: {
-        type: 'select',
-        options: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'],
-      },
+      control: { type: 'select' },
+      options: ['text', 'email', 'password', 'number', 'tel', 'url', 'search'],
       description: 'The type of input',
       defaultValue: 'text',
     },
     size: {
-      control: {
-        type: 'select',
-        options: ['sm', 'md', 'lg'],
-      },
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg'],
       description: 'The size of the input',
       defaultValue: 'md',
     },
     placeholder: {
       control: 'text',
       description: 'Placeholder text',
-      defaultValue: 'Enter text...',
+    },
+    value: {
+      control: 'text',
+      description: 'Input value',
     },
     disabled: {
       control: 'boolean',
       description: 'Whether the input is disabled',
-      defaultValue: false,
     },
     readonly: {
       control: 'boolean',
       description: 'Whether the input is readonly',
-      defaultValue: false,
     },
     required: {
       control: 'boolean',
       description: 'Whether the input is required',
-      defaultValue: false,
     },
     error: {
       control: 'boolean',
       description: 'Whether the input has an error',
-      defaultValue: false,
     },
     errorMessage: {
       control: 'text',
       description: 'Error message to display',
     },
+    onChange: { action: 'changed' },
+    onFocus: { action: 'focused' },
+    onBlur: { action: 'blurred' },
   },
-  tags: ['autodocs'],
+  args: {
+    type: 'text',
+    size: 'md',
+    placeholder: 'Enter text...',
+  },
 };
 
-// Create component template
-const createInputComponent = (args) => {
-  const input = createInputWithImplementation({
-    type: args.type,
-    size: args.size,
-    placeholder: args.placeholder,
-    disabled: args.disabled,
-    readonly: args.readonly,
-    required: args.required,
-    error: args.error,
-    errorMessage: args.errorMessage,
-    onChange: args.onChange,
-  });
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-  const InputComponent = () => {
-    const [componentState, setComponentState] = React.useState(() => input.state.getState());
-    const a11yProps = input.logic.getA11yProps('root');
-    const handlers = input.logic.getInteractionHandlers('root');
+// Basic Examples
+export const Default: Story = {};
 
-    // Update state based on args
-    React.useEffect(() => {
-      if (args.disabled !== undefined) input.state.setDisabled(args.disabled);
-      if (args.readonly !== undefined) input.state.setReadonly(args.readonly);
-      if (args.required !== undefined) input.state.setRequired(args.required);
-      if (args.error !== undefined) input.state.setError(args.error, args.errorMessage);
-      if (args.type) input.state.setType(args.type);
-      if (args.size) input.state.setSize(args.size);
-    }, [args]);
-
-    // Subscribe to state changes
-    React.useEffect(() => {
-      const unsubscribe = input.state.subscribe(setComponentState);
-      return unsubscribe;
-    }, []);
-
-    const baseStyles = {
-      fontFamily: 'sans-serif',
-      borderRadius: '4px',
-      border: '1px solid',
-      borderColor: componentState.error ? '#ef4444' : componentState.focused ? '#3182ce' : '#e5e7eb',
-      backgroundColor: componentState.disabled ? '#f3f4f6' : 'white',
-      color: componentState.disabled ? '#9ca3af' : '#111827',
-      outline: 'none',
-      transition: 'all 0.2s',
-      width: '100%',
-      boxSizing: 'border-box',
-    };
-
-    const sizeStyles = {
-      sm: {
-        height: '32px',
-        fontSize: '0.875rem',
-        padding: '0 0.75rem',
-      },
-      md: {
-        height: '40px',
-        fontSize: '1rem',
-        padding: '0 1rem',
-      },
-      lg: {
-        height: '48px',
-        fontSize: '1.125rem',
-        padding: '0 1.25rem',
-      },
-    };
-
-    const styles = {
-      ...baseStyles,
-      ...sizeStyles[componentState.size || 'md'],
-      cursor: componentState.disabled ? 'not-allowed' : componentState.readonly ? 'default' : 'text',
-    };
-
-    return (
-      <div style={{ width: '100%' }}>
-        <input
-          {...a11yProps}
-          {...handlers}
-          type={componentState.type}
-          style={styles}
-          placeholder={args.placeholder}
-          disabled={componentState.disabled}
-          readOnly={componentState.readonly}
-          required={componentState.required}
-          value={componentState.value}
-        />
-        {componentState.error && componentState.errorMessage && (
-          <div style={{ 
-            color: '#ef4444', 
-            fontSize: '0.875rem', 
-            marginTop: '0.25rem' 
-          }}>
-            {componentState.errorMessage}
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  return <InputComponent />;
+export const WithPlaceholder: Story = {
+  args: {
+    placeholder: 'Enter your name...',
+  },
 };
 
-// Default input
-export const Default = {
-  render: (args) => createInputComponent(args),
+export const WithValue: Story = {
+  args: {
+    value: 'Hello, World!',
+  },
 };
 
-// With placeholder
-export const WithPlaceholder = {
-  render: (args) => createInputComponent({ 
-    ...args, 
-    placeholder: 'Enter your name...' 
-  }),
-};
-
-// Email input
-export const Email = {
-  render: (args) => createInputComponent({ 
-    ...args, 
+// Input Types
+export const Email: Story = {
+  args: {
     type: 'email',
-    placeholder: 'email@example.com' 
-  }),
-};
-
-// Password input
-export const Password = {
-  render: (args) => createInputComponent({ 
-    ...args, 
-    type: 'password',
-    placeholder: 'Enter password' 
-  }),
-};
-
-// Number input
-export const Number = {
-  render: (args) => createInputComponent({ 
-    ...args, 
-    type: 'number',
-    placeholder: 'Enter a number' 
-  }),
-};
-
-// Search input
-export const Search = {
-  render: (args) => createInputComponent({ 
-    ...args, 
-    type: 'search',
-    placeholder: 'Search...' 
-  }),
-};
-
-// Small size
-export const Small = {
-  render: (args) => createInputComponent({ 
-    ...args, 
-    size: 'sm',
-    placeholder: 'Small input' 
-  }),
-};
-
-// Large size
-export const Large = {
-  render: (args) => createInputComponent({ 
-    ...args, 
-    size: 'lg',
-    placeholder: 'Large input' 
-  }),
-};
-
-// Disabled state
-export const Disabled = {
-  render: (args) => createInputComponent({ 
-    ...args, 
-    disabled: true,
-    placeholder: 'Disabled input' 
-  }),
-};
-
-// Readonly state
-export const Readonly = {
-  render: (args) => {
-    const InputWithValue = () => {
-      const input = createInputWithImplementation({
-        ...args,
-        readonly: true,
-      });
-      
-      // Set initial value
-      React.useEffect(() => {
-        input.state.setValue('Read-only value');
-        input.state.setReadonly(true);
-      }, []);
-      
-      const InputComponent = () => {
-        const [componentState, setComponentState] = React.useState(() => input.state.getState());
-        const a11yProps = input.logic.getA11yProps('root');
-        const handlers = input.logic.getInteractionHandlers('root');
-        
-        React.useEffect(() => {
-          const unsubscribe = input.state.subscribe(setComponentState);
-          return unsubscribe;
-        }, []);
-        
-        const baseStyles = {
-          fontFamily: 'sans-serif',
-          borderRadius: '4px',
-          border: '1px solid',
-          borderColor: componentState.error ? '#ef4444' : componentState.focused ? '#3182ce' : '#e5e7eb',
-          backgroundColor: componentState.disabled ? '#f3f4f6' : 'white',
-          color: componentState.disabled ? '#9ca3af' : '#111827',
-          outline: 'none',
-          transition: 'all 0.2s',
-          width: '100%',
-          boxSizing: 'border-box',
-          height: '40px',
-          fontSize: '1rem',
-          padding: '0 1rem',
-          cursor: componentState.disabled ? 'not-allowed' : componentState.readonly ? 'default' : 'text',
-        };
-        
-        return (
-          <div style={{ width: '100%' }}>
-            <input
-              {...a11yProps}
-              {...handlers}
-              type={componentState.type}
-              style={baseStyles}
-              placeholder="Read-only input"
-              disabled={componentState.disabled}
-              readOnly={componentState.readonly}
-              required={componentState.required}
-              value={componentState.value}
-            />
-          </div>
-        );
-      };
-      
-      return <InputComponent />;
-    };
-    
-    return <InputWithValue />;
+    placeholder: 'email@example.com',
   },
 };
 
-// Required input
-export const Required = {
-  render: (args) => createInputComponent({ 
-    ...args, 
-    required: true,
-    placeholder: 'Required field' 
-  }),
+export const Password: Story = {
+  args: {
+    type: 'password',
+    placeholder: 'Enter password',
+  },
 };
 
-// Error state
-export const Error = {
-  render: (args) => createInputComponent({ 
-    ...args, 
+export const Number: Story = {
+  args: {
+    type: 'number',
+    placeholder: 'Enter a number',
+  },
+};
+
+export const Search: Story = {
+  args: {
+    type: 'search',
+    placeholder: 'Search...',
+  },
+};
+
+export const Tel: Story = {
+  args: {
+    type: 'tel',
+    placeholder: '+1 (555) 123-4567',
+  },
+};
+
+export const Url: Story = {
+  args: {
+    type: 'url',
+    placeholder: 'https://example.com',
+  },
+};
+
+// Size Variations
+export const Small: Story = {
+  args: {
+    size: 'sm',
+    placeholder: 'Small input',
+  },
+};
+
+export const Medium: Story = {
+  args: {
+    size: 'md',
+    placeholder: 'Medium input',
+  },
+};
+
+export const Large: Story = {
+  args: {
+    size: 'lg',
+    placeholder: 'Large input',
+  },
+};
+
+// State Variations
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+    placeholder: 'Disabled input',
+    value: 'Cannot edit this',
+  },
+};
+
+export const Readonly: Story = {
+  args: {
+    readonly: true,
+    value: 'Read-only value',
+  },
+};
+
+export const Required: Story = {
+  args: {
+    required: true,
+    placeholder: 'Required field *',
+  },
+};
+
+export const Error: Story = {
+  args: {
     error: true,
     errorMessage: 'This field is required',
-    placeholder: 'Invalid input' 
-  }),
+    placeholder: 'Invalid input',
+  },
 };
 
-// Form example
-export const FormExample = {
-  render: () => {
-    const EmailInput = createInputComponent({ 
-      type: 'email', 
-      placeholder: 'Email address',
-      required: true 
-    });
-    const PasswordInput = createInputComponent({ 
-      type: 'password', 
-      placeholder: 'Password',
-      required: true 
-    });
+// Interactive Examples
+export const ControlledInput: Story = {
+  render: (args) => {
+    const [value, setValue] = React.useState('');
     
     return (
-      <div style={{ maxWidth: '400px', padding: '2rem' }}>
-        <h3>Login Form</h3>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Email
-            </label>
-            <EmailInput />
-          </div>
-          
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
-              Password
-            </label>
-            <PasswordInput />
-          </div>
-          
-          <button type="submit" style={{
-            backgroundColor: '#3182ce',
-            color: 'white',
-            padding: '0.5rem 1rem',
-            borderRadius: '4px',
-            border: 'none',
-            cursor: 'pointer',
-            width: '100%',
-          }}>
-            Sign In
-          </button>
-        </form>
+      <div>
+        <Input 
+          {...args}
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+            args.onChange?.(e);
+          }}
+        />
+        <p style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
+          Current value: "{value}"
+        </p>
       </div>
+    );
+  },
+};
+
+export const WithValidation: Story = {
+  render: (args) => {
+    const [value, setValue] = React.useState('');
+    const [error, setError] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState('');
+    
+    const validate = (email: string) => {
+      if (!email) {
+        setError(true);
+        setErrorMessage('Email is required');
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setError(true);
+        setErrorMessage('Please enter a valid email address');
+      } else {
+        setError(false);
+        setErrorMessage('');
+      }
+    };
+    
+    return (
+      <div>
+        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+          Email Address
+        </label>
+        <Input 
+          type="email"
+          placeholder="email@example.com"
+          value={value}
+          error={error}
+          errorMessage={errorMessage}
+          onChange={(e) => {
+            setValue(e.target.value);
+            validate(e.target.value);
+          }}
+          onBlur={() => validate(value)}
+        />
+      </div>
+    );
+  },
+};
+
+// Form Example
+export const LoginForm: Story = {
+  render: () => {
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    
+    const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      alert(`Login with: ${email}`);
+    };
+    
+    return (
+      <form onSubmit={handleSubmit} style={{ maxWidth: '400px', padding: '2rem', backgroundColor: '#f9fafb', borderRadius: '8px' }}>
+        <h3 style={{ marginBottom: '1.5rem' }}>Login Form</h3>
+        
+        <div style={{ marginBottom: '1rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+            Email
+          </label>
+          <Input
+            type="email"
+            placeholder="email@example.com"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+            Password
+          </label>
+          <Input
+            type="password"
+            placeholder="Enter password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        
+        <button type="submit" style={{
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          padding: '0.5rem 1rem',
+          borderRadius: '4px',
+          border: 'none',
+          cursor: 'pointer',
+          width: '100%',
+          fontSize: '1rem',
+        }}>
+          Sign In
+        </button>
+      </form>
     );
   },
 };
 
 // Showcase
-export const Showcase = {
+export const Showcase: Story = {
   render: () => (
-    <div style={{ padding: '2rem', display: 'grid', gap: '2rem', maxWidth: '600px' }}>
-      <div>
-        <h3>Input Types</h3>
-        <div style={{ display: 'grid', gap: '1rem' }}>
-          {createInputComponent({ type: 'text', placeholder: 'Text input' })}
-          {createInputComponent({ type: 'email', placeholder: 'Email input' })}
-          {createInputComponent({ type: 'password', placeholder: 'Password input' })}
-          {createInputComponent({ type: 'number', placeholder: 'Number input' })}
-          {createInputComponent({ type: 'search', placeholder: 'Search input' })}
-        </div>
-      </div>
+    <div style={{ padding: '2rem' }}>
+      <h2 style={{ marginBottom: '2rem' }}>Input Component Showcase</h2>
       
-      <div>
-        <h3>Input Sizes</h3>
-        <div style={{ display: 'grid', gap: '1rem' }}>
-          {createInputComponent({ size: 'sm', placeholder: 'Small input' })}
-          {createInputComponent({ size: 'md', placeholder: 'Medium input' })}
-          {createInputComponent({ size: 'lg', placeholder: 'Large input' })}
+      <section style={{ marginBottom: '3rem' }}>
+        <h3 style={{ marginBottom: '1rem' }}>Input Types</h3>
+        <div style={{ display: 'grid', gap: '1rem', maxWidth: '400px' }}>
+          <Input type="text" placeholder="Text input" />
+          <Input type="email" placeholder="Email input" />
+          <Input type="password" placeholder="Password input" />
+          <Input type="number" placeholder="Number input" />
+          <Input type="search" placeholder="Search input" />
+          <Input type="tel" placeholder="Phone input" />
+          <Input type="url" placeholder="URL input" />
         </div>
-      </div>
+      </section>
       
-      <div>
-        <h3>Input States</h3>
-        <div style={{ display: 'grid', gap: '1rem' }}>
-          {createInputComponent({ placeholder: 'Normal input' })}
-          {createInputComponent({ disabled: true, placeholder: 'Disabled input' })}
-          {(() => {
-            const input = createInputWithImplementation({ readonly: true });
-            React.useEffect(() => {
-              input.state.setValue('Readonly input');
-              input.state.setReadonly(true);
-            }, []);
-            
-            const ReadonlyInput = () => {
-              const [componentState, setComponentState] = React.useState(() => input.state.getState());
-              const a11yProps = input.logic.getA11yProps('root');
-              const handlers = input.logic.getInteractionHandlers('root');
-              
-              React.useEffect(() => {
-                const unsubscribe = input.state.subscribe(setComponentState);
-                return unsubscribe;
-              }, []);
-              
-              const styles = {
-                fontFamily: 'sans-serif',
-                borderRadius: '4px',
-                border: '1px solid #e5e7eb',
-                backgroundColor: 'white',
-                color: '#111827',
-                outline: 'none',
-                transition: 'all 0.2s',
-                width: '100%',
-                boxSizing: 'border-box',
-                height: '40px',
-                fontSize: '1rem',
-                padding: '0 1rem',
-                cursor: 'default',
-              };
-              
-              return (
-                <input
-                  {...a11yProps}
-                  {...handlers}
-                  type={componentState.type}
-                  style={styles}
-                  disabled={componentState.disabled}
-                  readOnly={componentState.readonly}
-                  required={componentState.required}
-                  value={componentState.value}
-                />
-              );
-            };
-            
-            return <ReadonlyInput />;
-          })()}
-          {createInputComponent({ 
-            error: true, 
-            errorMessage: 'Invalid input', 
-            placeholder: 'Error state' 
-          })}
+      <section style={{ marginBottom: '3rem' }}>
+        <h3 style={{ marginBottom: '1rem' }}>Sizes</h3>
+        <div style={{ display: 'grid', gap: '1rem', maxWidth: '400px' }}>
+          <Input size="sm" placeholder="Small input" />
+          <Input size="md" placeholder="Medium input" />
+          <Input size="lg" placeholder="Large input" />
         </div>
-      </div>
+      </section>
+      
+      <section style={{ marginBottom: '3rem' }}>
+        <h3 style={{ marginBottom: '1rem' }}>States</h3>
+        <div style={{ display: 'grid', gap: '1rem', maxWidth: '400px' }}>
+          <Input placeholder="Normal input" />
+          <Input disabled placeholder="Disabled input" />
+          <Input readonly value="Read-only value" />
+          <Input required placeholder="Required field *" />
+          <Input error errorMessage="This field has an error" placeholder="Error state" />
+        </div>
+      </section>
     </div>
   ),
+};
+
+// Edge Cases
+export const LongText: Story = {
+  args: {
+    value: 'This is a very long text that might overflow the input field and should be handled gracefully by the component',
+  },
+};
+
+export const SpecialCharacters: Story = {
+  args: {
+    value: '!@#$%^&*()_+-=[]{}|;\':",./<>?',
+  },
+};
+
+// Stress Test
+export const StressTest: Story = {
+  render: () => {
+    const [values, setValues] = React.useState<Record<number, string>>({});
+    
+    return (
+      <div style={{ padding: '2rem' }}>
+        <h3 style={{ marginBottom: '1rem' }}>Performance Test: 50 Inputs</h3>
+        <div style={{ 
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: '0.5rem',
+          maxHeight: '400px',
+          overflowY: 'auto',
+          border: '1px solid #e5e7eb',
+          borderRadius: '4px',
+          padding: '1rem'
+        }}>
+          {Array.from({ length: 50 }, (_, i) => (
+            <Input
+              key={i}
+              size="sm"
+              placeholder={`Input ${i + 1}`}
+              value={values[i] || ''}
+              onChange={(e) => setValues(prev => ({ ...prev, [i]: e.target.value }))}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  },
 };

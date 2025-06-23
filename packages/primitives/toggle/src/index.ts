@@ -21,7 +21,7 @@ export function createToggle(options: ToggleOptions = {}) {
             accessibility: {
                 role: 'switch',
                 keyboardShortcuts: ['Space'],
-                ariaAttributes: ['aria-checked', 'aria-disabled'],
+                ariaAttributes: ['aria-checked', 'aria-disabled', 'aria-label'],
                 wcagLevel: 'AA',
                 patterns: ['toggle', 'switch']
             },
