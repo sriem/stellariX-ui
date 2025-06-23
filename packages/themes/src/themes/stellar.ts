@@ -18,9 +18,9 @@ export const stellarLight: Theme = {
         cardForeground: 'hsl(222.2, 84%, 4.9%)',
         
         // Interactive colors - Modern vibrant palette with depth
-        primary: 'hsl(237.7, 85.6%, 62%)',  // Darkened for 4.5:1 contrast
+        primary: 'hsl(237.7, 85.6%, 62%)',
         primaryForeground: 'hsl(0, 0%, 100%)',
-        primaryHover: 'hsl(237.5, 77.8%, 56%)',  // Adjusted hover
+        primaryHover: 'hsl(237.5, 77.8%, 56%)',
         primaryHoverForeground: 'hsl(0, 0%, 100%)',
         secondary: 'hsl(262.1, 83.3%, 57.8%)',
         secondaryForeground: 'hsl(0, 0%, 100%)',
@@ -28,26 +28,26 @@ export const stellarLight: Theme = {
         secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
         // Semantic colors - WCAG AA compliant
-        destructive: '#dc2626',  // Darkened for 4.5:1 contrast
+        destructive: '#dc2626',
         destructiveForeground: '#ffffff',
         destructiveHover: '#b91c1c',
         destructiveHoverForeground: '#ffffff',
-        success: '#059669',  // Darkened for 4.5:1 contrast
+        success: '#059669',
         successForeground: '#ffffff',
         successHover: '#047857',
         successHoverForeground: '#ffffff',
         warning: '#f59e0b',
-        warningForeground: '#78350f',  // Dark text for better contrast
+        warningForeground: '#78350f',
         warningHover: '#d97706',
         warningHoverForeground: '#78350f',
-        info: '#2563eb',  // Darkened for 4.5:1 contrast
+        info: '#2563eb',
         infoForeground: '#ffffff',
         infoHover: '#1d4ed8',
         infoHoverForeground: '#ffffff',
         
         // UI colors - Refined grays with blue undertones
         muted: 'hsl(210, 40%, 96.1%)',
-        mutedForeground: 'hsl(215.4, 19%, 35%)',  // Darkened for 4.5:1 contrast on muted bg
+        mutedForeground: 'hsl(215.4, 19%, 35%)',
         accent: 'hsl(210, 40%, 95.1%)',
         accentForeground: 'hsl(222.2, 47.4%, 11.2%)',
         

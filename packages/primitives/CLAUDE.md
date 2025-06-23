@@ -296,6 +296,26 @@ export const Showcase = {
 }
 ```
 
+## 📝 Code Style Guidelines
+
+### Clean Code Practices
+- NO inline comments explaining code changes (e.g., `// Updated for WCAG compliance`)
+- NO implementation notes in production code
+- Keep code self-documenting through clear naming
+- Use JSDoc comments only for public APIs
+- Place explanatory comments in PR descriptions, not code
+
+### Example:
+```typescript
+// ❌ AVOID:
+primary: 'hsl(237.7, 85.6%, 62%)',  // Darkened for 4.5:1 contrast
+success: '#059669',  // Updated for WCAG AA compliance
+
+// ✅ PREFERRED:
+primary: 'hsl(237.7, 85.6%, 62%)',
+success: '#059669',
+```
+
 ## 🚫 Common Pitfalls to Avoid
 
 1. **Circular Dependencies**

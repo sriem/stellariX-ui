@@ -301,6 +301,8 @@ packages/primitives/[component]/
 - Use latest framework conventions in adapters
 - Consistent index.ts exports with proper types
 - Modern bundler-friendly patterns
+- NO inline comments for code changes (e.g., `// Updated for WCAG compliance`)
+- Keep code clean without implementation notes
 
 ## Current Focus Areas
 

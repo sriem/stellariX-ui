@@ -238,6 +238,22 @@ primary: 'hsl(237.7, 85.6%, 67.5%)',
 primary: '#6366f1',
 ```
 
+### Code Style for Themes
+- NO inline comments explaining color adjustments
+- NO implementation notes in theme files
+- Document color decisions in PR/commit messages
+- Keep theme files clean and readable
+
+```typescript
+// ❌ AVOID:
+primary: 'hsl(237.7, 85.6%, 62%)',  // Darkened for 4.5:1 contrast
+success: '#059669',  // WCAG AA compliant
+
+// ✅ PREFERRED:
+primary: 'hsl(237.7, 85.6%, 62%)',
+success: '#059669',
+```
+
 ### 2. **Sophisticated Shadow System**
 Modern themes need layered shadows for depth:
 ```typescript

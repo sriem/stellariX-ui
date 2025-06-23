@@ -18,9 +18,9 @@ export const auroraLight: Theme = {
         cardForeground: 'hsl(220, 16.4%, 21.6%)',
         
         // Interactive colors - Refined Nordic palette
-        primary: 'hsl(210, 34%, 46%)',  // Darkened for 4.5:1 contrast
+        primary: 'hsl(210, 34%, 46%)',
         primaryForeground: 'hsl(0, 0%, 100%)',
-        primaryHover: 'hsl(210, 34%, 40%)',  // Adjusted hover
+        primaryHover: 'hsl(210, 34%, 40%)',
         primaryHoverForeground: 'hsl(0, 0%, 100%)',
         secondary: 'hsl(210, 34%, 63.1%)',
         secondaryForeground: 'hsl(0, 0%, 100%)',
@@ -28,26 +28,26 @@ export const auroraLight: Theme = {
         secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
         // Semantic colors - Soft variants (WCAG AA compliant)
-        destructive: '#a54049',  // Darkened for 4.5:1 contrast
+        destructive: '#a54049',
         destructiveForeground: '#ffffff',
         destructiveHover: '#8f353d',
         destructiveHoverForeground: '#ffffff',
-        success: '#7fa865',  // Darkened for 4.5:1 contrast
+        success: '#7fa865',
         successForeground: '#ffffff',
         successHover: '#6f9456',
         successHoverForeground: '#ffffff',
         warning: '#ebcb8b',
-        warningForeground: '#3b2f1a',  // Already using dark text
+        warningForeground: '#3b2f1a',
         warningHover: '#e0b772',
         warningHoverForeground: '#3b2f1a',
-        info: '#5a9fb0',  // Darkened for 4.5:1 contrast
+        info: '#5a9fb0',
         infoForeground: '#ffffff',
         infoHover: '#4c8a9b',
         infoHoverForeground: '#ffffff',
         
         // UI colors - Soft Nordic grays
         muted: 'hsl(218.5, 26.8%, 92.5%)',
-        mutedForeground: 'hsl(220, 16%, 28%)',  // Darkened for 4.5:1 contrast on muted bg
+        mutedForeground: 'hsl(220, 16%, 28%)',
         accent: 'hsl(218.5, 26.8%, 92%)',
         accentForeground: 'hsl(220, 16.4%, 21.6%)',
         

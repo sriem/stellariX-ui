@@ -277,7 +277,7 @@ const ThemedToggle = ({ label, checked, onChange, ...props }: any) => {
                 <div className="sx-toggle__track" />
                 <div className="sx-toggle__thumb" />
             </div>
-            <span className="sx-toggle-label">{label}</span>
+            {label && <span className="sx-toggle-label">{label}</span>}
         </label>
     );
 };
