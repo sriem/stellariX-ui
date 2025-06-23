@@ -1,0 +1,43 @@
+{
+  "name": "@stellarix/popover",
+  "version": "0.1.0",
+  "description": "Popover component for StellarIX UI",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@stellarix/core": "workspace:*",
+    "@stellarix/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.0.0",
+    "@types/node": "^20.0.0",
+    "happy-dom": "^14.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
+  },
+  "peerDependencies": {},
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  }
+}
