@@ -10,19 +10,19 @@ import nebulaLight from '../../css/nebula-light.css?raw';
 import nebulaDark from '../../css/nebula-dark.css?raw';
 
 // Import all components
-import { createButtonWithDefaults } from '@stellarix/button';
-import { createCardWithImplementation } from '@stellarix/card';
-import { createBadgeWithImplementation } from '@stellarix/badge';
-import { createAlertWithImplementation } from '@stellarix/alert';
-import { createAvatarWithImplementation } from '@stellarix/avatar';
-import { createCheckboxWithImplementation } from '@stellarix/checkbox';
-import { createRadioWithImplementation } from '@stellarix/radio';
-import { createToggleWithImplementation } from '@stellarix/toggle';
-import { createInputWithImplementation } from '@stellarix/input';
-import { createTextareaWithImplementation } from '@stellarix/textarea';
-import { createSpinnerWithImplementation } from '@stellarix/spinner';
-import { createDividerWithImplementation } from '@stellarix/divider';
-import { createContainerWithImplementation } from '@stellarix/container';
+import { createButtonWithImplementation } from '../../../primitives/button/src';
+import { createCardWithImplementation } from '../../../primitives/card/src';
+import { createBadgeWithImplementation } from '../../../primitives/badge/src';
+import { createAlertWithImplementation } from '../../../primitives/alert/src';
+import { createAvatarWithImplementation } from '../../../primitives/avatar/src';
+import { createCheckboxWithImplementation } from '../../../primitives/checkbox/src';
+import { createRadioWithImplementation } from '../../../primitives/radio/src';
+import { createToggleWithImplementation } from '../../../primitives/toggle/src';
+import { createInputWithImplementation } from '../../../primitives/input/src';
+import { createTextareaWithImplementation } from '../../../primitives/textarea/src';
+import { createSpinnerWithImplementation } from '../../../primitives/spinner/src';
+import { createDividerWithImplementation } from '../../../primitives/divider/src';
+import { createContainerWithImplementation } from '../../../primitives/container/src';
 
 const meta = {
     title: 'Theme Showcase/All Components',
@@ -73,7 +73,7 @@ const ThemeProvider = ({ theme, children }: { theme: string; children: React.Rea
 
 // Component wrappers with themed styling
 const ThemedButton = ({ variant, size, children, ...props }: any) => {
-    const [button] = useState(() => createButtonWithDefaults({ variant, size, ...props }));
+    const [button] = useState(() => createButtonWithImplementation({ variant, size, ...props }));
     const [state, setState] = useState(() => button.state.getState());
 
     useEffect(() => {
@@ -230,7 +230,6 @@ const ThemedCheckbox = ({ label }: any) => {
                 {state.checked && (
                     <svg viewBox="0 0 16 16" className="sx-checkbox__icon">
                         <path
-                            fill="currentColor"
                             d="M13.5 3.5L6 11L2.5 7.5"
                             stroke="currentColor"
                             strokeWidth="2"

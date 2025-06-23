@@ -1,6 +1,16 @@
 /**
  * Spinner Component State Management
  * Ultra-generic state implementation
+ * 
+ * 🚨 CRITICAL WARNING: setState PARTIAL UPDATE PREVENTION
+ * 
+ * ❌ FORBIDDEN:
+ * - state.setState({ field: value }) // WILL NOT WORK - loses other fields!
+ * - store.setState({ field: value }) // CAUSES NaN/undefined errors!
+ * 
+ * ✅ ONLY CORRECT PATTERN:
+ * - store.setState((prev: any) => ({ ...prev, field: value }))
+ * - ALWAYS use function updater with spread operator
  */
 
 import { createComponentState } from '@stellarix/core';
@@ -52,29 +62,29 @@ export function createSpinnerState(options: SpinnerOptions = {}): SpinnerStateSt
         
         // Start spinning
         start: () => {
-            store.setState({ spinning: true });
+            store.setState((prev: SpinnerState) => ({ ...prev, spinning: true }));
         },
         
         // Stop spinning
         stop: () => {
-            store.setState({ spinning: false });
+            store.setState((prev: SpinnerState) => ({ ...prev, spinning: false }));
         },
         
         // Convenience setters
         setSize: (size: SpinnerSize) => {
-            store.setState({ size });
+            store.setState((prev: SpinnerState) => ({ ...prev, size }));
         },
         
         setColor: (color: string | undefined) => {
-            store.setState({ color });
+            store.setState((prev: SpinnerState) => ({ ...prev, color }));
         },
         
         setLabel: (label: string) => {
-            store.setState({ label });
+            store.setState((prev: SpinnerState) => ({ ...prev, label }));
         },
         
         setSpeed: (speed: number) => {
-            store.setState({ speed });
+            store.setState((prev: SpinnerState) => ({ ...prev, speed }));
         },
     };
     

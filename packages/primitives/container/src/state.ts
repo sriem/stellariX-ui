@@ -1,6 +1,16 @@
 /**
  * Container Component State Management
  * Ultra-generic state implementation
+ * 
+ * 🚨 CRITICAL WARNING: setState PARTIAL UPDATE PREVENTION
+ * 
+ * ❌ FORBIDDEN:
+ * - state.setState({ field: value }) // WILL NOT WORK - loses other fields!
+ * - store.setState({ field: value }) // CAUSES NaN/undefined errors!
+ * 
+ * ✅ ONLY CORRECT PATTERN:
+ * - store.setState((prev: any) => ({ ...prev, field: value }))
+ * - ALWAYS use function updater with spread operator
  */
 
 import { createComponentState } from '@stellarix/core';
@@ -64,19 +74,19 @@ export function createContainerState(options: ContainerOptions = {}): ContainerS
         
         // Convenience setters
         setSize: (size: ContainerSize) => {
-            store.setState({ size });
+            store.setState((prev: ContainerState) => ({ ...prev, size }));
         },
         
         setVariant: (variant: ContainerState['variant']) => {
-            store.setState({ variant });
+            store.setState((prev: ContainerState) => ({ ...prev, variant }));
         },
         
         setMaxWidth: (maxWidth: string | undefined) => {
-            store.setState({ maxWidth });
+            store.setState((prev: ContainerState) => ({ ...prev, maxWidth }));
         },
         
         setPadding: (padding: string | undefined) => {
-            store.setState({ padding });
+            store.setState((prev: ContainerState) => ({ ...prev, padding }));
         },
         
         // Computed properties

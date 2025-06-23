@@ -1,6 +1,16 @@
 /**
  * Radio Component State Management
  * Ultra-generic state implementation
+ * 
+ * 🚨 CRITICAL WARNING: setState PARTIAL UPDATE PREVENTION
+ * 
+ * ❌ FORBIDDEN:
+ * - state.setState({ field: value }) // WILL NOT WORK - loses other fields!
+ * - store.setState({ field: value }) // CAUSES NaN/undefined errors!
+ * 
+ * ✅ ONLY CORRECT PATTERN:
+ * - store.setState((prev: any) => ({ ...prev, field: value }))
+ * - ALWAYS use function updater with spread operator
  */
 
 import { createComponentState } from '@stellarix/core';
@@ -57,23 +67,23 @@ export function createRadioState(options: RadioOptions): RadioStateStore {
         
         // Convenience setters
         setChecked: (checked: boolean) => {
-            store.setState({ checked });
+            store.setState((prev: RadioState) => ({ ...prev, checked }));
         },
         
         setDisabled: (disabled: boolean) => {
-            store.setState({ disabled });
+            store.setState((prev: RadioState) => ({ ...prev, disabled }));
         },
         
         setFocused: (focused: boolean) => {
-            store.setState({ focused });
+            store.setState((prev: RadioState) => ({ ...prev, focused }));
         },
         
         setRequired: (required: boolean) => {
-            store.setState({ required });
+            store.setState((prev: RadioState) => ({ ...prev, required }));
         },
         
         setError: (error: boolean, errorMessage?: string) => {
-            store.setState({ error, errorMessage });
+            store.setState((prev: RadioState) => ({ ...prev, error, errorMessage }));
         },
         
         // Computed properties

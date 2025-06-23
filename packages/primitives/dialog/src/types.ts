@@ -1,152 +1,175 @@
 /**
  * Dialog Component Types
+ * Define all TypeScript interfaces for the component
  */
-
-import { BaseComponentOptions, BaseComponentState } from '../../../core/src/types';
 
 /**
- * Dialog state interface
+ * Dialog component state
+ * Represents the internal state of the component
  */
-export interface DialogState extends BaseComponentState {
+export interface DialogState {
     /**
-     * Whether the dialog is open
+     * Whether the dialog is currently open
      */
-    isOpen: boolean;
-
+    open: boolean;
+    
     /**
-     * Whether the dialog has a backdrop
+     * Element that had focus before dialog opened
      */
-    hasBackdrop: boolean;
-
+    previousFocus: HTMLElement | null;
+    
     /**
-     * Whether the dialog closes when clicking outside
+     * Whether the dialog is in a loading state
      */
-    closeOnOutsideClick: boolean;
-
+    loading: boolean;
+    
     /**
-     * Whether the dialog closes when pressing escape key
+     * Whether to close dialog on backdrop click
      */
-    closeOnEsc: boolean;
-
+    closeOnBackdropClick: boolean;
+    
     /**
-     * Generated title ID for accessibility
+     * Whether to close dialog on escape key
      */
-    titleId: string;
-
+    closeOnEscape: boolean;
+    
     /**
-     * Generated description ID for accessibility
+     * Whether to trap focus within dialog
      */
-    descriptionId: string;
-
+    focusTrap: boolean;
+    
     /**
-     * Dialog role - either "dialog" or "alertdialog"
+     * Whether to prevent body scroll when open
      */
-    role: "dialog" | "alertdialog";
+    preventScroll: boolean;
+    
+    /**
+     * Dialog role for accessibility
+     */
+    role: 'dialog' | 'alertdialog';
 }
 
 /**
- * Dialog events interface
+ * Dialog component options
+ * Configuration passed when creating the component
  */
-export interface DialogEvents {
-    /**
-     * Dialog open event
-     */
-    OPEN: void;
-
-    /**
-     * Dialog close event
-     */
-    CLOSE: void;
-
-    /**
-     * Escape key press event
-     */
-    ESCAPE_KEY_DOWN: {
-        /**
-         * The original keyboard event
-         */
-        originalEvent: KeyboardEvent;
-    };
-
-    /**
-     * Outside click event
-     */
-    OUTSIDE_CLICK: {
-        /**
-         * The original mouse event
-         */
-        originalEvent: MouseEvent;
-    };
-}
-
-/**
- * Dialog options interface
- */
-export interface DialogOptions extends BaseComponentOptions {
-    /**
-     * Unique ID for the dialog
-     */
-    id?: string;
-
+export interface DialogOptions {
     /**
      * Initial open state
      * @default false
      */
-    initialOpen?: boolean;
-
+    open?: boolean;
+    
     /**
-     * Whether the dialog has a backdrop
+     * Whether to close dialog on backdrop click
      * @default true
      */
-    hasBackdrop?: boolean;
-
+    closeOnBackdropClick?: boolean;
+    
     /**
-     * Whether the dialog closes when clicking outside
+     * Whether to close dialog on escape key
      * @default true
      */
-    closeOnOutsideClick?: boolean;
-
+    closeOnEscape?: boolean;
+    
     /**
-     * Whether the dialog closes when pressing escape key
+     * Whether to trap focus within dialog
      * @default true
      */
-    closeOnEsc?: boolean;
-
+    focusTrap?: boolean;
+    
     /**
-     * Whether to prevent body scrolling when dialog is open
+     * Whether to prevent body scroll when open
      * @default true
      */
     preventScroll?: boolean;
-
+    
     /**
-     * Whether to return focus to the trigger element when closed
-     * @default true
+     * Dialog role for accessibility
+     * @default 'dialog'
      */
-    returnFocusOnClose?: boolean;
-
+    role?: 'dialog' | 'alertdialog';
+    
     /**
-     * Dialog role - either "dialog" or "alertdialog"
-     * @default "dialog"
+     * ID attribute for the dialog
      */
-    role?: "dialog" | "alertdialog";
-
+    id?: string;
+    
     /**
-     * Callback when dialog opens
+     * ARIA label for the dialog
      */
-    onOpen?: () => void;
-
+    ariaLabel?: string;
+    
     /**
-     * Callback when dialog closes
+     * ID of element that labels the dialog
      */
-    onClose?: () => void;
-
+    ariaLabelledBy?: string;
+    
+    /**
+     * ID of element that describes the dialog
+     */
+    ariaDescribedBy?: string;
+    
+    /**
+     * Callback when dialog open state changes
+     */
+    onOpenChange?: (open: boolean) => void;
+    
     /**
      * Callback when escape key is pressed
      */
     onEscapeKeyDown?: (event: KeyboardEvent) => void;
-
+    
     /**
-     * Callback when clicking outside the dialog
+     * Callback when backdrop is clicked
      */
-    onOutsideClick?: (event: MouseEvent) => void;
+    onBackdropClick?: (event: MouseEvent) => void;
+    
+    /**
+     * Additional CSS classes
+     */
+    className?: string;
+}
+
+/**
+ * Dialog component events
+ * Events that can be triggered by the component
+ */
+export interface DialogEvents {
+    /**
+     * Fired when dialog open state changes
+     */
+    openChange: {
+        open: boolean;
+    };
+    
+    /**
+     * Fired when escape key is pressed
+     */
+    escapeKeyDown: {
+        event: KeyboardEvent;
+    };
+    
+    /**
+     * Fired when backdrop is clicked
+     */
+    backdropClick: {
+        event: MouseEvent;
+    };
+}
+
+/**
+ * Dialog component props
+ * Props that can be passed to the component
+ */
+export interface DialogProps extends DialogOptions {
+    /**
+     * Dialog content
+     */
+    children?: any;
+    
+    /**
+     * Test ID for testing
+     */
+    'data-testid'?: string;
 } 

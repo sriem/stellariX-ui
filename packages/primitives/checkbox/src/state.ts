@@ -1,6 +1,16 @@
 /**
  * Checkbox Component State Management
  * Ultra-generic state implementation
+ * 
+ * 🚨 CRITICAL WARNING: setState PARTIAL UPDATE PREVENTION
+ * 
+ * ❌ FORBIDDEN:
+ * - state.setState({ field: value }) // WILL NOT WORK - loses other fields!
+ * - store.setState({ field: value }) // CAUSES NaN/undefined errors!
+ * 
+ * ✅ ONLY CORRECT PATTERN:
+ * - store.setState((prev: any) => ({ ...prev, field: value }))
+ * - ALWAYS use function updater with spread operator
  */
 
 import { createComponentState } from '@stellarix/core';
@@ -56,40 +66,40 @@ export function createCheckboxState(options: CheckboxOptions = {}): CheckboxStat
         
         // Convenience setters
         setChecked: (checked: CheckboxCheckedState) => {
-            store.setState({ checked });
+            store.setState((prev: CheckboxState) => ({ ...prev, checked }));
         },
         
         setDisabled: (disabled: boolean) => {
-            store.setState({ disabled });
+            store.setState((prev: CheckboxState) => ({ ...prev, disabled }));
         },
         
         setFocused: (focused: boolean) => {
-            store.setState({ focused });
+            store.setState((prev: CheckboxState) => ({ ...prev, focused }));
         },
         
         setRequired: (required: boolean) => {
-            store.setState({ required });
+            store.setState((prev: CheckboxState) => ({ ...prev, required }));
         },
         
         setError: (error: boolean, errorMessage?: string) => {
-            store.setState({ error, errorMessage });
+            store.setState((prev: CheckboxState) => ({ ...prev, error, errorMessage }));
         },
         
         // Toggle checked state
         toggle: () => {
-            const currentState = store.getState();
-            
-            // If indeterminate, toggle to checked
-            // If checked, toggle to unchecked
-            // If unchecked, toggle to checked
-            let newChecked: CheckboxCheckedState;
-            if (currentState.checked === 'indeterminate') {
-                newChecked = true;
-            } else {
-                newChecked = !currentState.checked;
-            }
-            
-            store.setState({ checked: newChecked });
+            store.setState((prev: CheckboxState) => {
+                // If indeterminate, toggle to checked
+                // If checked, toggle to unchecked
+                // If unchecked, toggle to checked
+                let newChecked: CheckboxCheckedState;
+                if (prev.checked === 'indeterminate') {
+                    newChecked = true;
+                } else {
+                    newChecked = !prev.checked;
+                }
+                
+                return { ...prev, checked: newChecked };
+            });
         },
         
         // Computed properties

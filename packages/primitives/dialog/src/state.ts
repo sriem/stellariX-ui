@@ -1,38 +1,69 @@
 /**
- * Dialog State Module
+ * Dialog State Management
+ * Manages the dialog component state
  */
 
-import { createStore } from '../../../core/src/state';
-import { DialogState, DialogOptions } from './types';
-import { generateId } from '../../../utils/src/dom';
+import { createStore } from '@stellarix/core';
+import type { DialogState, DialogOptions } from './types';
 
 /**
- * Creates the dialog state
- * @param options Dialog options
- * @returns Dialog state store
+ * Default state values
+ */
+const defaultState: DialogState = {
+    open: false,
+    previousFocus: null,
+    loading: false,
+    closeOnBackdropClick: true,
+    closeOnEscape: true,
+    focusTrap: true,
+    preventScroll: true,
+    role: 'dialog',
+};
+
+/**
+ * Create dialog state store
  */
 export function createDialogState(options: DialogOptions = {}) {
-    // Generate unique IDs for accessibility
-    const titleId = options.id ? `${options.id}-title` : generateId('dialog-title');
-    const descriptionId = options.id ? `${options.id}-description` : generateId('dialog-description');
-
-    // Default values
     const initialState: DialogState = {
-        isOpen: options.initialOpen || false,
-        hasBackdrop: options.hasBackdrop !== false, // Default to true
-        closeOnOutsideClick: options.closeOnOutsideClick !== false, // Default to true
-        closeOnEsc: options.closeOnEsc !== false, // Default to true
-        titleId,
-        descriptionId,
-        role: options.role || 'dialog',
-        focused: false,
-        hovered: false,
-        disabled: options.disabled || false,
-        dataAttributes: {},
+        ...defaultState,
+        open: options.open ?? defaultState.open,
+        closeOnBackdropClick: options.closeOnBackdropClick ?? defaultState.closeOnBackdropClick,
+        closeOnEscape: options.closeOnEscape ?? defaultState.closeOnEscape,
+        focusTrap: options.focusTrap ?? defaultState.focusTrap,
+        preventScroll: options.preventScroll ?? defaultState.preventScroll,
+        role: options.role ?? defaultState.role,
     };
 
-    // Create the store
-    const store = createStore<DialogState>(initialState);
+    const store = createStore(initialState);
 
-    return store;
-} 
+    return {
+        ...store,
+        // Dialog-specific state setters
+        setOpen: (open: boolean) => {
+            store.setState((prev: DialogState) => ({ ...prev, open }));
+        },
+        setPreviousFocus: (element: HTMLElement | null) => {
+            store.setState((prev: DialogState) => ({ ...prev, previousFocus: element }));
+        },
+        setLoading: (loading: boolean) => {
+            store.setState((prev: DialogState) => ({ ...prev, loading }));
+        },
+        setCloseOnBackdropClick: (closeOnBackdropClick: boolean) => {
+            store.setState((prev: DialogState) => ({ ...prev, closeOnBackdropClick }));
+        },
+        setCloseOnEscape: (closeOnEscape: boolean) => {
+            store.setState((prev: DialogState) => ({ ...prev, closeOnEscape }));
+        },
+        setFocusTrap: (focusTrap: boolean) => {
+            store.setState((prev: DialogState) => ({ ...prev, focusTrap }));
+        },
+        setPreventScroll: (preventScroll: boolean) => {
+            store.setState((prev: DialogState) => ({ ...prev, preventScroll }));
+        },
+        setRole: (role: 'dialog' | 'alertdialog') => {
+            store.setState((prev: DialogState) => ({ ...prev, role }));
+        },
+    };
+}
+
+export type DialogStore = ReturnType<typeof createDialogState>; 
