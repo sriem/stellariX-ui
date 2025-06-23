@@ -1,0 +1,39 @@
+{
+    "name": "@stellarix/alert",
+    "version": "0.0.1",
+    "description": "Framework-agnostic alert component for StellarIX UI",
+    "type": "module",
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "sideEffects": false,
+    "files": [
+        "dist/**"
+    ],
+    "scripts": {
+        "build": "tsup --minify",
+        "dev": "tsup --watch",
+        "lint": "eslint src/**/*.ts",
+        "test": "vitest run",
+        "test:watch": "vitest"
+    },
+    "keywords": [
+        "ui",
+        "component",
+        "alert",
+        "notification",
+        "message",
+        "headless",
+        "framework-agnostic"
+    ],
+    "dependencies": {
+        "@stellarix/core": "workspace:*",
+        "@stellarix/utils": "workspace:*"
+    },
+    "devDependencies": {
+        "tsup": "^8.0.0",
+        "typescript": "^5.7.2",
+        "vitest": "^2.1.5"
+    },
+    "license": "MIT"
+}
