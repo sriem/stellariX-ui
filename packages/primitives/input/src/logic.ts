@@ -1,9 +1,13 @@
 /**
  * Input Component Logic
  * Business logic and event handling
+ * 
+ * 🚨 CRITICAL: NEVER call state.getState() in this file!
+ * ✅ Use currentState parameter in interactions
+ * ✅ Use state parameter in a11y functions
  */
 
-import { createComponentLogic } from '@stellarix/core';
+import { LogicLayerBuilder } from '@stellarix/core';
 import type { LogicLayer } from '@stellarix/core';
 import type { InputState, InputEvents, InputOptions } from './types';
 import type { InputStateStore } from './state';
@@ -18,140 +22,183 @@ export function createInputLogic(
     state: InputStateStore,
     options: InputOptions = {}
 ): LogicLayer<InputState, InputEvents> {
-    // Cache the previous value for change detection - get it once at initialization
+    // Cache the previous value for change detection
     let previousValue = '';
     
-    return createComponentLogic<InputState, InputEvents>('Input', {
+    const baseLogic = new LogicLayerBuilder<InputState, InputEvents>()
         // Event handlers
-        events: {
-            change: (payload: { value: string; previousValue: string }) => {
-                // Update state
-                state.setValue(payload.value);
+        .onEvent('change', (currentState, payload: any) => {
+            // Don't process if disabled or readonly
+            if (currentState.disabled || currentState.readonly) {
+                return null;
+            }
+            
+            const value = payload?.value !== undefined ? payload.value : payload;
+            const prevValue = payload?.previousValue !== undefined ? payload.previousValue : previousValue;
+            
+            // Update state
+            state.setValue(value);
+            previousValue = value;
+            
+            // Call user callback if provided
+            if (options.onChange) {
+                options.onChange(value);
+            }
+            
+            return null;
+        })
+        .onEvent('input', (currentState, payload: any) => {
+            // Don't process if disabled or readonly
+            if (currentState.disabled || currentState.readonly) {
+                return null;
+            }
+            
+            const value = payload?.value !== undefined ? payload.value : payload;
+            
+            // Update state
+            state.setValue(value);
+            
+            // Call user callback if provided
+            if (options.onInput) {
+                options.onInput(value);
+            }
+            
+            return null;
+        })
+        .onEvent('focus', (_currentState, payload: any) => {
+            const event = payload?.event ? payload.event : payload;
+            
+            // Update focus state
+            state.setFocused(true);
+            
+            // Call user callback if provided
+            if (options.onFocus) {
+                options.onFocus(event);
+            }
+            
+            return null;
+        })
+        .onEvent('blur', (_currentState, payload: any) => {
+            const event = payload?.event ? payload.event : payload;
+            
+            // Update focus state
+            state.setFocused(false);
+            
+            // Call user callback if provided
+            if (options.onBlur) {
+                options.onBlur(event);
+            }
+            
+            return null;
+        })
+        .onEvent('keydown', (_currentState, payload: any) => {
+            const event = payload?.event ? payload.event : payload;
+            
+            // Call user callback if provided
+            if (options.onKeyDown) {
+                options.onKeyDown(event);
+            }
+            
+            return null;
+        })
+        .onEvent('submit', (_currentState, payload: any) => {
+            const value = payload?.value !== undefined ? payload.value : payload;
+            
+            // Submit is handled by the form or parent component
+            // This event is just for notification
+            if (options.onSubmit) {
+                options.onSubmit(value);
+            }
+            
+            return null;
+        })
+        // A11y props
+        .withA11y('root', (state) => {
+            return {
+                'aria-invalid': state.error ? true : undefined,
+                'aria-required': state.required ? true : undefined,
+                'aria-disabled': state.disabled ? true : undefined,
+                'aria-readonly': state.readonly ? true : undefined,
+                'aria-describedby': state.errorMessage && options.id ? `${options.id}-error` : undefined,
+            };
+        })
+        // Interaction handlers
+        .withInteraction('root', 'onChange', (currentState, event) => {
+            // Check state here to avoid processing when disabled/readonly
+            if (currentState.disabled || currentState.readonly) {
+                return null;
+            }
+            
+            const target = event.target as HTMLInputElement;
+            const newValue = target.value;
+            
+            if (newValue !== previousValue) {
+                // Update state immediately
+                state.setValue(newValue);
+                previousValue = newValue;
                 
                 // Call user callback if provided
                 if (options.onChange) {
-                    options.onChange(payload.value);
-                }
-            },
-            
-            input: (payload: { value: string }) => {
-                // Update state
-                state.setValue(payload.value);
-                
-                // Call user callback if provided
-                if (options.onInput) {
-                    options.onInput(payload.value);
-                }
-            },
-            
-            focus: (payload: { event: FocusEvent }) => {
-                // Update focus state
-                state.setFocused(true);
-                
-                // Call user callback if provided
-                if (options.onFocus) {
-                    options.onFocus(payload.event);
-                }
-            },
-            
-            blur: (payload: { event: FocusEvent }) => {
-                // Update focus state
-                state.setFocused(false);
-                
-                // Call user callback if provided
-                if (options.onBlur) {
-                    options.onBlur(payload.event);
-                }
-            },
-            
-            keydown: (payload: { event: KeyboardEvent }) => {
-                // Handle Enter key for submit
-                if (payload.event.key === 'Enter') {
-                    // Trigger submit event with current value
-                    // The actual handleEvent call will be done by the component
+                    options.onChange(newValue);
                 }
                 
-                // Call user callback if provided
-                if (options.onKeyDown) {
-                    options.onKeyDown(payload.event);
-                }
-            },
-            
-            submit: (payload: { value: string }) => {
-                // Submit is handled by the form or parent component
-                // This event is just for notification
-            },
-        },
-        
-        // Accessibility props generator
-        a11y: {
-            root: (state) => ({
-                'aria-invalid': state.error || undefined,
-                'aria-required': state.required || undefined,
-                'aria-disabled': state.disabled || undefined,
-                'aria-readonly': state.readonly || undefined,
-                'aria-describedby': state.errorMessage ? `${options.id}-error` : undefined,
-            }),
-        },
-        
-        // Interaction handlers generator
-        interactions: {
-            root: (currentState, handleEvent) => ({
-                onChange: (event: Event) => {
-                    // Check state here to avoid processing when disabled/readonly
-                    if (currentState.disabled || currentState.readonly) {
-                        return;
-                    }
-                    
-                    const target = event.target as HTMLInputElement;
-                    const newValue = target.value;
-                    
-                    if (newValue !== previousValue) {
-                        handleEvent('change', { 
-                            value: newValue, 
-                            previousValue 
-                        });
-                        previousValue = newValue;
-                    }
-                },
-                
-                onInput: (event: Event) => {
-                    // Check state here to avoid processing when disabled/readonly
-                    if (currentState.disabled || currentState.readonly) {
-                        return;
-                    }
-                    
-                    const target = event.target as HTMLInputElement;
-                    handleEvent('input', { value: target.value });
-                },
-                
-                onFocus: (event: FocusEvent) => {
-                    handleEvent('focus', { event });
-                },
-                
-                onBlur: (event: FocusEvent) => {
-                    handleEvent('blur', { event });
-                },
-                
-                onKeyDown: (event: KeyboardEvent) => {
-                    handleEvent('keydown', { event });
-                    
-                    // Handle Enter key for submit
-                    if (event.key === 'Enter' && !currentState.disabled && !currentState.readonly) {
-                        handleEvent('submit', { value: currentState.value });
-                    }
-                },
-            }),
-        },
-        
-        // State change handler (optional)
-        onStateChange: (newState, prevState) => {
-            // Handle value changes that didn't come through events
-            if (newState.value !== previousValue) {
-                previousValue = newState.value;
-                
-                // Don't trigger onChange here as it should only fire on user input
+                return null;
             }
-        },
-    });
+            
+            return null;
+        })
+        .withInteraction('root', 'onInput', (currentState, event) => {
+            // Check state here to avoid processing when disabled/readonly
+            if (currentState.disabled || currentState.readonly) {
+                return null;
+            }
+            
+            const target = event.target as HTMLInputElement;
+            state.setValue(target.value);
+            
+            // Call user callback if provided
+            if (options.onInput) {
+                options.onInput(target.value);
+            }
+            
+            return null;
+        })
+        .withInteraction('root', 'onFocus', (currentState, event) => {
+            state.setFocused(true);
+            
+            // Call user callback if provided
+            if (options.onFocus) {
+                options.onFocus(event);
+            }
+            
+            return null;
+        })
+        .withInteraction('root', 'onBlur', (currentState, event) => {
+            state.setFocused(false);
+            
+            // Call user callback if provided
+            if (options.onBlur) {
+                options.onBlur(event);
+            }
+            
+            return null;
+        })
+        .withInteraction('root', 'onKeyDown', (currentState, event) => {
+            // Call user callback if provided
+            if (options.onKeyDown) {
+                options.onKeyDown(event);
+            }
+            
+            // Handle Enter key for submit
+            if (event.key === 'Enter' && !currentState.disabled && !currentState.readonly) {
+                if (options.onSubmit) {
+                    options.onSubmit(currentState.value);
+                }
+            }
+            
+            return null;
+        })
+        .build();
+    
+    return baseLogic;
 }

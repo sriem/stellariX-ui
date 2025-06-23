@@ -29,7 +29,9 @@ export function createInput(options: InputOptions = {}) {
                 supported: ['change', 'input', 'focus', 'blur', 'keydown', 'submit'],
                 required: [],
                 custom: {
-                    'submit': 'Triggered when Enter key is pressed'
+                    'submit': {
+                        description: 'Triggered when Enter key is pressed'
+                    }
                 }
             },
             structure: {

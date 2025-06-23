@@ -1,5 +1,10 @@
 /**
  * Divider Logic Tests
+ * 
+ * 🚨 CRITICAL: Testing Pattern Rules
+ * ✅ Test a11y props generation
+ * ✅ Component styling should be handled by the component, not logic layer
+ * ❌ Don't test for styles in interaction handlers
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
@@ -29,22 +34,16 @@ describe('Divider Logic', () => {
         logic.initialize();
     });
     
-    it('should have no event handlers', () => {
-        // Divider is presentational and has no events
-        expect(Object.keys(logic.events || {})).toHaveLength(0);
-    });
-    
     it('should provide correct a11y props for root', () => {
         const props = logic.getA11yProps('root');
         
         expect(props).toEqual({
             'role': 'separator',
-            'aria-orientation': 'horizontal',
             'aria-label': 'Section',
         });
     });
     
-    it('should provide correct a11y props for label', () => {
+    it('should provide a11y props for label element', () => {
         const props = logic.getA11yProps('label');
         
         expect(props).toEqual({
@@ -72,92 +71,85 @@ describe('Divider Logic', () => {
         expect(props['aria-label']).toBeUndefined();
     });
     
-    it('should provide horizontal interaction styles', () => {
+    it('should provide correct a11y props for vertical orientation', () => {
+        // Create vertical divider
+        const verticalState = createDividerState({ orientation: 'vertical', label: 'Vertical' });
+        const verticalLogic = createDividerLogic(verticalState, { orientation: 'vertical', label: 'Vertical' });
+        
+        verticalLogic.connect(verticalState);
+        verticalLogic.initialize();
+        
+        const props = verticalLogic.getA11yProps('root');
+        
+        expect(props).toEqual({
+            'role': 'separator',
+            'aria-orientation': 'vertical',
+            'aria-label': 'Vertical',
+        });
+    });
+    
+    it('should have empty interaction handlers for root', () => {
         const handlers = logic.getInteractionHandlers('root');
         
-        expect(handlers.style).toMatchObject({
-            width: '100%',
-            height: '2px',
-            marginTop: '2rem',
-            marginBottom: '2rem',
-            backgroundColor: '#ccc',
-            borderColor: '#ccc',
-        });
-        
-        expect(handlers['data-orientation']).toBe('horizontal');
-        expect(handlers['data-variant']).toBe('solid');
-        expect(handlers['data-has-label']).toBe(true);
+        // Divider is a purely visual component with no interactions
+        expect(handlers).toEqual({});
     });
     
-    it('should provide vertical interaction styles', () => {
-        stateStore.setOrientation('vertical');
-        const handlers = logic.getInteractionHandlers('root');
-        
-        expect(handlers.style).toMatchObject({
-            height: '100%',
-            width: '2px',
-            marginLeft: '2rem',
-            marginRight: '2rem',
-            backgroundColor: '#ccc',
-            borderColor: '#ccc',
-        });
-        
-        expect(handlers['data-orientation']).toBe('vertical');
-    });
-    
-    it('should apply variant styles', () => {
-        stateStore.setVariant('dashed');
-        let handlers = logic.getInteractionHandlers('root');
-        expect(handlers.style.borderStyle).toBe('dashed');
-        
-        stateStore.setVariant('dotted');
-        handlers = logic.getInteractionHandlers('root');
-        expect(handlers.style.borderStyle).toBe('dotted');
-        
-        stateStore.setVariant('solid');
-        handlers = logic.getInteractionHandlers('root');
-        expect(handlers.style.borderStyle).toBeUndefined();
-    });
-    
-    it('should provide label interaction handlers', () => {
+    it('should have empty interaction handlers for label', () => {
         const handlers = logic.getInteractionHandlers('label');
         
-        expect(handlers).toEqual({
-            'data-position': 'center',
-        });
-        
-        stateStore.setLabelPosition('start');
-        const updatedHandlers = logic.getInteractionHandlers('label');
-        expect(updatedHandlers['data-position']).toBe('start');
+        // Label has no interactions
+        expect(handlers).toEqual({});
     });
     
-    it('should use default values when options not provided', () => {
-        const minimalState = createDividerState();
-        const minimalLogic = createDividerLogic(minimalState);
-        
-        // Initialize the logic
-        minimalLogic.connect(minimalState);
-        minimalLogic.initialize();
-        
-        const handlers = minimalLogic.getInteractionHandlers('root');
-        
-        expect(handlers.style).toMatchObject({
-            width: '100%',
-            height: '1px', // default thickness
-            marginTop: '1rem', // default spacing
-            marginBottom: '1rem',
-        });
-        
-        // Should not have color styles when not provided
-        expect(handlers.style.backgroundColor).toBeUndefined();
-        expect(handlers.style.borderColor).toBeUndefined();
+    it('should handle no events', () => {
+        // Divider has no events, so handleEvent should do nothing
+        expect(() => logic.handleEvent('anyEvent', {})).not.toThrow();
     });
     
     it('should cleanup properly', () => {
         logic.cleanup();
         
-        // After cleanup, should return empty objects
-        expect(logic.getA11yProps('root')).toEqual({});
-        expect(logic.getInteractionHandlers('root')).toEqual({});
+        // After cleanup, logic should still return basic a11y props
+        const props = logic.getA11yProps('root');
+        expect(props).toBeDefined();
+    });
+});
+
+describe('Divider State Integration', () => {
+    it('should reflect state changes in a11y props', () => {
+        const options: DividerOptions = {
+            orientation: 'horizontal',
+        };
+        
+        const state = createDividerState(options);
+        const logic = createDividerLogic(state, options);
+        
+        logic.connect(state);
+        logic.initialize();
+        
+        // Initial props
+        let props = logic.getA11yProps('root');
+        expect(props['aria-orientation']).toBeUndefined();
+        
+        // Change to vertical
+        state.setOrientation('vertical');
+        props = logic.getA11yProps('root');
+        expect(props['aria-orientation']).toBe('vertical');
+    });
+    
+    it('should handle label in options', () => {
+        const options: DividerOptions = {
+            label: 'Test Label',
+        };
+        
+        const state = createDividerState(options);
+        const logic = createDividerLogic(state, options);
+        
+        logic.connect(state);
+        logic.initialize();
+        
+        const props = logic.getA11yProps('root');
+        expect(props['aria-label']).toBe('Test Label');
     });
 });

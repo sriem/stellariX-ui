@@ -1,8 +1,13 @@
 /**
  * Divider Component Logic
  * Business logic and event handling
+ * 
+ * 🚨 CRITICAL: NEVER call state.getState() in this file!
+ * ✅ Use currentState parameter in interactions
+ * ✅ Use state parameter in a11y functions
  */
 
+import { LogicLayerBuilder } from '@stellarix/core';
 import type { LogicLayer } from '@stellarix/core';
 import type { DividerState, DividerEvents, DividerOptions } from './types';
 import type { DividerStateStore } from './state';
@@ -17,73 +22,28 @@ export function createDividerLogic(
     state: DividerStateStore,
     options: DividerOptions = {}
 ): LogicLayer<DividerState, DividerEvents> {
-    // Since we need to access the component-specific logic methods,
-    // we'll create a custom implementation
-    let connectedStore: DividerStateStore | null = null;
-    let initialized = false;
     
-    const logic: LogicLayer<DividerState, DividerEvents> = {
-        handleEvent: () => {
-            // Divider has no events
-        },
-        
-        getA11yProps: (elementId: string) => {
-            // Return static props - component should read state directly
-            if (elementId === 'root') {
-                const a11yProps: Record<string, any> = {
-                    'role': 'separator',
-                };
-                
-                // Add label if provided
-                if (options.label) {
-                    a11yProps['aria-label'] = options.label;
-                }
-                
-                return a11yProps;
+    return new LogicLayerBuilder<DividerState, DividerEvents>()
+        // Divider has no events to handle
+        .withA11y('root', (state) => {
+            const a11yProps: Record<string, any> = {
+                'role': 'separator',
+            };
+            
+            // Add orientation for vertical dividers
+            if (state.orientation === 'vertical') {
+                a11yProps['aria-orientation'] = 'vertical';
             }
             
-            if (elementId === 'label') {
-                return {
-                    'aria-hidden': 'true',
-                };
+            // Add label if provided
+            if (options.label) {
+                a11yProps['aria-label'] = options.label;
             }
             
-            return {};
-        },
-        
-        getInteractionHandlers: (elementId: string) => {
-            // Return static handlers only - component should read state directly for styling
-            if (elementId === 'root') {
-                return {
-                    // No event handlers for divider - it's a purely visual component
-                };
-            }
-            
-            if (elementId === 'label') {
-                return {
-                    // No event handlers for label either
-                };
-            }
-            
-            return {};
-        },
-        
-        initialize: () => {
-            initialized = true;
-        },
-        
-        cleanup: () => {
-            initialized = false;
-            connectedStore = null;
-        },
-        
-        connect: (stateStore: any) => {
-            connectedStore = stateStore as DividerStateStore;
-        },
-        
-        // Additional properties for backward compatibility
-        events: {},
-    };
-    
-    return logic;
+            return a11yProps;
+        })
+        .withA11y('label', () => ({
+            'aria-hidden': 'true',
+        }))
+        .build();
 }

@@ -190,6 +190,11 @@ export interface InputOptions {
      * Callback for keydown event
      */
     onKeyDown?: (event: KeyboardEvent) => void;
+    
+    /**
+     * Callback for submit event (Enter key)
+     */
+    onSubmit?: (value: string) => void;
 }
 
 /**

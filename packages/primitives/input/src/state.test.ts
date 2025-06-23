@@ -14,17 +14,18 @@ describe('Input State', () => {
         state.subscribe(listener);
         state.setValue(''); // Trigger subscription with default value
         
-        // Input state probably has same issue - only partial updates
-        expect(listener).toHaveBeenCalledWith({ value: '' });
-        
-        // Verify other defaults through individual updates
-        listener.mockClear();
-        state.setFocused(false);
-        expect(listener).toHaveBeenCalledWith({ focused: false });
-        
-        listener.mockClear();
-        state.setDisabled(false);
-        expect(listener).toHaveBeenCalledWith({ disabled: false });
+        // State now returns the full state object
+        expect(listener).toHaveBeenCalledWith({
+            value: '',
+            focused: false,
+            disabled: false,
+            readonly: false,
+            error: false,
+            errorMessage: undefined,
+            required: false,
+            type: 'text',
+            size: 'md'
+        });
     });
     
     it('should create state with initial options', () => {
@@ -44,21 +45,18 @@ describe('Input State', () => {
         state.subscribe(listener);
         state.setValue('test'); // Trigger subscription with initial value
         
-        // Input state probably has same issue - only partial updates
-        expect(listener).toHaveBeenCalledWith({ value: 'test' });
-        
-        // Verify other options through individual updates
-        listener.mockClear();
-        state.setDisabled(true);
-        expect(listener).toHaveBeenCalledWith({ disabled: true });
-        
-        listener.mockClear();
-        state.setRequired(true);
-        expect(listener).toHaveBeenCalledWith({ required: true });
-        
-        listener.mockClear();
-        state.setError(true, 'Invalid email');
-        expect(listener).toHaveBeenCalledWith({ error: true, errorMessage: 'Invalid email' });
+        // State now returns the full state object
+        expect(listener).toHaveBeenCalledWith({
+            value: 'test',
+            focused: false,
+            disabled: true,
+            readonly: false,
+            error: true,
+            errorMessage: 'Invalid email',
+            required: true,
+            type: 'email',
+            size: 'lg'
+        });
     });
     
     it('should update value correctly', () => {

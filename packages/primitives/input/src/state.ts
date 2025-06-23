@@ -12,7 +12,7 @@ import type { InputState, InputOptions, InputType, InputSize } from './types';
 export interface InputStateStore {
     // Core state methods
     getState: () => InputState;
-    setState: (updates: Partial<InputState>) => void;
+    setState: (updater: InputState | ((prev: InputState) => InputState)) => void;
     subscribe: (listener: (state: InputState) => void) => () => void;
     derive: <U>(selector: (state: InputState) => U) => {
         get: () => U;
@@ -65,42 +65,43 @@ export function createInputState(options: InputOptions = {}): InputStateStore {
         
         // Convenience setters
         setValue: (value: string) => {
-            store.setState({ value });
+            store.setState(prev => ({ ...prev, value }));
         },
         
         setFocused: (focused: boolean) => {
-            store.setState({ focused });
+            store.setState(prev => ({ ...prev, focused }));
         },
         
         setDisabled: (disabled: boolean) => {
-            store.setState({ disabled });
+            store.setState(prev => ({ ...prev, disabled }));
         },
         
         setReadonly: (readonly: boolean) => {
-            store.setState({ readonly });
+            store.setState(prev => ({ ...prev, readonly }));
         },
         
         setError: (error: boolean, message?: string) => {
-            store.setState({ 
+            store.setState(prev => ({ 
+                ...prev,
                 error, 
                 errorMessage: message 
-            });
+            }));
         },
         
         setRequired: (required: boolean) => {
-            store.setState({ required });
+            store.setState(prev => ({ ...prev, required }));
         },
         
         setType: (type: InputType) => {
-            store.setState({ type });
+            store.setState(prev => ({ ...prev, type }));
         },
         
         setSize: (size: InputSize) => {
-            store.setState({ size });
+            store.setState(prev => ({ ...prev, size }));
         },
         
         clear: () => {
-            store.setState({ value: '' });
+            store.setState(prev => ({ ...prev, value: '' }));
         },
         
         // Computed properties

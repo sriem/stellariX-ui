@@ -3,7 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
     entry: ['src/index.ts'],
     format: ['cjs', 'esm'],
-    dts: false, // Temporarily disable DTS to prevent build hang
+    dts: false,
     splitting: false,
     sourcemap: true,
     clean: true,

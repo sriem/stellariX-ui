@@ -14,17 +14,32 @@ describe('Divider State', () => {
         state.subscribe(listener);
         state.setOrientation('horizontal'); // Trigger subscription with default value
         
-        // Divider state probably has same issue - only partial updates
-        expect(listener).toHaveBeenCalledWith({ orientation: 'horizontal' });
+        // State updates with full object
+        expect(listener).toHaveBeenCalledWith({
+            orientation: 'horizontal',
+            variant: 'solid',
+            labelPosition: 'center',
+            hasLabel: false
+        });
         
         // Verify other defaults through individual updates
         listener.mockClear();
         state.setVariant('solid');
-        expect(listener).toHaveBeenCalledWith({ variant: 'solid' });
+        expect(listener).toHaveBeenCalledWith({
+            orientation: 'horizontal',
+            variant: 'solid',
+            labelPosition: 'center',
+            hasLabel: false
+        });
         
         listener.mockClear();
         state.setLabelPosition('center');
-        expect(listener).toHaveBeenCalledWith({ labelPosition: 'center' });
+        expect(listener).toHaveBeenCalledWith({
+            orientation: 'horizontal',
+            variant: 'solid',
+            labelPosition: 'center',
+            hasLabel: false
+        });
     });
     
     it('should create state with initial options', () => {
@@ -41,17 +56,32 @@ describe('Divider State', () => {
         state.subscribe(listener);
         state.setOrientation('vertical'); // Trigger subscription with initial value
         
-        // Divider state probably has same issue - only partial updates
-        expect(listener).toHaveBeenCalledWith({ orientation: 'vertical' });
+        // State updates with full object
+        expect(listener).toHaveBeenCalledWith({
+            orientation: 'vertical',
+            variant: 'dashed',
+            labelPosition: 'start',
+            hasLabel: true
+        });
         
         // Verify other options through individual updates
         listener.mockClear();
         state.setVariant('dashed');
-        expect(listener).toHaveBeenCalledWith({ variant: 'dashed' });
+        expect(listener).toHaveBeenCalledWith({
+            orientation: 'vertical',
+            variant: 'dashed',
+            labelPosition: 'start',
+            hasLabel: true
+        });
         
         listener.mockClear();
         state.setLabelPosition('start');
-        expect(listener).toHaveBeenCalledWith({ labelPosition: 'start' });
+        expect(listener).toHaveBeenCalledWith({
+            orientation: 'vertical',
+            variant: 'dashed',
+            labelPosition: 'start',
+            hasLabel: true
+        });
     });
     
     it('should update orientation', () => {

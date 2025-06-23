@@ -85,10 +85,36 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                 ...domProps 
             } = renderProps;
             
+            // For input elements, map state to DOM props
+            const componentSpecificProps: Record<string, any> = {};
+            if (core.metadata.name === 'Input' && rootElement === 'input') {
+                // Map state properties to DOM attributes
+                if ('type' in state) componentSpecificProps.type = state.type;
+                if ('value' in state) componentSpecificProps.value = state.value;
+                if ('disabled' in state && state.disabled) componentSpecificProps.disabled = true;
+                if ('readonly' in state && state.readonly) componentSpecificProps.readOnly = true;
+                if ('required' in state && state.required) componentSpecificProps.required = true;
+                
+                // Pass through component props from restProps
+                if (restProps.placeholder) componentSpecificProps.placeholder = restProps.placeholder;
+                if (restProps.name) componentSpecificProps.name = restProps.name;
+                if (restProps.id) componentSpecificProps.id = restProps.id;
+                if (restProps.autoComplete || restProps.autocomplete) {
+                    componentSpecificProps.autoComplete = restProps.autoComplete || restProps.autocomplete;
+                }
+                if (restProps.minLength) componentSpecificProps.minLength = restProps.minLength;
+                if (restProps.maxLength) componentSpecificProps.maxLength = restProps.maxLength;
+                if (restProps.min) componentSpecificProps.min = restProps.min;
+                if (restProps.max) componentSpecificProps.max = restProps.max;
+                if (restProps.step) componentSpecificProps.step = restProps.step;
+                if (restProps.pattern) componentSpecificProps.pattern = restProps.pattern;
+            }
+            
             return createElement(
                 rootElement,
                 {
                     ...domProps,
+                    ...componentSpecificProps,
                     ...a11yProps,
                     ...interactionHandlers,
                     role: rootRole,

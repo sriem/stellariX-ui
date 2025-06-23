@@ -54,7 +54,9 @@ describe('Button Logic', () => {
         const mockEvent = new MouseEvent('click');
         const preventDefaultSpy = vi.spyOn(mockEvent, 'preventDefault');
         
-        logic.handleEvent('click', { event: mockEvent });
+        // Get interaction handlers and call onClick
+        const handlers = logic.getInteractionHandlers('root');
+        handlers.onClick(mockEvent);
 
         expect(preventDefaultSpy).toHaveBeenCalled();
         expect(mockOnClick).not.toHaveBeenCalled();
@@ -125,10 +127,12 @@ describe('Button Logic', () => {
         const mockEvent = new KeyboardEvent('keydown', { key: 'Enter' });
         const preventDefaultSpy = vi.spyOn(mockEvent, 'preventDefault');
         
-        logic.handleEvent('keydown', { event: mockEvent });
+        // Get interaction handlers and call onKeyDown
+        const handlers = logic.getInteractionHandlers('root');
+        handlers.onKeyDown(mockEvent);
 
-        // When disabled, preventDefault should not be called in createComponentLogic
-        expect(preventDefaultSpy).not.toHaveBeenCalled();
+        // When disabled, preventDefault SHOULD be called for Enter/Space keys
+        expect(preventDefaultSpy).toHaveBeenCalled();
         expect(mockOnClick).not.toHaveBeenCalled();
     });
 
