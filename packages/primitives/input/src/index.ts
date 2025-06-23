@@ -58,6 +58,13 @@ export function createInputWithImplementation(options: InputOptions = {}) {
     core.state = createInputState(options);
     core.logic = createInputLogic(core.state as any, options);
     
+    // Connect and initialize the logic
+    core.logic.connect(core.state);
+    core.logic.initialize();
+    
+    // Store options on the core for adapters to access
+    (core as any).options = options;
+    
     return core;
 }
 

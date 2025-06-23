@@ -88,6 +88,9 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
             // For input elements, map state to DOM props
             const componentSpecificProps: Record<string, any> = {};
             if (core.metadata.name === 'Input' && rootElement === 'input') {
+                // Get options from core if available
+                const options = (core as any).options || {};
+                
                 // Map state properties to DOM attributes
                 if ('type' in state) componentSpecificProps.type = state.type;
                 if ('value' in state) componentSpecificProps.value = state.value;
@@ -95,7 +98,19 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                 if ('readonly' in state && state.readonly) componentSpecificProps.readOnly = true;
                 if ('required' in state && state.required) componentSpecificProps.required = true;
                 
-                // Pass through component props from restProps
+                // Pass through component options first
+                if (options.placeholder) componentSpecificProps.placeholder = options.placeholder;
+                if (options.name) componentSpecificProps.name = options.name;
+                if (options.id) componentSpecificProps.id = options.id;
+                if (options.autocomplete) componentSpecificProps.autoComplete = options.autocomplete;
+                if (options.minLength) componentSpecificProps.minLength = options.minLength;
+                if (options.maxLength) componentSpecificProps.maxLength = options.maxLength;
+                if (options.min) componentSpecificProps.min = options.min;
+                if (options.max) componentSpecificProps.max = options.max;
+                if (options.step) componentSpecificProps.step = options.step;
+                if (options.pattern) componentSpecificProps.pattern = options.pattern;
+                
+                // Override with runtime props from restProps
                 if (restProps.placeholder) componentSpecificProps.placeholder = restProps.placeholder;
                 if (restProps.name) componentSpecificProps.name = restProps.name;
                 if (restProps.id) componentSpecificProps.id = restProps.id;

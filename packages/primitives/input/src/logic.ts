@@ -114,13 +114,17 @@ export function createInputLogic(
         })
         // A11y props
         .withA11y('root', (state) => {
-            return {
-                'aria-invalid': state.error ? true : undefined,
-                'aria-required': state.required ? true : undefined,
-                'aria-disabled': state.disabled ? true : undefined,
-                'aria-readonly': state.readonly ? true : undefined,
-                'aria-describedby': state.errorMessage && options.id ? `${options.id}-error` : undefined,
-            };
+            const a11yProps: Record<string, any> = {};
+            
+            if (state.error) a11yProps['aria-invalid'] = 'true';
+            if (state.required) a11yProps['aria-required'] = 'true';
+            if (state.disabled) a11yProps['aria-disabled'] = 'true';
+            if (state.readonly) a11yProps['aria-readonly'] = 'true';
+            if (state.errorMessage && options.id) {
+                a11yProps['aria-describedby'] = `${options.id}-error`;
+            }
+            
+            return a11yProps;
         })
         // Interaction handlers
         .withInteraction('root', 'onChange', (currentState, event) => {

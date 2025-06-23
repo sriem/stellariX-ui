@@ -107,13 +107,8 @@ describe('Input Logic', () => {
     it('should provide correct a11y props', () => {
         const props = logic.getA11yProps('root');
         
-        expect(props).toEqual({
-            'aria-invalid': undefined,
-            'aria-required': undefined,
-            'aria-disabled': undefined,
-            'aria-readonly': undefined,
-            'aria-describedby': undefined,
-        });
+        // When all states are false, should return empty object
+        expect(props).toEqual({});
         
         // Update state and check again
         stateStore.setDisabled(true);
@@ -122,11 +117,9 @@ describe('Input Logic', () => {
         
         const updatedProps = logic.getA11yProps('root');
         expect(updatedProps).toEqual({
-            'aria-invalid': true,
-            'aria-required': true,
-            'aria-disabled': true,
-            'aria-readonly': undefined,
-            'aria-describedby': undefined,
+            'aria-invalid': 'true',
+            'aria-required': 'true',
+            'aria-disabled': 'true',
         });
     });
     
