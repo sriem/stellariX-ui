@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { render } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { createButton } from '../src';
-import { reactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix-ui/react';
 
 expect.extend(toHaveNoViolations);
 

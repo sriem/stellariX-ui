@@ -3,7 +3,7 @@
  * Manages the state for the accordion component
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { AccordionState, AccordionOptions, AccordionItem } from './types.js';
 
 /**
@@ -160,6 +160,31 @@ export function createAccordionState(options: AccordionOptions) {
             }));
         },
         
+        setExpandedItems: (itemIds: string[]) => {
+            store.setState((prev) => {
+                // Filter out disabled items
+                const validIds = itemIds.filter(id => {
+                    const item = prev.items.find(i => i.id === id);
+                    return item && !item.disabled && !prev.disabled;
+                });
+                
+                // Apply multiple constraint
+                const newExpandedItems = prev.multiple ? validIds : validIds.slice(0, 1);
+                
+                // Update items array
+                const newItems = prev.items.map(item => ({
+                    ...item,
+                    expanded: newExpandedItems.includes(item.id)
+                }));
+                
+                return {
+                    ...prev,
+                    items: newItems,
+                    expandedItems: newExpandedItems
+                };
+            });
+        },
+        
         // Focus management
         setFocusedItem: (itemId: string | null) => {
             store.setState((prev) => ({ ...prev, focusedItem: itemId }));
@@ -172,14 +197,22 @@ export function createAccordionState(options: AccordionOptions) {
         
         setItemDisabled: (itemId: string, disabled: boolean) => {
             store.setState((prev) => {
-                const newItems = prev.items.map(item =>
-                    item.id === itemId ? { ...item, disabled } : item
-                );
-                
                 // If disabling an expanded item, collapse it
                 const newExpandedItems = disabled
                     ? prev.expandedItems.filter(id => id !== itemId)
                     : prev.expandedItems;
+                
+                // Update items array with new disabled state and expanded state
+                const newItems = prev.items.map(item => {
+                    if (item.id === itemId) {
+                        return {
+                            ...item,
+                            disabled,
+                            expanded: newExpandedItems.includes(itemId)
+                        };
+                    }
+                    return item;
+                });
                 
                 return {
                     ...prev,

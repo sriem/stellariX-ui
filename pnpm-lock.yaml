@@ -119,10 +119,10 @@ importers:
 
   packages/adapters/react:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -178,12 +178,31 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)(jsdom@22.1.0)
 
-  packages/primitives/alert:
+  packages/primitives/accordion:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
+        specifier: workspace:*
+        version: link:../../utils
+    devDependencies:
+      tsup:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@5.7.2)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)
+
+  packages/primitives/alert:
+    dependencies:
+      '@stellarix-ui/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -199,10 +218,10 @@ importers:
 
   packages/primitives/avatar:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -218,10 +237,10 @@ importers:
 
   packages/primitives/badge:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -237,10 +256,10 @@ importers:
 
   packages/primitives/button:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -256,10 +275,10 @@ importers:
 
   packages/primitives/card:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -275,10 +294,10 @@ importers:
 
   packages/primitives/checkbox:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -294,10 +313,10 @@ importers:
 
   packages/primitives/container:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -313,10 +332,10 @@ importers:
 
   packages/primitives/dialog:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -335,10 +354,10 @@ importers:
 
   packages/primitives/divider:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -360,10 +379,29 @@ importers:
 
   packages/primitives/input:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
+        specifier: workspace:*
+        version: link:../../utils
+    devDependencies:
+      tsup:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@5.7.2)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)
+
+  packages/primitives/menu:
+    dependencies:
+      '@stellarix-ui/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -379,10 +417,10 @@ importers:
 
   packages/primitives/popover:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -407,10 +445,29 @@ importers:
 
   packages/primitives/radio:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
+        specifier: workspace:*
+        version: link:../../utils
+    devDependencies:
+      tsup:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@5.7.2)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)
+
+  packages/primitives/select:
+    dependencies:
+      '@stellarix-ui/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -426,10 +483,29 @@ importers:
 
   packages/primitives/spinner:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
+        specifier: workspace:*
+        version: link:../../utils
+    devDependencies:
+      tsup:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@5.7.2)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)
+
+  packages/primitives/tabs:
+    dependencies:
+      '@stellarix-ui/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -445,10 +521,10 @@ importers:
 
   packages/primitives/textarea:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -464,10 +540,29 @@ importers:
 
   packages/primitives/toggle:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../../core
-      '@stellarix/utils':
+      '@stellarix-ui/utils':
+        specifier: workspace:*
+        version: link:../../utils
+    devDependencies:
+      tsup:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@5.7.2)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)
+
+  packages/primitives/tooltip:
+    dependencies:
+      '@stellarix-ui/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@stellarix-ui/utils':
         specifier: workspace:*
         version: link:../../utils
     devDependencies:
@@ -483,7 +578,7 @@ importers:
 
   packages/themes:
     dependencies:
-      '@stellarix/core':
+      '@stellarix-ui/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

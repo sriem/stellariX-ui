@@ -3,8 +3,8 @@
  * Event handling and business logic
  */
 
-import { LogicLayerBuilder } from '@stellarix/core';
-import type { LogicLayer } from '@stellarix/core';
+import { LogicLayerBuilder } from '@stellarix-ui/core';
+import type { LogicLayer } from '@stellarix-ui/core';
 import type { CardState, CardEvents, CardOptions } from './types';
 import type { CardStateStore } from './state';
 

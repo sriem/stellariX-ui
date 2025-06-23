@@ -7,11 +7,11 @@
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
-      "@stellarix/core/*": ["packages/core/src/*"],
-      "@stellarix/utils/*": ["packages/utils/src/*"],
-      "@stellarix/react/*": ["packages/adapters/react/src/*"],
-      "@stellarix/button/*": ["packages/primitives/button/src/*"],
-      "@stellarix/dialog/*": ["packages/primitives/dialog/src/*"]
+      "@stellarix-ui/core/*": ["packages/core/src/*"],
+      "@stellarix-ui/utils/*": ["packages/utils/src/*"],
+      "@stellarix-ui/react/*": ["packages/adapters/react/src/*"],
+      "@stellarix-ui/button/*": ["packages/primitives/button/src/*"],
+      "@stellarix-ui/dialog/*": ["packages/primitives/dialog/src/*"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -19,8 +19,6 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "noEmit": true,
-    "incremental": true,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,

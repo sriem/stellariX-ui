@@ -1,5 +1,5 @@
 /**
- * Template Logic Tests
+ * Accordion Logic Tests
  * 
  * 🚨 CRITICAL: Testing Pattern Rules
  * ❌ NEVER use state.getState() for verification
@@ -11,143 +11,367 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createTemplateLogic } from './logic';
-import { createTemplateState } from './state';
-import type { TemplateOptions } from './types';
+import { createAccordionLogic } from './logic';
+import { createAccordionState } from './state';
+import type { AccordionOptions } from './types';
 
-describe('Template Logic', () => {
-    let stateStore: ReturnType<typeof createTemplateState>;
-    let logic: ReturnType<typeof createTemplateLogic>;
-    let mockOnChange: ReturnType<typeof vi.fn>;
-    let mockOnActiveChange: ReturnType<typeof vi.fn>;
+describe('Accordion Logic', () => {
+    let stateStore: ReturnType<typeof createAccordionState>;
+    let logic: ReturnType<typeof createAccordionLogic>;
+    let mockOnExpandedChange: ReturnType<typeof vi.fn>;
+    let mockOnItemToggle: ReturnType<typeof vi.fn>;
     
     beforeEach(() => {
-        mockOnChange = vi.fn();
-        mockOnActiveChange = vi.fn();
+        mockOnExpandedChange = vi.fn();
+        mockOnItemToggle = vi.fn();
         
-        const options: TemplateOptions = {
-            onChange: mockOnChange,
-            onActiveChange: mockOnActiveChange,
+        const options: AccordionOptions = {
+            items: [
+                { id: 'item1' },
+                { id: 'item2' },
+                { id: 'item3', disabled: true }
+            ],
+            onExpandedChange: mockOnExpandedChange,
+            onItemToggle: mockOnItemToggle,
         };
         
-        stateStore = createTemplateState(options);
-        logic = createTemplateLogic(stateStore, options);
+        stateStore = createAccordionState(options);
+        logic = createAccordionLogic(stateStore, options);
         
         // Connect logic to state
         logic.connect(stateStore);
         logic.initialize();
     });
     
-    it('should handle change events', () => {
-        logic.handleEvent('change', { 
-            value: 'new value', 
-            previousValue: '' 
+    it('should handle item toggle event', async () => {
+        const listener = vi.fn();
+        stateStore.subscribe(listener);
+        
+        logic.handleEvent('itemToggle', { 
+            itemId: 'item1', 
+            expanded: true 
         });
         
-        expect(stateStore.getState().value).toBe('new value');
-        expect(mockOnChange).toHaveBeenCalledWith('new value');
+        // The listener should be called immediately with the state change
+        expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+            expandedItems: ['item1']
+        }));
+        
+        // The onItemToggle callback should be called immediately  
+        expect(mockOnItemToggle).toHaveBeenCalledWith('item1', true);
+        
+        // Wait for async onExpandedChange callback
+        await new Promise(resolve => setTimeout(resolve, 10));
+        
+        // Now onExpandedChange should have been called
+        expect(mockOnExpandedChange).toHaveBeenCalledWith(['item1']);
     });
     
-    it('should not handle change when disabled', () => {
-        stateStore.setDisabled(true);
+    it('should not toggle disabled items', () => {
+        // First clear any previous state changes
+        const listener = vi.fn();
         
-        logic.handleEvent('change', { 
-            value: 'new value', 
-            previousValue: '' 
+        // Try to toggle disabled item
+        logic.handleEvent('itemToggle', { 
+            itemId: 'item3', 
+            expanded: true 
         });
         
-        expect(stateStore.getState().value).toBe('');
-        expect(mockOnChange).not.toHaveBeenCalled();
+        // Subscribe after the event to check if state changed
+        stateStore.subscribe(listener);
+        stateStore.setState((prev) => ({ ...prev }));
+        
+        // Item3 should still be collapsed
+        expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+            expandedItems: []
+        }));
+        expect(mockOnItemToggle).not.toHaveBeenCalled();
     });
     
-    it('should handle activeChange events', () => {
-        logic.handleEvent('activeChange', { active: true });
+    it('should handle expanded items change', () => {
+        // Create a new accordion with multiple=true to test expanding multiple items
+        const multiOptions: AccordionOptions = {
+            items: [
+                { id: 'item1' },
+                { id: 'item2' },
+                { id: 'item3', disabled: true }
+            ],
+            multiple: true,
+            onExpandedChange: mockOnExpandedChange,
+            onItemToggle: mockOnItemToggle,
+        };
         
-        expect(stateStore.getState().active).toBe(true);
-        expect(mockOnActiveChange).toHaveBeenCalledWith(true);
+        const multiState = createAccordionState(multiOptions);
+        const multiLogic = createAccordionLogic(multiState, multiOptions);
+        multiLogic.connect(multiState);
+        multiLogic.initialize();
+        
+        const listener = vi.fn();
+        multiState.subscribe(listener);
+        
+        multiLogic.handleEvent('expandedChange', { 
+            expandedItems: ['item1', 'item2'],
+            previousExpandedItems: [] 
+        });
+        
+        // The logic should expand both items since multiple=true
+        // Verify the final state contains both expanded items
+        const calls = listener.mock.calls;
+        const lastCall = calls[calls.length - 1][0];
+        
+        expect(lastCall.expandedItems).toEqual(['item1', 'item2']);
+        expect(mockOnExpandedChange).toHaveBeenCalledWith(['item1', 'item2']);
     });
     
-    it('should not handle activeChange when disabled', () => {
-        stateStore.setDisabled(true);
+    it('should enforce single expansion when multiple is false', () => {
+        const state = createAccordionState({
+            items: [{ id: 'item1' }, { id: 'item2' }],
+            multiple: false,
+            onExpandedChange: mockOnExpandedChange,
+            onItemToggle: mockOnItemToggle
+        });
+        const singleLogic = createAccordionLogic(state, {
+            multiple: false,
+            onExpandedChange: mockOnExpandedChange,
+            onItemToggle: mockOnItemToggle
+        });
         
-        logic.handleEvent('activeChange', { active: true });
+        // Expand first item
+        state.expandItem('item1');
         
-        expect(stateStore.getState().active).toBe(false);
-        expect(mockOnActiveChange).not.toHaveBeenCalled();
+        // Expand second item should collapse first
+        state.expandItem('item2');
+        
+        const listener = vi.fn();
+        state.subscribe(listener);
+        state.setState((prev) => ({ ...prev }));
+        
+        expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+            expandedItems: ['item2']
+        }));
     });
     
-    it('should provide correct a11y props', () => {
+    it('should provide correct a11y props for root', () => {
+        const listener = vi.fn();
+        stateStore.subscribe(listener);
+        
+        // Get initial state from subscription
+        stateStore.setState((prev) => ({ ...prev }));
+        const currentState = listener.mock.calls[0][0];
+        
         const props = logic.getA11yProps('root');
         
         expect(props).toEqual({
-            'aria-disabled': false,
-            'aria-pressed': false,
-            'aria-label': 'Template component with value: ',
+            role: 'region',
+            'aria-disabled': undefined
         });
         
         // Update state and check again
         stateStore.setDisabled(true);
-        stateStore.setActive(true);
-        stateStore.setValue('test');
+        
+        // Get updated state
+        listener.mockClear();
+        stateStore.setState((prev) => ({ ...prev }));
+        const disabledState = listener.mock.calls[0][0];
         
         const updatedProps = logic.getA11yProps('root');
         expect(updatedProps).toEqual({
-            'aria-disabled': true,
-            'aria-pressed': true,
-            'aria-label': 'Template component with value: test',
+            role: 'region',
+            'aria-disabled': 'true'
         });
     });
     
-    it('should provide interaction handlers', () => {
-        const handlers = logic.getInteractionHandlers('root');
+    it('should provide correct a11y props for trigger', () => {
+        const listener = vi.fn();
+        stateStore.subscribe(listener);
+        
+        // Expand item1
+        stateStore.expandItem('item1');
+        
+        // Get current state
+        listener.mockClear();
+        stateStore.setState((prev) => ({ ...prev }));
+        const currentState = listener.mock.calls[0][0];
+        
+        // The trigger a11y props returns a function that takes itemId
+        const triggerPropsFunc = logic.getA11yProps('trigger');
+        const triggerProps = triggerPropsFunc('item1');
+        
+        expect(triggerProps).toEqual({
+            role: 'button',
+            'aria-expanded': 'true',
+            'aria-controls': 'panel-item1',
+            'aria-disabled': undefined,
+            tabIndex: 0,
+            'data-item-id': 'item1'
+        });
+        
+        // Check disabled item
+        const disabledProps = triggerPropsFunc('item3');
+        expect(disabledProps).toEqual({
+            role: 'button',
+            'aria-expanded': 'false',
+            'aria-controls': 'panel-item3',
+            'aria-disabled': 'true',
+            tabIndex: -1,
+            'data-item-id': 'item3'
+        });
+    });
+    
+    it('should provide interaction handlers for trigger', () => {
+        const handlers = logic.getInteractionHandlers('trigger');
         
         expect(handlers).toHaveProperty('onClick');
+        expect(handlers).toHaveProperty('onKeyDown');
         expect(handlers).toHaveProperty('onFocus');
         expect(handlers).toHaveProperty('onBlur');
-        
-        // Test onClick handler
-        const mockEvent = new MouseEvent('click');
-        handlers.onClick(mockEvent);
-        
-        expect(stateStore.getState().active).toBe(true);
     });
     
-    it('should not trigger onClick when disabled', () => {
+    it('should handle trigger click', (done) => {
+        const listener = vi.fn();
+        stateStore.subscribe(listener);
+        
+        const handlers = logic.getInteractionHandlers('trigger');
+        const mockEvent = new MouseEvent('click');
+        Object.defineProperty(mockEvent, 'currentTarget', {
+            value: { dataset: { itemId: 'item1' } } as HTMLElement,
+            configurable: true
+        });
+        
+        handlers.onClick?.(mockEvent);
+        
+        // Small timeout to allow for async callback execution
+        setTimeout(() => {
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                expandedItems: ['item1']
+            }));
+            expect(mockOnItemToggle).toHaveBeenCalledWith('item1', true);
+            expect(mockOnExpandedChange).toHaveBeenCalledWith(['item1']);
+            done();
+        }, 50);
+    });
+    
+    it('should not trigger click on disabled accordion', () => {
         stateStore.setDisabled(true);
         
-        const handlers = logic.getInteractionHandlers('root');
+        const handlers = logic.getInteractionHandlers('trigger');
         const mockEvent = new MouseEvent('click');
+        Object.defineProperty(mockEvent, 'currentTarget', {
+            value: { dataset: { itemId: 'item1' } } as HTMLElement,
+            configurable: true
+        });
         
-        handlers.onClick(mockEvent);
+        handlers.onClick?.(mockEvent);
         
-        expect(stateStore.getState().active).toBe(false);
-        expect(mockOnActiveChange).not.toHaveBeenCalled();
+        expect(mockOnItemToggle).not.toHaveBeenCalled();
+        expect(mockOnExpandedChange).not.toHaveBeenCalled();
     });
     
-    it('should handle focus events', () => {
-        const mockEvent = new FocusEvent('focus');
-        logic.handleEvent('focus', { event: mockEvent });
+    it('should handle item focus', () => {
+        const listener = vi.fn();
+        stateStore.subscribe(listener);
         
-        // Just verify it doesn't throw
-        expect(true).toBe(true);
+        logic.handleEvent('itemFocus', { 
+            itemId: 'item1',
+            event: new FocusEvent('focus') 
+        });
+        
+        expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+            focusedItem: 'item1'
+        }));
     });
     
-    it('should handle blur events', () => {
-        const mockEvent = new FocusEvent('blur');
-        logic.handleEvent('blur', { event: mockEvent });
+    it('should handle item blur', () => {
+        // First set focus
+        stateStore.setFocusedItem('item1');
         
-        // Just verify it doesn't throw
-        expect(true).toBe(true);
+        const listener = vi.fn();
+        stateStore.subscribe(listener);
+        
+        logic.handleEvent('itemBlur', { 
+            itemId: 'item1',
+            event: new FocusEvent('blur') 
+        });
+        
+        expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+            focusedItem: null
+        }));
     });
     
-    it('should cleanup properly', () => {
-        logic.cleanup();
+    it('should handle keyboard navigation', (done) => {
+        const handlers = logic.getInteractionHandlers('trigger');
+        const listener = vi.fn();
+        stateStore.subscribe(listener);
         
-        // After cleanup, events should not be processed
+        // Test Enter key to toggle
+        const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
+        Object.defineProperty(enterEvent, 'currentTarget', {
+            value: { dataset: { itemId: 'item1' } } as HTMLElement,
+            configurable: true
+        });
+        enterEvent.preventDefault = vi.fn();
+        
+        handlers.onKeyDown?.(enterEvent);
+        
+        setTimeout(() => {
+            expect(enterEvent.preventDefault).toHaveBeenCalled();
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                expandedItems: ['item1']
+            }));
+            done();
+        }, 50);
+    });
+    
+    it('should handle arrow key navigation', () => {
+        const handlers = logic.getInteractionHandlers('trigger');
+        const focusMock = vi.fn();
+        
+        // Mock document.querySelector to return element with focus method
+        const originalQuerySelector = document.querySelector;
+        document.querySelector = vi.fn(() => ({ focus: focusMock } as any));
+        
+        // Test ArrowDown
+        const arrowDownEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+        Object.defineProperty(arrowDownEvent, 'currentTarget', {
+            value: { dataset: { itemId: 'item1' } } as HTMLElement,
+            configurable: true
+        });
+        arrowDownEvent.preventDefault = vi.fn();
+        
+        handlers.onKeyDown?.(arrowDownEvent);
+        
+        expect(arrowDownEvent.preventDefault).toHaveBeenCalled();
+        expect(document.querySelector).toHaveBeenCalledWith('[data-item-id="item2"]');
+        expect(focusMock).toHaveBeenCalled();
+        
+        // Restore original querySelector
+        document.querySelector = originalQuerySelector;
+    });
+    
+    it('should enforce collapsible constraint', () => {
+        const collapsibleLogic = createAccordionLogic(stateStore, {
+            collapsible: false,
+            onItemToggle: mockOnItemToggle
+        });
+        
+        // Expand item1
+        stateStore.expandItem('item1');
+        
+        // Try to collapse it when collapsible is false
+        const handlers = collapsibleLogic.getInteractionHandlers('trigger');
         const mockEvent = new MouseEvent('click');
-        logic.handleEvent('activeChange', { active: true });
+        Object.defineProperty(mockEvent, 'currentTarget', {
+            value: { dataset: { itemId: 'item1' } } as HTMLElement,
+            configurable: true
+        });
         
-        // State should not change after cleanup
-        expect(stateStore.getState().active).toBe(false);
+        const listener = vi.fn();
+        stateStore.subscribe(listener);
+        
+        handlers.onClick?.(mockEvent);
+        
+        // Should not collapse when it's the only expanded item and collapsible is false
+        expect(listener).not.toHaveBeenCalled();
+        expect(mockOnItemToggle).not.toHaveBeenCalled();
     });
 });

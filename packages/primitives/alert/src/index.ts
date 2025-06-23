@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createAlertState } from './state';
 import { createAlertLogic } from './logic';
 import type { AlertOptions, AlertState, AlertEvents } from './types';

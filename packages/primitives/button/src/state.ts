@@ -1,4 +1,4 @@
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { ButtonState, ButtonOptions } from './types.js';
 
 export function createButtonState(options: ButtonOptions) {

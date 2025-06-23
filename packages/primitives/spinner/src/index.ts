@@ -1,4 +1,4 @@
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createSpinnerState } from './state.js';
 import { createSpinnerLogic } from './logic.js';
 import type { SpinnerOptions, SpinnerState, SpinnerEvents } from './types.js';

@@ -6,7 +6,7 @@
  * NEVER use setState({ field: value }) - it will lose other state fields!
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { MenuState, MenuOptions, MenuItem } from './types';
 
 /**

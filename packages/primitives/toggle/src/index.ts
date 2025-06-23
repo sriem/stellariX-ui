@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createToggleState } from './state';
 import { createToggleLogic } from './logic';
 import type { ToggleOptions, ToggleState, ToggleEvents } from './types';

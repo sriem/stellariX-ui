@@ -1,6 +1,6 @@
 import React from 'react';
 import { createInputWithImplementation } from '../src';
-import { reactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create input instances with different configurations
 const basicInput = createInputWithImplementation();

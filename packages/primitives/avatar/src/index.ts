@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createAvatarState } from './state';
 import { createAvatarLogic } from './logic';
 import type { AvatarOptions, AvatarState, AvatarEvents } from './types';

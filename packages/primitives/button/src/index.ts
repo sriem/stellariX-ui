@@ -1,4 +1,4 @@
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createButtonState } from './state.js';
 import { createButtonLogic } from './logic.js';
 import type { ButtonOptions, ButtonState, ButtonEvents } from './types.js';

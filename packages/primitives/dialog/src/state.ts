@@ -3,7 +3,7 @@
  * Manages the dialog component state
  */
 
-import { createStore } from '@stellarix/core';
+import { createStore } from '@stellarix-ui/core';
 import type { DialogState, DialogOptions } from './types';
 
 /**

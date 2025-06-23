@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createAccordionState } from './state.js';
 import { createAccordionLogic } from './logic.js';
 import type { AccordionOptions, AccordionState, AccordionEvents } from './types.js';

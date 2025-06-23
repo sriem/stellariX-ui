@@ -3,7 +3,7 @@
  * Framework-agnostic dropdown select component with search and keyboard navigation
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createSelectState } from './state.js';
 import { createSelectLogic } from './logic.js';
 import type { SelectOptions, SelectState, SelectEvents } from './types.js';

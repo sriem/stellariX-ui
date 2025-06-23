@@ -3,7 +3,7 @@
  * Multi-line text input component with autogrow support
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createTextareaState } from './state';
 import { createTextareaLogic } from './logic';
 import type { TextareaOptions, TextareaState, TextareaEvents } from './types';

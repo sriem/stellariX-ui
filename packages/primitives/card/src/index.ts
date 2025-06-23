@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createCardState } from './state';
 import { createCardLogic } from './logic';
 import type { CardOptions, CardState, CardEvents } from './types';

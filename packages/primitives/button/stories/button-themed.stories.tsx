@@ -6,8 +6,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState, useEffect } from 'react';
 import { createButtonWithImplementation } from '../src';
-import { reactAdapter } from '@stellarix/react';
-import { themes, themeToCSSVariables, generateCSSString } from '@stellarix/themes';
+import { reactAdapter } from '@stellarix-ui/react';
+import { themes, themeToCSSVariables, generateCSSString } from '@stellarix-ui/themes';
 
 const meta = {
     title: 'Themed/Button',

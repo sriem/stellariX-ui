@@ -8,5 +8,5 @@ export default defineConfig({
     sourcemap: true,
     clean: true,
     target: 'es2022',
-    external: ['@stellarix/core', '@stellarix/utils'],
+    external: ['@stellarix-ui/core', '@stellarix-ui/utils'],
 });

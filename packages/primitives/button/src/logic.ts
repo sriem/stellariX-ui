@@ -7,8 +7,8 @@
  * ✅ Call state setters directly
  */
 
-import { LogicLayerBuilder } from '@stellarix/core';
-import { generateComponentId } from '@stellarix/utils';
+import { LogicLayerBuilder } from '@stellarix-ui/core';
+import { generateComponentId } from '@stellarix-ui/utils';
 import type { ButtonState, ButtonEvents, ButtonOptions } from './types.js';
 import type { ButtonStateStore } from './state.js';
 

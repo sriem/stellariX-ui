@@ -21,16 +21,43 @@ describe('Radio State', () => {
         state.setChecked(false); // Trigger subscription
         
         // Radio state has the same issue as checkbox - only partial updates
-        expect(listener).toHaveBeenCalledWith({ checked: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
         
         // Verify other properties through individual updates
         listener.mockClear();
         state.setDisabled(false);
-        expect(listener).toHaveBeenCalledWith({ disabled: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
         
         listener.mockClear();
         state.setRequired(false);
-        expect(listener).toHaveBeenCalledWith({ required: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
     });
 
     it('should create initial state with custom options', () => {
@@ -48,17 +75,43 @@ describe('Radio State', () => {
         state.subscribe(listener);
         state.setChecked(true); // Trigger subscription
         
-        // Radio state has the same issue as checkbox - only partial updates
-        expect(listener).toHaveBeenCalledWith({ checked: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: true,
+            disabled: true,
+            focused: false,
+            required: true,
+            error: false,
+            errorMessage: undefined,
+            name: 'custom-group',
+            value: 'custom-value'
+        });
         
         // Verify other properties through individual updates
         listener.mockClear();
         state.setDisabled(true);
-        expect(listener).toHaveBeenCalledWith({ disabled: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: true,
+            disabled: true,
+            focused: false,
+            required: true,
+            error: false,
+            errorMessage: undefined,
+            name: 'custom-group',
+            value: 'custom-value'
+        });
         
         listener.mockClear();
         state.setRequired(true);
-        expect(listener).toHaveBeenCalledWith({ required: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: true,
+            disabled: true,
+            focused: false,
+            required: true,
+            error: false,
+            errorMessage: undefined,
+            name: 'custom-group',
+            value: 'custom-value'
+        });
     });
 
     it('should update checked state', () => {
@@ -72,11 +125,29 @@ describe('Radio State', () => {
         state.subscribe(listener);
         
         state.setChecked(true);
-        expect(listener).toHaveBeenCalledWith({ checked: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: true,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
         
         listener.mockClear();
         state.setChecked(false);
-        expect(listener).toHaveBeenCalledWith({ checked: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
     });
 
     it('should update disabled state', () => {
@@ -90,11 +161,29 @@ describe('Radio State', () => {
         state.subscribe(listener);
         
         state.setDisabled(true);
-        expect(listener).toHaveBeenCalledWith({ disabled: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: true,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
         
         listener.mockClear();
         state.setDisabled(false);
-        expect(listener).toHaveBeenCalledWith({ disabled: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
     });
 
     it('should update focused state', () => {
@@ -108,11 +197,29 @@ describe('Radio State', () => {
         state.subscribe(listener);
         
         state.setFocused(true);
-        expect(listener).toHaveBeenCalledWith({ focused: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: true,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
         
         listener.mockClear();
         state.setFocused(false);
-        expect(listener).toHaveBeenCalledWith({ focused: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
     });
 
     it('should update required state', () => {
@@ -126,11 +233,29 @@ describe('Radio State', () => {
         state.subscribe(listener);
         
         state.setRequired(true);
-        expect(listener).toHaveBeenCalledWith({ required: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: true,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
         
         listener.mockClear();
         state.setRequired(false);
-        expect(listener).toHaveBeenCalledWith({ required: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
     });
 
     it('should update error state', () => {
@@ -144,16 +269,28 @@ describe('Radio State', () => {
         state.subscribe(listener);
         
         state.setError(true, 'Test error message');
-        expect(listener).toHaveBeenCalledWith({ 
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
             error: true,
-            errorMessage: 'Test error message'
+            errorMessage: 'Test error message',
+            name: 'test-group',
+            value: 'test-value'
         });
         
         listener.mockClear();
         state.setError(false);
-        expect(listener).toHaveBeenCalledWith({ 
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
             error: false,
-            errorMessage: undefined
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
         });
     });
 
@@ -190,7 +327,16 @@ describe('Radio State', () => {
         const unsubscribe = state.subscribe(listener);
         
         state.setChecked(true);
-        expect(listener).toHaveBeenCalledWith({ checked: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: true,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
         
         unsubscribe();
         state.setChecked(false);
@@ -496,7 +642,16 @@ describe('Radio Integration', () => {
         state.setChecked(true); // Trigger subscription
         
         // Radio state has the same issue - only partial updates
-        expect(listener).toHaveBeenCalledWith({ checked: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: true,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined,
+            name: 'test-group',
+            value: 'test-value'
+        });
         // Value and name are set during initialization and don't change
     });
 });

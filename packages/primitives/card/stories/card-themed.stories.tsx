@@ -6,8 +6,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState, useEffect } from 'react';
 import { createCardWithImplementation } from '../src';
-import { reactAdapter } from '@stellarix/react';
-import { themes, themeToCSSVariables } from '@stellarix/themes';
+import { reactAdapter } from '@stellarix-ui/react';
+import { themes, themeToCSSVariables } from '@stellarix-ui/themes';
 
 const meta = {
     title: 'Themed/Card',

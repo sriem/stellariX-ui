@@ -3,7 +3,7 @@
  * A floating overlay component that appears next to a trigger element
  */
 
-import type { ComponentCore } from '@stellarix/core';
+import type { ComponentCore } from '@stellarix-ui/core';
 import { createPopoverState } from './state';
 import { createPopoverLogic } from './logic';
 import type { PopoverState, PopoverOptions, PopoverEvents } from './types';

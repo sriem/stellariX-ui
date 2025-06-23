@@ -8,7 +8,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@stellarix/core': path.resolve(__dirname, '../core/src'),
+            '@stellarix-ui/core': path.resolve(__dirname, '../core/src'),
         },
     },
 });

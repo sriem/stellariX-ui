@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createContainerState } from './state';
 import { createContainerLogic } from './logic';
 import type { ContainerOptions, ContainerState, ContainerEvents } from './types';
@@ -19,7 +19,6 @@ export function createContainer(options: ContainerOptions = {}) {
         logicConfig: options,
         metadata: {
             accessibility: {
-                role: undefined, // Container has no semantic role
                 keyboardShortcuts: [],
                 ariaAttributes: [],
                 wcagLevel: 'AA',
@@ -34,7 +33,6 @@ export function createContainer(options: ContainerOptions = {}) {
                 elements: {
                     'root': {
                         type: 'div',
-                        role: undefined, // No ARIA role for layout containers
                         optional: false
                     }
                 }

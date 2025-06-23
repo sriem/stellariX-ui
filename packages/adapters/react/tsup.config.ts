@@ -15,5 +15,5 @@ export default defineConfig({
     clean: true,
     target: 'es2022',
     tsconfig: './tsconfig.json',
-    external: ['react', 'react-dom', '@stellarix/core', '@stellarix/utils'],
+    external: ['react', 'react-dom', '@stellarix-ui/core', '@stellarix-ui/utils'],
 });

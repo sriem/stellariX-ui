@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createBadgeState } from './state';
 import { createBadgeLogic } from './logic';
 import type { BadgeOptions, BadgeState, BadgeEvents } from './types';

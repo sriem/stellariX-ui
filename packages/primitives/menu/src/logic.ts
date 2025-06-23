@@ -19,8 +19,8 @@
  * that cause infinite loops and crash the application.
  */
 
-import { LogicLayerBuilder } from '@stellarix/core';
-import type { LogicLayer } from '@stellarix/core';
+import { LogicLayerBuilder } from '@stellarix-ui/core';
+import type { LogicLayer } from '@stellarix-ui/core';
 import type { MenuState, MenuEvents, MenuOptions, MenuItem } from './types';
 import type { MenuStateStore } from './state';
 

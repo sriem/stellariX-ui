@@ -3,7 +3,7 @@
  * Ultra-generic state implementation
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { InputState, InputOptions, InputType, InputSize } from './types';
 
 /**

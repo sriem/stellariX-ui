@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createCheckboxState } from './state';
 import { createCheckboxLogic } from './logic';
 import type { CheckboxOptions, CheckboxState, CheckboxEvents } from './types';

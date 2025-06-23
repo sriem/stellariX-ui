@@ -14,13 +14,13 @@ describe('Container State', () => {
         state.subscribe(listener);
         state.setSize('md'); // Trigger subscription with default value
         
-        // Container state probably has same issue - only partial updates
-        expect(listener).toHaveBeenCalledWith({ size: 'md' });
-        
-        // Verify other defaults through individual updates
-        listener.mockClear();
-        state.setVariant('default');
-        expect(listener).toHaveBeenCalledWith({ variant: 'default' });
+        // Expect full state object
+        expect(listener).toHaveBeenCalledWith({
+            size: 'md',
+            variant: 'default',
+            maxWidth: undefined,
+            padding: '1rem'
+        });
     });
     
     it('should create state with initial options', () => {
@@ -37,13 +37,13 @@ describe('Container State', () => {
         state.subscribe(listener);
         state.setSize('lg'); // Trigger subscription with initial value
         
-        // Container state probably has same issue - only partial updates
-        expect(listener).toHaveBeenCalledWith({ size: 'lg' });
-        
-        // Verify other options through individual updates
-        listener.mockClear();
-        state.setVariant('fluid');
-        expect(listener).toHaveBeenCalledWith({ variant: 'fluid' });
+        // Expect full state object with custom options
+        expect(listener).toHaveBeenCalledWith({
+            size: 'lg',
+            variant: 'fluid',
+            maxWidth: '1400px',
+            padding: '2rem'
+        });
     });
     
     it('should update size', () => {

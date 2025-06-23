@@ -3,7 +3,7 @@
  * Implements the business logic and behavior for the accordion component
  */
 
-import { LogicLayerBuilder } from '@stellarix/core';
+import { LogicLayerBuilder } from '@stellarix-ui/core';
 import type { AccordionState, AccordionEvents, AccordionOptions } from './types.js';
 import type { AccordionStateStore } from './state.js';
 
@@ -23,6 +23,12 @@ export function createAccordionLogic(
         .onEvent('itemToggle', (currentState, payload) => {
             const { itemId, expanded } = payload;
             
+            // Check if item exists and is not disabled
+            const item = currentState.items.find(i => i.id === itemId);
+            if (!item || item.disabled || currentState.disabled) {
+                return null;
+            }
+            
             // Check if toggle is allowed
             if (!collapsible && currentState.expandedItems.length === 1 && 
                 currentState.expandedItems[0] === itemId && !expanded) {
@@ -39,13 +45,20 @@ export function createAccordionLogic(
             }
             
             if (options.onExpandedChange) {
-                // Get updated state after toggle
-                let newExpandedItems: string[] = [];
-                const unsubscribe = state.subscribe((newState) => {
-                    newExpandedItems = newState.expandedItems;
-                });
-                unsubscribe();
-                options.onExpandedChange(newExpandedItems);
+                // Use setTimeout to ensure state is updated
+                setTimeout(() => {
+                    // Subscribe once to get the updated state
+                    let called = false;
+                    const unsubscribe = state.subscribe((newState) => {
+                        if (!called) {
+                            called = true;
+                            options.onExpandedChange(newState.expandedItems);
+                        }
+                    });
+                    // Trigger the subscription by doing a no-op state update
+                    state.setState((prev) => ({ ...prev }));
+                    unsubscribe();
+                }, 0);
             }
             
             return null;
@@ -55,18 +68,8 @@ export function createAccordionLogic(
         .onEvent('expandedChange', (currentState, payload) => {
             const { expandedItems } = payload;
             
-            // Update state to match the new expanded items
-            expandedItems.forEach(itemId => {
-                if (!currentState.expandedItems.includes(itemId)) {
-                    state.expandItem(itemId);
-                }
-            });
-            
-            currentState.expandedItems.forEach(itemId => {
-                if (!expandedItems.includes(itemId)) {
-                    state.collapseItem(itemId);
-                }
-            });
+            // Use the new setExpandedItems method to update all at once
+            state.setExpandedItems(expandedItems);
             
             if (options.onExpandedChange) {
                 options.onExpandedChange(expandedItems);

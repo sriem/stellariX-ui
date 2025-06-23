@@ -3,7 +3,7 @@
  * Ultra-generic state implementation
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { ToggleState, ToggleOptions } from './types';
 
 /**

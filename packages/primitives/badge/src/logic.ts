@@ -26,8 +26,8 @@
  * PROVEN WORKING PATTERN (Checkbox component - 30/30 tests passing):
  */
 
-import { LogicLayerBuilder } from '@stellarix/core';
-import type { LogicLayer } from '@stellarix/core';
+import { LogicLayerBuilder } from '@stellarix-ui/core';
+import type { LogicLayer } from '@stellarix-ui/core';
 import type { BadgeState, BadgeEvents, BadgeOptions } from './types';
 import type { BadgeStateStore } from './state';
 

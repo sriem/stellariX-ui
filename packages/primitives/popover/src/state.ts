@@ -6,7 +6,7 @@
  * store.setState((prev: any) => ({ ...prev, field: value }))
  */
 
-import { createStore } from '@stellarix/core';
+import { createStore } from '@stellarix-ui/core';
 import type { PopoverState, PopoverOptions, PopoverPlacement } from './types';
 
 /**

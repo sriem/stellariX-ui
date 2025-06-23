@@ -13,7 +13,7 @@
  * - ALWAYS use function updater with spread operator
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { ContainerState, ContainerOptions, ContainerSize } from './types';
 
 /**
@@ -33,7 +33,7 @@ const SIZE_PRESETS: Record<ContainerSize, string> = {
 export interface ContainerStateStore {
     // Core state methods
     getState: () => ContainerState;
-    setState: (updates: Partial<ContainerState>) => void;
+    setState: (updater: ContainerState | ((prev: ContainerState) => ContainerState)) => void;
     subscribe: (listener: (state: ContainerState) => void) => () => void;
     derive: <U>(selector: (state: ContainerState) => U) => {
         get: () => U;

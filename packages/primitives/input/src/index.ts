@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createInputState } from './state';
 import { createInputLogic } from './logic';
 import type { InputOptions, InputState, InputEvents } from './types';

@@ -13,7 +13,7 @@
  * - ALWAYS use function updater with spread operator
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { SpinnerState, SpinnerOptions, SpinnerSize } from './types';
 
 /**

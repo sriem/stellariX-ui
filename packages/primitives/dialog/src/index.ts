@@ -3,7 +3,7 @@
  * Framework-agnostic dialog/modal implementation
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createDialogState } from './state';
 import { createDialogLogic } from './logic';
 import type { DialogOptions, DialogState, DialogEvents } from './types';

@@ -21,7 +21,7 @@ import { createRadioState } from './state';
 import { createRadioLogic } from './logic';
 import type { RadioOptions, RadioState, RadioEvents } from './types';
 import type { RadioStateStore } from './state';
-import type { LogicLayer } from '@stellarix/core';
+import type { LogicLayer } from '@stellarix-ui/core';
 
 /**
  * Component core interface for Radio

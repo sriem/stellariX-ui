@@ -8,5 +8,5 @@ export default defineConfig({
     sourcemap: true,
     clean: true,
     target: 'es2022',
-    external: ['react', 'vue', 'svelte', 'solid-js', '@angular/core', '@stellarix/core', '@stellarix/utils'],
+    external: ['react', 'vue', 'svelte', 'solid-js', '@angular/core', '@stellarix-ui/core', '@stellarix-ui/utils'],
 });

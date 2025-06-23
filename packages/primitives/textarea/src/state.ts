@@ -3,7 +3,7 @@
  * Ultra-generic state implementation for multi-line text input
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { TextareaState, TextareaOptions } from './types';
 
 /**

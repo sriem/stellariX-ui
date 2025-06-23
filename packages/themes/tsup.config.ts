@@ -7,5 +7,5 @@ export default defineConfig({
     splitting: false,
     sourcemap: true,
     clean: true,
-    external: ['@stellarix/core'],
+    external: ['@stellarix-ui/core'],
 });

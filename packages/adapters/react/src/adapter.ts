@@ -7,7 +7,7 @@ import { createElement, useMemo, type ComponentType } from 'react';
 import type {
     ComponentCore,
     FrameworkAdapter,
-} from '@stellarix/core';
+} from '@stellarix-ui/core';
 import { useStore, useLogic } from './hooks';
 import type { ReactComponent, ReactProps } from './types';
 
@@ -34,7 +34,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
             
             // Use custom hooks to connect to core state and logic
             const state = useStore(core.state);
-            const logic = useLogic(core.logic, core.state);
+            const logic = useLogic(core.logic);
 
             // Get component metadata for rendering hints
             const { structure, accessibility } = core.metadata;
@@ -92,11 +92,13 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                 const options = (core as any).options || {};
                 
                 // Map state properties to DOM attributes
-                if ('type' in state) componentSpecificProps.type = state.type;
-                if ('value' in state) componentSpecificProps.value = state.value;
-                if ('disabled' in state && state.disabled) componentSpecificProps.disabled = true;
-                if ('readonly' in state && state.readonly) componentSpecificProps.readOnly = true;
-                if ('required' in state && state.required) componentSpecificProps.required = true;
+                if (state && typeof state === 'object') {
+                    if ('type' in state) componentSpecificProps.type = (state as any).type;
+                    if ('value' in state) componentSpecificProps.value = (state as any).value;
+                    if ('disabled' in state && (state as any).disabled) componentSpecificProps.disabled = true;
+                    if ('readonly' in state && (state as any).readonly) componentSpecificProps.readOnly = true;
+                    if ('required' in state && (state as any).required) componentSpecificProps.required = true;
+                }
                 
                 // Pass through component options first
                 if (options.placeholder) componentSpecificProps.placeholder = options.placeholder;
@@ -111,18 +113,18 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                 if (options.pattern) componentSpecificProps.pattern = options.pattern;
                 
                 // Override with runtime props from restProps
-                if (restProps.placeholder) componentSpecificProps.placeholder = restProps.placeholder;
-                if (restProps.name) componentSpecificProps.name = restProps.name;
-                if (restProps.id) componentSpecificProps.id = restProps.id;
-                if (restProps.autoComplete || restProps.autocomplete) {
-                    componentSpecificProps.autoComplete = restProps.autoComplete || restProps.autocomplete;
+                if ('placeholder' in restProps) componentSpecificProps.placeholder = (restProps as any).placeholder;
+                if ('name' in restProps) componentSpecificProps.name = (restProps as any).name;
+                if ('id' in restProps) componentSpecificProps.id = (restProps as any).id;
+                if ('autoComplete' in restProps || 'autocomplete' in restProps) {
+                    componentSpecificProps.autoComplete = (restProps as any).autoComplete || (restProps as any).autocomplete;
                 }
-                if (restProps.minLength) componentSpecificProps.minLength = restProps.minLength;
-                if (restProps.maxLength) componentSpecificProps.maxLength = restProps.maxLength;
-                if (restProps.min) componentSpecificProps.min = restProps.min;
-                if (restProps.max) componentSpecificProps.max = restProps.max;
-                if (restProps.step) componentSpecificProps.step = restProps.step;
-                if (restProps.pattern) componentSpecificProps.pattern = restProps.pattern;
+                if ('minLength' in restProps) componentSpecificProps.minLength = (restProps as any).minLength;
+                if ('maxLength' in restProps) componentSpecificProps.maxLength = (restProps as any).maxLength;
+                if ('min' in restProps) componentSpecificProps.min = (restProps as any).min;
+                if ('max' in restProps) componentSpecificProps.max = (restProps as any).max;
+                if ('step' in restProps) componentSpecificProps.step = (restProps as any).step;
+                if ('pattern' in restProps) componentSpecificProps.pattern = (restProps as any).pattern;
             }
             
             // Void elements (input, br, hr, etc.) can't have children

@@ -3,8 +3,8 @@
  * Handles interactions and business logic for the select component
  */
 
-import { LogicLayerBuilder } from '@stellarix/core';
-import { generateComponentId } from '@stellarix/utils';
+import { LogicLayerBuilder } from '@stellarix-ui/core';
+import { generateComponentId } from '@stellarix-ui/utils';
 import type { SelectState, SelectEvents, SelectOptions } from './types.js';
 import type { SelectStateStore } from './state.js';
 

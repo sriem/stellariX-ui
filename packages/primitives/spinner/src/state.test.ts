@@ -13,21 +13,25 @@ describe('createSpinnerState', () => {
         state.subscribe(listener);
         state.start(); // Trigger subscription (spinning defaults to true)
         
-        // Spinner state probably has same issue - only partial updates
-        expect(listener).toHaveBeenCalledWith({ spinning: true });
+        // Expect full state object
+        expect(listener).toHaveBeenCalledWith({
+            spinning: true,
+            size: 'md',
+            color: undefined,
+            label: 'Loading...',
+            speed: 750
+        });
         
-        // Verify other defaults through individual updates
+        // Verify state is properly initialized
         listener.mockClear();
-        state.setSize('md');
-        expect(listener).toHaveBeenCalledWith({ size: 'md' });
-        
-        listener.mockClear();
-        state.setLabel('Loading...');
-        expect(listener).toHaveBeenCalledWith({ label: 'Loading...' });
-        
-        listener.mockClear();
-        state.setSpeed(750);
-        expect(listener).toHaveBeenCalledWith({ speed: 750 });
+        state.stop();
+        expect(listener).toHaveBeenCalledWith({
+            spinning: false,
+            size: 'md',
+            color: undefined,
+            label: 'Loading...',
+            speed: 750
+        });
     });
     
     it('should create state with custom options', () => {
@@ -41,27 +45,27 @@ describe('createSpinnerState', () => {
         
         const listener = vi.fn();
         state.subscribe(listener);
-        state.stop(); // Trigger subscription (spinning is false)
+        state.start(); // Trigger subscription to get current state
         
-        // Spinner state probably has same issue - only partial updates
-        expect(listener).toHaveBeenCalledWith({ spinning: false });
+        // Expect full state object with custom options
+        expect(listener).toHaveBeenCalledWith({
+            spinning: true,
+            size: 'lg',
+            color: '#3182ce',
+            label: 'Processing...',
+            speed: 1000
+        });
         
-        // Verify other custom options through individual updates
+        // Verify state changes work correctly
         listener.mockClear();
-        state.setSize('lg');
-        expect(listener).toHaveBeenCalledWith({ size: 'lg' });
-        
-        listener.mockClear();
-        state.setColor('#3182ce');
-        expect(listener).toHaveBeenCalledWith({ color: '#3182ce' });
-        
-        listener.mockClear();
-        state.setLabel('Processing...');
-        expect(listener).toHaveBeenCalledWith({ label: 'Processing...' });
-        
-        listener.mockClear();
-        state.setSpeed(1000);
-        expect(listener).toHaveBeenCalledWith({ speed: 1000 });
+        state.stop();
+        expect(listener).toHaveBeenCalledWith({
+            spinning: false,
+            size: 'lg',
+            color: '#3182ce',
+            label: 'Processing...',
+            speed: 1000
+        });
     });
     
     it('should start spinning', () => {

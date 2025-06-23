@@ -16,7 +16,7 @@
  * Partial objects cause the state to lose all other fields, resulting in NaN/undefined errors.
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { TooltipState, TooltipOptions, TooltipPlacement } from './types';
 
 /**

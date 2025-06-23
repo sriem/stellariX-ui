@@ -3,7 +3,7 @@
  * Business logic and event handling
  */
 
-import type { LogicLayer } from '@stellarix/core';
+import type { LogicLayer } from '@stellarix-ui/core';
 import type { SpinnerState, SpinnerEvents, SpinnerOptions } from './types';
 import type { SpinnerStateStore } from './state';
 

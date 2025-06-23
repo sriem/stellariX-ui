@@ -16,7 +16,7 @@
  * Partial objects cause the state to lose all other fields.
  */
 
-import { createStore } from '@stellarix/core';
+import { createStore } from '@stellarix-ui/core';
 import type { TabsState, TabsOptions, Tab } from './types';
 
 /**

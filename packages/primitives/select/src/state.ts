@@ -3,7 +3,7 @@
  * Manages the state for the select component
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { SelectState, SelectOptions, SelectOption } from './types.js';
 
 /**

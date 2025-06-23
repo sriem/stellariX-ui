@@ -3,7 +3,7 @@
  * Ultra-generic state implementation
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { CardState, CardOptions, CardVariant, CardPadding } from './types';
 
 /**

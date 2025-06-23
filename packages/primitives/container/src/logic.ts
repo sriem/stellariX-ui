@@ -3,8 +3,8 @@
  * Business logic and event handling
  */
 
-import { createComponentLogic } from '@stellarix/core';
-import type { LogicLayer } from '@stellarix/core';
+import { createComponentLogic } from '@stellarix-ui/core';
+import type { LogicLayer } from '@stellarix-ui/core';
 import type { ContainerState, ContainerEvents, ContainerOptions } from './types';
 import type { ContainerStateStore } from './state';
 

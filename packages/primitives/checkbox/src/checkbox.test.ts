@@ -18,23 +18,58 @@ describe('Checkbox State', () => {
         
         // Test individual properties by triggering updates
         state.setChecked(false);
-        expect(listener).toHaveBeenLastCalledWith({ checked: false });
+        expect(listener).toHaveBeenLastCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setDisabled(false);
-        expect(listener).toHaveBeenLastCalledWith({ disabled: false });
+        expect(listener).toHaveBeenLastCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setFocused(false);
-        expect(listener).toHaveBeenLastCalledWith({ focused: false });
+        expect(listener).toHaveBeenLastCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setRequired(false);
-        expect(listener).toHaveBeenLastCalledWith({ required: false });
+        expect(listener).toHaveBeenLastCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setError(false);
-        expect(listener).toHaveBeenLastCalledWith({ error: false, errorMessage: undefined });
+        expect(listener).toHaveBeenLastCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
     });
 
     it('should create initial state with custom options', () => {
@@ -52,15 +87,36 @@ describe('Checkbox State', () => {
         
         // Verify each property was initialized correctly
         state.setChecked(true);
-        expect(listener).toHaveBeenLastCalledWith({ checked: true });
+        expect(listener).toHaveBeenLastCalledWith({
+            checked: true,
+            disabled: true,
+            focused: false,
+            required: true,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setDisabled(true);
-        expect(listener).toHaveBeenLastCalledWith({ disabled: true });
+        expect(listener).toHaveBeenLastCalledWith({
+            checked: true,
+            disabled: true,
+            focused: false,
+            required: true,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setRequired(true);
-        expect(listener).toHaveBeenLastCalledWith({ required: true });
+        expect(listener).toHaveBeenLastCalledWith({
+            checked: true,
+            disabled: true,
+            focused: false,
+            required: true,
+            error: false,
+            errorMessage: undefined
+        });
     });
 
     it('should handle indeterminate state', () => {
@@ -85,15 +141,36 @@ describe('Checkbox State', () => {
         state.subscribe(listener);
         
         state.setChecked(true);
-        expect(listener).toHaveBeenCalledWith({ checked: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: true,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setChecked('indeterminate');
-        expect(listener).toHaveBeenCalledWith({ checked: 'indeterminate' });
+        expect(listener).toHaveBeenCalledWith({
+            checked: 'indeterminate',
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setChecked(false);
-        expect(listener).toHaveBeenCalledWith({ checked: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
     });
 
     it('should update disabled state', () => {
@@ -103,11 +180,25 @@ describe('Checkbox State', () => {
         state.subscribe(listener);
         
         state.setDisabled(true);
-        expect(listener).toHaveBeenCalledWith({ disabled: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: true,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setDisabled(false);
-        expect(listener).toHaveBeenCalledWith({ disabled: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
     });
 
     it('should update focused state', () => {
@@ -117,11 +208,25 @@ describe('Checkbox State', () => {
         state.subscribe(listener);
         
         state.setFocused(true);
-        expect(listener).toHaveBeenCalledWith({ focused: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: true,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setFocused(false);
-        expect(listener).toHaveBeenCalledWith({ focused: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
     });
 
     it('should update required state', () => {
@@ -131,11 +236,25 @@ describe('Checkbox State', () => {
         state.subscribe(listener);
         
         state.setRequired(true);
-        expect(listener).toHaveBeenCalledWith({ required: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: true,
+            error: false,
+            errorMessage: undefined
+        });
         
         listener.mockClear();
         state.setRequired(false);
-        expect(listener).toHaveBeenCalledWith({ required: false });
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
     });
 
     it('should update error state', () => {
@@ -145,14 +264,22 @@ describe('Checkbox State', () => {
         state.subscribe(listener);
         
         state.setError(true, 'Test error');
-        expect(listener).toHaveBeenCalledWith({ 
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
             error: true,
             errorMessage: 'Test error'
         });
         
         listener.mockClear();
         state.setError(false);
-        expect(listener).toHaveBeenCalledWith({ 
+        expect(listener).toHaveBeenCalledWith({
+            checked: false,
+            disabled: false,
+            focused: false,
+            required: false,
             error: false,
             errorMessage: undefined
         });
@@ -212,7 +339,14 @@ describe('Checkbox State', () => {
         const unsubscribe = state.subscribe(listener);
         
         state.setChecked(true);
-        expect(listener).toHaveBeenCalledWith({ checked: true });
+        expect(listener).toHaveBeenCalledWith({
+            checked: true,
+            disabled: false,
+            focused: false,
+            required: false,
+            error: false,
+            errorMessage: undefined
+        });
         
         unsubscribe();
         state.setChecked(false);

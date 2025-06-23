@@ -7,8 +7,8 @@
  * ✅ Use state parameter in a11y functions
  */
 
-import { LogicLayerBuilder } from '@stellarix/core';
-import type { LogicLayer } from '@stellarix/core';
+import { LogicLayerBuilder } from '@stellarix-ui/core';
+import type { LogicLayer } from '@stellarix-ui/core';
 import type { InputState, InputEvents, InputOptions } from './types';
 import type { InputStateStore } from './state';
 

@@ -3,7 +3,7 @@
  * Exports all public types and functions
  */
 
-import { ComponentCore } from '@stellarix/core';
+import { ComponentCore } from '@stellarix-ui/core';
 import { createTooltipState } from './state';
 import { createTooltipLogic } from './logic';
 import type { TooltipState, TooltipOptions, TooltipEvents, TooltipPlacement } from './types';

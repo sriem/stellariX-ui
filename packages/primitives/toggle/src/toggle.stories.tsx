@@ -6,7 +6,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { createToggleWithImplementation } from './index';
-import { reactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create a wrapper component that creates individual Toggle instances
 const ToggleWrapper = React.forwardRef((props: any, ref: any) => {

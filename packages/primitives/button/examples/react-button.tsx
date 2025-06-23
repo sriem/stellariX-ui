@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { createButton } from '../src';
-import { reactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix-ui/react';
 
 /**
  * Basic Button Implementation

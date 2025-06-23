@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createDividerState } from './state';
 import { createDividerLogic } from './logic';
 import type { DividerOptions, DividerState, DividerEvents } from './types';

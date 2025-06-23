@@ -1,18 +1,18 @@
 
-> @stellarix-ui/textarea@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/textarea
+> @stellarix-ui/textarea@0.0.1 build /Users/sriem/dev/stellariX-ui/packages/primitives/textarea
 > tsup --minify
 
 CLI Building entry: src/index.ts
 CLI Using tsconfig: tsconfig.json
 CLI tsup v8.0.0
-CLI Using tsup config: /mnt/d/dev/stellariX-ui/packages/primitives/textarea/tsup.config.ts
+CLI Using tsup config: /Users/sriem/dev/stellariX-ui/packages/primitives/textarea/tsup.config.ts
 CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-ESM dist/index.js     3.03 KB
-ESM dist/index.js.map 18.04 KB
-ESM ⚡️ Build success in 52ms
-CJS dist/index.cjs     3.55 KB
-CJS dist/index.cjs.map 18.17 KB
-CJS ⚡️ Build success in 55ms
+ESM dist/index.js     3.04 KB
+ESM dist/index.js.map 18.05 KB
+ESM ⚡️ Build success in 21ms
+CJS dist/index.cjs     3.56 KB
+CJS dist/index.cjs.map 18.18 KB
+CJS ⚡️ Build success in 21ms

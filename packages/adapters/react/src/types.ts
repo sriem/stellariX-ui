@@ -51,7 +51,7 @@ export type ReactComponent<P = {}> = ComponentType<P & ReactProps>;
  * React-specific logic hook result
  * Provides typed access to logic methods (state is managed separately)
  */
-export interface ReactLogic<S, E extends Record<string, any> = Record<string, any>> {
+export interface ReactLogic<E extends Record<string, any> = Record<string, any>> {
     /**
      * Handle an event
      */

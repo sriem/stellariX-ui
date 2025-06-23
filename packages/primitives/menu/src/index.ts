@@ -7,7 +7,7 @@ import { createMenuState } from './state';
 import { createMenuLogic } from './logic';
 import type { MenuOptions, MenuState, MenuEvents, MenuItem } from './types';
 import type { MenuStateStore } from './state';
-import type { LogicLayer } from '@stellarix/core';
+import type { LogicLayer } from '@stellarix-ui/core';
 
 /**
  * Menu component instance interface

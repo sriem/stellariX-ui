@@ -7,7 +7,7 @@ import { render } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { createInputWithImplementation } from '../src';
-import { reactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix-ui/react';
 
 expect.extend(toHaveNoViolations);
 

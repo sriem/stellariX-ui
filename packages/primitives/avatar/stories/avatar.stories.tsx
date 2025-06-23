@@ -6,7 +6,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState } from 'react';
 import { createAvatarWithImplementation } from '../src';
-import { reactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix-ui/react';
 
 const meta = {
     title: 'Primitives/Avatar',

@@ -4,7 +4,7 @@
  */
 
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react';
-import type { Store, LogicLayer } from '@stellarix/core';
+import type { Store, LogicLayer } from '@stellarix-ui/core';
 import type { ReactLogic } from './types';
 
 /**
@@ -39,11 +39,11 @@ export function useStore<T>(store: Store<T>): T {
  * @returns React logic interface
  */
 export function useLogic<S, E extends Record<string, any> = Record<string, any>>(
-    logicLayer: LogicLayer<S, E>,
-    store: Store<S>
-): ReactLogic<S, E> {
+    logicLayer: LogicLayer<S, E>
+): ReactLogic<E> {
     // DO NOT call useStore here - it creates circular updates!
     // The component using this hook should manage state separately
+    // Store parameter removed as it's not needed - state is managed separately
     
     // Memoize event handler to prevent unnecessary re-renders
     const handleEvent = useCallback(

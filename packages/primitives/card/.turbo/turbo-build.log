@@ -1,18 +1,18 @@
 
-> @stellarix-ui/card@0.0.1 build /mnt/d/dev/stellariX-ui/packages/primitives/card
+> @stellarix-ui/card@0.0.1 build /Users/sriem/dev/stellariX-ui/packages/primitives/card
 > tsup --minify
 
 CLI Building entry: src/index.ts
 CLI Using tsconfig: tsconfig.json
 CLI tsup v8.0.0
-CLI Using tsup config: /mnt/d/dev/stellariX-ui/packages/primitives/card/tsup.config.ts
+CLI Using tsup config: /Users/sriem/dev/stellariX-ui/packages/primitives/card/tsup.config.ts
 CLI Target: es2022
 CLI Cleaning output folder
 CJS Build start
 ESM Build start
-ESM dist/index.js     3.62 KB
-ESM dist/index.js.map 18.99 KB
-ESM ⚡️ Build success in 143ms
-CJS dist/index.cjs     4.13 KB
-CJS dist/index.cjs.map 19.11 KB
-CJS ⚡️ Build success in 147ms
+ESM dist/index.js     3.63 KB
+ESM dist/index.js.map 19.00 KB
+ESM ⚡️ Build success in 20ms
+CJS dist/index.cjs     4.14 KB
+CJS dist/index.cjs.map 19.12 KB
+CJS ⚡️ Build success in 22ms
