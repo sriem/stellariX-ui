@@ -184,6 +184,68 @@ timeout 30s pnpm build
 timeout 30s pnpm typecheck
 ```
 
+### Step 8: Create Changeset for Component
+```bash
+# After all tests pass and component is complete:
+pnpm changeset
+
+# For new components, always use 'minor' version bump
+# Select the component package (e.g., @stellarix/select)
+# Write a clear summary:
+# "Add Select component with search, keyboard navigation, and accessibility support"
+```
+
+## 📦 Component Changeset Guidelines
+
+### New Component = Minor Version
+When creating a new primitive component, ALWAYS use a **minor** version bump (0.X.0) because:
+- It's a new feature addition
+- It's backwards compatible (nothing existed before)
+- It signals to users that new functionality is available
+
+### Changeset Message Template for Components:
+```
+feat: add [Component] component
+
+- Full keyboard navigation support
+- WCAG 2.2 AA compliant
+- [Specific feature 1]
+- [Specific feature 2]
+- Framework-agnostic with adapter support
+```
+
+### Example Component Changesets:
+
+**New Component:**
+```
+feat: add Select component
+
+- Searchable dropdown with real-time filtering
+- Full keyboard navigation (Arrow keys, Home, End, Escape)
+- Single selection with optional clear button
+- Customizable option rendering
+- WCAG 2.2 AA compliant with proper ARIA attributes
+```
+
+**Component Enhancement:**
+```
+feat(button): add loading state support
+
+- Added loading prop to show spinner
+- Loading state prevents user interaction
+- Spinner inherits button variant colors
+- Added loadingText prop for accessibility
+```
+
+**Component Bug Fix:**
+```
+fix(dialog): prevent focus trap memory leak
+
+- Properly cleanup focus trap on unmount
+- Remove event listeners in cleanup function
+- Fix subscription cleanup in useEffect
+```
+
 ## 🎯 Reference Implementations
 
 Use these components as perfect examples:
@@ -264,6 +326,8 @@ Before considering a component complete:
 - [ ] No circular dependencies
 - [ ] Build succeeds
 - [ ] TypeScript strict mode passes
+- [ ] Changeset created with `pnpm changeset`
+- [ ] README.md follows standard template
 
 ## 📝 Component README Structure
 

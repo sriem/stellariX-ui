@@ -244,7 +244,7 @@ const ThemedCheckbox = ({ label, checked, onChange, ...props }: any) => {
 };
 
 const ThemedToggle = ({ label, checked, onChange, ...props }: any) => {
-    const [toggle] = useState(() => createToggleWithImplementation({ checked, onChange, ...props }));
+    const [toggle] = useState(() => createToggleWithImplementation({ label, checked, onChange, ...props }));
     const [state, setState] = useState(() => toggle.state.getState());
 
     useEffect(() => {

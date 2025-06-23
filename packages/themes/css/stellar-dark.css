@@ -2,29 +2,41 @@
 /* Auto-generated - Do not edit directly */
 
 :root {
-  --sx-background: #0f172a;
-  --sx-foreground: #f8fafc;
-  --sx-card: #1e293b;
-  --sx-card-foreground: #f8fafc;
-  --sx-primary: #818cf8;
-  --sx-primary-foreground: #0f172a;
-  --sx-secondary: #a78bfa;
-  --sx-secondary-foreground: #0f172a;
+  --sx-background: hsl(222.2, 84%, 4.9%);
+  --sx-foreground: hsl(210, 40%, 98%);
+  --sx-card: hsl(222.2, 47.4%, 11.2%);
+  --sx-card-foreground: hsl(210, 40%, 98%);
+  --sx-primary: hsl(237.5, 86%, 73.7%);
+  --sx-primary-foreground: hsl(222.2, 84%, 4.9%);
+  --sx-primary-hover: hsl(237.7, 85.6%, 67.5%);
+  --sx-primary-hover-foreground: hsl(0, 0%, 100%);
+  --sx-secondary: hsl(261.2, 85.1%, 72.9%);
+  --sx-secondary-foreground: hsl(222.2, 84%, 4.9%);
+  --sx-secondary-hover: hsl(262.1, 83.3%, 57.8%);
+  --sx-secondary-hover-foreground: hsl(0, 0%, 100%);
   --sx-destructive: #f87171;
   --sx-destructive-foreground: #0f172a;
+  --sx-destructive-hover: #ef4444;
+  --sx-destructive-hover-foreground: #ffffff;
   --sx-success: #34d399;
   --sx-success-foreground: #0f172a;
+  --sx-success-hover: #10b981;
+  --sx-success-hover-foreground: #ffffff;
   --sx-warning: #fbbf24;
   --sx-warning-foreground: #0f172a;
+  --sx-warning-hover: #f59e0b;
+  --sx-warning-hover-foreground: #ffffff;
   --sx-info: #60a5fa;
   --sx-info-foreground: #0f172a;
-  --sx-muted: #1e293b;
-  --sx-muted-foreground: #94a3b8;
-  --sx-accent: #334155;
-  --sx-accent-foreground: #f8fafc;
-  --sx-border: #334155;
-  --sx-input: #334155;
-  --sx-ring: #818cf8;
+  --sx-info-hover: #3b82f6;
+  --sx-info-hover-foreground: #ffffff;
+  --sx-muted: hsl(217.2, 32.6%, 17.5%);
+  --sx-muted-foreground: hsl(215, 20.2%, 65.1%);
+  --sx-accent: hsl(217.2, 32.6%, 17.5%);
+  --sx-accent-foreground: hsl(210, 40%, 98%);
+  --sx-border: hsl(217.2, 32.6%, 17.5%);
+  --sx-input: hsl(217.2, 32.6%, 17.5%);
+  --sx-ring: hsl(237.5, 86%, 73.7%);
   --sx-gradient-from: #818cf8;
   --sx-gradient-via: #a78bfa;
   --sx-gradient-to: #f472b6;
@@ -98,17 +110,20 @@
   --sx-radius-3xl: 2rem;
   --sx-radius-full: 9999px;
   --sx-shadow-none: none;
-  --sx-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-  --sx-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.26);
-  --sx-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.26);
-  --sx-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
-  --sx-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.24);
-  --sx-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  --sx-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
-  --sx-shadow-glow: 0 0 20px rgba(129, 140, 248, 0.3);
-  --sx-shadow-glow-sm: 0 0 10px rgba(129, 140, 248, 0.2);
-  --sx-shadow-glow-lg: 0 0 30px rgba(129, 140, 248, 0.4);
-  --sx-shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --sx-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --sx-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --sx-shadow-md: 0 4px 8px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+  --sx-shadow-lg: 0 12px 20px -3px rgb(0 0 0 / 0.3), 0 4px 8px -4px rgb(0 0 0 / 0.2);
+  --sx-shadow-xl: 0 20px 30px -5px rgb(0 0 0 / 0.3), 0 8px 12px -6px rgb(0 0 0 / 0.2);
+  --sx-shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+  --sx-shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --sx-shadow-card: 0 2px 8px 0 rgb(0 0 0 / 0.4);
+  --sx-shadow-button: 0 1px 3px 0 rgb(0 0 0 / 0.2), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+  --sx-shadow-dropdown: 0 10px 25px -3px rgb(0 0 0 / 0.5), 0 4px 10px -4px rgb(0 0 0 / 0.3);
+  --sx-shadow-glow: 0 0 15px -3px rgba(129, 140, 248, 0.4);
+  --sx-shadow-glow-sm: 0 0 10px -2px rgba(129, 140, 248, 0.3);
+  --sx-shadow-glow-lg: 0 0 25px -5px rgba(129, 140, 248, 0.5);
+  --sx-shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
   --sx-duration-fast: 150ms;
   --sx-duration-normal: 300ms;
   --sx-duration-slow: 500ms;
@@ -240,7 +255,7 @@
 
 .sx-gradient-border {
   position: relative;
-  background: #0f172a;
+  background: hsl(222.2, 84%, 4.9%);
   border-radius: var(--sx-radius);
 }
 
@@ -351,9 +366,16 @@
 }
 
 .sx-button--primary:hover:not(:disabled) {
-  background: var(--sx-primary-hover);
+  background: var(--sx-primary-hover, var(--sx-primary));
+  color: var(--sx-primary-hover-foreground, var(--sx-primary-foreground));
   transform: translateY(-1px);
-  box-shadow: var(--sx-shadow-md);
+  box-shadow: var(--sx-shadow-button, var(--sx-shadow-md));
+}
+
+.sx-button--primary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--sx-shadow-sm);
+  transition-duration: 75ms;
 }
 
 .sx-button--secondary {
@@ -363,7 +385,16 @@
 }
 
 .sx-button--secondary:hover:not(:disabled) {
-  background: var(--sx-secondary-hover);
+  background: var(--sx-secondary-hover, var(--sx-secondary));
+  color: var(--sx-secondary-hover-foreground, var(--sx-secondary-foreground));
+  transform: translateY(-1px);
+  box-shadow: var(--sx-shadow-button, var(--sx-shadow-sm));
+}
+
+.sx-button--secondary:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+  transition-duration: 75ms;
 }
 
 .sx-button--outline {
@@ -374,7 +405,16 @@
 
 .sx-button--outline:hover:not(:disabled) {
   background: var(--sx-accent);
+  color: var(--sx-accent-foreground);
   border-color: var(--sx-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--sx-shadow-sm);
+}
+
+.sx-button--outline:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+  transition-duration: 75ms;
 }
 
 .sx-button--ghost {
@@ -385,6 +425,12 @@
 
 .sx-button--ghost:hover:not(:disabled) {
   background: var(--sx-accent);
+  color: var(--sx-accent-foreground);
+}
+
+.sx-button--ghost:active:not(:disabled) {
+  background: var(--sx-muted);
+  transition-duration: 75ms;
 }
 
 .sx-button--danger {
@@ -394,7 +440,16 @@
 }
 
 .sx-button--danger:hover:not(:disabled) {
-  background: var(--sx-destructive-hover);
+  background: var(--sx-destructive-hover, var(--sx-destructive));
+  color: var(--sx-destructive-hover-foreground, var(--sx-destructive-foreground));
+  transform: translateY(-1px);
+  box-shadow: var(--sx-shadow-button, var(--sx-shadow-md));
+}
+
+.sx-button--danger:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--sx-shadow-sm);
+  transition-duration: 75ms;
 }
 
 /* Card Component */
@@ -417,7 +472,13 @@
 .sx-card--elevated {
   background: var(--sx-card);
   color: var(--sx-card-foreground);
-  box-shadow: var(--sx-shadow-lg);
+  box-shadow: var(--sx-shadow-card, var(--sx-shadow-lg));
+  transition: all var(--sx-duration-normal) var(--sx-ease-out);
+}
+
+.sx-card--elevated:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sx-shadow-xl);
 }
 
 .sx-card--filled {
@@ -715,6 +776,16 @@
   backdrop-filter: blur(var(--sx-glass-blur));
   -webkit-backdrop-filter: blur(var(--sx-glass-blur));
   border: 1px solid var(--sx-glass-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.sx-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+  pointer-events: none;
 }
 
 /* Gradient Border Effect (when enabled) */
@@ -867,14 +938,17 @@ body[data-theme="stellar-dark"] {
 
 /* Shadow Utilities */
 .sx-shadow-none { box-shadow: none; }
-.sx-shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.25); }
-.sx-shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.26); }
-.sx-shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.26); }
-.sx-shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.25); }
-.sx-shadow-xl { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.24); }
-.sx-shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-.sx-shadow-inner { box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); }
-.sx-shadow-glow { box-shadow: 0 0 20px rgba(129, 140, 248, 0.3); }
-.sx-shadow-glowSm { box-shadow: 0 0 10px rgba(129, 140, 248, 0.2); }
-.sx-shadow-glowLg { box-shadow: 0 0 30px rgba(129, 140, 248, 0.4); }
-.sx-shadow-glass { box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); }
+.sx-shadow-sm { box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.3); }
+.sx-shadow { box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3); }
+.sx-shadow-md { box-shadow: 0 4px 8px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2); }
+.sx-shadow-lg { box-shadow: 0 12px 20px -3px rgb(0 0 0 / 0.3), 0 4px 8px -4px rgb(0 0 0 / 0.2); }
+.sx-shadow-xl { box-shadow: 0 20px 30px -5px rgb(0 0 0 / 0.3), 0 8px 12px -6px rgb(0 0 0 / 0.2); }
+.sx-shadow-2xl { box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5); }
+.sx-shadow-inner { box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05); }
+.sx-shadow-card { box-shadow: 0 2px 8px 0 rgb(0 0 0 / 0.4); }
+.sx-shadow-button { box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.2), 0 1px 2px -1px rgb(0 0 0 / 0.3); }
+.sx-shadow-dropdown { box-shadow: 0 10px 25px -3px rgb(0 0 0 / 0.5), 0 4px 10px -4px rgb(0 0 0 / 0.3); }
+.sx-shadow-glow { box-shadow: 0 0 15px -3px rgba(129, 140, 248, 0.4); }
+.sx-shadow-glowSm { box-shadow: 0 0 10px -2px rgba(129, 140, 248, 0.3); }
+.sx-shadow-glowLg { box-shadow: 0 0 25px -5px rgba(129, 140, 248, 0.5); }
+.sx-shadow-glass { box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6); }

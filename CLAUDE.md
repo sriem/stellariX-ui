@@ -86,13 +86,15 @@ pnpm --filter=@stellarix/[package] build       # Verify build works
 2. pnpm lint              # No linting errors allowed  
 3. pnpm typecheck         # TypeScript MUST compile
 4. Create Storybook story # REQUIRED: Show ALL features and edge cases
-5. TodoWrite update       # Mark current task as completed
-6. Update activeContext   # Document what was just completed
-7. git add . && git commit -m "feat: [component/feature description]"
+5. pnpm changeset         # Create changeset describing your changes
+6. TodoWrite update       # Mark current task as completed
+7. Update activeContext   # Document what was just completed
+8. git add . && git commit -m "feat: [component/feature description]"
 
 # NEVER skip testing - this is a hard requirement
 # NEVER commit without all checks passing
 # NEVER skip creating stories - visual testing is mandatory
+# NEVER skip changesets - version tracking is critical
 ```
 
 ### 📖 Storybook Story Requirements (MANDATORY)
@@ -146,6 +148,19 @@ After implementing each primitive component, you MUST create a comprehensive Sto
 ```bash
 pnpm --filter=@stellarix/button build    # Build specific package
 pnpm --filter=@stellarix/core dev        # Run dev mode for specific package
+```
+
+### Version Management with Changesets
+```bash
+pnpm changeset              # Create a new changeset for your changes
+pnpm changeset version      # Update package versions based on changesets
+pnpm changeset publish      # Publish packages to npm (maintainers only)
+pnpm changeset status       # Check current changeset status
+
+# Changeset types:
+# patch - Bug fixes and small changes (0.0.X)
+# minor - New features, backwards compatible (0.X.0)
+# major - Breaking changes (X.0.0)
 ```
 
 ## 🏗️ Ultra-Generic Architecture (CRITICAL)
@@ -306,8 +321,98 @@ Before making architectural decisions, review:
 - **Turbo**: Orchestrates monorepo builds with caching
 - **tsup**: Bundles individual packages
 - **Vitest**: Test runner with jsdom environment
+- **Changesets**: Version management and changelog generation
 - Build outputs go to `dist/` in each package
 - Declaration files (.d.ts) are generated for all packages
+
+## 📦 Version Management with Changesets
+
+Changesets manages versioning and changelogs across our monorepo. Every change that affects package functionality MUST have a changeset.
+
+### Creating a Changeset
+
+After implementing a feature, fix, or change:
+
+```bash
+pnpm changeset
+```
+
+Follow the prompts to:
+1. Select which packages have changed
+2. Choose version bump type:
+   - **patch**: Bug fixes, documentation (0.0.X)
+   - **minor**: New features, backwards compatible (0.X.0)  
+   - **major**: Breaking changes (X.0.0)
+3. Write a summary of your changes
+
+### Changeset Guidelines
+
+#### When to Use Each Version Type:
+
+**Patch (0.0.X)**:
+- Bug fixes
+- Documentation updates
+- Performance improvements (no API changes)
+- Internal refactoring (no API changes)
+
+**Minor (0.X.0)**:
+- New components
+- New features added to existing components
+- New utility functions
+- New configuration options (with defaults)
+
+**Major (X.0.0)**:
+- Breaking API changes
+- Removing features
+- Changing default behavior
+- Renaming exports
+- Changing required options
+
+#### Changeset Message Format:
+```
+feat(button): add loading state and spinner animation
+
+- Added `loading` prop to show spinner
+- Added `loadingText` prop for custom loading message
+- Spinner automatically inherits button variant colors
+```
+
+### Working with Changesets
+
+```bash
+# View current changesets
+pnpm changeset status
+
+# Version packages (maintainers only)
+pnpm changeset version
+
+# Publish to npm (maintainers only, CI/CD)
+pnpm changeset publish
+```
+
+### Monorepo Considerations
+
+- Changesets automatically handles dependency updates
+- If `@stellarix/core` changes, all dependent packages get version bumps
+- Use `linked` packages in `.changeset/config.json` for synchronized versions
+- Internal dependencies use workspace protocol: `"@stellarix/core": "workspace:*"`
+
+### Example Changeset Workflow
+
+```bash
+# 1. Implement new Select component
+pnpm --filter=@stellarix/select test
+
+# 2. Create changeset
+pnpm changeset
+# Select: @stellarix/select
+# Type: minor
+# Summary: "Add Select component with search and keyboard navigation"
+
+# 3. Commit with changeset
+git add .
+git commit -m "feat: implement Select component"
+```
 
 ## Common Development Tasks
 

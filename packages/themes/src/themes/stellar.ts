@@ -9,40 +9,52 @@ export const stellarLight: Theme = {
     name: 'stellar-light',
     mode: 'light',
     colors: {
-        // Base colors
-        background: '#ffffff',
-        foreground: '#0f172a',
+        // Base colors - Clean and sophisticated
+        background: 'hsl(0, 0%, 100%)',
+        foreground: 'hsl(222.2, 84%, 4.9%)',
         
-        // Component colors
-        card: '#ffffff',
-        cardForeground: '#0f172a',
+        // Component colors - Subtle depth
+        card: 'hsl(0, 0%, 100%)',
+        cardForeground: 'hsl(222.2, 84%, 4.9%)',
         
-        // Interactive colors - Modern vibrant palette
-        primary: '#6366f1',
-        primaryForeground: '#ffffff',
-        secondary: '#8b5cf6',
-        secondaryForeground: '#ffffff',
+        // Interactive colors - Modern vibrant palette with depth
+        primary: 'hsl(237.7, 85.6%, 67.5%)',
+        primaryForeground: 'hsl(0, 0%, 100%)',
+        primaryHover: 'hsl(237.5, 77.8%, 59.6%)',
+        primaryHoverForeground: 'hsl(0, 0%, 100%)',
+        secondary: 'hsl(262.1, 83.3%, 57.8%)',
+        secondaryForeground: 'hsl(0, 0%, 100%)',
+        secondaryHover: 'hsl(262.8, 76.3%, 50.6%)',
+        secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
         // Semantic colors
         destructive: '#ef4444',
         destructiveForeground: '#ffffff',
+        destructiveHover: '#dc2626',
+        destructiveHoverForeground: '#ffffff',
         success: '#10b981',
         successForeground: '#ffffff',
+        successHover: '#059669',
+        successHoverForeground: '#ffffff',
         warning: '#f59e0b',
         warningForeground: '#ffffff',
+        warningHover: '#d97706',
+        warningHoverForeground: '#ffffff',
         info: '#3b82f6',
         infoForeground: '#ffffff',
+        infoHover: '#2563eb',
+        infoHoverForeground: '#ffffff',
         
-        // UI colors
-        muted: '#f8fafc',
-        mutedForeground: '#64748b',
-        accent: '#f1f5f9',
-        accentForeground: '#0f172a',
+        // UI colors - Refined grays with blue undertones
+        muted: 'hsl(210, 40%, 96.1%)',
+        mutedForeground: 'hsl(215.4, 16.3%, 46.9%)',
+        accent: 'hsl(210, 40%, 95.1%)',
+        accentForeground: 'hsl(222.2, 47.4%, 11.2%)',
         
-        // Borders and dividers
-        border: '#e2e8f0',
-        input: '#e2e8f0',
-        ring: '#6366f1',
+        // Borders and dividers - Subtle and refined
+        border: 'hsl(214.3, 31.8%, 91.4%)',
+        input: 'hsl(214.3, 31.8%, 91.4%)',
+        ring: 'hsl(237.7, 85.6%, 67.5%)',
         
         // Special effects
         gradient: {
@@ -138,18 +150,21 @@ export const stellarLight: Theme = {
     },
     shadows: {
         none: 'none',
-        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-        inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-        // Special shadows
-        glow: '0 0 20px rgba(99, 102, 241, 0.15)',
-        glowSm: '0 0 10px rgba(99, 102, 241, 0.1)',
-        glowLg: '0 0 30px rgba(99, 102, 241, 0.2)',
-        glass: '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+        sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+        DEFAULT: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+        md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+        lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+        xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+        '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+        inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
+        // Special shadows - More sophisticated
+        card: '0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04)',
+        button: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+        dropdown: '0 10px 20px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04)',
+        glow: '0 0 15px -3px rgba(99, 102, 241, 0.2)',
+        glowSm: '0 0 10px -2px rgba(99, 102, 241, 0.15)',
+        glowLg: '0 0 25px -5px rgba(99, 102, 241, 0.3)',
+        glass: '0 8px 32px 0 rgba(31, 38, 135, 0.12)',
     },
     animations: {
         duration: {
@@ -227,40 +242,52 @@ export const stellarDark: Theme = {
     name: 'stellar-dark',
     mode: 'dark',
     colors: {
-        // Base colors
-        background: '#0f172a',
-        foreground: '#f8fafc',
+        // Base colors - Deep sophisticated dark
+        background: 'hsl(222.2, 84%, 4.9%)',
+        foreground: 'hsl(210, 40%, 98%)',
         
-        // Component colors
-        card: '#1e293b',
-        cardForeground: '#f8fafc',
+        // Component colors - Layered depth
+        card: 'hsl(222.2, 47.4%, 11.2%)',
+        cardForeground: 'hsl(210, 40%, 98%)',
         
         // Interactive colors - Vibrant in dark mode
-        primary: '#818cf8',
-        primaryForeground: '#0f172a',
-        secondary: '#a78bfa',
-        secondaryForeground: '#0f172a',
+        primary: 'hsl(237.5, 86%, 73.7%)',
+        primaryForeground: 'hsl(222.2, 84%, 4.9%)',
+        primaryHover: 'hsl(237.7, 85.6%, 67.5%)',
+        primaryHoverForeground: 'hsl(0, 0%, 100%)',
+        secondary: 'hsl(261.2, 85.1%, 72.9%)',
+        secondaryForeground: 'hsl(222.2, 84%, 4.9%)',
+        secondaryHover: 'hsl(262.1, 83.3%, 57.8%)',
+        secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
         // Semantic colors
         destructive: '#f87171',
         destructiveForeground: '#0f172a',
+        destructiveHover: '#ef4444',
+        destructiveHoverForeground: '#ffffff',
         success: '#34d399',
         successForeground: '#0f172a',
+        successHover: '#10b981',
+        successHoverForeground: '#ffffff',
         warning: '#fbbf24',
         warningForeground: '#0f172a',
+        warningHover: '#f59e0b',
+        warningHoverForeground: '#ffffff',
         info: '#60a5fa',
         infoForeground: '#0f172a',
+        infoHover: '#3b82f6',
+        infoHoverForeground: '#ffffff',
         
-        // UI colors
-        muted: '#1e293b',
-        mutedForeground: '#94a3b8',
-        accent: '#334155',
-        accentForeground: '#f8fafc',
+        // UI colors - Sophisticated dark palette
+        muted: 'hsl(217.2, 32.6%, 17.5%)',
+        mutedForeground: 'hsl(215, 20.2%, 65.1%)',
+        accent: 'hsl(217.2, 32.6%, 17.5%)',
+        accentForeground: 'hsl(210, 40%, 98%)',
         
-        // Borders and dividers
-        border: '#334155',
-        input: '#334155',
-        ring: '#818cf8',
+        // Borders and dividers - Subtle in dark
+        border: 'hsl(217.2, 32.6%, 17.5%)',
+        input: 'hsl(217.2, 32.6%, 17.5%)',
+        ring: 'hsl(237.5, 86%, 73.7%)',
         
         // Special effects
         gradient: {
@@ -276,17 +303,20 @@ export const stellarDark: Theme = {
     },
     shadows: {
         ...stellarLight.shadows,
-        // Darker shadows for dark mode
-        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.25)',
-        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.26)',
-        md: '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.26)',
-        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.25)',
-        xl: '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.24)',
-        '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-        // Glow shadows with theme colors
-        glow: '0 0 20px rgba(129, 140, 248, 0.3)',
-        glowSm: '0 0 10px rgba(129, 140, 248, 0.2)',
-        glowLg: '0 0 30px rgba(129, 140, 248, 0.4)',
-        glass: '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
+        // Sophisticated shadows for dark mode
+        sm: '0 1px 2px 0 rgb(0 0 0 / 0.3)',
+        DEFAULT: '0 2px 4px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3)',
+        md: '0 4px 8px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2)',
+        lg: '0 12px 20px -3px rgb(0 0 0 / 0.3), 0 4px 8px -4px rgb(0 0 0 / 0.2)',
+        xl: '0 20px 30px -5px rgb(0 0 0 / 0.3), 0 8px 12px -6px rgb(0 0 0 / 0.2)',
+        '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.5)',
+        // Ambient lighting effects
+        card: '0 2px 8px 0 rgb(0 0 0 / 0.4)',
+        button: '0 1px 3px 0 rgb(0 0 0 / 0.2), 0 1px 2px -1px rgb(0 0 0 / 0.3)',
+        dropdown: '0 10px 25px -3px rgb(0 0 0 / 0.5), 0 4px 10px -4px rgb(0 0 0 / 0.3)',
+        glow: '0 0 15px -3px rgba(129, 140, 248, 0.4)',
+        glowSm: '0 0 10px -2px rgba(129, 140, 248, 0.3)',
+        glowLg: '0 0 25px -5px rgba(129, 140, 248, 0.5)',
+        glass: '0 8px 32px 0 rgba(0, 0, 0, 0.6)',
     },
 };

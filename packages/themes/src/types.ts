@@ -18,18 +18,30 @@ export interface ColorPalette {
     // Interactive colors
     primary: string;
     primaryForeground: string;
+    primaryHover?: string;
+    primaryHoverForeground?: string;
     secondary: string;
     secondaryForeground: string;
+    secondaryHover?: string;
+    secondaryHoverForeground?: string;
     
     // Semantic colors
     destructive: string;
     destructiveForeground: string;
+    destructiveHover?: string;
+    destructiveHoverForeground?: string;
     success: string;
     successForeground: string;
+    successHover?: string;
+    successHoverForeground?: string;
     warning: string;
     warningForeground: string;
+    warningHover?: string;
+    warningHoverForeground?: string;
     info: string;
     infoForeground: string;
+    infoHover?: string;
+    infoHoverForeground?: string;
     
     // UI colors
     muted: string;

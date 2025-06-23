@@ -16,7 +16,7 @@ const meta = {
         layout: 'centered',
         docs: {
             description: {
-                component: 'Card component with StellarIX UI theme system showcasing modern card designs.',
+                component: 'State-of-the-art card designs showcasing StellarIX UI\'s sophisticated theming system with HSL colors, layered shadows, and premium effects.',
             },
         },
     },
@@ -114,7 +114,7 @@ const ThemedCard = ({
         elevated: {
             backgroundColor: 'var(--sx-card)',
             border: 'none',
-            boxShadow: 'var(--sx-shadow)',
+            boxShadow: 'var(--sx-shadow-card, var(--sx-shadow-md))',
         },
         filled: {
             backgroundColor: 'var(--sx-muted)',
@@ -142,11 +142,11 @@ const ThemedCard = ({
                 borderRadius: 'var(--sx-radius-lg)',
                 color: 'var(--sx-card-foreground)',
                 overflow: 'hidden',
-                transition: 'all var(--sx-duration-normal) var(--sx-easing-spring)',
+                transition: 'all var(--sx-duration-normal) var(--sx-ease-spring)',
                 cursor: options.interactive ? 'pointer' : 'default',
-                transform: isHovered && options.interactive ? 'translateY(-4px)' : 'translateY(0)',
+                transform: isHovered && options.interactive ? 'translateY(-2px) scale(1.02)' : 'translateY(0) scale(1)',
                 boxShadow: isHovered && variant === 'elevated' 
-                    ? 'var(--sx-shadow-lg)' 
+                    ? 'var(--sx-shadow-xl, var(--sx-shadow-lg))' 
                     : currentVariant.boxShadow,
                 outline: isFocused ? '2px solid var(--sx-ring)' : 'none',
                 outlineOffset: '2px',
@@ -258,6 +258,66 @@ const ThemedCard = ({
     );
 };
 
+// Shadow Showcase Story
+export const ShadowShowcase: Story = {
+    render: () => (
+        <ThemeProvider>
+            <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+                gap: '32px',
+                padding: '32px',
+                background: 'var(--sx-background)',
+            }}>
+                <div style={{ textAlign: 'center' }}>
+                    <ThemedCard
+                        variant="simple"
+                        style={{ boxShadow: 'var(--sx-shadow-sm)' }}
+                        title="Small Shadow"
+                        content="Subtle depth for UI elements"
+                    />
+                    <p style={{ marginTop: '12px', fontSize: 'var(--sx-font-size-sm)', color: 'var(--sx-muted-foreground)' }}>
+                        --sx-shadow-sm
+                    </p>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                    <ThemedCard
+                        variant="simple"
+                        style={{ boxShadow: 'var(--sx-shadow-md)' }}
+                        title="Medium Shadow"
+                        content="Standard elevation for cards"
+                    />
+                    <p style={{ marginTop: '12px', fontSize: 'var(--sx-font-size-sm)', color: 'var(--sx-muted-foreground)' }}>
+                        --sx-shadow-md
+                    </p>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                    <ThemedCard
+                        variant="simple"
+                        style={{ boxShadow: 'var(--sx-shadow-lg)' }}
+                        title="Large Shadow"
+                        content="Prominent elevation for modals"
+                    />
+                    <p style={{ marginTop: '12px', fontSize: 'var(--sx-font-size-sm)', color: 'var(--sx-muted-foreground)' }}>
+                        --sx-shadow-lg
+                    </p>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                    <ThemedCard
+                        variant="simple"
+                        style={{ boxShadow: 'var(--sx-shadow-xl)' }}
+                        title="Extra Large Shadow"
+                        content="Maximum elevation for dropdowns"
+                    />
+                    <p style={{ marginTop: '12px', fontSize: 'var(--sx-font-size-sm)', color: 'var(--sx-muted-foreground)' }}>
+                        --sx-shadow-xl
+                    </p>
+                </div>
+            </div>
+        </ThemeProvider>
+    ),
+};
+
 // Individual stories
 export const SimpleCards: Story = {
     render: () => (
@@ -286,19 +346,210 @@ export const SimpleCards: Story = {
     ),
 };
 
+// Color Palette Showcase
+export const ColorPalette: Story = {
+    render: () => (
+        <ThemeProvider>
+            <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
+                gap: '24px',
+                marginBottom: '48px'
+            }}>
+                {/* Primary Color */}
+                <ThemedCard
+                    variant="elevated"
+                    style={{ 
+                        background: 'var(--sx-primary)',
+                        color: 'var(--sx-primary-foreground)',
+                    }}
+                    title="Primary"
+                    content={
+                        <div>
+                            <div style={{ 
+                                padding: '12px',
+                                background: 'var(--sx-primary-hover)',
+                                color: 'var(--sx-primary-hover-foreground)',
+                                borderRadius: 'var(--sx-radius-md)',
+                                marginTop: '8px',
+                                textAlign: 'center',
+                                transition: 'all var(--sx-duration-fast) var(--sx-ease-spring)',
+                            }}>
+                                Hover State
+                            </div>
+                        </div>
+                    }
+                />
+                
+                {/* Secondary Color */}
+                <ThemedCard
+                    variant="elevated"
+                    style={{ 
+                        background: 'var(--sx-secondary)',
+                        color: 'var(--sx-secondary-foreground)',
+                    }}
+                    title="Secondary"
+                    content={
+                        <div>
+                            <div style={{ 
+                                padding: '12px',
+                                background: 'var(--sx-secondary-hover)',
+                                color: 'var(--sx-secondary-hover-foreground)',
+                                borderRadius: 'var(--sx-radius-md)',
+                                marginTop: '8px',
+                                textAlign: 'center',
+                            }}>
+                                Hover State
+                            </div>
+                        </div>
+                    }
+                />
+                
+                {/* Success Color */}
+                <ThemedCard
+                    variant="elevated"
+                    style={{ 
+                        background: 'var(--sx-success)',
+                        color: 'var(--sx-success-foreground)',
+                    }}
+                    title="Success"
+                    content={
+                        <div>
+                            <div style={{ 
+                                padding: '12px',
+                                background: 'var(--sx-success-hover)',
+                                color: 'var(--sx-success-hover-foreground)',
+                                borderRadius: 'var(--sx-radius-md)',
+                                marginTop: '8px',
+                                textAlign: 'center',
+                            }}>
+                                Hover State
+                            </div>
+                        </div>
+                    }
+                />
+                
+                {/* Warning Color */}
+                <ThemedCard
+                    variant="elevated"
+                    style={{ 
+                        background: 'var(--sx-warning)',
+                        color: 'var(--sx-warning-foreground)',
+                    }}
+                    title="Warning"
+                    content={
+                        <div>
+                            <div style={{ 
+                                padding: '12px',
+                                background: 'var(--sx-warning-hover)',
+                                color: 'var(--sx-warning-hover-foreground)',
+                                borderRadius: 'var(--sx-radius-md)',
+                                marginTop: '8px',
+                                textAlign: 'center',
+                            }}>
+                                Hover State
+                            </div>
+                        </div>
+                    }
+                />
+                
+                {/* Destructive Color */}
+                <ThemedCard
+                    variant="elevated"
+                    style={{ 
+                        background: 'var(--sx-destructive)',
+                        color: 'var(--sx-destructive-foreground)',
+                    }}
+                    title="Destructive"
+                    content={
+                        <div>
+                            <div style={{ 
+                                padding: '12px',
+                                background: 'var(--sx-destructive-hover)',
+                                color: 'var(--sx-destructive-hover-foreground)',
+                                borderRadius: 'var(--sx-radius-md)',
+                                marginTop: '8px',
+                                textAlign: 'center',
+                            }}>
+                                Hover State
+                            </div>
+                        </div>
+                    }
+                />
+                
+                {/* Info Color */}
+                <ThemedCard
+                    variant="elevated"
+                    style={{ 
+                        background: 'var(--sx-info)',
+                        color: 'var(--sx-info-foreground)',
+                    }}
+                    title="Info"
+                    content={
+                        <div>
+                            <div style={{ 
+                                padding: '12px',
+                                background: 'var(--sx-info-hover)',
+                                color: 'var(--sx-info-hover-foreground)',
+                                borderRadius: 'var(--sx-radius-md)',
+                                marginTop: '8px',
+                                textAlign: 'center',
+                            }}>
+                                Hover State
+                            </div>
+                        </div>
+                    }
+                />
+            </div>
+        </ThemeProvider>
+    ),
+};
+
 export const GlassCards: Story = {
     render: () => (
         <ThemeProvider>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+            <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+                gap: '32px',
+                padding: '40px',
+                background: `linear-gradient(135deg, var(--sx-gradient-from) 0%, var(--sx-gradient-via) 50%, var(--sx-gradient-to) 100%)`,
+                borderRadius: 'var(--sx-radius-lg)',
+            }}>
                 <ThemedCard
                     variant="elevated"
                     glassEffect
-                    title="Glass Morphism"
-                    subtitle="Modern frosted glass effect"
-                    content="This card uses backdrop blur and transparency to create a glass-like appearance."
+                    title="Premium Glass"
+                    subtitle="Sophisticated frosted glass effect"
+                    content={
+                        <div>
+                            <p style={{ marginBottom: '16px' }}>
+                                State-of-the-art glass morphism with:
+                            </p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', fontSize: 'var(--sx-font-size-sm)' }}>
+                                <li>Dynamic backdrop blur</li>
+                                <li>Adaptive transparency</li>
+                                <li>Subtle gradient overlay</li>
+                                <li>Theme-aware coloring</li>
+                            </ul>
+                        </div>
+                    }
                     footer={
-                        <div style={{ fontSize: 'var(--sx-font-size-sm)', color: 'var(--sx-muted-foreground)' }}>
-                            Glass effect adapts to theme
+                        <div style={{ 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '8px',
+                            fontSize: 'var(--sx-font-size-sm)', 
+                            color: 'var(--sx-muted-foreground)' 
+                        }}>
+                            <span style={{ 
+                                width: '8px', 
+                                height: '8px', 
+                                borderRadius: '50%', 
+                                background: 'var(--sx-success)',
+                                display: 'inline-block'
+                            }} />
+                            Works with all themes
                         </div>
                     }
                 />
@@ -306,9 +557,50 @@ export const GlassCards: Story = {
                     variant="simple"
                     glassEffect
                     gradientBorder
-                    title="Combined Effects"
-                    subtitle="Glass + Gradient Border"
-                    content="Multiple effects can be combined for unique designs."
+                    interactive
+                    title="Layered Effects"
+                    subtitle="Glass + Gradient + Interaction"
+                    content={
+                        <div>
+                            <p style={{ marginBottom: '16px' }}>
+                                Multiple premium effects combined:
+                            </p>
+                            <ul style={{ margin: 0, paddingLeft: '20px', fontSize: 'var(--sx-font-size-sm)' }}>
+                                <li>Glass morphism base</li>
+                                <li>Animated gradient border</li>
+                                <li>Spring hover animations</li>
+                                <li>Interactive selection</li>
+                            </ul>
+                        </div>
+                    }
+                />
+                <ThemedCard
+                    variant="elevated"
+                    glassEffect
+                    style={{
+                        background: 'var(--sx-glass-background)',
+                        backdropFilter: 'blur(var(--sx-glass-blur)) saturate(180%)',
+                        WebkitBackdropFilter: 'blur(var(--sx-glass-blur)) saturate(180%)',
+                    }}
+                    title="Enhanced Glass"
+                    subtitle="With saturation boost"
+                    content={
+                        <div>
+                            <p style={{ marginBottom: '16px' }}>
+                                Advanced glass effect with color saturation:
+                            </p>
+                            <div style={{
+                                padding: '16px',
+                                background: 'rgba(255, 255, 255, 0.1)',
+                                borderRadius: 'var(--sx-radius-md)',
+                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                            }}>
+                                <code style={{ fontSize: 'var(--sx-font-size-sm)' }}>
+                                    backdrop-filter: blur(12px) saturate(180%)
+                                </code>
+                            </div>
+                        </div>
+                    }
                 />
             </div>
         </ThemeProvider>
@@ -335,6 +627,130 @@ export const InteractiveCards: Story = {
                     title="Pre-selected"
                     subtitle="Already selected"
                     content="This card starts in a selected state with glass morphism effect."
+                />
+            </div>
+        </ThemeProvider>
+    ),
+};
+
+// Premium Effects Showcase
+export const PremiumEffects: Story = {
+    render: () => (
+        <ThemeProvider>
+            <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+                gap: '32px',
+                padding: '24px',
+            }}>
+                {/* Hover Transform Card */}
+                <ThemedCard
+                    variant="elevated"
+                    interactive
+                    title="Spring Animations"
+                    subtitle="Hover to see the effect"
+                    content={
+                        <div>
+                            <p style={{ marginBottom: '16px' }}>
+                                Natural spring physics create delightful interactions
+                            </p>
+                            <div style={{
+                                display: 'flex',
+                                gap: '8px',
+                                marginTop: '16px',
+                            }}>
+                                <div style={{
+                                    padding: '8px 16px',
+                                    background: 'var(--sx-primary)',
+                                    color: 'var(--sx-primary-foreground)',
+                                    borderRadius: 'var(--sx-radius-md)',
+                                    fontSize: 'var(--sx-font-size-sm)',
+                                    fontWeight: 'var(--sx-font-weight-medium)',
+                                    transition: 'all var(--sx-duration-fast) var(--sx-ease-spring)',
+                                    cursor: 'pointer',
+                                }}>
+                                    translateY(-2px)
+                                </div>
+                                <div style={{
+                                    padding: '8px 16px',
+                                    background: 'var(--sx-secondary)',
+                                    color: 'var(--sx-secondary-foreground)',
+                                    borderRadius: 'var(--sx-radius-md)',
+                                    fontSize: 'var(--sx-font-size-sm)',
+                                    fontWeight: 'var(--sx-font-weight-medium)',
+                                    transition: 'all var(--sx-duration-fast) var(--sx-ease-spring)',
+                                    cursor: 'pointer',
+                                }}>
+                                    scale(1.02)
+                                </div>
+                            </div>
+                        </div>
+                    }
+                />
+                
+                {/* Shadow Evolution Card */}
+                <ThemedCard
+                    variant="elevated"
+                    interactive
+                    style={{
+                        transition: 'all var(--sx-duration-normal) var(--sx-ease-spring)',
+                    }}
+                    title="Shadow Evolution"
+                    subtitle="Multi-layered shadow system"
+                    content={
+                        <div>
+                            <p style={{ marginBottom: '16px' }}>
+                                Shadows adapt based on elevation and interaction state
+                            </p>
+                            <div style={{
+                                padding: '16px',
+                                background: 'var(--sx-muted)',
+                                borderRadius: 'var(--sx-radius-md)',
+                                marginTop: '16px',
+                            }}>
+                                <code style={{ fontSize: 'var(--sx-font-size-xs)', color: 'var(--sx-muted-foreground)' }}>
+                                    box-shadow: var(--sx-shadow-card)
+                                </code>
+                            </div>
+                        </div>
+                    }
+                />
+                
+                {/* Focus State Card */}
+                <ThemedCard
+                    variant="elevated"
+                    interactive
+                    title="Focus Accessibility"
+                    subtitle="Tab to see focus ring"
+                    content={
+                        <div>
+                            <p style={{ marginBottom: '16px' }}>
+                                Clear focus indicators for keyboard navigation
+                            </p>
+                            <button style={{
+                                padding: 'var(--sx-spacing-2) var(--sx-spacing-4)',
+                                borderRadius: 'var(--sx-radius-md)',
+                                border: '2px solid var(--sx-border)',
+                                background: 'transparent',
+                                color: 'var(--sx-foreground)',
+                                fontSize: 'var(--sx-font-size-sm)',
+                                fontWeight: 'var(--sx-font-weight-medium)',
+                                cursor: 'pointer',
+                                transition: 'all var(--sx-duration-fast) var(--sx-ease-out)',
+                                outline: 'none',
+                            }}
+                            onFocus={(e) => {
+                                e.target.style.borderColor = 'var(--sx-ring)';
+                                e.target.style.boxShadow = '0 0 0 3px var(--sx-ring-alpha, rgba(99, 102, 241, 0.1))';
+                            }}
+                            onBlur={(e) => {
+                                e.target.style.borderColor = 'var(--sx-border)';
+                                e.target.style.boxShadow = 'none';
+                            }}>
+                                Tab to Focus
+                            </button>
+                        </div>
+                    }
                 />
             </div>
         </ThemeProvider>
@@ -415,12 +831,16 @@ export const Showcase: Story = {
         <ThemeProvider>
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
                 <h2 style={{ 
-                    marginBottom: '32px',
-                    fontSize: 'var(--sx-font-size-3xl)',
+                    marginBottom: '48px',
+                    fontSize: 'var(--sx-font-size-4xl)',
                     fontWeight: 'var(--sx-font-weight-bold)',
                     textAlign: 'center',
+                    background: 'linear-gradient(135deg, var(--sx-gradient-from), var(--sx-gradient-via), var(--sx-gradient-to))',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
                 }}>
-                    <span className="sx-gradient-text">StellarIX UI</span> Card Showcase
+                    State-of-the-Art Card Showcase
                 </h2>
                 
                 {/* Feature Cards */}
@@ -437,16 +857,17 @@ export const Showcase: Story = {
                             variant="elevated"
                             glassEffect
                             gradientBorder
-                            title="Glass Morphism"
+                            title="Premium Shadows"
+                            subtitle="Multi-layered depth system"
                             content={
                                 <>
                                     <p style={{ marginBottom: '16px' }}>
-                                        Modern frosted glass effect with backdrop blur
+                                        Sophisticated shadow system with layered depth
                                     </p>
                                     <ul style={{ margin: 0, paddingLeft: '20px', fontSize: 'var(--sx-font-size-sm)' }}>
-                                        <li>Adaptive transparency</li>
-                                        <li>Dynamic blur radius</li>
-                                        <li>Theme-aware colors</li>
+                                        <li>Component-specific shadows</li>
+                                        <li>Smooth elevation transitions</li>
+                                        <li>Adaptive to theme mode</li>
                                     </ul>
                                 </>
                             }
@@ -454,16 +875,17 @@ export const Showcase: Story = {
                         <ThemedCard
                             variant="elevated"
                             gradientBorder
-                            title="Gradient Borders"
+                            title="HSL Color System"
+                            subtitle="Scientific color relationships"
                             content={
                                 <>
                                     <p style={{ marginBottom: '16px' }}>
-                                        Animated gradient borders on hover/focus
+                                        Using HSL for better color science
                                     </p>
                                     <ul style={{ margin: 0, paddingLeft: '20px', fontSize: 'var(--sx-font-size-sm)' }}>
-                                        <li>Smooth animations</li>
-                                        <li>Theme gradients</li>
-                                        <li>Interactive states</li>
+                                        <li>Consistent hover states</li>
+                                        <li>Harmonious palettes</li>
+                                        <li>WCAG 2.2 compliant</li>
                                     </ul>
                                 </>
                             }
@@ -471,17 +893,18 @@ export const Showcase: Story = {
                         <ThemedCard
                             variant="elevated"
                             interactive
-                            title="Spring Animations"
-                            subtitle="Click me!"
+                            glassEffect
+                            title="Glass Morphism"
+                            subtitle="Premium frosted glass"
                             content={
                                 <>
                                     <p style={{ marginBottom: '16px' }}>
-                                        Natural-feeling animations with spring physics
+                                        State-of-the-art glass effects with backdrop filters
                                     </p>
                                     <ul style={{ margin: 0, paddingLeft: '20px', fontSize: 'var(--sx-font-size-sm)' }}>
-                                        <li>Hover effects</li>
-                                        <li>Click feedback</li>
-                                        <li>Smooth transitions</li>
+                                        <li>Dynamic blur & saturation</li>
+                                        <li>Adaptive transparency</li>
+                                        <li>Gradient overlays</li>
                                     </ul>
                                 </>
                             }

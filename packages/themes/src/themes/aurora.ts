@@ -9,51 +9,63 @@ export const auroraLight: Theme = {
     name: 'aurora-light',
     mode: 'light',
     colors: {
-        // Base colors - Soft, muted tones
-        background: '#fefeff',
-        foreground: '#2e3440',
+        // Base colors - Soft Nordic warmth
+        background: 'hsl(300, 20%, 99.6%)',
+        foreground: 'hsl(220, 16.4%, 21.6%)',
         
-        // Component colors
-        card: '#ffffff',
-        cardForeground: '#2e3440',
+        // Component colors - Soft elevation
+        card: 'hsl(0, 0%, 100%)',
+        cardForeground: 'hsl(220, 16.4%, 21.6%)',
         
-        // Interactive colors - Nordic palette
-        primary: '#5e81ac',
-        primaryForeground: '#ffffff',
-        secondary: '#81a1c1',
-        secondaryForeground: '#ffffff',
+        // Interactive colors - Refined Nordic palette
+        primary: 'hsl(210, 34%, 52.4%)',
+        primaryForeground: 'hsl(0, 0%, 100%)',
+        primaryHover: 'hsl(210, 34%, 44.3%)',
+        primaryHoverForeground: 'hsl(0, 0%, 100%)',
+        secondary: 'hsl(210, 34%, 63.1%)',
+        secondaryForeground: 'hsl(0, 0%, 100%)',
+        secondaryHover: 'hsl(210, 29.8%, 58%)',
+        secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
         // Semantic colors - Soft variants
         destructive: '#bf616a',
         destructiveForeground: '#ffffff',
+        destructiveHover: '#a54049',
+        destructiveHoverForeground: '#ffffff',
         success: '#a3be8c',
-        successForeground: '#2e3440',
+        successForeground: '#ffffff',
+        successHover: '#8fa876',
+        successHoverForeground: '#ffffff',
         warning: '#ebcb8b',
-        warningForeground: '#2e3440',
+        warningForeground: '#3b2f1a',
+        warningHover: '#e0b772',
+        warningHoverForeground: '#3b2f1a',
         info: '#88c0d0',
-        infoForeground: '#2e3440',
+        infoForeground: '#ffffff',
+        infoHover: '#6faabb',
+        infoHoverForeground: '#ffffff',
         
-        // UI colors
-        muted: '#eceff4',
-        mutedForeground: '#4c566a',
-        accent: '#e5e9f0',
-        accentForeground: '#2e3440',
+        // UI colors - Soft Nordic grays
+        muted: 'hsl(218.5, 26.8%, 92.5%)',
+        mutedForeground: 'hsl(220, 13.4%, 36.1%)',
+        accent: 'hsl(218.5, 26.8%, 92%)',
+        accentForeground: 'hsl(220, 16.4%, 21.6%)',
         
-        // Borders and dividers
-        border: '#d8dee9',
-        input: '#d8dee9',
-        ring: '#5e81ac',
+        // Borders and dividers - Gentle definition
+        border: 'hsl(218.5, 18.9%, 88%)',
+        input: 'hsl(218.5, 18.9%, 88%)',
+        ring: 'hsl(210, 34%, 52.4%)',
         
-        // Special effects - Soft aurora gradient
+        // Special effects - Ethereal aurora gradient
         gradient: {
-            from: '#88c0d0',
-            via: '#81a1c1',
-            to: '#b48ead',
+            from: 'hsl(193, 43.4%, 67.5%)',
+            via: 'hsl(210, 34%, 63.1%)',
+            to: 'hsl(311, 20.2%, 63.1%)',
         },
         glass: {
-            background: 'rgba(255, 255, 255, 0.85)',
-            border: 'rgba(216, 222, 233, 0.6)',
-            blur: '8px',
+            background: 'rgba(255, 255, 255, 0.9)',
+            border: 'rgba(216, 222, 233, 0.5)',
+            blur: '10px',
         },
     },
     typography: {
@@ -138,18 +150,21 @@ export const auroraLight: Theme = {
     },
     shadows: {
         none: 'none',
-        sm: '0 1px 3px 0 rgba(46, 52, 64, 0.04)',
-        DEFAULT: '0 2px 6px 0 rgba(46, 52, 64, 0.06), 0 1px 3px 0 rgba(46, 52, 64, 0.04)',
-        md: '0 4px 8px -1px rgba(46, 52, 64, 0.08), 0 2px 4px -1px rgba(46, 52, 64, 0.04)',
-        lg: '0 8px 16px -3px rgba(46, 52, 64, 0.1), 0 4px 8px -2px rgba(46, 52, 64, 0.05)',
-        xl: '0 16px 24px -5px rgba(46, 52, 64, 0.12), 0 8px 12px -5px rgba(46, 52, 64, 0.06)',
-        '2xl': '0 24px 48px -12px rgba(46, 52, 64, 0.18)',
-        inner: 'inset 0 2px 4px 0 rgba(46, 52, 64, 0.04)',
-        // Soft glow shadows
-        glow: '0 0 24px rgba(136, 192, 208, 0.12)',
-        glowSm: '0 0 12px rgba(136, 192, 208, 0.08)',
-        glowLg: '0 0 36px rgba(136, 192, 208, 0.16)',
-        glass: '0 6px 24px 0 rgba(46, 52, 64, 0.08)',
+        sm: '0 1px 3px 0 rgb(46 52 64 / 0.04), 0 1px 2px -1px rgb(46 52 64 / 0.03)',
+        DEFAULT: '0 2px 6px -1px rgb(46 52 64 / 0.06), 0 2px 4px -2px rgb(46 52 64 / 0.03)',
+        md: '0 4px 12px -2px rgb(46 52 64 / 0.08), 0 3px 6px -3px rgb(46 52 64 / 0.04)',
+        lg: '0 8px 20px -4px rgb(46 52 64 / 0.1), 0 6px 10px -5px rgb(46 52 64 / 0.04)',
+        xl: '0 16px 32px -6px rgb(46 52 64 / 0.12), 0 10px 16px -8px rgb(46 52 64 / 0.05)',
+        '2xl': '0 24px 48px -12px rgb(46 52 64 / 0.18)',
+        inner: 'inset 0 2px 4px 0 rgb(46 52 64 / 0.05)',
+        // Ethereal Nordic shadows
+        card: '0 2px 8px -2px rgb(46 52 64 / 0.05), 0 1px 2px -1px rgb(46 52 64 / 0.03)',
+        button: '0 1px 3px 0 rgb(46 52 64 / 0.04), 0 1px 2px -1px rgb(46 52 64 / 0.03)',
+        dropdown: '0 10px 25px -5px rgb(46 52 64 / 0.1), 0 8px 10px -6px rgb(46 52 64 / 0.04)',
+        glow: '0 0 20px -5px rgba(136, 192, 208, 0.2)',
+        glowSm: '0 0 12px -3px rgba(136, 192, 208, 0.15)',
+        glowLg: '0 0 30px -8px rgba(136, 192, 208, 0.25)',
+        glass: '0 8px 24px -4px rgba(46, 52, 64, 0.08)',
     },
     animations: {
         duration: {
@@ -227,66 +242,81 @@ export const auroraDark: Theme = {
     name: 'aurora-dark',
     mode: 'dark',
     colors: {
-        // Base colors - Nord night
-        background: '#2e3440',
-        foreground: '#eceff4',
+        // Base colors - Deep Nord night
+        background: 'hsl(220, 16.4%, 21.6%)',
+        foreground: 'hsl(218.5, 26.8%, 92.5%)',
         
-        // Component colors
-        card: '#3b4252',
-        cardForeground: '#eceff4',
+        // Component colors - Layered darkness
+        card: 'hsl(220, 16.8%, 28%)',
+        cardForeground: 'hsl(218.5, 26.8%, 92.5%)',
         
-        // Interactive colors - Brighter for dark mode
-        primary: '#88c0d0',
-        primaryForeground: '#2e3440',
-        secondary: '#81a1c1',
-        secondaryForeground: '#2e3440',
+        // Interactive colors - Luminous in darkness
+        primary: 'hsl(193, 43.4%, 67.5%)',
+        primaryForeground: 'hsl(220, 16.4%, 21.6%)',
+        primaryHover: 'hsl(193, 43.4%, 60%)',
+        primaryHoverForeground: 'hsl(0, 0%, 100%)',
+        secondary: 'hsl(210, 34%, 63.1%)',
+        secondaryForeground: 'hsl(220, 16.4%, 21.6%)',
+        secondaryHover: 'hsl(210, 29.8%, 58%)',
+        secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
         // Semantic colors
         destructive: '#d08770',
-        destructiveForeground: '#2e3440',
+        destructiveForeground: '#ffffff',
+        destructiveHover: '#bf616a',
+        destructiveHoverForeground: '#ffffff',
         success: '#a3be8c',
         successForeground: '#2e3440',
+        successHover: '#8fa876',
+        successHoverForeground: '#ffffff',
         warning: '#ebcb8b',
         warningForeground: '#2e3440',
+        warningHover: '#e0b772',
+        warningHoverForeground: '#2e3440',
         info: '#5e81ac',
         infoForeground: '#eceff4',
+        infoHover: '#4c6b94',
+        infoHoverForeground: '#ffffff',
         
-        // UI colors
-        muted: '#3b4252',
-        mutedForeground: '#d8dee9',
-        accent: '#434c5e',
-        accentForeground: '#eceff4',
+        // UI colors - Refined dark palette
+        muted: 'hsl(220, 16.8%, 28%)',
+        mutedForeground: 'hsl(218.5, 18.9%, 88%)',
+        accent: 'hsl(220.9, 16.4%, 33.3%)',
+        accentForeground: 'hsl(218.5, 26.8%, 92.5%)',
         
-        // Borders and dividers
-        border: '#434c5e',
-        input: '#434c5e',
-        ring: '#88c0d0',
+        // Borders and dividers - Subtle definition
+        border: 'hsl(220.9, 16.4%, 33.3%)',
+        input: 'hsl(220.9, 16.4%, 33.3%)',
+        ring: 'hsl(193, 43.4%, 67.5%)',
         
-        // Special effects
+        // Special effects - Northern lights
         gradient: {
-            from: '#88c0d0',
-            via: '#5e81ac',
-            to: '#b48ead',
+            from: 'hsl(193, 43.4%, 67.5%)',
+            via: 'hsl(210, 34%, 52.4%)',
+            to: 'hsl(311, 20.2%, 63.1%)',
         },
         glass: {
-            background: 'rgba(59, 66, 82, 0.85)',
-            border: 'rgba(67, 76, 94, 0.8)',
-            blur: '12px',
+            background: 'rgba(59, 66, 82, 0.9)',
+            border: 'rgba(67, 76, 94, 0.6)',
+            blur: '14px',
         },
     },
     shadows: {
         ...auroraLight.shadows,
-        // Darker, softer shadows
-        sm: '0 1px 3px 0 rgba(0, 0, 0, 0.2)',
-        DEFAULT: '0 2px 6px 0 rgba(0, 0, 0, 0.25), 0 1px 3px 0 rgba(0, 0, 0, 0.2)',
-        md: '0 4px 8px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)',
-        lg: '0 8px 16px -3px rgba(0, 0, 0, 0.35), 0 4px 8px -2px rgba(0, 0, 0, 0.25)',
-        xl: '0 16px 24px -5px rgba(0, 0, 0, 0.4), 0 8px 12px -5px rgba(0, 0, 0, 0.3)',
-        '2xl': '0 24px 48px -12px rgba(0, 0, 0, 0.5)',
-        // Aurora glow
-        glow: '0 0 24px rgba(136, 192, 208, 0.25)',
-        glowSm: '0 0 12px rgba(136, 192, 208, 0.15)',
-        glowLg: '0 0 36px rgba(136, 192, 208, 0.35)',
-        glass: '0 6px 24px 0 rgba(0, 0, 0, 0.35)',
+        // Deep Nordic shadows
+        sm: '0 1px 3px 0 rgb(0 0 0 / 0.25), 0 1px 2px -1px rgb(0 0 0 / 0.2)',
+        DEFAULT: '0 2px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.25)',
+        md: '0 4px 12px -2px rgb(0 0 0 / 0.35), 0 3px 6px -3px rgb(0 0 0 / 0.25)',
+        lg: '0 8px 20px -4px rgb(0 0 0 / 0.4), 0 6px 10px -5px rgb(0 0 0 / 0.25)',
+        xl: '0 16px 32px -6px rgb(0 0 0 / 0.45), 0 10px 16px -8px rgb(0 0 0 / 0.3)',
+        '2xl': '0 24px 48px -12px rgb(0 0 0 / 0.5)',
+        // Nordic aurora glow
+        card: '0 2px 8px -2px rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.25)',
+        button: '0 1px 3px 0 rgb(0 0 0 / 0.25), 0 1px 2px -1px rgb(0 0 0 / 0.2)',
+        dropdown: '0 10px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.25)',
+        glow: '0 0 25px -5px rgba(136, 192, 208, 0.3)',
+        glowSm: '0 0 15px -3px rgba(136, 192, 208, 0.2)',
+        glowLg: '0 0 35px -8px rgba(136, 192, 208, 0.4)',
+        glass: '0 8px 24px -4px rgba(0, 0, 0, 0.4)',
     },
 };
