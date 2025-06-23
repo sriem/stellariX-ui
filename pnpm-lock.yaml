@@ -11,6 +11,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.26.2
         version: 2.26.2
+      '@eslint/js':
+        specifier: ^9.29.0
+        version: 9.29.0
       '@storybook/addon-a11y':
         specifier: ^8.6.14
         version: 8.6.14(storybook@8.6.14)
@@ -47,6 +50,9 @@ importers:
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.0.0
         version: 8.0.0(@typescript-eslint/parser@8.34.1)(eslint@9.0.0)(typescript@5.7.2)
+      '@typescript-eslint/parser':
+        specifier: ^8.34.1
+        version: 8.34.1(eslint@9.0.0)(typescript@5.7.2)
       '@vitejs/plugin-react':
         specifier: ^4.0.4
         version: 4.0.4(vite@4.4.9)
@@ -191,6 +197,25 @@ importers:
         specifier: ^2.1.5
         version: 2.1.5(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)
 
+  packages/primitives/checkbox:
+    dependencies:
+      '@stellarix/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@stellarix/utils':
+        specifier: workspace:*
+        version: link:../../utils
+    devDependencies:
+      tsup:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@5.7.2)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)
+
   packages/primitives/container:
     dependencies:
       '@stellarix/core':
@@ -258,6 +283,44 @@ importers:
         version: 2.1.5(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)
 
   packages/primitives/input:
+    dependencies:
+      '@stellarix/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@stellarix/utils':
+        specifier: workspace:*
+        version: link:../../utils
+    devDependencies:
+      tsup:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@5.7.2)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)
+
+  packages/primitives/radio:
+    dependencies:
+      '@stellarix/core':
+        specifier: workspace:*
+        version: link:../../core
+      '@stellarix/utils':
+        specifier: workspace:*
+        version: link:../../utils
+    devDependencies:
+      tsup:
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@5.7.2)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@22.0.0)(@vitest/ui@2.1.0)(happy-dom@15.0.0)
+
+  packages/primitives/spinner:
     dependencies:
       '@stellarix/core':
         specifier: workspace:*
@@ -1568,6 +1631,11 @@ packages:
 
   /@eslint/js@9.0.0:
     resolution: {integrity: sha512-RThY/MnKrhubF6+s1JflwUjPEsnCEmYCWwqa/aRISKWNXGZ9epUwft4bUMM35SdKF9xvBrLydAM1RDHd1Z//ZQ==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    dev: true
+
+  /@eslint/js@9.29.0:
+    resolution: {integrity: sha512-3PIF4cBw/y+1u2EazflInpV+lYsSG0aByVIQzAgb1m1MhHFSbqTyNqtBKHgWf/9Ykud+DhILS9EGkmekVhbKoQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     dev: true
 

@@ -1,0 +1,4 @@
+
+> @stellarix/dialog@0.0.1 lint /mnt/d/dev/stellariX-ui/packages/primitives/dialog
+> eslint "src/**/*.ts*"
+

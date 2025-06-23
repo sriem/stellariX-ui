@@ -2,15 +2,3 @@
 > @stellarix/radio@0.0.1 lint /mnt/d/dev/stellariX-ui/packages/primitives/radio
 > eslint src/**/*.ts
 
-
-Oops! Something went wrong! :(
-
-ESLint: 9.0.0
-
-Error: Could not find config file.
-    at locateConfigFileToUse (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/eslint@9.0.0/node_modules/eslint/lib/eslint/eslint.js:349:21)
-    at async calculateConfigArray (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/eslint@9.0.0/node_modules/eslint/lib/eslint/eslint.js:384:49)
-    at async ESLint.lintFiles (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/eslint@9.0.0/node_modules/eslint/lib/eslint/eslint.js:814:25)
-    at async Object.execute (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/eslint@9.0.0/node_modules/eslint/lib/cli.js:461:23)
-    at async main (/mnt/d/dev/stellariX-ui/node_modules/.pnpm/eslint@9.0.0/node_modules/eslint/bin/eslint.js:165:22)
- ELIFECYCLE  Command failed with exit code 2.

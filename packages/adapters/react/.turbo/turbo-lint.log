@@ -1,0 +1,4 @@
+
+> @stellarix/react@0.0.1 lint /mnt/d/dev/stellariX-ui/packages/adapters/react
+> eslint "src/**/*.ts*"
+

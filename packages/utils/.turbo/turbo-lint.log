@@ -1,0 +1,4 @@
+
+> @stellarix/utils@0.0.1 lint /mnt/d/dev/stellariX-ui/packages/utils
+> eslint "src/**/*.ts*"
+
