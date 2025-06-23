@@ -8,13 +8,160 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { createCheckboxWithImplementation } from './index';
 import { reactAdapter } from '@stellarix/react';
 
-// Create the React checkbox component
-const checkbox = createCheckboxWithImplementation();
-const Checkbox = checkbox.connect(reactAdapter);
+// Create a wrapper component that creates individual Checkbox instances
+const CheckboxWrapper = React.forwardRef((props: any, ref: any) => {
+  const [checkbox] = React.useState(() => createCheckboxWithImplementation(props));
+  const Component = React.useMemo(() => checkbox.connect(reactAdapter), [checkbox]);
+  
+  // Update the checkbox's state when props change
+  React.useEffect(() => {
+    if (props.checked !== undefined) {
+      if (props.checked === 'indeterminate') {
+        checkbox.state.setIndeterminate(true);
+      } else {
+        checkbox.state.setChecked(props.checked);
+        checkbox.state.setIndeterminate(false);
+      }
+    }
+  }, [props.checked, checkbox]);
+  
+  React.useEffect(() => {
+    if (props.disabled !== undefined) {
+      checkbox.state.setDisabled(props.disabled);
+    }
+  }, [props.disabled, checkbox]);
+  
+  React.useEffect(() => {
+    if (props.error !== undefined) {
+      checkbox.state.setError(props.error, props.errorMessage);
+    }
+  }, [props.error, props.errorMessage, checkbox]);
+  
+  // Connect onChange handler
+  React.useEffect(() => {
+    if (props.onChange) {
+      const unsubscribe = checkbox.state.subscribe((state) => {
+        // Only call onChange if it's a user interaction
+        if (state.checked !== (props.checked === true)) {
+          props.onChange(state.checked);
+        }
+      });
+      return unsubscribe;
+    }
+  }, [props.onChange, props.checked, checkbox]);
+  
+  // Add size class for styling
+  const className = `${props.className || ''} ${props.size ? `checkbox-${props.size}` : ''}`.trim();
+  
+  return <Component ref={ref} {...props} className={className} />;
+});
+
+CheckboxWrapper.displayName = 'Checkbox';
+
+const Checkbox = CheckboxWrapper;
+
+// Decorator to add visual styles to the headless checkbox
+const withCheckboxStyles = (Story: any) => {
+  return (
+    <>
+      <style>{`
+        input[type="checkbox"] {
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          border: 2px solid #d1d5db;
+          border-radius: 4px;
+          background-color: white;
+          cursor: pointer;
+          position: relative;
+          transition: all 0.2s;
+          margin: 0;
+        }
+        
+        input[type="checkbox"]:checked {
+          background-color: #3b82f6;
+          border-color: #3b82f6;
+        }
+        
+        input[type="checkbox"]:checked::after {
+          content: '✓';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: white;
+          font-size: 14px;
+          font-weight: bold;
+        }
+        
+        input[type="checkbox"]:indeterminate {
+          background-color: #3b82f6;
+          border-color: #3b82f6;
+        }
+        
+        input[type="checkbox"]:indeterminate::after {
+          content: '−';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: white;
+          font-size: 16px;
+          font-weight: bold;
+        }
+        
+        input[type="checkbox"]:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          background-color: #f3f4f6;
+        }
+        
+        input[type="checkbox"]:focus {
+          outline: 2px solid #3b82f6;
+          outline-offset: 2px;
+        }
+        
+        input[type="checkbox"]:hover:not(:disabled) {
+          border-color: #3b82f6;
+        }
+        
+        /* Error state */
+        input[type="checkbox"][aria-invalid="true"] {
+          border-color: #ef4444;
+        }
+        
+        input[type="checkbox"][aria-invalid="true"]:focus {
+          outline-color: #ef4444;
+        }
+        
+        /* Size variants */
+        input[type="checkbox"].checkbox-sm {
+          width: 16px;
+          height: 16px;
+        }
+        
+        input[type="checkbox"].checkbox-sm::after {
+          font-size: 12px;
+        }
+        
+        input[type="checkbox"].checkbox-lg {
+          width: 24px;
+          height: 24px;
+        }
+        
+        input[type="checkbox"].checkbox-lg::after {
+          font-size: 18px;
+        }
+      `}</style>
+      <Story />
+    </>
+  );
+};
 
 const meta: Meta<typeof Checkbox> = {
   title: 'Primitives/Checkbox',
   component: Checkbox,
+  decorators: [withCheckboxStyles],
   parameters: {
     layout: 'padded',
     docs: {

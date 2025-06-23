@@ -37,9 +37,108 @@ const RadioComponent = ({ ...props }) => {
 
 const Radio = RadioComponent;
 
+// Decorator to add visual styles to the headless radio
+const withRadioStyles = (Story: any) => {
+  return (
+    <>
+      <style>{`
+        input[type="radio"] {
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          border: 2px solid #d1d5db;
+          border-radius: 50%;
+          background-color: white;
+          cursor: pointer;
+          position: relative;
+          transition: all 0.2s;
+          margin: 0;
+        }
+        
+        input[type="radio"]:checked {
+          border-color: #3b82f6;
+        }
+        
+        input[type="radio"]:checked::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #3b82f6;
+        }
+        
+        input[type="radio"]:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          background-color: #f3f4f6;
+        }
+        
+        input[type="radio"]:focus {
+          outline: 2px solid #3b82f6;
+          outline-offset: 2px;
+        }
+        
+        input[type="radio"]:hover:not(:disabled) {
+          border-color: #3b82f6;
+        }
+        
+        /* Size variants */
+        input[type="radio"].radio-sm {
+          width: 16px;
+          height: 16px;
+        }
+        
+        input[type="radio"].radio-sm::after {
+          width: 8px;
+          height: 8px;
+        }
+        
+        input[type="radio"].radio-lg {
+          width: 24px;
+          height: 24px;
+        }
+        
+        input[type="radio"].radio-lg::after {
+          width: 12px;
+          height: 12px;
+        }
+        
+        /* Radio group styling */
+        .radio-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+        
+        .radio-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        
+        .radio-item label {
+          cursor: pointer;
+          user-select: none;
+        }
+        
+        .radio-item input[type="radio"]:disabled + label {
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+      `}</style>
+      <Story />
+    </>
+  );
+};
+
 const meta: Meta<typeof Radio> = {
   title: 'Primitives/Radio',
   component: Radio,
+  decorators: [withRadioStyles],
   parameters: {
     layout: 'padded',
     docs: {
