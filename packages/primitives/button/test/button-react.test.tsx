@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { createButton } from '../src';
+import createButton from '../src';
 import { reactAdapter } from '@stellarix-ui/react';
 
 describe('Button with React Adapter Integration', () => {
@@ -22,7 +22,7 @@ describe('Button with React Adapter Integration', () => {
   
   it('should render a disabled button', () => {
     const button = createButton({
-      defaultDisabled: true
+      disabled: true
     });
     const Button = button.connect(reactAdapter);
     
@@ -52,7 +52,7 @@ describe('Button with React Adapter Integration', () => {
     const handleClick = vi.fn();
     const button = createButton({
       onClick: handleClick,
-      defaultDisabled: true
+      disabled: true
     });
     const Button = button.connect(reactAdapter);
     

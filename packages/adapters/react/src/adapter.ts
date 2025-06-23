@@ -87,6 +87,17 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
             
             // For input elements, map state to DOM props
             const componentSpecificProps: Record<string, any> = {};
+            
+            // Handle Button component
+            if (core.metadata.name === 'Button' && rootElement === 'button') {
+                if (state && typeof state === 'object') {
+                    if ('disabled' in state && (state as any).disabled) componentSpecificProps.disabled = true;
+                    if ('loading' in state && (state as any).loading) componentSpecificProps.disabled = true;
+                    if ('type' in state) componentSpecificProps.type = (state as any).type || 'button';
+                    else componentSpecificProps.type = 'button';
+                }
+            }
+            
             if (core.metadata.name === 'Input' && rootElement === 'input') {
                 // Get options from core if available
                 const options = (core as any).options || {};

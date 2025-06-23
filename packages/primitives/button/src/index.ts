@@ -41,6 +41,10 @@ export function createButtonWithImplementation(options: ButtonOptions = {}) {
     core.state = createButtonState(options);
     core.logic = createButtonLogic(core.state as any, options);
     
+    // Connect and initialize the logic
+    core.logic.connect(core.state);
+    core.logic.initialize();
+    
     return core;
 }
 
