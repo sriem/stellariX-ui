@@ -312,12 +312,7 @@ Before making architectural decisions, review:
 ## Common Development Tasks
 
 ### Adding a New Component
-1. Create package structure under `packages/primitives/[name]/`
-2. Implement state.ts, logic.ts, types.ts following existing patterns
-3. Export public API through index.ts
-4. Add unit tests alongside implementation
-5. Create examples in `examples/` directory
-6. Update exports in adapter packages
+See `/packages/primitives/CLAUDE.md` for the detailed component creation process using templates.
 
 ### Debugging Build Issues
 1. Check `turbo.json` for pipeline configuration
@@ -478,163 +473,22 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
 3. Configure ultra-strict TypeScript 5.7+ setup
 ```
 
-Remember to check memory-bank documentation for detailed architectural decisions and patterns specific to each component.
+Remember to check:
+- `/packages/primitives/CLAUDE.md` for primitive component development
+- `/memory-bank/` documentation for architectural decisions
 
-## 🎯 Component Development Process
+## 🎯 Component Development
 
-### 🚨🚨🚨 CRITICAL: LEARNED PATTERNS FROM CHECKBOX SUCCESS (30/30 tests passing)
+### For Primitive Components
+See `/packages/primitives/CLAUDE.md` for detailed component development guide including:
+- Critical state management patterns
+- Component creation process
+- Testing patterns
+- Reference implementations
 
-**ALWAYS use these proven patterns when creating components:**
-
-#### ULTRA-CRITICAL: state.getState() Prevention
-```typescript
-// ❌❌❌ FORBIDDEN - CAUSES INFINITE LOOPS (proven 8+ times):
-.withInteraction('root', 'onClick', (currentState, event) => {
-    const state = store.getState(); // 🚨 INFINITE LOOP!
-    if (state.disabled) return;     // 🚨 INFINITE LOOP!
-})
-
-// ✅✅✅ CORRECT - PROVEN WORKING PATTERN:
-.withInteraction('root', 'onClick', (currentState, event) => {
-    if (currentState.disabled) return; // ✅ Use parameter
-    state.setChecked(newValue);         // ✅ Call state methods directly
-    return 'change';                    // ✅ Return event type
-})
-```
-
-#### MANDATORY LogicLayerBuilder Pattern
-```typescript
-// ✅ ALWAYS use this pattern (LogicLayerBuilder):
-export function createComponentLogic(state, options = {}) {
-    return new LogicLayerBuilder<State, Events>()
-        .onEvent('change', (currentState, payload) => {
-            // Extract from payload: const value = payload?.value ? payload.value : payload
-            const newValue = payload && 'value' in payload ? payload.value : currentState.value;
-            state.setValue(newValue);
-            if (options.onChange) options.onChange(newValue);
-            return null;
-        })
-        .withA11y('root', (state) => ({
-            'aria-disabled': state.disabled ? 'true' : undefined,
-            tabIndex: state.disabled ? -1 : 0,
-        }))
-        .withInteraction('root', 'onClick', (currentState, event) => {
-            if (currentState.disabled) { event.preventDefault(); return null; }
-            state.setValue(newValue);  // Update state directly
-            return 'change';           // Trigger event
-        })
-        .build();
-}
-```
-
-#### MANDATORY Testing Patterns
-```typescript
-// ❌❌❌ FORBIDDEN - causes state issues:
-expect(state.getState().checked).toBe(true);
-
-// ✅ CORRECT - test via callbacks for logic:
-const onChange = vi.fn();
-const logic = createComponentLogic(state, { onChange });
-logic.connect(state);
-logic.initialize();
-const interactions = logic.getInteractionHandlers('root');
-interactions.onClick(mockEvent);
-expect(onChange).toHaveBeenCalledWith(true);
-
-// ✅ CORRECT - test state changes via subscription:
-const listener = vi.fn();
-state.subscribe(listener);
-state.setChecked(true);
-expect(listener).toHaveBeenCalledWith({ checked: true });
-```
-
-#### MANDATORY Storybook Pattern
-```typescript
-// ❌❌❌ FORBIDDEN - causes infinite loops:
-const state = component.state.getState();
-
-// ✅ CORRECT - use subscription pattern:
-const [componentState, setComponentState] = useState(() => component.state.getState());
-useEffect(() => {
-  const unsubscribe = component.state.subscribe(setComponentState);
-  return unsubscribe;
-}, []);
-// Now use componentState instead of state
-```
-
-### CRITICAL: Template-First Development
-
-**ALWAYS use the component template** when creating new components:
-
-1. **Template Location**: `/templates/component-template/` (Updated with working patterns)
-2. **Creation Guide**: `/templates/COMPONENT_CREATION_GUIDE.md`
-3. **Process**:
-   ```bash
-   # 1. Copy template to new component
-   cp -r templates/component-template packages/primitives/[component-name]
-   
-   # 2. Follow the guide to replace placeholders
-   # 3. Implement component-specific logic using LogicLayerBuilder
-   # 4. Test with timeout protection and callback verification
-   timeout 30s pnpm test
-   ```
-
-### PROVEN COMPONENT IMPLEMENTATION SUCCESS CASES
-
-#### ✅ Checkbox Component (100% Success - 30/30 tests passing)
-- **Location**: `/packages/primitives/checkbox/`
-- **Key Success Factors**:
-  - ✅ Used LogicLayerBuilder pattern exclusively
-  - ✅ NEVER called state.getState() anywhere in logic layer  
-  - ✅ Proper event payload extraction: `const event = payload?.event ? payload.event : payload`
-  - ✅ Testing via callbacks, not state inspection
-  - ✅ State tests use subscription pattern for verification
-  - ✅ Proper tsconfig.json extends and vitest.config.ts path aliases
-  - ✅ Clean state management with checked/unchecked/indeterminate
-  - ✅ Full accessibility support (WCAG 2.1 AA)
-  - ✅ Keyboard navigation (Space key)
-  - ✅ Comprehensive Storybook story with subscription pattern
-
-#### ✅ Radio Component (100% Success - 29/29 tests passing)
-- **Location**: `/packages/primitives/radio/`
-- **Key Success Factors**:
-  - ✅ Built using Checkbox as reference implementation
-  - ✅ Direct onChange callback invocation in interactions for proper value passing
-  - ✅ Radio-specific behavior: can only check, never uncheck on click
-  - ✅ All tests use callback verification pattern
-  - ✅ Storybook stories use subscription pattern for state tracking
-  - ✅ Complete accessibility with proper ARIA attributes
-  - ✅ Arrow key support structure for future radio group navigation
-
-**Use these as reference implementations** for all future components!
-
-### Template Evolution Process
-
-When we identify patterns that repeat across components:
-
-1. **Build a Working Component First**
-   - Implement the component completely
-   - Ensure all tests pass
-   - Verify the architecture works
-
-2. **Extract the Pattern**
-   - Identify what's common across similar components
-   - Create a template from the working component
-   - Document the specific implementation steps
-
-3. **Update Instructions**
-   - Add the new template to `/templates/`
-   - Update this CLAUDE.md with usage instructions
-   - Create a guide for the specific component type
-
-4. **Examples of Templates to Create**:
-   - Input components (text, number, email, etc.)
-   - Toggle components (checkbox, radio, switch)
-   - Layout components (container, grid, flex)
-   - Overlay components (dialog, popover, tooltip)
-   - Navigation components (menu, tabs, breadcrumb)
-
-This ensures we learn from each implementation and continuously improve our development process.
+### Component Templates
+- **Location**: `/templates/component-template/`
+- **Guide**: `/templates/COMPONENT_CREATION_GUIDE.md`
 
 ## 📋 Work Tracking & Current Status
 
