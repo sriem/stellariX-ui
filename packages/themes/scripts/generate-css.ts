@@ -2,7 +2,7 @@
  * Generate CSS files for each theme
  */
 
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { themes } from '../src';
@@ -18,6 +18,9 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const cssDir = join(__dirname, '..', 'css');
+
+// Read component styles
+const componentStyles = readFileSync(join(__dirname, '..', 'src', 'components.css'), 'utf-8');
 
 // Ensure CSS directory exists
 mkdirSync(cssDir, { recursive: true });
@@ -44,14 +47,19 @@ ${glassMorphismCSS}
 ${gradientBordersCSS}
 ${dynamicShadowsCSS}
 
+/* Component Styles */
+${componentStyles}
+
 /* Theme-specific utilities */
 .sx-theme-${theme.name} {
   color-scheme: ${theme.mode};
 }
 
-/* Component Base Styles */
-.sx-component {
-  transition: all var(--sx-duration-normal) var(--sx-easing-out);
+/* Additional theme-specific component styles */
+body[data-theme="${name}"] {
+  background-color: var(--sx-background);
+  color: var(--sx-foreground);
+  font-family: var(--sx-font-sans);
 }
 
 /* Animation Utilities */
@@ -125,6 +133,9 @@ ${Object.entries(themes).map(([name, theme]) => {
 ${Object.entries(cssVars).map(([key, value]) => `  ${key}: ${value};`).join('\n')}
 }`;
 }).join('\n')}
+
+/* Component styles (theme-independent) */
+${componentStyles}
 `;
 
 writeFileSync(join(cssDir, 'index.css'), indexCSS, 'utf-8');

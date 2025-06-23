@@ -6,6 +6,8 @@ const config: StorybookConfig = {
     '../packages/primitives/**/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
     // Load any stories from adapters
     '../packages/adapters/**/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
+    // Load stories from themes package
+    '../packages/themes/**/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
   ],
   addons: [
     '@storybook/addon-essentials',

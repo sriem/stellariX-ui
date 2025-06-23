@@ -2,10 +2,13 @@
   "project": {
     "name": "StellarIX UI",
     "type": "monorepo",
-    "description": "Framework-agnostic headless component library"
+    "description": "Framework-agnostic headless component library",
+    "philosophy": "DX-first approach - Developer Experience is paramount"
   },
   "rules": {
     "critical": [
+      "🎯 DX-FIRST: Always prioritize Developer Experience - use short prefixes (sx), intuitive APIs, minimal boilerplate",
+      "🎯 USE 'sx' PREFIX: Always use 'sx' for CSS classes and variables (NOT 'stellarix') - DX-friendly like MUI",
       "🚨🚨🚨 NEVER EVER call state.getState() ANYWHERE in logic layer files - CAUSES INFINITE LOOPS - HARD FORBIDDEN",
       "🚨🚨🚨 NEVER call state.getState() in event handlers - WILL BREAK EVERYTHING",
       "🚨🚨🚨 NEVER call state.getState() in withInteraction callbacks - FORBIDDEN", 
@@ -116,6 +119,26 @@
         "reason": "Radio buttons can only be checked, never unchecked by clicking"
       }
     ]
+  },
+  "dx_principles": {
+    "naming": {
+      "css_prefix": "sx",
+      "css_variables": "--sx-*",
+      "component_prefix": "Sx",
+      "rationale": "Short prefixes improve DX - 'sx' is memorable (Stellar + X) and fast to type"
+    },
+    "api_design": {
+      "minimal_boilerplate": "Components should work with zero config",
+      "intuitive_defaults": "Sensible defaults that match developer expectations",
+      "progressive_disclosure": "Simple API for common cases, advanced API for complex needs",
+      "consistent_patterns": "Same patterns across all components"
+    },
+    "developer_ergonomics": {
+      "typing_efficiency": "Prefer short names that are fast to type (sx > stellarix)",
+      "autocomplete_friendly": "APIs designed to work well with IDE autocomplete",
+      "error_messages": "Clear, actionable error messages that guide to solutions",
+      "documentation": "Examples-first documentation with copy-paste code"
+    }
   },
   "testing": {
     "runner": "vitest",

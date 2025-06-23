@@ -6,6 +6,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 StellarIX UI is a framework-agnostic headless component library that provides a single, consistent component implementation adaptable to React, Vue, Svelte, Solid, Qwik, Angular, and Web Components. The project uses a monorepo structure with pnpm workspaces.
 
+## 🎯 DX-First Philosophy
+
+**Developer Experience is our #1 priority**. Every decision should optimize for:
+
+1. **Minimal Typing**: Use `sx` prefix (not `stellarix`) - it's 75% shorter!
+2. **Zero Config**: Components work out-of-the-box with sensible defaults
+3. **Intuitive APIs**: If a developer has to check docs for basic usage, we've failed
+4. **Fast Feedback**: Instant hot-reload, clear error messages, visual testing
+
+### Naming Conventions
+- **CSS Classes**: `sx-button`, `sx-card`, `sx-input` (NOT `stellarix-button`)
+- **CSS Variables**: `--sx-primary`, `--sx-spacing-4` (NOT `--stellarix-primary`)
+- **Component Exports**: Simple names like `Button`, `Card` (not `StellarixButton`)
+- **Why "sx"?**: Stellar + X = sx. It's memorable, fast to type, and follows patterns like MUI's sx prop
+
 ## 🎯 Critical Information Sources
 
 ### Where to Find Project Information
