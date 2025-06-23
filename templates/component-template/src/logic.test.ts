@@ -1,5 +1,13 @@
 /**
  * Template Logic Tests
+ * 
+ * 🚨 CRITICAL: Testing Pattern Rules
+ * ❌ NEVER use state.getState() for verification
+ * ✅ ALWAYS test via callbacks: onChange, onFocus, etc.
+ * ✅ ALWAYS verify behavior through callback invocations
+ * ✅ For a11y props, call logic.getA11yProps() directly
+ * 
+ * This prevents infinite loops and ensures proper behavior testing
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';

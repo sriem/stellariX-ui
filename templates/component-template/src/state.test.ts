@@ -1,5 +1,12 @@
 /**
  * Template State Tests
+ * 
+ * 🚨 CRITICAL: Testing Pattern Rules
+ * ❌ NEVER use state.getState() for verification
+ * ✅ ALWAYS use subscription pattern: state.subscribe(listener)
+ * ✅ ALWAYS verify via listener calls: expect(listener).toHaveBeenCalledWith()
+ * 
+ * This prevents infinite loops and ensures proper reactive testing
  */
 
 import { describe, it, expect, vi } from 'vitest';

@@ -13,17 +13,20 @@
       "🚨🚨🚨 NEVER call state.getState() in interactions generator - FORBIDDEN",
       "🚨🚨🚨 NEVER call state.getState() in any reactive context - FORBIDDEN",
       "🚨🚨🚨 NEVER call state.getState() in tests - use callbacks to verify behavior instead",
+      "🚨🚨🚨 NEVER call component.state.getState() in Storybook stories - use subscription pattern",
       "ALWAYS use (currentState, event) parameters in withInteraction callbacks",
       "ALWAYS use (state) parameter in withA11y functions",
       "ALWAYS use LogicLayerBuilder pattern for logic implementations",
       "ALWAYS handle event payload extraction: const event = payload?.event ? payload.event : payload",
       "ALWAYS support both direct events and wrapped { event } payloads in onEvent handlers",
+      "ALWAYS call onChange callbacks directly in interaction handlers for proper value passing",
       "ALWAYS set dts: false in tsup.config.ts",
       "ALWAYS run tests with timeout protection",
       "ALWAYS create Storybook stories after implementing components",
       "ALWAYS update vitest.config.ts with path aliases",
       "ALWAYS extend '../../../tsconfig.json' not tsconfig.base.json",
-      "ALWAYS test interactions via callbacks, not state inspection"
+      "ALWAYS test interactions via callbacks, not state inspection",
+      "ALWAYS use subscription pattern in Storybook: useState + useEffect + subscribe"
     ],
     "forbidden_patterns": [
       {
@@ -35,6 +38,11 @@
         "pattern": "expect(state.getState()",
         "context": "in test files",
         "reason": "Use callback verification instead of state inspection"
+      },
+      {
+        "pattern": "component.state.getState()",
+        "context": "in Storybook stories",
+        "reason": "Use subscription pattern with useState and useEffect"
       },
       {
         "pattern": "createComponentLogic",
@@ -50,6 +58,11 @@
         "pattern": "while(true)",
         "context": "anywhere without break condition",
         "reason": "Creates infinite loops"
+      },
+      {
+        "pattern": "state.getState() in test verification",
+        "context": "verifying state values in tests",
+        "reason": "Use state.subscribe(listener) pattern instead"
       }
     ],
     "required_patterns": [
@@ -62,6 +75,26 @@
         "pattern": "use state parameter",
         "context": "logic layer's interactions and a11y generators",
         "reason": "Avoids circular dependencies"
+      },
+      {
+        "pattern": "LogicLayerBuilder pattern",
+        "context": "all logic layer implementations",
+        "example": "new LogicLayerBuilder<State, Events>().onEvent().withA11y().withInteraction().build()"
+      },
+      {
+        "pattern": "Storybook subscription pattern",
+        "context": "accessing component state in stories",
+        "example": "const [state, setState] = useState(initialState); useEffect(() => { const unsub = component.state.subscribe(setState); return unsub; }, []);"
+      },
+      {
+        "pattern": "Test verification pattern",
+        "context": "verifying state changes in tests",
+        "example": "const listener = vi.fn(); state.subscribe(listener); state.setValue('new'); expect(listener).toHaveBeenCalledWith({ value: 'new' });"
+      },
+      {
+        "pattern": "Radio button behavior",
+        "context": "implementing radio components",
+        "reason": "Radio buttons can only be checked, never unchecked by clicking"
       }
     ]
   },

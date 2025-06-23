@@ -384,14 +384,19 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
    - **FORBIDDEN**: NEVER call `state.getState()` in getA11yProps()
    - **FORBIDDEN**: NEVER call `state.getState()` in interactions generator
    - **FORBIDDEN**: NEVER call `state.getState()` in reactive contexts
+   - **FORBIDDEN**: NEVER use `expect(state.getState())` in tests
+   - **FORBIDDEN**: NEVER use `component.state.getState()` in Storybook stories
    
    **✅ CORRECT PATTERNS**:
    - Use `(currentState, handleEvent)` parameters in interactions
    - Use `(state)` parameter in a11y functions  
    - Call state setters directly: `state.setValue()`, `state.setActive()`
-   - Let components read state directly for dynamic values
+   - Call onChange callbacks directly in interactions for proper value passing
+   - Test using callbacks: `expect(onChange).toHaveBeenCalledWith(value)`
+   - Test state changes: `state.subscribe(listener); expect(listener).toHaveBeenCalledWith()`
+   - Storybook state: `const [state, setState] = useState(); useEffect(() => subscribe...)`
    
-   **WHY**: Calling `state.getState()` in reactive contexts creates circular dependencies that cause infinite loops and crash the application. This has happened 6+ times and MUST be prevented.
+   **WHY**: Calling `state.getState()` in reactive contexts creates circular dependencies that cause infinite loops and crash the application. This has happened 10+ times and MUST be prevented.
 
 3. **Memory Leaks**:
    - Always cleanup subscriptions
@@ -481,12 +486,12 @@ export function createComponentLogic(state, options = {}) {
 }
 ```
 
-#### MANDATORY Testing Pattern
+#### MANDATORY Testing Patterns
 ```typescript
-// ❌ FORBIDDEN - causes state issues:
+// ❌❌❌ FORBIDDEN - causes state issues:
 expect(state.getState().checked).toBe(true);
 
-// ✅ CORRECT - test via callbacks:
+// ✅ CORRECT - test via callbacks for logic:
 const onChange = vi.fn();
 const logic = createComponentLogic(state, { onChange });
 logic.connect(state);
@@ -494,6 +499,26 @@ logic.initialize();
 const interactions = logic.getInteractionHandlers('root');
 interactions.onClick(mockEvent);
 expect(onChange).toHaveBeenCalledWith(true);
+
+// ✅ CORRECT - test state changes via subscription:
+const listener = vi.fn();
+state.subscribe(listener);
+state.setChecked(true);
+expect(listener).toHaveBeenCalledWith({ checked: true });
+```
+
+#### MANDATORY Storybook Pattern
+```typescript
+// ❌❌❌ FORBIDDEN - causes infinite loops:
+const state = component.state.getState();
+
+// ✅ CORRECT - use subscription pattern:
+const [componentState, setComponentState] = useState(() => component.state.getState());
+useEffect(() => {
+  const unsubscribe = component.state.subscribe(setComponentState);
+  return unsubscribe;
+}, []);
+// Now use componentState instead of state
 ```
 
 ### CRITICAL: Template-First Development
@@ -522,13 +547,25 @@ expect(onChange).toHaveBeenCalledWith(true);
   - ✅ NEVER called state.getState() anywhere in logic layer  
   - ✅ Proper event payload extraction: `const event = payload?.event ? payload.event : payload`
   - ✅ Testing via callbacks, not state inspection
+  - ✅ State tests use subscription pattern for verification
   - ✅ Proper tsconfig.json extends and vitest.config.ts path aliases
   - ✅ Clean state management with checked/unchecked/indeterminate
   - ✅ Full accessibility support (WCAG 2.1 AA)
   - ✅ Keyboard navigation (Space key)
-  - ✅ Comprehensive Storybook story
+  - ✅ Comprehensive Storybook story with subscription pattern
 
-**Use this as the reference implementation** for all future components!
+#### ✅ Radio Component (100% Success - 29/29 tests passing)
+- **Location**: `/packages/primitives/radio/`
+- **Key Success Factors**:
+  - ✅ Built using Checkbox as reference implementation
+  - ✅ Direct onChange callback invocation in interactions for proper value passing
+  - ✅ Radio-specific behavior: can only check, never uncheck on click
+  - ✅ All tests use callback verification pattern
+  - ✅ Storybook stories use subscription pattern for state tracking
+  - ✅ Complete accessibility with proper ARIA attributes
+  - ✅ Arrow key support structure for future radio group navigation
+
+**Use these as reference implementations** for all future components!
 
 ### Template Evolution Process
 
