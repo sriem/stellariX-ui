@@ -398,6 +398,32 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
    
    **WHY**: Calling `state.getState()` in reactive contexts creates circular dependencies that cause infinite loops and crash the application. This has happened 10+ times and MUST be prevented.
 
+   **🚨🚨🚨 ULTRA-CRITICAL: setState PARTIAL UPDATE PREVENTION**:
+   - **FORBIDDEN**: NEVER use `state.setState({ field: value })` - WILL NOT WORK
+   - **FORBIDDEN**: NEVER use `store.setState({ field: value })` - CAUSES NaN/undefined
+   - **FORBIDDEN**: NEVER use partial object updates with setState
+   - **FORBIDDEN**: NEVER try to update single fields without spread operator
+   - **FORBIDDEN**: NEVER assume setState accepts partial updates like React
+   
+   **✅ ONLY CORRECT PATTERN FOR setState**:
+   ```typescript
+   // ✅ ALWAYS use function updater pattern:
+   store.setState((prev: any) => ({ ...prev, field: value }));
+   
+   // ✅ For multiple fields:
+   store.setState((prev: any) => ({ 
+     ...prev, 
+     field1: value1,
+     field2: value2 
+   }));
+   
+   // ❌❌❌ NEVER do this (WILL BREAK):
+   store.setState({ field: value }); // FORBIDDEN!
+   state.setState({ field: value }); // FORBIDDEN!
+   ```
+   
+   **WHY**: The core setState expects either a full state object or a function updater. Partial objects cause the state to lose all other fields, resulting in NaN/undefined errors. This pattern has caused critical failures 5+ times and MUST be prevented.
+
 3. **Memory Leaks**:
    - Always cleanup subscriptions
    - Always remove event listeners

@@ -14,6 +14,9 @@
       "🚨🚨🚨 NEVER call state.getState() in any reactive context - FORBIDDEN",
       "🚨🚨🚨 NEVER call state.getState() in tests - use callbacks to verify behavior instead",
       "🚨🚨🚨 NEVER call component.state.getState() in Storybook stories - use subscription pattern",
+      "🚨🚨🚨 NEVER EVER use state.setState({ field: value }) - WILL NOT WORK - USE FUNCTION UPDATER PATTERN",
+      "🚨🚨🚨 NEVER use store.setState with partial objects - ALWAYS use (prev) => ({ ...prev, field: value })",
+      "🚨🚨🚨 NEVER write state.setState ANYWHERE - this pattern is FORBIDDEN and WILL BREAK",
       "ALWAYS use (currentState, event) parameters in withInteraction callbacks",
       "ALWAYS use (state) parameter in withA11y functions",
       "ALWAYS use LogicLayerBuilder pattern for logic implementations",
@@ -26,7 +29,8 @@
       "ALWAYS update vitest.config.ts with path aliases",
       "ALWAYS extend '../../../tsconfig.json' not tsconfig.base.json",
       "ALWAYS test interactions via callbacks, not state inspection",
-      "ALWAYS use subscription pattern in Storybook: useState + useEffect + subscribe"
+      "ALWAYS use subscription pattern in Storybook: useState + useEffect + subscribe",
+      "ALWAYS use function updater pattern for setState: store.setState((prev) => ({ ...prev, field: value }))"
     ],
     "forbidden_patterns": [
       {
@@ -43,6 +47,21 @@
         "pattern": "component.state.getState()",
         "context": "in Storybook stories",
         "reason": "Use subscription pattern with useState and useEffect"
+      },
+      {
+        "pattern": "state.setState({",
+        "context": "ANYWHERE in the codebase",
+        "reason": "WILL NOT WORK - core setState expects full state or function updater"
+      },
+      {
+        "pattern": "store.setState({",
+        "context": "ANYWHERE in the codebase",
+        "reason": "FORBIDDEN - must use function updater pattern: (prev) => ({ ...prev, field })"
+      },
+      {
+        "pattern": "setState({ [field]: value })",
+        "context": "state management",
+        "reason": "Partial updates MUST use function updater pattern"
       },
       {
         "pattern": "createComponentLogic",
