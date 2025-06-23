@@ -1,76 +1,132 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
-/.pnp
+# Dependencies
+node_modules/
+.pnp
 .pnp.js
 .yarn/install-state.gz
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.pnpm-store/
 
-# testing
-/coverage
+# Lock files (keep only pnpm-lock.yaml)
+package-lock.json
+yarn.lock
+!pnpm-lock.yaml
 
-# next.js
-/.next/
-/out/
+# Testing & Coverage
+coverage/
+*.lcov
+.nyc_output/
+results.json
 
-# production
-/build
+# Build outputs
+dist/
+build/
+out/
+storybook-static/
 
-# misc
+# Build artifacts
+*.d.ts
+*.d.ts.map
+*.d.cts
+*.d.mts
+*.cjs
+*.cjs.map
+*.mjs
+*.mjs.map
+*.js.map
+
+# Build tool caches
+.turbo/
+turbo-*.log
+.eslintcache
+.stylelintcache
+.prettiercache
+*.tsbuildinfo
+.cache/
+*.cache
+.cache-loader
+.parcel-cache
+.vite/
+
+# Framework specific
+.next/
+.nuxt/
+.vuepress/dist
+.serverless/
+.fusebox/
+.dynamodb/
+.netlify/
+.docusaurus
+next-env.d.ts
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# OS files
 .DS_Store
-*.pem
-nextjs-codebase-context.txt
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
 
-# debug
+# Logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
 
-# local env files
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+.temp/
+.tmp/
+
+# Environment variables
+.env
 .env*.local
 
-# vercel
-.vercel
+# Misc
+*.pem
+.tern-port
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-
-#nextcollector
+# Project specific
+.claude/settings.local.json
+nextjs-codebase-context.txt
 .nextjscollectorignore
 .nextjs-codebase-context.txt
-logs/
 
-# turbo
-.turbo/
-
-# build artifacts
-dist/
-*.d.ts
-*.d.cts
-*.cjs
-*.cjs.map
-*.js.map
-
-# package specific node_modules
-packages/**/node_modules/
-
-# cache files
-.cache/
-*.cache
-
-# vitest
-results.json
-.vite/
-
-# storybook
-storybook-static/
-
-# local settings
-.claude/settings.local.json
-
-# changesets - do not track temporary changeset files
+# Changesets - track config but not temporary files
 .changeset/*.md
 !.changeset/README.md
 !.changeset/config.json
+
+# Vercel
+.vercel
