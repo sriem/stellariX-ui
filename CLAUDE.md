@@ -329,6 +329,19 @@ Before making architectural decisions, review:
 
 Changesets manages versioning and changelogs across our monorepo. Every change that affects package functionality MUST have a changeset.
 
+### 🚨 AI Agent Restrictions
+
+**AI agents (including Claude) must NEVER:**
+- Run `pnpm changeset version` - This updates package.json versions
+- Run `pnpm changeset publish` - This publishes to npm
+- Modify version numbers in package.json files directly
+- Create automated publishing workflows
+
+**AI agents SHOULD:**
+- Create changesets with `pnpm changeset` after implementing features
+- Help users understand which version bump to use (patch/minor/major)
+- Document changes clearly in changeset descriptions
+
 ### Creating a Changeset
 
 After implementing a feature, fix, or change:
@@ -383,19 +396,32 @@ feat(button): add loading state and spinner animation
 # View current changesets
 pnpm changeset status
 
-# Version packages (maintainers only)
+# Version packages (USER INITIATED ONLY - NEVER RUN AUTOMATICALLY)
 pnpm changeset version
 
-# Publish to npm (maintainers only, CI/CD)
+# Publish to npm (USER INITIATED ONLY - NEVER RUN AUTOMATICALLY)
 pnpm changeset publish
+
+# ⚠️ IMPORTANT: AI agents must NEVER run version or publish commands
+# These commands should only be executed by human maintainers
 ```
 
 ### Monorepo Considerations
 
-- Changesets automatically handles dependency updates
+- Changesets automatically handles dependency updates across our package structure:
+  - `@stellarix/core` - Core state and logic systems
+  - `@stellarix/primitives/*` - All UI components (button, select, etc.)
+  - `@stellarix/themes` - Theme system and CSS
+  - `@stellarix/adapters/*` - Framework adapters (react, vue, svelte, etc.)
 - If `@stellarix/core` changes, all dependent packages get version bumps
-- Use `linked` packages in `.changeset/config.json` for synchronized versions
 - Internal dependencies use workspace protocol: `"@stellarix/core": "workspace:*"`
+- All packages are published under the `stellarix` npm organization
+
+### Package Naming Convention
+All packages follow the `@stellarix/[package-name]` convention:
+- `@stellarix/button` ✅ (NOT `@stellarix/primitives-button`)
+- `@stellarix/react` ✅ (NOT `@stellarix/adapter-react`)
+- `@stellarix/themes` ✅ (single themes package)
 
 ### Example Changeset Workflow
 

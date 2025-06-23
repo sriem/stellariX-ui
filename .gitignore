@@ -69,4 +69,8 @@ storybook-static/
 
 # local settings
 .claude/settings.local.json
-.claude/settings.local.json
+
+# changesets - do not track temporary changeset files
+.changeset/*.md
+!.changeset/README.md
+!.changeset/config.json
