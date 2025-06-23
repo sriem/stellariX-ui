@@ -93,7 +93,7 @@ interface DialogLogicReturn {
 
 ### React Usage
 ```jsx
-import { Dialog } from '@stellarix/react';
+import { Dialog } from '@stellarix-ui/react';
 
 function MyDialog() {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,11 +1,11 @@
-# @stellarix/tooltip
+# @stellarix-ui/tooltip
 
 A framework-agnostic tooltip component that provides contextual help text on hover or focus.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/tooltip
+pnpm add @stellarix-ui/tooltip
 ```
 
 ## Features
@@ -23,8 +23,8 @@ pnpm add @stellarix/tooltip
 ## Basic Usage
 
 ```typescript
-import { createTooltip } from '@stellarix/tooltip';
-import { reactAdapter } from '@stellarix/react';
+import { createTooltip } from '@stellarix-ui/tooltip';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const tooltip = createTooltip({

@@ -1,11 +1,11 @@
-# @stellarix/avatar
+# @stellarix-ui/avatar
 
 A flexible avatar component for displaying user representations with support for images, initials, icons, and fallback states.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/avatar
+pnpm add @stellarix-ui/avatar
 ```
 
 ## Features
@@ -24,8 +24,8 @@ pnpm add @stellarix/avatar
 ## Basic Usage
 
 ```typescript
-import { createAvatarWithImplementation } from '@stellarix/avatar';
-import { reactAdapter } from '@stellarix/react';
+import { createAvatarWithImplementation } from '@stellarix-ui/avatar';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create avatar component instance
 const avatar = createAvatarWithImplementation({

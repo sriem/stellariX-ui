@@ -16,7 +16,7 @@ This guide explains how to create new components using the component template.
    - `TEMPLATE` → `YOUR_COMPONENT` (SCREAMING_CASE, e.g., `INPUT`, `CHECKBOX`)
 
 3. **Update package.json**:
-   - Change `name` to `@stellarix/[component-name]`
+   - Change `name` to `@stellarix-ui/[component-name]`
    - Update `description`
 
 4. **Implement component-specific logic**:
@@ -113,7 +113,7 @@ cd packages/primitives/input
 # TEMPLATE → INPUT
 
 # 4. Update package.json name
-# "@stellarix/template" → "@stellarix/input"
+# "@stellarix-ui/template" → "@stellarix-ui/input"
 
 # 5. Implement Input-specific logic
 # - Update types for text input

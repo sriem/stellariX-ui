@@ -1,11 +1,11 @@
-# @stellarix/toggle
+# @stellarix-ui/toggle
 
 A framework-agnostic toggle switch component for binary choices with smooth animations and accessibility features.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/toggle
+pnpm add @stellarix-ui/toggle
 ```
 
 ## Features
@@ -21,8 +21,8 @@ pnpm add @stellarix/toggle
 ## Basic Usage
 
 ```typescript
-import { createToggleWithImplementation } from '@stellarix/toggle';
-import { reactAdapter } from '@stellarix/react';
+import { createToggleWithImplementation } from '@stellarix-ui/toggle';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const toggle = createToggleWithImplementation({

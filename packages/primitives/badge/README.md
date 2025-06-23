@@ -1,11 +1,11 @@
-# @stellarix/badge
+# @stellarix-ui/badge
 
 A versatile badge component for displaying status indicators, counts, and notifications with multiple display modes.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/badge
+pnpm add @stellarix-ui/badge
 ```
 
 ## Features
@@ -23,8 +23,8 @@ pnpm add @stellarix/badge
 ## Basic Usage
 
 ```typescript
-import { createBadgeWithImplementation } from '@stellarix/badge';
-import { reactAdapter } from '@stellarix/react';
+import { createBadgeWithImplementation } from '@stellarix-ui/badge';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const badge = createBadgeWithImplementation({

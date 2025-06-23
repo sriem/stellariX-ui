@@ -140,12 +140,12 @@ Update root `tsconfig.json`:
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@stellarix/core": ["./packages/core/src"],
-      "@stellarix/core/*": ["./packages/core/src/*"],
-      "@stellarix/utils": ["./packages/utils/src"],
-      "@stellarix/utils/*": ["./packages/utils/src/*"],
-      "@stellarix/react": ["./packages/adapters/react/src"],
-      "@stellarix/react/*": ["./packages/adapters/react/src/*"]
+      "@stellarix-ui/core": ["./packages/core/src"],
+      "@stellarix-ui/core/*": ["./packages/core/src/*"],
+      "@stellarix-ui/utils": ["./packages/utils/src"],
+      "@stellarix-ui/utils/*": ["./packages/utils/src/*"],
+      "@stellarix-ui/react": ["./packages/adapters/react/src"],
+      "@stellarix-ui/react/*": ["./packages/adapters/react/src/*"]
     }
   },
   "include": ["packages/*/src/**/*", "packages/*/test/**/*"],
@@ -179,7 +179,7 @@ Update `packages/tsconfig.base.json`:
 pnpm typecheck
 
 # Verify path aliases work
-echo 'import { createStore } from "@stellarix/core";' > temp-test.ts
+echo 'import { createStore } from "@stellarix-ui/core";' > temp-test.ts
 npx tsc --noEmit temp-test.ts
 rm temp-test.ts
 ```
@@ -371,7 +371,7 @@ describe('State Management', () => {
 EOF
 
 # Run tests
-pnpm --filter=@stellarix/core test
+pnpm --filter=@stellarix-ui/core test
 ```
 
 **Success Criteria:**
@@ -652,7 +652,7 @@ describe('Logic Layer', () => {
 **Commands:**
 ```bash
 # Run tests
-pnpm --filter=@stellarix/core test
+pnpm --filter=@stellarix-ui/core test
 ```
 
 **Success Criteria:**
@@ -742,7 +742,7 @@ export function listAdapters(): FrameworkAdapter[] {
 // Auto-discovery for adapters (future feature)
 export function discoverAdapters(): FrameworkAdapter[] {
   // This would scan for packages matching patterns like:
-  // - @stellarix/adapter-*
+  // - @stellarix-ui/adapter-*
   // - Packages with 'stellarix-adapter' keyword
   // - Packages with stellarix adapter in peerDependencies
   
@@ -1055,8 +1055,8 @@ export type {
 EOF
 
 # Test everything
-pnpm --filter=@stellarix/core test
-pnpm --filter=@stellarix/core build
+pnpm --filter=@stellarix-ui/core test
+pnpm --filter=@stellarix-ui/core build
 ```
 
 **Success Criteria:**
@@ -1330,8 +1330,8 @@ export {
 **Commands:**
 ```bash
 # Test utils
-pnpm --filter=@stellarix/utils test
-pnpm --filter=@stellarix/utils build
+pnpm --filter=@stellarix-ui/utils test
+pnpm --filter=@stellarix-ui/utils build
 ```
 
 **Success Criteria:**
@@ -1352,7 +1352,7 @@ Update `packages/adapters/react/src/adapter.ts`:
 
 ```typescript
 import { useState, useEffect, useRef, useCallback, type RefObject } from 'react';
-import type { ComponentCore, FrameworkAdapter, StateStore } from '@stellarix/core';
+import type { ComponentCore, FrameworkAdapter, StateStore } from '@stellarix-ui/core';
 
 // React 19 state-of-the-art adapter
 export const reactAdapter: FrameworkAdapter = {
@@ -1483,7 +1483,7 @@ Update `packages/adapters/react/src/hooks.ts`:
 
 ```typescript
 import { useEffect, useRef, useCallback } from 'react';
-import type { StateStore, LogicLayer } from '@stellarix/core';
+import type { StateStore, LogicLayer } from '@stellarix-ui/core';
 
 // Custom hooks for React integration
 
@@ -1562,14 +1562,14 @@ export {
 } from './hooks.js';
 
 // Re-export React types for convenience
-export type { ComponentCore, FrameworkAdapter } from '@stellarix/core';
+export type { ComponentCore, FrameworkAdapter } from '@stellarix-ui/core';
 ```
 
 **Commands:**
 ```bash
 # Test React adapter
-pnpm --filter=@stellarix/react test
-pnpm --filter=@stellarix/react build
+pnpm --filter=@stellarix-ui/react test
+pnpm --filter=@stellarix-ui/react build
 ```
 
 **Success Criteria:**
@@ -1631,7 +1631,7 @@ export interface ButtonProps extends ButtonOptions {
 Update `packages/primitives/button/src/state.ts`:
 
 ```typescript
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { ButtonState, ButtonOptions } from './types.js';
 
 export function createButtonState(options: ButtonOptions) {
@@ -1695,8 +1695,8 @@ export type ButtonStateStore = ReturnType<typeof createButtonState>;
 Update `packages/primitives/button/src/logic.ts`:
 
 ```typescript
-import { createComponentLogic } from '@stellarix/core';
-import { generateComponentId } from '@stellarix/utils';
+import { createComponentLogic } from '@stellarix-ui/core';
+import { generateComponentId } from '@stellarix-ui/utils';
 import type { ButtonState, ButtonEvents, ButtonOptions } from './types.js';
 import type { ButtonStateStore } from './state.js';
 
@@ -1812,7 +1812,7 @@ export function createButtonLogic(
 Update `packages/primitives/button/src/index.ts`:
 
 ```typescript
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createButtonState } from './state.js';
 import { createButtonLogic } from './logic.js';
 import type { ButtonOptions, ButtonState, ButtonEvents } from './types.js';
@@ -1942,8 +1942,8 @@ describe('Button State', () => {
 **Commands:**
 ```bash
 # Test button implementation
-pnpm --filter=@stellarix/button test
-pnpm --filter=@stellarix/button build
+pnpm --filter=@stellarix-ui/button test
+pnpm --filter=@stellarix-ui/button build
 ```
 
 **Success Criteria:**
@@ -1973,8 +1973,8 @@ pnpm build
 # Test React integration
 cat > test-integration.tsx << 'EOF'
 import React from 'react';
-import { createButtonWithImplementation } from '@stellarix/button';
-import { reactAdapter } from '@stellarix/react';
+import { createButtonWithImplementation } from '@stellarix-ui/button';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Test that the ultra-generic architecture works
 const button = createButtonWithImplementation({
@@ -2053,8 +2053,8 @@ Before implementing any component in this phase:
 1. Copy template: `cp -r templates/component-template packages/primitives/container`
 2. Update component name from "Component" to "Container" in all files
 3. Implement Container-specific state, logic, and types
-4. Test with: `timeout 30s pnpm --filter=@stellarix/container test`
-5. Build and verify: `pnpm --filter=@stellarix/container build`
+4. Test with: `timeout 30s pnpm --filter=@stellarix-ui/container test`
+5. Build and verify: `pnpm --filter=@stellarix-ui/container build`
 
 [Continue with Container-specific implementation details...]
 

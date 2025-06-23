@@ -1,11 +1,11 @@
-# @stellarix/card
+# @stellarix-ui/card
 
 A flexible content container component for organizing and displaying related information with support for headers, media, and footers.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/card
+pnpm add @stellarix-ui/card
 ```
 
 ## Features
@@ -23,8 +23,8 @@ pnpm add @stellarix/card
 ## Basic Usage
 
 ```typescript
-import { createCard } from '@stellarix/card';
-import { reactAdapter } from '@stellarix/react';
+import { createCard } from '@stellarix-ui/card';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const card = createCard({

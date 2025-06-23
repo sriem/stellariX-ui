@@ -1,11 +1,11 @@
-# @stellarix/dialog
+# @stellarix-ui/dialog
 
 A fully accessible, framework-agnostic modal dialog component with focus management, backdrop control, and keyboard navigation.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/dialog
+pnpm add @stellarix-ui/dialog
 ```
 
 ## Features
@@ -23,8 +23,8 @@ pnpm add @stellarix/dialog
 ## Basic Usage
 
 ```typescript
-import { createDialog } from '@stellarix/dialog';
-import { reactAdapter } from '@stellarix/react';
+import { createDialog } from '@stellarix-ui/dialog';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create dialog instance
 const dialog = createDialog({

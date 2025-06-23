@@ -84,8 +84,8 @@ store.setState((prev: any) => ({
 
 ### Component Creation Pattern
 ```typescript
-import { createButton } from '@stellarix/button';
-import { reactAdapter } from '@stellarix/react';
+import { createButton } from '@stellarix-ui/button';
+import { reactAdapter } from '@stellarix-ui/react';
 
 const button = createButton(options);
 const ReactButton = button.connect(reactAdapter);

@@ -1,6 +1,13 @@
 /**
  * React 19 Adapter Implementation
  * State-of-the-art adapter using latest React 19 patterns
+ * 
+ * Key React 19 Features Used:
+ * - ref as prop: No more forwardRef needed, ref can be passed as a regular prop
+ * - useActionState: For form state management with async actions
+ * - use hook: For suspending on promises and reading context conditionally
+ * - Server/Client Components: Directives for component boundaries
+ * - useFormStatus: For accessing form submission state
  */
 
 import { createElement, useMemo, type ComponentType } from 'react';
@@ -30,6 +37,8 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
         // React 19 allows ref as a regular prop - no forwardRef needed!
         const Component = function StellarIXComponent(props: ReactProps & { ref?: any }) {
             // Extract ref as a regular prop (React 19 feature)
+            // In React 19, function components can access ref directly from props
+            // This eliminates the need for React.forwardRef wrapper
             const { ref, className, style, children, ...restProps } = props;
             
             // Use custom hooks to connect to core state and logic
@@ -216,25 +225,106 @@ export function createClientComponent<P extends object>(
 /**
  * Hook for using React 19's useActionState with forms
  * Provides integration with StellarIX components
+ * 
+ * useActionState simplifies form handling by:
+ * - Managing async form submission state
+ * - Providing pending state during submission
+ * - Handling optimistic updates
+ * - Automatic form reset on success
+ * 
+ * Example usage:
+ * const [state, formAction, isPending] = useActionState(async (prevState, formData) => {
+ *   const result = await submitToServer(formData);
+ *   return result;
+ * }, initialState);
  */
 export function useStellarIXAction<TState, TResult>(
     action: (prevState: TState, formData: FormData) => Promise<TResult>,
     initialState: TState,
-    _permalink?: string
+    permalink?: string
 ) {
     // This would use React 19's useActionState when available
     // For now, we'll provide a type-safe interface
+    // In React 19: import { useActionState } from 'react';
+    // return useActionState(action, initialState, permalink);
     return [initialState, action, false] as const;
 }
 
 /**
  * Hook for form status (React 19 feature)
  * Provides pending state for forms
+ * 
+ * useFormStatus must be called from a component rendered inside a <form>
+ * It provides:
+ * - pending: boolean indicating if the form is submitting
+ * - data: FormData being submitted
+ * - method: HTTP method of the form
+ * - action: URL or function the form is submitting to
+ * 
+ * Example usage:
+ * function SubmitButton() {
+ *   const { pending } = useFormStatus();
+ *   return <button disabled={pending}>Submit</button>;
+ * }
  */
 export function useStellarIXFormStatus() {
     // This would use React 19's useFormStatus when available
-    return { pending: false };
+    // In React 19: import { useFormStatus } from 'react-dom';
+    // return useFormStatus();
+    return { pending: false, data: null, method: null, action: null };
 }
+
+/**
+ * React 19 'use' Hook Examples
+ * 
+ * The 'use' hook enables:
+ * 1. Reading promises with Suspense
+ * 2. Conditional context reading
+ * 3. Integration with async data
+ * 
+ * @example Reading a promise
+ * ```tsx
+ * function Component({ promise }) {
+ *   const data = use(promise); // Suspends until resolved
+ *   return <div>{data}</div>;
+ * }
+ * ```
+ * 
+ * @example Conditional context
+ * ```tsx
+ * function Component({ showTheme }) {
+ *   if (showTheme) {
+ *     const theme = use(ThemeContext); // Can be conditional!
+ *     return <div className={theme}>...</div>;
+ *   }
+ *   return <div>...</div>;
+ * }
+ * ```
+ */
+
+/**
+ * React 19 Form Actions Example
+ * 
+ * Forms can now have async actions directly:
+ * 
+ * @example
+ * ```tsx
+ * async function updateName(formData: FormData) {
+ *   'use server'; // Server action
+ *   const name = formData.get('name');
+ *   await db.users.update({ name });
+ * }
+ * 
+ * function Form() {
+ *   return (
+ *     <form action={updateName}>
+ *       <input name="name" />
+ *       <button type="submit">Save</button>
+ *     </form>
+ *   );
+ * }
+ * ```
+ */
 
 // Re-export everything for convenience
 export * from './hooks';

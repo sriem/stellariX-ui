@@ -1,4 +1,4 @@
-# @stellarix/template
+# @stellarix-ui/template
 
 Template component for StellarIX UI library.
 

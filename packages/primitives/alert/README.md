@@ -1,11 +1,11 @@
-# @stellarix/alert
+# @stellarix-ui/alert
 
 A framework-agnostic alert component for displaying important notifications and messages to users.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/alert
+pnpm add @stellarix-ui/alert
 ```
 
 ## Features
@@ -23,8 +23,8 @@ pnpm add @stellarix/alert
 ## Basic Usage
 
 ```typescript
-import { createAlertWithImplementation } from '@stellarix/alert';
-import { reactAdapter } from '@stellarix/react';
+import { createAlertWithImplementation } from '@stellarix-ui/alert';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create alert component instance
 const alert = createAlertWithImplementation({

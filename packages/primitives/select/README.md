@@ -1,11 +1,11 @@
-# @stellarix/select
+# @stellarix-ui/select
 
 Framework-agnostic dropdown select component with search, keyboard navigation, and full accessibility support.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/select
+pnpm add @stellarix-ui/select
 ```
 
 ## Features
@@ -22,8 +22,8 @@ pnpm add @stellarix/select
 ## Basic Usage
 
 ```typescript
-import { createSelect } from '@stellarix/select';
-import { reactAdapter } from '@stellarix/react';
+import { createSelect } from '@stellarix-ui/select';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create select instance
 const select = createSelect({

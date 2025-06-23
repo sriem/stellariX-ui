@@ -1,11 +1,11 @@
-# @stellarix/button
+# @stellarix-ui/button
 
 A versatile, accessible button component with multiple variants, sizes, and states.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/button
+pnpm add @stellarix-ui/button
 ```
 
 ## Features
@@ -24,8 +24,8 @@ pnpm add @stellarix/button
 ## Basic Usage
 
 ```typescript
-import { createButtonWithImplementation } from '@stellarix/button';
-import { reactAdapter } from '@stellarix/react';
+import { createButtonWithImplementation } from '@stellarix-ui/button';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create button instance
 const button = createButtonWithImplementation({
@@ -165,21 +165,21 @@ const button = createButtonWithImplementation({
 
 The button component generates semantic CSS classes:
 
-- `.stellarix-button` - Base button class
-- `.stellarix-button--default` - Default variant
-- `.stellarix-button--primary` - Primary variant
-- `.stellarix-button--secondary` - Secondary variant
-- `.stellarix-button--destructive` - Destructive variant
-- `.stellarix-button--ghost` - Ghost variant
-- `.stellarix-button--link` - Link variant
-- `.stellarix-button--icon` - Icon variant
-- `.stellarix-button--sm` - Small size
-- `.stellarix-button--md` - Medium size (default)
-- `.stellarix-button--lg` - Large size
-- `.stellarix-button--loading` - Loading state
-- `.stellarix-button--disabled` - Disabled state
-- `.stellarix-button--pressed` - Pressed state
-- `.stellarix-button--focused` - Focused state
+- `.sx-button` - Base button class
+- `.sx-button--default` - Default variant
+- `.sx-button--primary` - Primary variant
+- `.sx-button--secondary` - Secondary variant
+- `.sx-button--destructive` - Destructive variant
+- `.sx-button--ghost` - Ghost variant
+- `.sx-button--link` - Link variant
+- `.sx-button--icon` - Icon variant
+- `.sx-button--sm` - Small size
+- `.sx-button--md` - Medium size (default)
+- `.sx-button--lg` - Large size
+- `.sx-button--loading` - Loading state
+- `.sx-button--disabled` - Disabled state
+- `.sx-button--pressed` - Pressed state
+- `.sx-button--focused` - Focused state
 
 ### CSS Variables
 
@@ -187,11 +187,11 @@ Customize appearance with CSS variables:
 
 ```css
 :root {
-  --stellarix-button-primary-bg: #3b82f6;
-  --stellarix-button-primary-hover: #2563eb;
-  --stellarix-button-border-radius: 0.375rem;
-  --stellarix-button-padding-x: 1rem;
-  --stellarix-button-padding-y: 0.5rem;
+  --sx-button-primary-bg: #3b82f6;
+  --sx-button-primary-hover: #2563eb;
+  --sx-button-border-radius: 0.375rem;
+  --sx-button-padding-x: 1rem;
+  --sx-button-padding-y: 0.5rem;
 }
 ```
 

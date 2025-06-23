@@ -70,10 +70,10 @@ All components must have:
 
 ```bash
 # Test specific component
-pnpm --filter=@stellarix/[component] test
+pnpm --filter=@stellarix-ui/[component] test
 
 # Build component
-pnpm --filter=@stellarix/[component] build
+pnpm --filter=@stellarix-ui/[component] build
 ```
 
 ## 📖 Documentation

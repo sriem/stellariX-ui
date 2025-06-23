@@ -1,11 +1,11 @@
-# @stellarix/checkbox
+# @stellarix-ui/checkbox
 
 A framework-agnostic checkbox component with indeterminate state support and full accessibility compliance.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/checkbox
+pnpm add @stellarix-ui/checkbox
 ```
 
 ## Features
@@ -22,8 +22,8 @@ pnpm add @stellarix/checkbox
 ## Basic Usage
 
 ```typescript
-import { createCheckboxWithImplementation } from '@stellarix/checkbox';
-import { reactAdapter } from '@stellarix/react';
+import { createCheckboxWithImplementation } from '@stellarix-ui/checkbox';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const checkbox = createCheckboxWithImplementation({

@@ -102,7 +102,7 @@ describe('Button State', () => {
 // Testing React component
 import { render, screen } from '@testing-library/react';
 import { createButton } from '../src';
-import { reactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix-ui/react';
 
 describe('Button Component', () => {
   it('should render correctly', () => {
@@ -122,7 +122,7 @@ describe('Button Component', () => {
 import { render } from '@testing-library/react';
 import { axe } from 'jest-axe';
 import { createButton } from '../src';
-import { reactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix-ui/react';
 
 describe('Button Accessibility', () => {
   it('should have no accessibility violations', async () => {
@@ -147,7 +147,7 @@ pnpm test
 To run tests for a specific package:
 
 ```bash
-pnpm --filter=@stellarix/button test
+pnpm --filter=@stellarix-ui/button test
 ```
 
 To run tests in watch mode:

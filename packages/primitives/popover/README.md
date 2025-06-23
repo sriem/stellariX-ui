@@ -1,11 +1,11 @@
-# @stellarix/popover
+# @stellarix-ui/popover
 
 A floating overlay component that appears next to a trigger element with intelligent positioning and focus management.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/popover
+pnpm add @stellarix-ui/popover
 ```
 
 ## Features
@@ -24,8 +24,8 @@ pnpm add @stellarix/popover
 ## Basic Usage
 
 ```typescript
-import { createPopover } from '@stellarix/popover';
-import { reactAdapter } from '@stellarix/react';
+import { createPopover } from '@stellarix-ui/popover';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const popover = createPopover({

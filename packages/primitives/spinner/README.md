@@ -1,11 +1,11 @@
-# @stellarix/spinner
+# @stellarix-ui/spinner
 
 A flexible, accessible loading spinner component for indicating loading states and ongoing processes.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/spinner
+pnpm add @stellarix-ui/spinner
 ```
 
 ## Features
@@ -22,8 +22,8 @@ pnpm add @stellarix/spinner
 ## Basic Usage
 
 ```typescript
-import { createSpinnerWithImplementation } from '@stellarix/spinner';
-import { reactAdapter } from '@stellarix/react';
+import { createSpinnerWithImplementation } from '@stellarix-ui/spinner';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const component = createSpinnerWithImplementation({

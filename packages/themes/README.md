@@ -1,11 +1,11 @@
-# @stellarix/themes
+# @stellarix-ui/themes
 
 State-of-the-art theme system for StellarIX UI with beautiful, accessible, and customizable design tokens.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/themes
+pnpm add @stellarix-ui/themes
 ```
 
 ## Features
@@ -24,7 +24,7 @@ pnpm add @stellarix/themes
 ### Import Themes in JavaScript/TypeScript
 
 ```typescript
-import { themes, injectTheme } from '@stellarix/themes';
+import { themes, injectTheme } from '@stellarix-ui/themes';
 
 // Inject a theme into the document
 injectTheme('stellar-light');
@@ -37,18 +37,18 @@ injectTheme(themes['stellar-dark']);
 
 ```css
 /* Import all themes */
-@import '@stellarix/themes/css';
+@import '@stellarix-ui/themes/css';
 
 /* Or import specific themes */
-@import '@stellarix/themes/css/stellar-light.css';
-@import '@stellarix/themes/css/stellar-dark.css';
+@import '@stellarix-ui/themes/css/stellar-light.css';
+@import '@stellarix-ui/themes/css/stellar-dark.css';
 ```
 
 ### HTML Usage
 
 ```html
 <!-- Link to pre-built CSS -->
-<link rel="stylesheet" href="node_modules/@stellarix/themes/css/stellar-light.css">
+<link rel="stylesheet" href="node_modules/@stellarix-ui/themes/css/stellar-light.css">
 
 <!-- Apply theme with data attribute -->
 <body data-theme="stellar-light">
@@ -115,7 +115,7 @@ Each theme provides these design tokens:
 ### Theme Switching
 
 ```typescript
-import { injectTheme, removeTheme } from '@stellarix/themes';
+import { injectTheme, removeTheme } from '@stellarix-ui/themes';
 
 // Switch themes dynamically
 function switchTheme(themeName: string) {
@@ -136,7 +136,7 @@ toggleButton.addEventListener('click', () => {
 ### Custom Theme Creation
 
 ```typescript
-import { Theme, injectTheme } from '@stellarix/themes';
+import { Theme, injectTheme } from '@stellarix-ui/themes';
 
 const myCustomTheme: Theme = {
   name: 'my-custom-theme',
@@ -177,7 +177,7 @@ All themes expose CSS variables you can use directly:
 ### React Integration
 
 ```tsx
-import { ThemeProvider } from '@stellarix/themes/react';
+import { ThemeProvider } from '@stellarix-ui/themes/react';
 
 function App() {
   return (
@@ -199,7 +199,7 @@ function App() {
 
 <script setup>
 import { ref, watch } from 'vue'
-import { injectTheme } from '@stellarix/themes'
+import { injectTheme } from '@stellarix-ui/themes'
 
 const currentTheme = ref('stellar-light')
 
@@ -231,7 +231,7 @@ Using HSL color space for better color relationships and easier customization.
 ### Extending a Theme
 
 ```typescript
-import { themes } from '@stellarix/themes';
+import { themes } from '@stellarix-ui/themes';
 
 const myExtendedTheme = {
   ...themes['stellar-light'],

@@ -1,11 +1,11 @@
-# @stellarix/menu
+# @stellarix-ui/menu
 
 Framework-agnostic dropdown menu component with keyboard navigation, hierarchical submenus, and type-ahead search.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/menu
+pnpm add @stellarix-ui/menu
 ```
 
 ## Features
@@ -24,8 +24,8 @@ pnpm add @stellarix/menu
 ## Basic Usage
 
 ```typescript
-import { createMenu } from '@stellarix/menu';
-import { reactAdapter } from '@stellarix/react';
+import { createMenu } from '@stellarix-ui/menu';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const menu = createMenu({

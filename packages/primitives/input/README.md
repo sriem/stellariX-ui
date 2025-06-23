@@ -1,11 +1,11 @@
-# @stellarix/input
+# @stellarix-ui/input
 
 A flexible, accessible input component that handles various input types with built-in validation, focus management, and form integration.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/input
+pnpm add @stellarix-ui/input
 ```
 
 ## Features
@@ -28,8 +28,8 @@ pnpm add @stellarix/input
 ## Basic Usage
 
 ```typescript
-import { createInputWithImplementation } from '@stellarix/input';
-import { reactAdapter } from '@stellarix/react';
+import { createInputWithImplementation } from '@stellarix-ui/input';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const input = createInputWithImplementation({

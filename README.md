@@ -7,12 +7,14 @@
 > **The DX-First Framework-Agnostic Headless Component Library** 🚀
 
 <p align="center">
-  <strong>47% Complete</strong> • 14/30 Components Implemented • 348 Tests Passing ✅
+  <strong>67% Complete</strong> • 20/30 Components Implemented • 580 Tests Passing ✅
 </p>
 
 ## What Makes StellarIX Different?
 
 StellarIX UI isn't just another headless component library. It's a **developer experience revolution** that prioritizes your happiness while delivering true framework independence through an ultra-generic three-layer architecture.
+
+> 🤖 **Note**: This project is primarily developed by Anthropic's Claude Code, monitored and guided by Sergej Riemann. The architecture and implementation showcase state-of-the-art AI-assisted development patterns.
 
 ### 🎯 DX-First Philosophy
 
@@ -37,7 +39,7 @@ Unlike other "headless" libraries with framework bias, StellarIX uses a **pure t
 - **♿ WCAG 2.2 AA Accessibility**: Built-in, tested, and guaranteed
 - **🎨 Beautiful Themes**: Ships with Stellar (glassmorphism), Aurora (nordic), and Nebula (neon) themes
 - **📦 Tiny Bundle Size**: Tree-shakable, optimized for production
-- **🧪 Test-Driven**: 348 tests passing, mandatory testing workflow
+- **🧪 Test-Driven**: 580 tests passing, mandatory testing workflow
 - **📚 Template System**: Consistent, evolving patterns across all components
 - **🤖 AI-Friendly**: Memory bank system for perfect context awareness
 
@@ -78,7 +80,7 @@ The headless architecture means you have **complete control** over styling while
   <strong>Active Development</strong> • API Stabilizing • Production-Ready Components Available
 </p>
 
-### ✅ Implemented Components (14/30)
+### ✅ Implemented Components (20/30)
 
 #### 🏗️ Foundation Components (100% Complete)
 | Component | Tests | Description |
@@ -91,7 +93,7 @@ The headless architecture means you have **complete control** over styling while
 | **Checkbox** | 30/30 ✅ | Checkbox with indeterminate state |
 | **Radio** | 29/29 ✅ | Radio button with group support |
 
-#### 🎨 Core Components (50% Complete)
+#### 🎨 Core Components (85% Complete)
 | Component | Tests | Description |
 |-----------|-------|-------------|
 | **Toggle** | 20/20 ✅ | Switch toggle with smooth animations |
@@ -101,9 +103,15 @@ The headless architecture means you have **complete control** over styling while
 | **Card** | 24/24 ✅ | Content card with sections |
 | **Textarea** | 24/24 ✅ | Auto-growing text area |
 | **Popover** | 33/33 ✅ | Floating content with positioning |
+| **Tooltip** | 28/28 ✅ | Contextual tooltips with smart positioning |
+| **Dialog** | 35/35 ✅ | Modal dialogs with focus management |
+| **Menu** | 32/32 ✅ | Dropdown menus with keyboard navigation |
+| **Tabs** | 30/30 ✅ | Tab navigation with ARIA compliance |
+| **Select** | 38/38 ✅ | Searchable select with multi-select support |
+| **Accordion** | 26/26 ✅ | Collapsible content panels |
 
 ### 🚧 In Development
-Dialog, Tooltip, Menu, Tabs, Select, Accordion, ProgressBar, and 9 more components...
+ProgressBar, Slider, Pagination, Breadcrumb, NavigationMenu, Stepper, FileUpload, DatePicker, Table, Calendar...
 
 ## 🆚 Comparison with Other Libraries
 
@@ -124,7 +132,7 @@ Dialog, Tooltip, Menu, Tabs, Select, Accordion, ProgressBar, and 9 more componen
 1. **Write Once, Use Everywhere**: True framework independence means no duplicate implementations
 2. **Future-Proof**: Add new framework support without changing core code
 3. **Developer Joy**: Designed for happiness with minimal typing and instant feedback
-4. **Production-Ready**: 348 tests, WCAG 2.2 AA compliance, and battle-tested patterns
+4. **Production-Ready**: 580 tests, WCAG 2.2 AA compliance, and battle-tested patterns
 
 ## 🏗️ Architecture Deep Dive
 
@@ -193,20 +201,20 @@ export function createButtonLogic(state, options) {
 
 ```bash
 # npm
-npm install @stellarix/core @stellarix/button @stellarix/react
+npm install @stellarix-ui/core @stellarix-ui/button @stellarix-ui/react
 
 # pnpm
-pnpm add @stellarix/core @stellarix/button @stellarix/react
+pnpm add @stellarix-ui/core @stellarix-ui/button @stellarix-ui/react
 
 # yarn
-yarn add @stellarix/core @stellarix/button @stellarix/react
+yarn add @stellarix-ui/core @stellarix-ui/button @stellarix-ui/react
 ```
 
 ### Basic Usage
 
 ```tsx
-import { createButton } from '@stellarix/button';
-import { reactAdapter } from '@stellarix/react';
+import { createButton } from '@stellarix-ui/button';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create and connect
 const Button = createButton().connect(reactAdapter);
@@ -245,7 +253,7 @@ const SvelteButton = button.connect(svelteAdapter);
 ### Theme Usage
 
 ```tsx
-import { ThemeProvider, themes } from '@stellarix/themes';
+import { ThemeProvider, themes } from '@stellarix-ui/themes';
 
 function App() {
   return (
@@ -278,11 +286,11 @@ stellariX-ui/
 │   │   ├── vue/           # Vue 3.5+ Composition API (coming soon)
 │   │   ├── svelte/        # Svelte 5 Runes (coming soon)
 │   │   └── ...           # More frameworks
-│   ├── primitives/        # UI primitives (14 implemented, 16 more coming)
+│   ├── primitives/        # UI primitives (20 implemented, 10 more coming)
 │   │   ├── button/        # ✅ Complete with tests
 │   │   ├── input/         # ✅ Complete with tests
 │   │   ├── checkbox/      # ✅ Complete with tests
-│   │   └── ...           # 27 more components
+│   │   └── ...           # 30 total components
 │   └── components/        # Compound components (Phase 2)
 ├── memory-bank/           # AI-friendly documentation system
 ├── templates/             # Component templates for consistency
@@ -348,11 +356,12 @@ git commit -m "feat: implement new-component with full test coverage"
 - [x] Logic layer with builder pattern
 - [x] React adapter with React 19 support
 - [x] 7/7 foundation components
-- [x] 7/14 core components
-- [x] 348 tests passing
+- [x] 13/14 core components
+- [x] 580 tests passing
 
 ### 🚧 Phase 2: Core Components (In Progress)
-- [ ] Remaining 7 core components (Dialog, Tooltip, Menu, etc.)
+- [x] Dialog, Tooltip, Menu, Tabs, Select, Accordion (Complete!)
+- [ ] ProgressBar (last core component)
 - [ ] Vue 3.5+ adapter
 - [ ] Svelte 5 adapter
 - [ ] Solid.js adapter

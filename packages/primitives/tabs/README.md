@@ -1,11 +1,11 @@
-# @stellarix/tabs
+# @stellarix-ui/tabs
 
 A fully accessible tabs component with keyboard navigation, content panels, and flexible orientation support.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/tabs
+pnpm add @stellarix-ui/tabs
 ```
 
 ## Features
@@ -23,8 +23,8 @@ pnpm add @stellarix/tabs
 ## Basic Usage
 
 ```typescript
-import { createTabs } from '@stellarix/tabs';
-import { reactAdapter } from '@stellarix/react';
+import { createTabs } from '@stellarix-ui/tabs';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const tabs = createTabs({

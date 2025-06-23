@@ -1,11 +1,11 @@
-# @stellarix/container
+# @stellarix-ui/container
 
 Framework-agnostic layout container component with responsive design and flexible sizing options.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/container
+pnpm add @stellarix-ui/container
 ```
 
 ## Features
@@ -22,8 +22,8 @@ pnpm add @stellarix/container
 ## Basic Usage
 
 ```typescript
-import { createContainer } from '@stellarix/container';
-import { reactAdapter } from '@stellarix/react';
+import { createContainer } from '@stellarix-ui/container';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const container = createContainer({

@@ -1,11 +1,11 @@
-# @stellarix/textarea
+# @stellarix-ui/textarea
 
 Multi-line text input component with autogrow support and flexible resize options.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/textarea
+pnpm add @stellarix-ui/textarea
 ```
 
 ## Features
@@ -23,8 +23,8 @@ pnpm add @stellarix/textarea
 ## Basic Usage
 
 ```typescript
-import { createTextareaWithImplementation } from '@stellarix/textarea';
-import { reactAdapter } from '@stellarix/react';
+import { createTextareaWithImplementation } from '@stellarix-ui/textarea';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const textarea = createTextareaWithImplementation({

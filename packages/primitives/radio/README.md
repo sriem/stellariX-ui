@@ -1,11 +1,11 @@
-# @stellarix/radio
+# @stellarix-ui/radio
 
 Framework-agnostic radio button component with full accessibility and keyboard navigation support.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/radio
+pnpm add @stellarix-ui/radio
 ```
 
 ## Features
@@ -23,8 +23,8 @@ pnpm add @stellarix/radio
 ## Basic Usage
 
 ```typescript
-import { createRadio } from '@stellarix/radio';
-import { reactAdapter } from '@stellarix/react';
+import { createRadio } from '@stellarix-ui/radio';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create radio component instance
 const radio = createRadio({

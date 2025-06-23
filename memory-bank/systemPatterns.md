@@ -376,7 +376,7 @@ All imports use path aliases for improved maintainability:
 import { createState } from '../../../../core/src/state';
 
 // With path aliases
-import { createState } from '@stellarix/core/state';
+import { createState } from '@stellarix-ui/core/state';
 ```
 
 ### Project References

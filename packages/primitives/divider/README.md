@@ -1,11 +1,11 @@
-# @stellarix/divider
+# @stellarix-ui/divider
 
 A versatile separator component for creating visual divisions in your UI, supporting horizontal and vertical orientations with customizable styling.
 
 ## Installation
 
 ```bash
-pnpm add @stellarix/divider
+pnpm add @stellarix-ui/divider
 ```
 
 ## Features
@@ -22,8 +22,8 @@ pnpm add @stellarix/divider
 ## Basic Usage
 
 ```typescript
-import { createDivider } from '@stellarix/divider';
-import { reactAdapter } from '@stellarix/react';
+import { createDivider } from '@stellarix-ui/divider';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
 const divider = createDivider({

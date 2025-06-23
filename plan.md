@@ -287,7 +287,7 @@ const emit = defineEmits<{
 const elementRef = useTemplateRef('element')
 
 // Provide state for child components
-provide('stellarix-state', props.state)
+provide('sx-state', props.state)
 </script>
 
 <template>
@@ -309,7 +309,7 @@ provide('stellarix-state', props.state)
 **Implementation Strategy:**
 ```svelte
 <script lang="ts">
-  import type { ComponentState, ComponentLogic } from '@stellarix/core';
+  import type { ComponentState, ComponentLogic } from '@stellarix-ui/core';
   
   interface Props {
     state: ComponentState;
@@ -469,7 +469,7 @@ export function getAdapter(name: string): FrameworkAdapter | undefined {
 
 // Auto-discovery from npm packages
 export function discoverAdapters(): FrameworkAdapter[] {
-  // Scan for packages matching @stellarix/adapter-*
+  // Scan for packages matching @stellarix-ui/adapter-*
   // Or packages with stellarix-adapter keyword
 }
 ```
@@ -626,7 +626,7 @@ git commit -m "feat(component): implement [name] with tests"
 3. **State Pattern**: Modern reactive primitives, not complex state machines
 4. **Component Factory**: Leverage latest framework-specific patterns
 5. **Testing**: Latest Vitest 2.x with happy-dom for modern DOM testing
-6. **Imports**: ESM-first with package imports (@stellarix/core)
+6. **Imports**: ESM-first with package imports (@stellarix-ui/core)
 
 ### What NOT to Do
 1. Don't over-engineer state management
