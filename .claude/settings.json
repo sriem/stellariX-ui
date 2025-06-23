@@ -1,157 +1,37 @@
 {
-  "project": {
-    "name": "StellarIX UI",
-    "type": "monorepo",
-    "description": "Framework-agnostic headless component library",
-    "philosophy": "DX-first approach - Developer Experience is paramount"
-  },
-  "rules": {
-    "critical": [
-      "🎯 DX-FIRST: Always prioritize Developer Experience - use short prefixes (sx), intuitive APIs, minimal boilerplate",
-      "🎯 USE 'sx' PREFIX: Always use 'sx' for CSS classes and variables (NOT 'stellarix') - DX-friendly like MUI",
-      "🚨🚨🚨 NEVER EVER call state.getState() ANYWHERE in logic layer files - CAUSES INFINITE LOOPS - HARD FORBIDDEN",
-      "🚨🚨🚨 NEVER call state.getState() in event handlers - WILL BREAK EVERYTHING",
-      "🚨🚨🚨 NEVER call state.getState() in withInteraction callbacks - FORBIDDEN", 
-      "🚨🚨🚨 NEVER call state.getState() in getA11yProps() - FORBIDDEN",
-      "🚨🚨🚨 NEVER call state.getState() in interactions generator - FORBIDDEN",
-      "🚨🚨🚨 NEVER call state.getState() in any reactive context - FORBIDDEN",
-      "🚨🚨🚨 NEVER call state.getState() in tests - use callbacks to verify behavior instead",
-      "🚨🚨🚨 NEVER call component.state.getState() in Storybook stories - use subscription pattern",
-      "🚨🚨🚨 NEVER EVER use state.setState({ field: value }) - WILL NOT WORK - USE FUNCTION UPDATER PATTERN",
-      "🚨🚨🚨 NEVER use store.setState with partial objects - ALWAYS use (prev) => ({ ...prev, field: value })",
-      "🚨🚨🚨 NEVER write state.setState ANYWHERE - this pattern is FORBIDDEN and WILL BREAK",
-      "ALWAYS use (currentState, event) parameters in withInteraction callbacks",
-      "ALWAYS use (state) parameter in withA11y functions",
-      "ALWAYS use LogicLayerBuilder pattern for logic implementations",
-      "ALWAYS handle event payload extraction: const event = payload?.event ? payload.event : payload",
-      "ALWAYS support both direct events and wrapped { event } payloads in onEvent handlers",
-      "ALWAYS call onChange callbacks directly in interaction handlers for proper value passing",
-      "ALWAYS set dts: false in tsup.config.ts",
-      "ALWAYS run tests with timeout protection",
-      "ALWAYS create Storybook stories after implementing components",
-      "ALWAYS update vitest.config.ts with path aliases",
-      "ALWAYS extend '../../../tsconfig.json' not tsconfig.base.json",
-      "ALWAYS test interactions via callbacks, not state inspection",
-      "ALWAYS use subscription pattern in Storybook: useState + useEffect + subscribe",
-      "ALWAYS use function updater pattern for setState: store.setState((prev) => ({ ...prev, field: value }))"
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(cp:*)",
+      "Bash(curl:*)",
+      "Bash(do:*)",
+      "Bash(done)",
+      "Bash(find:*)",
+      "Bash(for:*)",
+      "Bash(git:*)",
+      "Bash(grep:*)",
+      "Bash(kill:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(node:*)",
+      "Bash(npx storybook dev:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npx tsc:*)",
+      "Bash(pkill:*)",
+      "Bash(pnpm:*)",
+      "Bash(rg:*)",
+      "Bash(rm:*)",
+      "Bash(sed:*)",
+      "Bash(timeout:*)",
+      "Bash(touch:*)",
+      "Bash(true)",
+      "mcp__context7__get-library-docs",
+      "mcp__context7__resolve-library-id"
     ],
-    "forbidden_patterns": [
-      {
-        "pattern": "state.getState()",
-        "context": "inside logic layer methods",
-        "reason": "Causes infinite loops in reactive contexts"
-      },
-      {
-        "pattern": "expect(state.getState()",
-        "context": "in test files",
-        "reason": "Use callback verification instead of state inspection"
-      },
-      {
-        "pattern": "component.state.getState()",
-        "context": "in Storybook stories",
-        "reason": "Use subscription pattern with useState and useEffect"
-      },
-      {
-        "pattern": "state.setState({",
-        "context": "ANYWHERE in the codebase",
-        "reason": "WILL NOT WORK - core setState expects full state or function updater"
-      },
-      {
-        "pattern": "store.setState({",
-        "context": "ANYWHERE in the codebase",
-        "reason": "FORBIDDEN - must use function updater pattern: (prev) => ({ ...prev, field })"
-      },
-      {
-        "pattern": "setState({ [field]: value })",
-        "context": "state management",
-        "reason": "Partial updates MUST use function updater pattern"
-      },
-      {
-        "pattern": "createComponentLogic",
-        "context": "logic layer implementation",
-        "reason": "Use LogicLayerBuilder pattern instead for better control"
-      },
-      {
-        "pattern": "dts: true",
-        "context": "tsup.config.ts",
-        "reason": "DTS generation fails due to module resolution"
-      },
-      {
-        "pattern": "while(true)",
-        "context": "anywhere without break condition",
-        "reason": "Creates infinite loops"
-      },
-      {
-        "pattern": "state.getState() in test verification",
-        "context": "verifying state values in tests",
-        "reason": "Use state.subscribe(listener) pattern instead"
-      }
-    ],
-    "required_patterns": [
-      {
-        "pattern": "timeout [seconds]s [command]",
-        "context": "when running tests or builds",
-        "reason": "Prevents hanging on infinite loops"
-      },
-      {
-        "pattern": "use state parameter",
-        "context": "logic layer's interactions and a11y generators",
-        "reason": "Avoids circular dependencies"
-      },
-      {
-        "pattern": "LogicLayerBuilder pattern",
-        "context": "all logic layer implementations",
-        "example": "new LogicLayerBuilder<State, Events>().onEvent().withA11y().withInteraction().build()"
-      },
-      {
-        "pattern": "Storybook subscription pattern",
-        "context": "accessing component state in stories",
-        "example": "const [state, setState] = useState(initialState); useEffect(() => { const unsub = component.state.subscribe(setState); return unsub; }, []);"
-      },
-      {
-        "pattern": "Test verification pattern",
-        "context": "verifying state changes in tests",
-        "example": "const listener = vi.fn(); state.subscribe(listener); state.setValue('new'); expect(listener).toHaveBeenCalledWith({ value: 'new' });"
-      },
-      {
-        "pattern": "Radio button behavior",
-        "context": "implementing radio components",
-        "reason": "Radio buttons can only be checked, never unchecked by clicking"
-      }
-    ]
+    "deny": []
   },
-  "dx_principles": {
-    "naming": {
-      "css_prefix": "sx",
-      "css_variables": "--sx-*",
-      "component_prefix": "Sx",
-      "rationale": "Short prefixes improve DX - 'sx' is memorable (Stellar + X) and fast to type"
-    },
-    "api_design": {
-      "minimal_boilerplate": "Components should work with zero config",
-      "intuitive_defaults": "Sensible defaults that match developer expectations",
-      "progressive_disclosure": "Simple API for common cases, advanced API for complex needs",
-      "consistent_patterns": "Same patterns across all components"
-    },
-    "developer_ergonomics": {
-      "typing_efficiency": "Prefer short names that are fast to type (sx > stellarix)",
-      "autocomplete_friendly": "APIs designed to work well with IDE autocomplete",
-      "error_messages": "Clear, actionable error messages that guide to solutions",
-      "documentation": "Examples-first documentation with copy-paste code"
-    }
-  },
-  "testing": {
-    "runner": "vitest",
-    "environment": "happy-dom",
-    "timeout": 30,
-    "coverage": {
-      "core": 90,
-      "components": 80
-    }
-  },
-  "build": {
-    "tool": "tsup",
-    "dts": false,
-    "external": ["@stellarix/core", "@stellarix/utils"]
+  "env": {
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1"
   }
 }
