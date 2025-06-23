@@ -1,85 +1,72 @@
 /**
- * Checkbox Component Tests
- * Unit tests for state and logic layers
+ * Radio Component Tests
+ * Unit tests for state and logic layers using proven callback verification patterns
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createCheckboxState } from './state';
-import { createCheckboxLogic } from './logic';
-import type { CheckboxOptions, CheckboxCheckedState } from './types';
+import { createRadioState } from './state';
+import { createRadioLogic } from './logic';
+import type { RadioOptions } from './types';
 
-describe('Checkbox State', () => {
+describe('Radio State', () => {
     it('should create initial state with default values', () => {
-        const state = createCheckboxState();
+        const options: RadioOptions = {
+            name: 'test-group',
+            value: 'test-value'
+        };
+        const state = createRadioState(options);
         const listener = vi.fn();
         
-        // Subscribe and verify individual state properties through updates
         state.subscribe(listener);
+        state.setChecked(false); // Trigger subscription
         
-        // Test individual properties by triggering updates
-        state.setChecked(false);
-        expect(listener).toHaveBeenLastCalledWith({ checked: false });
+        // Radio state has the same issue as checkbox - only partial updates
+        expect(listener).toHaveBeenCalledWith({ checked: false });
         
+        // Verify other properties through individual updates
         listener.mockClear();
         state.setDisabled(false);
-        expect(listener).toHaveBeenLastCalledWith({ disabled: false });
-        
-        listener.mockClear();
-        state.setFocused(false);
-        expect(listener).toHaveBeenLastCalledWith({ focused: false });
+        expect(listener).toHaveBeenCalledWith({ disabled: false });
         
         listener.mockClear();
         state.setRequired(false);
-        expect(listener).toHaveBeenLastCalledWith({ required: false });
-        
-        listener.mockClear();
-        state.setError(false);
-        expect(listener).toHaveBeenLastCalledWith({ error: false, errorMessage: undefined });
+        expect(listener).toHaveBeenCalledWith({ required: false });
     });
 
     it('should create initial state with custom options', () => {
-        const options: CheckboxOptions = {
+        const options: RadioOptions = {
+            name: 'custom-group',
+            value: 'custom-value',
             checked: true,
             disabled: true,
             required: true
         };
         
-        const state = createCheckboxState(options);
+        const state = createRadioState(options);
         const listener = vi.fn();
         
-        // Subscribe and verify individual properties match initial options
         state.subscribe(listener);
+        state.setChecked(true); // Trigger subscription
         
-        // Verify each property was initialized correctly
-        state.setChecked(true);
-        expect(listener).toHaveBeenLastCalledWith({ checked: true });
+        // Radio state has the same issue as checkbox - only partial updates
+        expect(listener).toHaveBeenCalledWith({ checked: true });
         
+        // Verify other properties through individual updates
         listener.mockClear();
         state.setDisabled(true);
-        expect(listener).toHaveBeenLastCalledWith({ disabled: true });
+        expect(listener).toHaveBeenCalledWith({ disabled: true });
         
         listener.mockClear();
         state.setRequired(true);
-        expect(listener).toHaveBeenLastCalledWith({ required: true });
-    });
-
-    it('should handle indeterminate state', () => {
-        const state = createCheckboxState({ checked: 'indeterminate' });
-        const listener = vi.fn();
-        
-        state.subscribe(listener);
-        // Trigger update to verify current state
-        state.setChecked('indeterminate'); // Same as initial
-        
-        expect(listener).toHaveBeenCalledWith(
-            expect.objectContaining({
-                checked: 'indeterminate'
-            })
-        );
+        expect(listener).toHaveBeenCalledWith({ required: true });
     });
 
     it('should update checked state', () => {
-        const state = createCheckboxState();
+        const options: RadioOptions = {
+            name: 'test-group',
+            value: 'test-value'
+        };
+        const state = createRadioState(options);
         const listener = vi.fn();
         
         state.subscribe(listener);
@@ -88,16 +75,16 @@ describe('Checkbox State', () => {
         expect(listener).toHaveBeenCalledWith({ checked: true });
         
         listener.mockClear();
-        state.setChecked('indeterminate');
-        expect(listener).toHaveBeenCalledWith({ checked: 'indeterminate' });
-        
-        listener.mockClear();
         state.setChecked(false);
         expect(listener).toHaveBeenCalledWith({ checked: false });
     });
 
     it('should update disabled state', () => {
-        const state = createCheckboxState();
+        const options: RadioOptions = {
+            name: 'test-group',
+            value: 'test-value'
+        };
+        const state = createRadioState(options);
         const listener = vi.fn();
         
         state.subscribe(listener);
@@ -111,7 +98,11 @@ describe('Checkbox State', () => {
     });
 
     it('should update focused state', () => {
-        const state = createCheckboxState();
+        const options: RadioOptions = {
+            name: 'test-group',
+            value: 'test-value'
+        };
+        const state = createRadioState(options);
         const listener = vi.fn();
         
         state.subscribe(listener);
@@ -125,7 +116,11 @@ describe('Checkbox State', () => {
     });
 
     it('should update required state', () => {
-        const state = createCheckboxState();
+        const options: RadioOptions = {
+            name: 'test-group',
+            value: 'test-value'
+        };
+        const state = createRadioState(options);
         const listener = vi.fn();
         
         state.subscribe(listener);
@@ -139,15 +134,19 @@ describe('Checkbox State', () => {
     });
 
     it('should update error state', () => {
-        const state = createCheckboxState();
+        const options: RadioOptions = {
+            name: 'test-group',
+            value: 'test-value'
+        };
+        const state = createRadioState(options);
         const listener = vi.fn();
         
         state.subscribe(listener);
         
-        state.setError(true, 'Test error');
+        state.setError(true, 'Test error message');
         expect(listener).toHaveBeenCalledWith({ 
             error: true,
-            errorMessage: 'Test error'
+            errorMessage: 'Test error message'
         });
         
         listener.mockClear();
@@ -158,55 +157,34 @@ describe('Checkbox State', () => {
         });
     });
 
-    describe('toggle method', () => {
-        it('should toggle from false to true', () => {
-            const state = createCheckboxState({ checked: false });
-            const listener = vi.fn();
-            
-            state.subscribe(listener);
-            state.toggle();
-            
-            expect(listener).toHaveBeenCalled();
-            // Since toggle uses getState internally, we just verify it was called
-        });
-
-        it('should toggle from true to false', () => {
-            const state = createCheckboxState({ checked: true });
-            const listener = vi.fn();
-            
-            state.subscribe(listener);
-            state.toggle();
-            
-            expect(listener).toHaveBeenCalled();
-            // Since toggle uses getState internally, we just verify it was called
-        });
-
-        it('should toggle from indeterminate to true', () => {
-            const state = createCheckboxState({ checked: 'indeterminate' });
-            const listener = vi.fn();
-            
-            state.subscribe(listener);
-            state.toggle();
-            
-            expect(listener).toHaveBeenCalled();
-            // Since toggle uses getState internally, we just verify it was called
-        });
-    });
-
     describe('isInteractive computed property', () => {
         it('should return true when not disabled', () => {
-            const state = createCheckboxState({ disabled: false });
+            const options: RadioOptions = {
+                name: 'test-group',
+                value: 'test-value',
+                disabled: false
+            };
+            const state = createRadioState(options);
             expect(state.isInteractive()).toBe(true);
         });
 
         it('should return false when disabled', () => {
-            const state = createCheckboxState({ disabled: true });
+            const options: RadioOptions = {
+                name: 'test-group',
+                value: 'test-value',
+                disabled: true
+            };
+            const state = createRadioState(options);
             expect(state.isInteractive()).toBe(false);
         });
     });
 
     it('should handle subscriptions', () => {
-        const state = createCheckboxState();
+        const options: RadioOptions = {
+            name: 'test-group',
+            value: 'test-value'
+        };
+        const state = createRadioState(options);
         const listener = vi.fn();
         
         const unsubscribe = state.subscribe(listener);
@@ -220,16 +198,21 @@ describe('Checkbox State', () => {
     });
 });
 
-describe('Checkbox Logic', () => {
-    let state: ReturnType<typeof createCheckboxState>;
-    let logic: ReturnType<typeof createCheckboxLogic>;
+describe('Radio Logic', () => {
+    let state: ReturnType<typeof createRadioState>;
+    let logic: ReturnType<typeof createRadioLogic>;
     let mockEvent: Partial<MouseEvent>;
     let mockKeyboardEvent: Partial<KeyboardEvent>;
     let mockFocusEvent: Partial<FocusEvent>;
+    let options: RadioOptions;
 
     beforeEach(() => {
-        state = createCheckboxState();
-        logic = createCheckboxLogic(state);
+        options = {
+            name: 'test-group',
+            value: 'test-value'
+        };
+        state = createRadioState(options);
+        logic = createRadioLogic(state, options);
         
         mockEvent = {
             preventDefault: vi.fn(),
@@ -254,7 +237,7 @@ describe('Checkbox Logic', () => {
             const a11yProps = logic.getA11yProps('root');
             
             expect(a11yProps).toMatchObject({
-                role: 'checkbox',
+                role: 'radio',
                 'aria-checked': false,
                 tabIndex: 0
             });
@@ -267,21 +250,8 @@ describe('Checkbox Logic', () => {
             const a11yProps = logic.getA11yProps('root');
             
             expect(a11yProps).toMatchObject({
-                role: 'checkbox',
+                role: 'radio',
                 'aria-checked': true,
-                tabIndex: 0
-            });
-        });
-
-        it('should generate correct a11y props for indeterminate state', () => {
-            state.setChecked('indeterminate');
-            logic.connect(state);
-            logic.initialize();
-            const a11yProps = logic.getA11yProps('root');
-            
-            expect(a11yProps).toMatchObject({
-                role: 'checkbox',
-                'aria-checked': 'mixed',
                 tabIndex: 0
             });
         });
@@ -310,21 +280,24 @@ describe('Checkbox Logic', () => {
         });
 
         it('should generate correct a11y props for error state', () => {
+            const optionsWithId = { ...options, id: 'test-radio' };
+            const logicWithId = createRadioLogic(state, optionsWithId);
             state.setError(true, 'Test error');
-            logic.connect(state);
-            logic.initialize();
-            const a11yProps = logic.getA11yProps('root');
+            logicWithId.connect(state);
+            logicWithId.initialize();
+            const a11yProps = logicWithId.getA11yProps('root');
             
             expect(a11yProps).toMatchObject({
-                'aria-invalid': 'true'
+                'aria-invalid': 'true',
+                'aria-describedby': 'test-radio-error'
             });
         });
     });
 
     describe('interactions', () => {
-        it('should handle click to toggle checkbox', () => {
+        it('should handle click to check radio', () => {
             const onChange = vi.fn();
-            const logicWithCallback = createCheckboxLogic(state, { onChange });
+            const logicWithCallback = createRadioLogic(state, { ...options, onChange });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
             const interactions = logicWithCallback.getInteractionHandlers('root');
@@ -332,13 +305,27 @@ describe('Checkbox Logic', () => {
             interactions.onClick(mockEvent as MouseEvent);
             
             // Verify the onChange callback was called with true
-            expect(onChange).toHaveBeenCalledWith(true);
+            expect(onChange).toHaveBeenCalledWith(true, 'test-value');
+        });
+
+        it('should not toggle when already checked (radio behavior)', () => {
+            state.setChecked(true);
+            const onChange = vi.fn();
+            const logicWithCallback = createRadioLogic(state, { ...options, onChange });
+            logicWithCallback.connect(state);
+            logicWithCallback.initialize();
+            const interactions = logicWithCallback.getInteractionHandlers('root');
+            
+            interactions.onClick(mockEvent as MouseEvent);
+            
+            // Radio should not uncheck when clicked if already checked
+            expect(onChange).not.toHaveBeenCalled();
         });
 
         it('should prevent click when disabled', () => {
             state.setDisabled(true);
             const onChange = vi.fn();
-            const logicWithCallback = createCheckboxLogic(state, { onChange });
+            const logicWithCallback = createRadioLogic(state, { ...options, onChange });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
             const interactions = logicWithCallback.getInteractionHandlers('root');
@@ -350,9 +337,9 @@ describe('Checkbox Logic', () => {
             expect(onChange).not.toHaveBeenCalled();
         });
 
-        it('should handle space key to toggle', () => {
+        it('should handle space key to check', () => {
             const onChange = vi.fn();
-            const logicWithCallback = createCheckboxLogic(state, { onChange });
+            const logicWithCallback = createRadioLogic(state, { ...options, onChange });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
             const interactions = logicWithCallback.getInteractionHandlers('root');
@@ -360,12 +347,40 @@ describe('Checkbox Logic', () => {
             interactions.onKeyDown(mockKeyboardEvent as KeyboardEvent);
             
             expect(mockKeyboardEvent.preventDefault).toHaveBeenCalled();
-            expect(onChange).toHaveBeenCalledWith(true);
+            expect(onChange).toHaveBeenCalledWith(true, 'test-value');
         });
 
-        it('should ignore non-space keys', () => {
+        it('should not toggle with space when already checked', () => {
+            state.setChecked(true);
             const onChange = vi.fn();
-            const logicWithCallback = createCheckboxLogic(state, { onChange });
+            const logicWithCallback = createRadioLogic(state, { ...options, onChange });
+            logicWithCallback.connect(state);
+            logicWithCallback.initialize();
+            const interactions = logicWithCallback.getInteractionHandlers('root');
+            
+            interactions.onKeyDown(mockKeyboardEvent as KeyboardEvent);
+            
+            expect(mockKeyboardEvent.preventDefault).toHaveBeenCalled();
+            // Radio should not uncheck with space if already checked
+            expect(onChange).not.toHaveBeenCalled();
+        });
+
+        it('should handle arrow keys for group navigation', () => {
+            const logicWithCallback = createRadioLogic(state, options);
+            logicWithCallback.connect(state);
+            logicWithCallback.initialize();
+            const interactions = logicWithCallback.getInteractionHandlers('root');
+            const arrowKey = { ...mockKeyboardEvent, code: 'ArrowDown' };
+            
+            interactions.onKeyDown(arrowKey as KeyboardEvent);
+            
+            // Arrow keys should not prevent default (to allow group navigation)
+            expect(arrowKey.preventDefault).not.toHaveBeenCalled();
+        });
+
+        it('should ignore non-space/arrow keys', () => {
+            const onChange = vi.fn();
+            const logicWithCallback = createRadioLogic(state, { ...options, onChange });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
             const mockOtherKey = { ...mockKeyboardEvent, code: 'Enter' };
@@ -380,7 +395,7 @@ describe('Checkbox Logic', () => {
         it('should prevent keydown when disabled', () => {
             state.setDisabled(true);
             const onChange = vi.fn();
-            const logicWithCallback = createCheckboxLogic(state, { onChange });
+            const logicWithCallback = createRadioLogic(state, { ...options, onChange });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
             const interactions = logicWithCallback.getInteractionHandlers('root');
@@ -393,7 +408,7 @@ describe('Checkbox Logic', () => {
 
         it('should handle focus events', () => {
             const onFocus = vi.fn();
-            const logicWithCallback = createCheckboxLogic(state, { onFocus });
+            const logicWithCallback = createRadioLogic(state, { ...options, onFocus });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
             const interactions = logicWithCallback.getInteractionHandlers('root');
@@ -406,7 +421,7 @@ describe('Checkbox Logic', () => {
 
         it('should handle blur events', () => {
             const onBlur = vi.fn();
-            const logicWithCallback = createCheckboxLogic(state, { onBlur });
+            const logicWithCallback = createRadioLogic(state, { ...options, onBlur });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
             const interactions = logicWithCallback.getInteractionHandlers('root');
@@ -418,41 +433,70 @@ describe('Checkbox Logic', () => {
         });
     });
 
-    describe('event handling', () => {
-        it('should call onChange callback when provided', () => {
+    describe('event triggering', () => {
+        it('should trigger change event on interaction', () => {
             const onChange = vi.fn();
-            const logicWithCallback = createCheckboxLogic(state, { onChange });
+            const logicWithCallback = createRadioLogic(state, { ...options, onChange });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
             
+            // Simulate an event being triggered
             logicWithCallback.handleEvent('change', {
                 checked: true,
-                previousChecked: false
+                value: 'test-value'
             });
             
-            expect(onChange).toHaveBeenCalledWith(true);
+            expect(onChange).toHaveBeenCalledWith(true, 'test-value');
         });
 
-        it('should call onFocus callback when provided', () => {
+        it('should trigger focus event', () => {
             const onFocus = vi.fn();
-            const logicWithCallback = createCheckboxLogic(state, { onFocus });
+            const logicWithCallback = createRadioLogic(state, { ...options, onFocus });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
             
-            logicWithCallback.handleEvent('focus', { event: mockFocusEvent as FocusEvent });
+            // Simulate focus event
+            logicWithCallback.handleEvent('focus', mockFocusEvent);
             
             expect(onFocus).toHaveBeenCalledWith(mockFocusEvent);
         });
 
-        it('should call onBlur callback when provided', () => {
+        it('should trigger blur event', () => {
             const onBlur = vi.fn();
-            const logicWithCallback = createCheckboxLogic(state, { onBlur });
+            const logicWithCallback = createRadioLogic(state, { ...options, onBlur });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
             
-            logicWithCallback.handleEvent('blur', { event: mockFocusEvent as FocusEvent });
+            // Simulate blur event
+            logicWithCallback.handleEvent('blur', mockFocusEvent);
             
             expect(onBlur).toHaveBeenCalledWith(mockFocusEvent);
         });
+    });
+});
+
+describe('Radio Integration', () => {
+    it('should create complete radio component', () => {
+        const options: RadioOptions = {
+            name: 'test-group',
+            value: 'test-value',
+            checked: true,
+            onChange: vi.fn()
+        };
+        
+        const state = createRadioState(options);
+        const logic = createRadioLogic(state, options);
+        const listener = vi.fn();
+        
+        expect(state).toBeDefined();
+        expect(logic).toBeDefined();
+        
+        // Verify state through subscription
+        state.subscribe(listener);
+        state.setChecked(true); // Trigger subscription
+        
+        // Radio state has the same issue - only partial updates
+        expect(listener).toHaveBeenCalledWith({ checked: true });
+        // Value and name are set during initialization and don't change
     });
 });

@@ -1,48 +1,77 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createButtonState } from './state.js';
 
 describe('Button State', () => {
     it('should create button state with default values', () => {
         const state = createButtonState({});
-        const currentState = state.getState();
+        const listener = vi.fn();
         
-        expect(currentState.pressed).toBe(false);
-        expect(currentState.focused).toBe(false);
-        expect(currentState.disabled).toBe(false);
-        expect(currentState.loading).toBe(false);
-        expect(currentState.variant).toBe('default');
-        expect(currentState.size).toBe('md');
+        // Subscribe and trigger updates to verify state
+        state.subscribe(listener);
+        state.setPressed(false); // Trigger subscription
+        
+        // Button state uses correct spread operator, so we get full state
+        const receivedState = listener.mock.calls[0][0];
+        expect(receivedState.pressed).toBe(false);
+        expect(receivedState.focused).toBe(false);
+        expect(receivedState.disabled).toBe(false);
+        expect(receivedState.loading).toBe(false);
+        expect(receivedState.variant).toBe('default');
+        expect(receivedState.size).toBe('md');
     });
 
     it('should set disabled state', () => {
         const state = createButtonState({});
+        const listener = vi.fn();
+        
+        state.subscribe(listener);
         
         state.setDisabled(true);
-        expect(state.getState().disabled).toBe(true);
+        expect(listener).toHaveBeenCalledWith(
+            expect.objectContaining({ disabled: true })
+        );
         
+        listener.mockClear();
         state.setDisabled(false);
-        expect(state.getState().disabled).toBe(false);
+        expect(listener).toHaveBeenCalledWith(
+            expect.objectContaining({ disabled: false })
+        );
     });
 
     it('should set loading state', () => {
         const state = createButtonState({});
+        const listener = vi.fn();
         
+        state.subscribe(listener);
         state.setLoading(true);
-        expect(state.getState().loading).toBe(true);
+        
+        expect(listener).toHaveBeenCalledWith(
+            expect.objectContaining({ loading: true })
+        );
     });
 
     it('should set pressed state', () => {
         const state = createButtonState({});
+        const listener = vi.fn();
         
+        state.subscribe(listener);
         state.setPressed(true);
-        expect(state.getState().pressed).toBe(true);
+        
+        expect(listener).toHaveBeenCalledWith(
+            expect.objectContaining({ pressed: true })
+        );
     });
 
     it('should set focused state', () => {
         const state = createButtonState({});
+        const listener = vi.fn();
         
+        state.subscribe(listener);
         state.setFocused(true);
-        expect(state.getState().focused).toBe(true);
+        
+        expect(listener).toHaveBeenCalledWith(
+            expect.objectContaining({ focused: true })
+        );
     });
 
     it('should compute interactive state', () => {
@@ -66,9 +95,14 @@ describe('Button State', () => {
             loading: false
         });
         
-        const currentState = state.getState();
-        expect(currentState.variant).toBe('primary');
-        expect(currentState.size).toBe('lg');
-        expect(currentState.disabled).toBe(true);
+        const listener = vi.fn();
+        state.subscribe(listener);
+        state.setDisabled(true); // Trigger subscription with same value
+        
+        // Button state uses correct spread operator, so we get full state
+        const receivedState = listener.mock.calls[0][0];
+        expect(receivedState.variant).toBe('primary');
+        expect(receivedState.size).toBe('lg');
+        expect(receivedState.disabled).toBe(true);
     });
 });

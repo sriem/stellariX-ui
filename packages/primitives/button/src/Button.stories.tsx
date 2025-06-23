@@ -65,7 +65,14 @@ const createButtonComponent = (args) => {
   // For now, we'll create a simple React component that simulates the button
   // In a real implementation, the React adapter would handle this
   const ButtonComponent = () => {
-    const state = button.state.getState();
+    // Use local state to track button state changes
+    const [buttonState, setButtonState] = React.useState({
+      disabled: false,
+      loading: false,
+      pressed: false,
+      focused: false
+    });
+    
     const a11yProps = button.logic.getA11yProps('root');
     const handlers = button.logic.getInteractionHandlers('root');
     
@@ -79,11 +86,10 @@ const createButtonComponent = (args) => {
       }
     }, [args.disabled, args.loading]);
 
-    // Force re-render when state changes
-    const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+    // Subscribe to state changes
     React.useEffect(() => {
-      const unsubscribe = button.state.subscribe(() => {
-        forceUpdate();
+      const unsubscribe = button.state.subscribe((newState) => {
+        setButtonState(newState);
       });
       return unsubscribe;
     }, []);
@@ -144,18 +150,18 @@ const createButtonComponent = (args) => {
 
     const styles = {
       ...baseStyles,
-      ...variantStyles[state.variant || 'primary'],
-      ...sizeStyles[state.size || 'md'],
+      ...variantStyles[buttonState.variant || 'primary'],
+      ...sizeStyles[buttonState.size || 'md'],
     };
 
     return (
       <button
         style={styles}
-        disabled={state.disabled}
+        disabled={buttonState.disabled}
         onClick={() => handlers.onClick?.()}
         {...a11yProps}
       >
-        {state.loading ? 'Loading...' : args.children || 'Button Text'}
+        {buttonState.loading ? 'Loading...' : args.children || 'Button Text'}
       </button>
     );
   };
