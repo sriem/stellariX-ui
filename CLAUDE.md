@@ -23,6 +23,17 @@ StellarIX UI is a framework-agnostic headless component library that provides a 
 - **Component Exports**: Simple names like `Button`, `Card` (not `StellarixButton`)
 - **Why "sx"?**: Stellar + X = sx. It's memorable, fast to type, and follows patterns like MUI's sx prop
 
+### Import Aliases (Even Shorter!)
+Configure your bundler to use `@sx/` instead of `@stellarix/` for ultra-minimal typing:
+```tsx
+// Before
+import { createButton } from '@stellarix/button';
+
+// After (with alias)
+import { createButton } from '@sx/button';
+```
+See `/ALIAS_SETUP.md` for bundler configuration.
+
 ## 🎯 Critical Information Sources
 
 ### Where to Find Project Information
@@ -190,13 +201,20 @@ interface FrameworkAdapter {
 - ✅ ALWAYS communicate via events, not direct calls
 
 ### Component Creation Pattern
-```typescript
-import { createButton } from '@stellarix-ui/button';
-import { reactAdapter } from '@stellarix-ui/react';
 
+**IMPORTANT**: We're moving towards a single factory pattern. Instead of having separate `createComponent` and `createComponentWithImplementation` functions, use a unified approach:
+
+```typescript
+// Preferred: Single factory pattern
+import { createButton } from '@stellarix/button';
+import { reactAdapter } from '@stellarix/react';
+
+// The factory handles both cases internally
 const button = createButton(options);
 const ReactButton = button.connect(reactAdapter);
 ```
+
+This simplifies the API and reduces cognitive load. The factory function internally determines whether to use a default implementation or a custom one based on the provided options.
 
 ### Package Structure
 - `/packages/core/` - Core state and logic systems
@@ -234,48 +252,121 @@ packages/primitives/[component]/
     "exactOptionalPropertyTypes": true,
     "noUncheckedIndexedAccess": true,
     "verbatimModuleSyntax": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   }
 }
 ```
-- Ultra-strict mode with exactOptionalPropertyTypes
-- Bundler module resolution for modern tools
-- Path aliases: `@stellarix-ui/core`, `@stellarix-ui/utils`, etc.
-- ESM-first with verbatimModuleSyntax
+- **Ultra-strict mode**: `exactOptionalPropertyTypes` ensures undefined handling
+- **Bundler module resolution**: Compatible with Vite, webpack, esbuild, etc.
+- **verbatimModuleSyntax**: Replaces deprecated `importsNotUsedAsValues`
+- **ESM-first**: Modern module syntax with proper tree-shaking
+- **Path aliases**: `@stellarix/core`, `@stellarix/utils` (no -ui suffix)
 
 ### Latest Framework Patterns
 1. **React 19 Adapter**:
    ```typescript
-   // Use latest React patterns
-   const Component = ({ ref, ...props }) => {
-     const [data, action, isPending] = useActionState(serverAction);
-     const asyncData = use(promise); // Direct promise reading
-     return <div ref={ref} {...props} />; // ref as prop
-   };
+   // React 19 - ref as prop (no forwardRef needed)
+   function MyInput({ placeholder, ref }) {
+     return <input placeholder={placeholder} ref={ref} />;
+   }
+   
+   // React 19 - useActionState for forms
+   function Form() {
+     const [error, submitAction, isPending] = useActionState(
+       async (previousState, formData) => {
+         const error = await updateName(formData.get("name"));
+         if (error) return error;
+         redirect("/path");
+         return null;
+       },
+       null
+     );
+     
+     return (
+       <form action={submitAction}>
+         <input type="text" name="name" />
+         <button type="submit" disabled={isPending}>Update</button>
+         {error && <p>{error}</p>}
+       </form>
+     );
+   }
+   
+   // React 19 - use hook for promises and context
+   function Component() {
+     const data = use(fetchDataPromise); // Suspends until resolved
+     const theme = use(ThemeContext); // Can be conditional
+     return <div theme={theme}>{data}</div>;
+   }
    ```
 
 2. **Vue 3.5+ Adapter**:
    ```vue
    <script setup lang="ts">
-   import { useTemplateRef } from 'vue'
+   import { useTemplateRef, onMounted } from 'vue'
    
-   const props = defineProps<{ state: ComponentState }>()
-   const emit = defineEmits<{ update: [value: string] }>()
-   const elementRef = useTemplateRef('element')
+   // Type-safe props with generic argument
+   const props = defineProps<{
+     foo: string
+     bar?: number
+   }>()
+   
+   // Type-safe emits with call signatures
+   const emit = defineEmits<{
+     (e: 'change', id: number): void
+     (e: 'update', value: string): void
+   }>()
+   
+   // Vue 3.5+ useTemplateRef for DOM access
+   const input = useTemplateRef('my-input')
+   
+   onMounted(() => {
+     input.value?.focus()
+   })
    </script>
+   
+   <template>
+     <input ref="my-input" />
+   </template>
    ```
 
 3. **Svelte 5 Runes Adapter**:
    ```svelte
    <script lang="ts">
+   // Svelte 5 - $props() rune for component props
    let { state, logic }: Props = $props();
-   let count = $state(0);
-   let doubled = $derived(count * 2);
    
+   // $state for reactive variables
+   let count = $state(0);
+   
+   // $derived for computed values
+   let doubled = $derived(count * 2);
+   let large = $derived(count > 10);
+   
+   // $derived.by for complex derivations
+   let total = $derived.by(() => {
+     let sum = 0;
+     for (const n of numbers) {
+       sum += n;
+     }
+     return sum;
+   });
+   
+   // $effect for side effects and cleanup
    $effect(() => {
      const cleanup = logic.initialize();
-     return cleanup;
+     
+     // Cleanup function
+     return () => {
+       cleanup();
+     };
    });
+   
+   // $inspect for development debugging
+   $inspect(count, state); // Auto-logs changes
    </script>
    ```
 
@@ -305,6 +396,20 @@ packages/primitives/[component]/
 1. **Dialog Component**: Currently implementing in `packages/primitives/dialog/`
 2. **TypeScript Enhancement**: Standardizing TypeScript 5.0+ configurations
 3. **React Adapter**: Completing the React adapter implementation
+
+## 📖 Framework Pattern Guides
+
+Detailed guides for each framework's latest patterns:
+
+- **React 19**: `/packages/adapters/react/REACT19-PATTERNS.md`
+- **Vue 3.5+**: `/packages/adapters/vue/VUE3-PATTERNS.md`
+- **Svelte 5**: `/packages/adapters/svelte/SVELTE5-PATTERNS.md`
+
+These guides include:
+- Latest framework features and syntax
+- Integration examples with StellarIX components
+- Migration guides from older versions
+- Best practices and advanced patterns
 
 ## Important Context Files
 
@@ -416,20 +521,20 @@ pnpm changeset publish
 - All packages are published under the `stellarix-ui` npm organization
 
 ### Package Naming Convention
-All packages follow the `@stellarix-ui/[package-name]` convention:
-- `@stellarix-ui/button` ✅ (NOT `@stellarix-ui/primitives-button`)
-- `@stellarix-ui/react` ✅ (NOT `@stellarix-ui/adapter-react`)
-- `@stellarix-ui/themes` ✅ (single themes package)
+All packages follow the `@stellarix/[package-name]` convention:
+- `@stellarix/button` ✅ (NOT `@stellarix/primitives-button`)
+- `@stellarix/react` ✅ (NOT `@stellarix/adapter-react`)
+- `@stellarix/themes` ✅ (single themes package)
 
 ### Example Changeset Workflow
 
 ```bash
 # 1. Implement new Select component
-pnpm --filter=@stellarix-ui/select test
+pnpm --filter=@stellarix/select test
 
 # 2. Create changeset
 pnpm changeset
-# Select: @stellarix-ui/select
+# Select: @stellarix/select
 # Type: minor
 # Summary: "Add Select component with search and keyboard navigation"
 
@@ -617,6 +722,20 @@ See `/packages/primitives/CLAUDE.md` for detailed component development guide in
 ### Component Templates
 - **Location**: `/templates/component-template/`
 - **Guide**: `/templates/COMPONENT_CREATION_GUIDE.md`
+
+## 📚 Additional Documentation
+
+### Framework-Specific Guides
+- **React 19 Patterns**: `/packages/adapters/react/REACT19-PATTERNS.md`
+- **Vue 3.5+ Patterns**: `/packages/adapters/vue/VUE3-PATTERNS.md`
+- **Svelte 5 Patterns**: `/packages/adapters/svelte/SVELTE5-PATTERNS.md`
+- **TypeScript 5.7+ Config**: `/TYPESCRIPT-CONFIG.md`
+
+These guides provide:
+- Latest syntax and best practices
+- Migration guides from older versions
+- Integration examples with StellarIX
+- Performance optimization tips
 
 ## 📋 Work Tracking & Current Status
 
