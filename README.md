@@ -41,6 +41,37 @@ Unlike other "headless" libraries with framework bias, StellarIX uses a **pure t
 - **📚 Template System**: Consistent, evolving patterns across all components
 - **🤖 AI-Friendly**: Memory bank system for perfect context awareness
 
+### 🎨 Styling Freedom
+
+StellarIX UI is **truly headless** - no forced styles, no CSS battles, just pure functionality ready for YOUR design:
+
+#### Works Perfectly with Tailwind CSS
+
+```tsx
+// Direct className application - it just works!
+<Button className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg" />
+
+// State-based Tailwind styling
+<Button className={cn(
+  "px-4 py-2 rounded-lg transition-all",
+  state.disabled ? "bg-gray-300" : "bg-blue-500 hover:bg-blue-600",
+  state.loading && "animate-pulse"
+)} />
+
+// Dark mode? No problem!
+<Button className="bg-white dark:bg-gray-800 text-black dark:text-white" />
+```
+
+#### Or Any Styling Solution
+
+- **CSS Modules**: `className={styles.button}`
+- **Styled Components**: Wrap any component
+- **Emotion/Stitches**: CSS-in-JS ready
+- **Vanilla CSS**: Use the provided CSS hooks
+- **No styles**: Components work without any CSS
+
+The headless architecture means you have **complete control** over styling while maintaining all the functionality, accessibility, and state management.
+
 ## 📊 Project Status
 
 <p align="center">
@@ -83,6 +114,7 @@ Dialog, Tooltip, Menu, Tabs, Select, Accordion, ProgressBar, and 9 more componen
 | **State Management** | ✅ Universal reactive | ❌ Framework-specific | ❌ React hooks | ❌ Framework-tied |
 | **Component Factory** | ✅ Single source | ❌ Separate codebases | ❌ React only | ❌ Duplicated logic |
 | **Latest Framework Support** | ✅ React 19, Vue 3.5+, Svelte 5 | ⚠️ Older versions | ⚠️ React 18 | ⚠️ Behind latest |
+| **Tailwind CSS Support** | ✅ First-class support | ✅ Good | ✅ Good | ❌ Style conflicts |
 | **Built-in Themes** | ✅ 3 beautiful themes | ❌ None | ❌ None | ✅ Single theme |
 | **Template System** | ✅ Evolving patterns | ❌ Manual | ❌ Manual | ❌ Manual |
 | **Bundle Size** | ✅ Ultra-optimized | ✅ Good | ✅ Good | ❌ Large |

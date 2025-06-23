@@ -1,0 +1,51 @@
+{
+  "name": "@stellarix-ui/example-tailwind",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Example of StellarIX UI components with Tailwind CSS",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@stellarix-ui/core": "workspace:*",
+    "@stellarix-ui/button": "workspace:*",
+    "@stellarix-ui/input": "workspace:*",
+    "@stellarix-ui/checkbox": "workspace:*",
+    "@stellarix-ui/radio": "workspace:*",
+    "@stellarix-ui/toggle": "workspace:*",
+    "@stellarix-ui/alert": "workspace:*",
+    "@stellarix-ui/badge": "workspace:*",
+    "@stellarix-ui/avatar": "workspace:*",
+    "@stellarix-ui/card": "workspace:*",
+    "@stellarix-ui/dialog": "workspace:*",
+    "@stellarix-ui/popover": "workspace:*",
+    "@stellarix-ui/container": "workspace:*",
+    "@stellarix-ui/divider": "workspace:*",
+    "@stellarix-ui/spinner": "workspace:*",
+    "@stellarix-ui/textarea": "workspace:*",
+    "@stellarix-ui/accordion": "workspace:*",
+    "@stellarix-ui/react": "workspace:*",
+    "@stellarix-ui/themes": "workspace:*",
+    "clsx": "^2.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^2.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.17",
+    "class-variance-authority": "^0.7.0",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.1"
+  }
+}

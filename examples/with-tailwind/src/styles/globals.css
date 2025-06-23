@@ -1,0 +1,252 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* StellarIX Design Tokens as CSS Variables */
+    --sx-color-background: 0 0% 100%;
+    --sx-color-foreground: 222.2 84% 4.9%;
+    
+    --sx-color-muted: 210 40% 96.1%;
+    --sx-color-muted-foreground: 215.4 16.3% 46.9%;
+    
+    --sx-color-card: 0 0% 100%;
+    --sx-color-card-foreground: 222.2 84% 4.9%;
+    
+    --sx-color-popover: 0 0% 100%;
+    --sx-color-popover-foreground: 222.2 84% 4.9%;
+    
+    --sx-color-border: 214.3 31.8% 91.4%;
+    --sx-color-input: 214.3 31.8% 91.4%;
+    
+    --sx-color-primary: 217.2 91.2% 59.8%;
+    --sx-color-primary-foreground: 210 40% 98%;
+    
+    --sx-color-secondary: 210 40% 96.1%;
+    --sx-color-secondary-foreground: 222.2 47.4% 11.2%;
+    
+    --sx-color-destructive: 0 84.2% 60.2%;
+    --sx-color-destructive-foreground: 210 40% 98%;
+    
+    --sx-color-ring: 217.2 91.2% 59.8%;
+    
+    --sx-radius: 0.5rem;
+  }
+  
+  .dark {
+    --sx-color-background: 222.2 84% 4.9%;
+    --sx-color-foreground: 210 40% 98%;
+    
+    --sx-color-muted: 217.2 32.6% 17.5%;
+    --sx-color-muted-foreground: 215 20.2% 65.1%;
+    
+    --sx-color-card: 222.2 84% 4.9%;
+    --sx-color-card-foreground: 210 40% 98%;
+    
+    --sx-color-popover: 222.2 84% 4.9%;
+    --sx-color-popover-foreground: 210 40% 98%;
+    
+    --sx-color-border: 217.2 32.6% 17.5%;
+    --sx-color-input: 217.2 32.6% 17.5%;
+    
+    --sx-color-primary: 217.2 91.2% 59.8%;
+    --sx-color-primary-foreground: 222.2 47.4% 11.2%;
+    
+    --sx-color-secondary: 217.2 32.6% 17.5%;
+    --sx-color-secondary-foreground: 210 40% 98%;
+    
+    --sx-color-destructive: 0 62.8% 30.6%;
+    --sx-color-destructive-foreground: 210 40% 98%;
+    
+    --sx-color-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Smooth scrolling for better UX */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Focus visible styles for accessibility */
+  *:focus {
+    outline: none;
+  }
+  
+  *:focus-visible {
+    @apply ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+  
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* StellarIX Component Base Styles */
+  
+  /* Button base styles */
+  .sx-button {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+  }
+  
+  /* Input base styles */
+  .sx-input {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm;
+    @apply ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium;
+    @apply placeholder:text-muted-foreground;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  /* Dialog overlay styles */
+  .sx-dialog-overlay {
+    @apply fixed inset-0 z-50 bg-background/80 backdrop-blur-sm;
+    animation: fadeIn 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* Dialog content styles */
+  .sx-dialog-content {
+    @apply fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%];
+    @apply rounded-lg border bg-background p-6 shadow-lg;
+    animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* Select styles */
+  .sx-select-trigger {
+    @apply flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2;
+    @apply text-sm ring-offset-background placeholder:text-muted-foreground;
+    @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  .sx-select-content {
+    @apply relative z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md;
+    animation: slideUpAndFade 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  /* Card styles */
+  .sx-card {
+    @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+  }
+  
+  .sx-card-header {
+    @apply flex flex-col space-y-1.5 p-6;
+  }
+  
+  .sx-card-content {
+    @apply p-6 pt-0;
+  }
+  
+  .sx-card-footer {
+    @apply flex items-center p-6 pt-0;
+  }
+}
+
+@layer utilities {
+  /* Custom utilities for StellarIX */
+  
+  /* Loading spinner animation */
+  .sx-loading {
+    @apply pointer-events-none relative;
+  }
+  
+  .sx-loading::after {
+    @apply absolute inset-0 flex items-center justify-center;
+    content: '';
+    animation: sx-spin 0.6s linear infinite;
+  }
+  
+  /* Glassmorphism effects */
+  .sx-glass {
+    @apply bg-white/10 backdrop-blur-md;
+    @apply border border-white/20;
+    @apply shadow-xl;
+  }
+  
+  .sx-glass-dark {
+    @apply bg-black/10 backdrop-blur-md;
+    @apply border border-black/20;
+    @apply shadow-xl;
+  }
+  
+  /* Gradient text */
+  .sx-gradient-text {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
+  }
+  
+  /* Hover lift effect */
+  .sx-hover-lift {
+    @apply transition-transform duration-200 ease-out;
+  }
+  
+  .sx-hover-lift:hover {
+    @apply -translate-y-1;
+  }
+  
+  /* Active press effect */
+  .sx-active-press {
+    @apply transition-transform duration-75;
+  }
+  
+  .sx-active-press:active {
+    @apply scale-95;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Print styles */
+@media print {
+  .sx-no-print {
+    display: none !important;
+  }
+}
