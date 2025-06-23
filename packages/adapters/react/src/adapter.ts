@@ -125,6 +125,9 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                 if (restProps.pattern) componentSpecificProps.pattern = restProps.pattern;
             }
             
+            // Void elements (input, br, hr, etc.) can't have children
+            const isVoidElement = ['input', 'br', 'hr', 'img', 'area', 'base', 'col', 'embed', 'link', 'meta', 'param', 'source', 'track', 'wbr'].includes(rootElement);
+            
             return createElement(
                 rootElement,
                 {
@@ -137,7 +140,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                     className,
                     style,
                 },
-                children
+                isVoidElement ? undefined : children
             );
         };
 

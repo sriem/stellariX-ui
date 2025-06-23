@@ -8,9 +8,46 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { createToggleWithImplementation } from './index';
 import { reactAdapter } from '@stellarix/react';
 
-// Create the React toggle component
-const toggle = createToggleWithImplementation();
-const Toggle = toggle.connect(reactAdapter);
+// Create a wrapper component that creates individual Toggle instances
+const ToggleWrapper = React.forwardRef((props: any, ref: any) => {
+  const [toggle] = React.useState(() => createToggleWithImplementation(props));
+  const Component = React.useMemo(() => toggle.connect(reactAdapter), [toggle]);
+  
+  // Update the toggle's state when props change
+  React.useEffect(() => {
+    if (props.checked !== undefined && props.checked !== toggle.state.getState().checked) {
+      toggle.state.setChecked(props.checked);
+    }
+  }, [props.checked, toggle]);
+  
+  React.useEffect(() => {
+    if (props.disabled !== undefined) {
+      toggle.state.setDisabled(props.disabled);
+    }
+  }, [props.disabled, toggle]);
+  
+  // Connect onChange handler
+  React.useEffect(() => {
+    if (props.onChange) {
+      const unsubscribe = toggle.state.subscribe((state) => {
+        // Only call onChange if it's a user interaction (not initial state)
+        if (state.checked !== props.checked) {
+          props.onChange(state.checked);
+        }
+      });
+      return unsubscribe;
+    }
+  }, [props.onChange, props.checked, toggle]);
+  
+  // Add size class for styling
+  const className = `${props.className || ''} ${props.size ? `toggle-${props.size}` : ''}`.trim();
+  
+  return <Component ref={ref} {...props} className={className} />;
+});
+
+ToggleWrapper.displayName = 'Toggle';
+
+const Toggle = ToggleWrapper;
 
 // Toggle visual styles for Storybook
 const toggleStyles = {
@@ -20,72 +57,71 @@ const toggleStyles = {
 };
 
 // Decorator to add visual styles to the headless toggle
-const withToggleStyles = (Story: any, context: any) => {
-  const size = context.args.size || 'md';
-  const sizeStyle = toggleStyles[size];
-  
-  // Use a wrapper to apply styles
-  const StyledToggle = () => {
-    const storyElement = Story();
-    const [isChecked, setIsChecked] = React.useState(context.args.checked || false);
-    
-    React.useEffect(() => {
-      // Listen for toggle state changes
-      const handleChange = (e: any) => {
-        if (e.target.getAttribute('role') === 'switch') {
-          setIsChecked(e.target.getAttribute('aria-checked') === 'true');
+const withToggleStyles = (Story: any) => {
+  return (
+    <>
+      <style>{`
+        button[role="switch"] {
+          appearance: none;
+          position: relative;
+          width: var(--toggle-width, 48px);
+          height: var(--toggle-height, 26px);
+          background-color: var(--toggle-bg, #ccc);
+          border-radius: 100px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+          border: none;
+          padding: 0;
         }
-      };
-      
-      document.addEventListener('click', handleChange);
-      return () => document.removeEventListener('click', handleChange);
-    }, []);
-    
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <div style={{ position: 'relative', display: 'inline-block' }}>
-          <style>{`
-            button[role="switch"] {
-              appearance: none;
-              position: relative;
-              width: ${sizeStyle.width};
-              height: ${sizeStyle.height};
-              background-color: ${isChecked ? '#4CAF50' : '#ccc'};
-              border-radius: 100px;
-              cursor: ${context.args.disabled ? 'not-allowed' : 'pointer'};
-              opacity: ${context.args.disabled ? 0.5 : 1};
-              transition: background-color 0.2s;
-              border: none;
-              padding: 0;
-            }
-            
-            button[role="switch"]:focus {
-              outline: 2px solid #2196F3;
-              outline-offset: 2px;
-            }
-            
-            button[role="switch"]::after {
-              content: '';
-              position: absolute;
-              top: 50%;
-              left: ${isChecked ? `calc(100% - ${sizeStyle.thumbSize} - 2px)` : '2px'};
-              transform: translateY(-50%);
-              width: ${sizeStyle.thumbSize};
-              height: ${sizeStyle.thumbSize};
-              background-color: white;
-              border-radius: 50%;
-              transition: left 0.2s;
-              box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            }
-          `}</style>
-          {storyElement}
-        </div>
-        {context.args.label && <span>{context.args.label}</span>}
-      </div>
-    );
-  };
-  
-  return <StyledToggle />;
+        
+        button[role="switch"][aria-checked="true"] {
+          background-color: #4CAF50;
+        }
+        
+        button[role="switch"]:disabled {
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+        
+        button[role="switch"]:focus {
+          outline: 2px solid #2196F3;
+          outline-offset: 2px;
+        }
+        
+        button[role="switch"]::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 2px;
+          transform: translateY(-50%);
+          width: var(--toggle-thumb, 22px);
+          height: var(--toggle-thumb, 22px);
+          background-color: white;
+          border-radius: 50%;
+          transition: left 0.2s;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        button[role="switch"][aria-checked="true"]::after {
+          left: calc(100% - var(--toggle-thumb, 22px) - 2px);
+        }
+        
+        /* Size variants */
+        button[role="switch"].toggle-sm {
+          --toggle-width: 36px;
+          --toggle-height: 20px;
+          --toggle-thumb: 16px;
+        }
+        
+        button[role="switch"].toggle-lg {
+          --toggle-width: 60px;
+          --toggle-height: 32px;
+          --toggle-thumb: 28px;
+        }
+      `}</style>
+      <Story />
+    </>
+  );
 };
 
 const meta: Meta<typeof Toggle> = {

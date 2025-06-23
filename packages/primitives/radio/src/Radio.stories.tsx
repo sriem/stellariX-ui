@@ -8,9 +8,34 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { createRadio } from './index';
 import { reactAdapter } from '@stellarix/react';
 
-// Create the React radio component
-const radio = createRadio({ name: 'default', value: 'default' });
-const Radio = radio.connect(reactAdapter);
+// Create the React radio component using the direct pattern
+const RadioComponent = ({ ...props }) => {
+  const radio = React.useMemo(() => createRadio(props), []);
+  const [state, setState] = React.useState(() => radio.state.getState());
+  
+  React.useEffect(() => {
+    const unsubscribe = radio.state.subscribe(setState);
+    return unsubscribe;
+  }, [radio]);
+
+  const a11yProps = radio.logic.getA11yProps('root');
+  const handlers = radio.logic.getInteractionHandlers('root');
+
+  return (
+    <input
+      type="radio"
+      {...a11yProps}
+      {...handlers}
+      checked={state.checked}
+      disabled={state.disabled}
+      name={props.name}
+      value={props.value}
+      style={{ cursor: state.disabled ? 'not-allowed' : 'pointer' }}
+    />
+  );
+};
+
+const Radio = RadioComponent;
 
 const meta: Meta<typeof Radio> = {
   title: 'Primitives/Radio',
