@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createPaginationState } from './state';
 import { createPaginationLogic } from './logic';
 import type { PaginationOptions, PaginationState, PaginationEvents } from './types';

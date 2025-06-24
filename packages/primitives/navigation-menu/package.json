@@ -1,0 +1,79 @@
+{
+  "name": "@stellarix-ui/navigation-menu",
+  "version": "0.0.0",
+  "private": false,
+  "description": "Accessible and flexible navigation menu component for StellarIX UI",
+  "keywords": [
+    "stellarix",
+    "navigation",
+    "menu",
+    "nav",
+    "component",
+    "ui",
+    "headless",
+    "accessible",
+    "wcag"
+  ],
+  "license": "MIT",
+  "author": "StellarIX Team",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist .turbo",
+    "dev": "tsup --watch",
+    "lint": "eslint src test",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:a11y": "vitest run test/navigation-menu-a11y.test.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@stellarix-ui/core": "workspace:*",
+    "@stellarix-ui/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@stellarix-ui/react": "workspace:*",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^22.10.7",
+    "@types/react": "19.0.5",
+    "@types/react-dom": "19.0.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^9.3.0",
+    "happy-dom": "^16.5.0",
+    "jest-axe": "^10.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  },
+  "peerDependencies": {
+    "@stellarix-ui/core": "^0.0.0",
+    "@stellarix-ui/utils": "^0.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

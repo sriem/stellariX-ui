@@ -10,7 +10,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { createSelectWithImplementation } from '../src/index';
-import { reactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix-ui/react';
 import type { SelectOption } from '../src/types';
 
 // Create the React-connected Select component

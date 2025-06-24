@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createSliderState } from './state';
 import { createSliderLogic } from './logic';
 import type { SliderOptions, SliderState, SliderEvents } from './types';

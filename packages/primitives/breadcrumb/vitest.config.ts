@@ -1,13 +1,12 @@
-/// <reference types="vitest/config" />
-import { defineConfig } from 'vitest/config'
-import path from 'path'
+import { defineConfig } from 'vitest/config';
+import path from 'path';
 
 export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
+    setupFiles: [],
     include: ['src/**/*.test.{ts,tsx}', 'test/**/*.test.{ts,tsx}'],
-    testTimeout: 30000,
   },
   resolve: {
     alias: {
@@ -16,4 +15,4 @@ export default defineConfig({
       '@stellarix-ui/react': path.resolve(__dirname, '../../adapters/react/src'),
     },
   },
-})
+});

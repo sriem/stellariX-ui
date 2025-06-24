@@ -1,0 +1,76 @@
+{
+  "name": "@stellarix/stepper",
+  "version": "0.0.1",
+  "description": "Ultra-generic stepper component for StellarIX UI",
+  "keywords": [
+    "stepper",
+    "wizard",
+    "progress",
+    "steps",
+    "component",
+    "ui",
+    "stellarix",
+    "headless",
+    "framework-agnostic",
+    "typescript"
+  ],
+  "author": "Anthropic Claude <claude@anthropic.com>",
+  "homepage": "https://github.com/yourusername/stellariX-ui#readme",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/stellariX-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/stellariX-ui/issues"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:a11y": "vitest run test/*-a11y.test.tsx",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "@stellarix-ui/core": "workspace:*",
+    "@stellarix-ui/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@stellarix-ui/themes": "workspace:*",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsup": "^8.0.1",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.5",
+    "happy-dom": "^15.11.7",
+    "@vitest/coverage-v8": "^2.1.5",
+    "jest-axe": "^10.0.0"
+  },
+  "peerDependencies": {
+    "@stellarix-ui/core": "workspace:*",
+    "@stellarix-ui/utils": "workspace:*"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  }
+}
