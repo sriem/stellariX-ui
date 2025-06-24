@@ -11,7 +11,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { createSelectWithImplementation } from '../src';
+import { createSelect } from '../src';
 import { reactAdapter } from '@stellarix-ui/react';
 import type { SelectOptions, SelectOption } from '../src/types';
 
@@ -26,7 +26,7 @@ const mockOptions: SelectOption[] = [
 
 describe.skip('Select React Integration', () => {
     it('should render with React adapter', () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         render(<SelectComponent />);
@@ -122,7 +122,7 @@ describe.skip('Select React Integration', () => {
     });
     
     it('should handle keyboard navigation with arrow keys', async () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         render(<SelectComponent />);
@@ -317,7 +317,7 @@ describe.skip('Select React Integration', () => {
     });
     
     it('should handle Home and End keys', async () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         render(<SelectComponent />);

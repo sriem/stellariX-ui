@@ -12,7 +12,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
-import { createSelectWithImplementation } from '../src';
+import { createSelect } from '../src';
 import { reactAdapter } from '@stellarix-ui/react';
 import type { SelectOption } from '../src/types';
 
@@ -39,7 +39,7 @@ describe.skip('Select Accessibility', () => {
     });
     
     it('should meet WCAG 2.1 AA standards', async () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         const { container } = render(
@@ -65,7 +65,7 @@ describe.skip('Select Accessibility', () => {
     }, 30000);
     
     it('should have proper ARIA attributes for combobox pattern', () => {
-        const select = createSelectWithImplementation({
+        const select = createSelect({
             options: mockOptions,
             value: 'apple',
             placeholder: 'Choose a fruit'
@@ -84,7 +84,7 @@ describe.skip('Select Accessibility', () => {
     });
     
     it('should have proper ARIA attributes when open', () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         const { getByRole } = render(<SelectComponent />);
@@ -112,7 +112,7 @@ describe.skip('Select Accessibility', () => {
     });
     
     it('should support keyboard navigation', () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         const { getByRole } = render(<SelectComponent />);
@@ -127,7 +127,7 @@ describe.skip('Select Accessibility', () => {
     });
     
     it('should announce selected value to screen readers', () => {
-        const select = createSelectWithImplementation({
+        const select = createSelect({
             options: mockOptions,
             value: 'banana'
         });
@@ -146,7 +146,7 @@ describe.skip('Select Accessibility', () => {
     });
     
     it('should have proper ARIA attributes for disabled state', () => {
-        const select = createSelectWithImplementation({
+        const select = createSelect({
             options: mockOptions,
             disabled: true
         });
@@ -160,7 +160,7 @@ describe.skip('Select Accessibility', () => {
     });
     
     it('should have proper ARIA attributes for readonly state', () => {
-        const select = createSelectWithImplementation({
+        const select = createSelect({
             options: mockOptions,
             value: 'orange',
             readonly: true
@@ -175,7 +175,7 @@ describe.skip('Select Accessibility', () => {
     });
     
     it('should support aria-label', async () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         const { container } = render(
@@ -190,7 +190,7 @@ describe.skip('Select Accessibility', () => {
     }, 30000);
     
     it('should support aria-labelledby', async () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         const { container } = render(
@@ -208,7 +208,7 @@ describe.skip('Select Accessibility', () => {
     }, 30000);
     
     it('should support aria-describedby', async () => {
-        const select = createSelectWithImplementation({
+        const select = createSelect({
             options: mockOptions,
             required: true
         });
@@ -230,7 +230,7 @@ describe.skip('Select Accessibility', () => {
     }, 30000);
     
     it('should properly handle aria-activedescendant for keyboard navigation', () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         const { getByRole } = render(<SelectComponent />);
@@ -248,7 +248,7 @@ describe.skip('Select Accessibility', () => {
     });
     
     it('should support searchable select accessibility', async () => {
-        const select = createSelectWithImplementation({
+        const select = createSelect({
             options: mockOptions,
             searchable: true
         });
@@ -274,7 +274,7 @@ describe.skip('Select Accessibility', () => {
     }, 30000);
     
     it('should handle high contrast mode', () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         const { getByRole } = render(<SelectComponent />);
@@ -286,7 +286,7 @@ describe.skip('Select Accessibility', () => {
     });
     
     it('should properly handle focus management', () => {
-        const select = createSelectWithImplementation({ options: mockOptions });
+        const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
         const { getByRole } = render(<SelectComponent />);
@@ -307,7 +307,7 @@ describe.skip('Select Accessibility', () => {
     });
     
     it('should have no accessibility violations with clearable button', async () => {
-        const select = createSelectWithImplementation({
+        const select = createSelect({
             options: mockOptions,
             value: 'apple',
             clearable: true
