@@ -8,17 +8,21 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createToggleWithImplementation } from './index';
 import { reactAdapter } from '@stellarix-ui/react';
 
-// Create a wrapper component that creates individual Toggle instances
+// Safe wrapper component to prevent infinite loops  
 const ToggleWrapper = React.forwardRef((props: any, ref: any) => {
   const [toggle] = React.useState(() => createToggleWithImplementation(props));
   const Component = React.useMemo(() => toggle.connect(reactAdapter), [toggle]);
   
-  // Update the toggle's state when props change
+  // Track current checked state to avoid unnecessary updates
+  const [currentChecked, setCurrentChecked] = React.useState(props.checked || false);
+  
+  // Update the toggle's state when props change (safely)
   React.useEffect(() => {
-    if (props.checked !== undefined && props.checked !== toggle.state.getState().checked) {
+    if (props.checked !== undefined && props.checked !== currentChecked) {
       toggle.state.setChecked(props.checked);
+      setCurrentChecked(props.checked);
     }
-  }, [props.checked, toggle]);
+  }, [props.checked, currentChecked, toggle]);
   
   React.useEffect(() => {
     if (props.disabled !== undefined) {
@@ -26,35 +30,19 @@ const ToggleWrapper = React.forwardRef((props: any, ref: any) => {
     }
   }, [props.disabled, toggle]);
   
-  // Track if change is from user interaction
-  const isUserInteractionRef = React.useRef(false);
-  
-  // Connect onChange handler to logic events
+  // Safe state subscription without monkey patching
   React.useEffect(() => {
-    if (props.onChange && toggle.logic) {
-      const originalHandleEvent = toggle.logic.handleEvent;
-      toggle.logic.handleEvent = (event, payload) => {
-        if (event === 'change') {
-          isUserInteractionRef.current = true;
-        }
-        return originalHandleEvent.call(toggle.logic, event, payload);
-      };
-    }
-  }, [props.onChange, toggle]);
-  
-  // Subscribe to state changes
-  React.useEffect(() => {
-    if (props.onChange) {
-      const unsubscribe = toggle.state.subscribe((state) => {
-        // Only call onChange if it's a user interaction
-        if (isUserInteractionRef.current && state.checked !== props.checked) {
+    const unsubscribe = toggle.state.subscribe((state) => {
+      if (state.checked !== currentChecked) {
+        setCurrentChecked(state.checked);
+        // Call onChange callback safely
+        if (props.onChange) {
           props.onChange(state.checked);
-          isUserInteractionRef.current = false;
         }
-      });
-      return unsubscribe;
-    }
-  }, [props.onChange, props.checked, toggle]);
+      }
+    });
+    return unsubscribe;
+  }, [props.onChange, currentChecked, toggle]);
   
   // Add size class for styling
   const className = `${props.className || ''} ${props.size ? `toggle-${props.size}` : ''}`.trim();
