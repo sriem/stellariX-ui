@@ -16,7 +16,7 @@ A framework-agnostic breadcrumb navigation component that provides hierarchical 
 ## Installation
 
 ```bash
-npm install @stellarix/breadcrumb
+pnpm add @stellarix/breadcrumb
 ```
 
 ## Basic Usage

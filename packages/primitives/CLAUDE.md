@@ -513,12 +513,12 @@ const state = component.state.getState(); // NEVER DO THIS IN STORIES!
 3. **Showcase Story**: Grid of all variations
 4. **Accessibility Story**: Demonstrates a11y features
 
-### Step 7: Run Tests with Timeout Protection
+### Step 7: Run Tests
 ```bash
-# ALWAYS use timeout to prevent hanging:
-timeout 30s pnpm test
-timeout 30s pnpm build
-timeout 30s pnpm typecheck
+# Run commands directly:
+pnpm test
+pnpm build
+pnpm typecheck
 ```
 
 ### Step 8: Create Changeset for Component
@@ -737,7 +737,7 @@ array[index]?.property
    - Clear timers/intervals
 
 3. **Test Hangs**
-   - Always use `timeout` command
+   - Run commands directly without timeout
    - Check for infinite loops
    - Verify no circular dependencies
 

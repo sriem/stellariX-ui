@@ -33,7 +33,7 @@ This guide explains how to create new components using the component template.
 
 6. **Run tests**:
    ```bash
-   timeout 30s pnpm test
+   pnpm test
    ```
 
 ## Component Checklist
@@ -91,9 +91,9 @@ Every component MUST have:
 
 ## Safety Rules
 
-1. **ALWAYS use timeout** when running tests:
+1. **Run tests directly**:
    ```bash
-   timeout 30s pnpm test
+   pnpm test
    ```
 
 2. **NEVER create circular dependencies**:
@@ -133,10 +133,10 @@ cd packages/primitives/input
 # - Add input-specific stories (placeholder, disabled, error states)
 
 # 7. Test
-timeout 30s pnpm test
+pnpm test
 
 # 8. Build
-timeout 30s pnpm build
+pnpm build
 
 # 9. View in Storybook
 pnpm storybook
@@ -148,7 +148,7 @@ pnpm storybook
 ### Tests hanging?
 - Check for infinite loops in state subscriptions
 - Ensure no circular dependencies
-- Use `timeout` command always
+- Run commands directly
 
 ### TypeScript errors?
 - Run `pnpm typecheck` to see all errors

@@ -17,7 +17,7 @@ A flexible, framework-agnostic pagination component for navigating through pages
 ## Installation
 
 ```bash
-npm install @stellarix-ui/pagination
+pnpm add @stellarix-ui/pagination
 ```
 
 ## Usage

@@ -5,10 +5,6 @@ A flexible and accessible navigation menu component for StellarIX UI that suppor
 ## Installation
 
 ```bash
-npm install @stellarix/navigation-menu @stellarix/core
-# or
-yarn add @stellarix/navigation-menu @stellarix/core
-# or  
 pnpm add @stellarix/navigation-menu @stellarix/core
 ```
 

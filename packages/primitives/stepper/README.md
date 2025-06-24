@@ -5,7 +5,7 @@ A framework-agnostic stepper component for guiding users through multi-step proc
 ## Installation
 
 ```bash
-npm install @stellarix/stepper @stellarix-ui/core
+pnpm add @stellarix/stepper @stellarix-ui/core
 ```
 
 ## Features

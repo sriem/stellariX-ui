@@ -35,7 +35,7 @@ Before starting development, verify:
    - This creates a virtuous cycle of improvement
 
 3. **Testing Safety**:
-   - Always use `timeout 30s pnpm test` to prevent infinite loops
+   - Run `pnpm test` directly
    - This protects against circular dependencies and runaway tests
    - If tests timeout, investigate immediately
 
@@ -2035,8 +2035,8 @@ Before implementing any component in this phase:
 
 3. **Test with Timeout**:
    ```bash
-   # Always test with timeout to prevent infinite loops
-   timeout 30s pnpm test
+   # Run tests directly
+   pnpm test
    ```
 
 4. **Template Evolution Principle**:

@@ -18,7 +18,7 @@ A flexible slider component with single and range value support, keyboard naviga
 ## Installation
 
 ```bash
-npm install @stellarix/slider
+pnpm add @stellarix/slider
 ```
 
 ## Usage
