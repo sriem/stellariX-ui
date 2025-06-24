@@ -175,7 +175,7 @@ export const WithClickHandler: Story = {
           }}
         >
           Clicked {clickCount} times
-        </Button>
+        </ButtonWrapper>
       </div>
     );
   },
@@ -188,28 +188,28 @@ export const Showcase: Story = {
       <div>
         <h3 style={{ marginBottom: '1rem' }}>Variants</h3>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <ButtonWrapper variant="primary">Primary</Button>
-          <ButtonWrapper variant="secondary">Secondary</Button>
-          <ButtonWrapper variant="outline">Outline</Button>
-          <ButtonWrapper variant="ghost">Ghost</Button>
+          <ButtonWrapper variant="primary">Primary</ButtonWrapper>
+          <ButtonWrapper variant="secondary">Secondary</ButtonWrapper>
+          <ButtonWrapper variant="outline">Outline</ButtonWrapper>
+          <ButtonWrapper variant="ghost">Ghost</ButtonWrapper>
         </div>
       </div>
       
       <div>
         <h3 style={{ marginBottom: '1rem' }}>Sizes</h3>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <ButtonWrapper size="sm">Small</Button>
-          <ButtonWrapper size="md">Medium</Button>
-          <ButtonWrapper size="lg">Large</Button>
+          <ButtonWrapper size="sm">Small</ButtonWrapper>
+          <ButtonWrapper size="md">Medium</ButtonWrapper>
+          <ButtonWrapper size="lg">Large</ButtonWrapper>
         </div>
       </div>
       
       <div>
         <h3 style={{ marginBottom: '1rem' }}>States</h3>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <ButtonWrapper>Normal</Button>
-          <ButtonWrapper disabled>Disabled</Button>
-          <ButtonWrapper loading>Loading</Button>
+          <ButtonWrapper>Normal</ButtonWrapper>
+          <ButtonWrapper disabled>Disabled</ButtonWrapper>
+          <ButtonWrapper loading>Loading</ButtonWrapper>
         </div>
       </div>
 
@@ -218,10 +218,10 @@ export const Showcase: Story = {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
           {(['primary', 'secondary', 'outline', 'ghost'] as const).map(variant => (
             <React.Fragment key={variant}>
-              <ButtonWrapper variant={variant} size="sm">{variant} sm</Button>
-              <ButtonWrapper variant={variant} size="md">{variant} md</Button>
-              <ButtonWrapper variant={variant} size="lg">{variant} lg</Button>
-              <ButtonWrapper variant={variant} disabled>{variant} disabled</Button>
+              <ButtonWrapper variant={variant} size="sm">{variant} sm</ButtonWrapper>
+              <ButtonWrapper variant={variant} size="md">{variant} md</ButtonWrapper>
+              <ButtonWrapper variant={variant} size="lg">{variant} lg</ButtonWrapper>
+              <ButtonWrapper variant={variant} disabled>{variant} disabled</ButtonWrapper>
             </React.Fragment>
           ))}
         </div>
@@ -246,12 +246,12 @@ export const KeyboardNavigation: Story = {
           onClick={() => alert(`Button ${num} clicked!`)}
         >
           Button {num} (Press Enter/Space to activate)
-        </Button>
+        </ButtonWrapper>
       ))}
       
       <ButtonWrapper disabled>
         Disabled button (Not focusable)
-      </Button>
+      </ButtonWrapper>
     </div>
   ),
 };
@@ -286,7 +286,7 @@ export const StressTest: Story = {
               onClick={() => setLastClicked(index + 1)}
             >
               {index + 1}
-            </Button>
+            </ButtonWrapper>
           ))}
         </div>
       </div>
