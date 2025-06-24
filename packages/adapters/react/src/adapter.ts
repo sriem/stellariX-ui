@@ -408,7 +408,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
             if (core.metadata.name === 'Select') {
                 const selectState = state as any;
                 const clearable = (restProps as any).clearable || (core as any).options?.clearable;
-                const searchable = (restProps as any).searchable || (core as any).options?.searchable;
+                const searchable = (restProps as any).searchable || (core as any).options?.searchable || false;
                 
                 // Get A11y props and handlers for each element
                 const triggerA11y = logic.getA11yProps('trigger');
@@ -448,8 +448,9 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                 const listboxId = triggerA11y?.['aria-controls'] || `listbox-${Date.now()}`;
                 
                 // Get options from state
-                const options = selectState.filteredOptions || selectState.options || [];
-                const selectedOption = options.find((opt: any) => opt.value === selectState.value);
+                const allOptions = selectState.options || [];
+                const filteredOptions = selectState.filteredOptions || allOptions;
+                const selectedOption = allOptions.find((opt: any) => opt.value === selectState.value);
                 
                 const elements = [];
                 
@@ -488,8 +489,8 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             ...style
                         }
                     }, [
-                        // Display value or placeholder (or search input if searchable)
-                        searchable ? 
+                        // Display value or placeholder (or search input if searchable and open)
+                        (searchable && selectState.open) ? 
                             createElement('input', {
                                 key: 'search',
                                 type: 'search',
@@ -547,7 +548,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                 );
                 
                 // Listbox (only when open)
-                if (selectState.open && options.length > 0) {
+                if (selectState.open && filteredOptions.length > 0) {
                     elements.push(
                         createElement('ul', {
                             key: 'listbox',
@@ -570,7 +571,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                                 padding: 0,
                                 zIndex: 1000
                             }
-                        }, options.map((option: any, index: number) => {
+                        }, filteredOptions.map((option: any, index: number) => {
                             const optionA11y = logic.getA11yProps('option');
                             const optionA11yProps = typeof optionA11y === 'function' ? optionA11y(index) : {};
                             const optionHandlers = logic.getInteractionHandlers('option');
@@ -582,9 +583,8 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                                     (e: any) => {
                                         e.optionIndex = index;
                                         const result = (handler as Function)(e);
-                                        if (result && typeof result === 'string') {
-                                            logic.handleEvent(result, { option, index, event: e });
-                                        }
+                                        // Don't call handleEvent again - the handler already handled it
+                                        // The result is just an event name for tracking, not for re-triggering
                                     }
                                 ])
                             );
@@ -601,7 +601,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                                     backgroundColor: index === selectState.highlightedIndex ? '#f0f0f0' : 
                                                    option.value === selectState.value ? '#e6f3ff' : 'white',
                                     color: option.disabled ? '#999' : 'black',
-                                    borderBottom: index < options.length - 1 ? '1px solid #f0f0f0' : 'none'
+                                    borderBottom: index < filteredOptions.length - 1 ? '1px solid #f0f0f0' : 'none'
                                 }
                             }, option.label);
                         }))

@@ -191,7 +191,7 @@ export function createSelectLogic(
                         if (option && options.onChange) {
                             options.onChange(option.value, option);
                         }
-                        return 'optionSelect';
+                        return null;
                     }
                     
                 case 'ArrowDown':
@@ -305,7 +305,7 @@ export function createSelectLogic(
                     options.onChange(option.value, option);
                 }
                 
-                return 'optionSelect';
+                return null;
             }
             
             return null;

@@ -17,12 +17,19 @@ export function useStore<T>(store: Store<T>): T {
     const [state, setState] = useState<T>(() => store.getState());
 
     useEffect(() => {
-        // Set initial state in case it changed
-        setState(store.getState());
-        
         // Subscribe to store changes
         const unsubscribe = store.subscribe(newState => {
             setState(newState);
+        });
+
+        // Check if current state is different from store state
+        const currentStoreState = store.getState();
+        setState(prevState => {
+            // Only update if actually different
+            if (JSON.stringify(prevState) !== JSON.stringify(currentStoreState)) {
+                return currentStoreState;
+            }
+            return prevState;
         });
 
         return unsubscribe;
