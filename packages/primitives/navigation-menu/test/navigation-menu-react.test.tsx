@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createNavigationMenu, getMenuItemA11yProps, getSubmenuA11yProps, createMenuItemHandlers } from '../src/index';
 import { reactAdapter } from '@stellarix-ui/react';
@@ -37,6 +37,9 @@ describe('NavigationMenu React Integration', () => {
     
     const createReactNavigationMenu = (options = {}) => {
         const menu = createNavigationMenu({ items: sampleItems, ...options });
+        // Store options in menu for handlers
+        (menu as any).options = { items: sampleItems, ...options };
+        
         return reactAdapter.createComponent({
             state: menu.state,
             logic: menu.logic,
@@ -47,12 +50,13 @@ describe('NavigationMenu React Integration', () => {
                     const isExpanded = state.expandedItemIds.includes(item.id);
                     
                     return (
-                        <li key={item.id} data-testid={`menu-item-${item.id}`}>
+                        <React.Fragment key={item.id}>
                             {hasChildren ? (
                                 <button
                                     {...getMenuItemA11yProps(state, item.id, hasChildren)}
-                                    {...createMenuItemHandlers(menu.state, menu.options, item.id)}
+                                    {...createMenuItemHandlers(menu.state, (menu as any).options, item.id)}
                                     data-testid={`menu-button-${item.id}`}
+                                    data-item-id={item.id}
                                 >
                                     {item.label}
                                     <span>{isExpanded ? ' ▼' : ' ►'}</span>
@@ -60,22 +64,25 @@ describe('NavigationMenu React Integration', () => {
                             ) : (
                                 <a
                                     {...getMenuItemA11yProps(state, item.id, hasChildren)}
-                                    {...createMenuItemHandlers(menu.state, menu.options, item.id)}
+                                    {...createMenuItemHandlers(menu.state, (menu as any).options, item.id)}
                                     data-testid={`menu-link-${item.id}`}
+                                    data-item-id={item.id}
+                                    href={item.href}
                                 >
                                     {item.label}
                                 </a>
                             )}
                             
                             {hasChildren && isExpanded && (
-                                <ul
+                                <div
                                     {...getSubmenuA11yProps(state, item.id)}
                                     data-testid={`submenu-${item.id}`}
+                                    style={{ position: 'absolute' }}
                                 >
                                     {item.children.map((child) => renderMenuItem(child, level + 1))}
-                                </ul>
+                                </div>
                             )}
-                        </li>
+                        </React.Fragment>
                     );
                 };
                 
@@ -93,13 +100,17 @@ describe('NavigationMenu React Integration', () => {
                             </button>
                         )}
                         
-                        <ul
+                        <div
                             {...a11y.menuList}
                             data-testid="menu-list"
-                            style={{ display: state.collapsed ? 'none' : 'block' }}
+                            style={{ 
+                                display: state.collapsed ? 'none' : 'flex',
+                                flexDirection: state.orientation === 'horizontal' ? 'row' : 'column',
+                                gap: state.orientation === 'horizontal' ? '8px' : '0',
+                            }}
                         >
                             {state.items.map((item) => renderMenuItem(item))}
-                        </ul>
+                        </div>
                     </nav>
                 );
             }
@@ -124,10 +135,10 @@ describe('NavigationMenu React Integration', () => {
         const nav = screen.getByTestId('navigation-menu');
         expect(nav).toHaveAttribute('role', 'navigation');
         expect(nav).toHaveAttribute('aria-label', 'Main navigation');
-        expect(nav).toHaveAttribute('aria-orientation', 'horizontal');
         
         const menuList = screen.getByTestId('menu-list');
         expect(menuList).toHaveAttribute('role', 'menubar');
+        expect(menuList).toHaveAttribute('aria-orientation', 'horizontal');
         
         const productsButton = screen.getByTestId('menu-button-products');
         expect(productsButton).toHaveAttribute('aria-haspopup', 'menu');
@@ -172,17 +183,17 @@ describe('NavigationMenu React Integration', () => {
         fireEvent.mouseEnter(productsButton);
         
         // Wait for hover delay
-        await new Promise(resolve => setTimeout(resolve, 200));
-        
-        expect(screen.getByTestId('submenu-products')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByTestId('submenu-products')).toBeInTheDocument();
+        }, { timeout: 300 });
         
         // Mouse leave to collapse
         fireEvent.mouseLeave(productsButton);
         
         // Wait for leave delay
-        await new Promise(resolve => setTimeout(resolve, 350));
-        
-        expect(screen.queryByTestId('submenu-products')).not.toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.queryByTestId('submenu-products')).not.toBeInTheDocument();
+        }, { timeout: 500 });
     });
     
     it('should handle keyboard navigation', async () => {
@@ -242,7 +253,7 @@ describe('NavigationMenu React Integration', () => {
         
         // Initially expanded
         expect(mobileButton).toHaveAttribute('aria-expanded', 'true');
-        expect(menuList).toHaveStyle({ display: 'block' });
+        expect(menuList).toHaveStyle({ display: 'flex' });
         
         // Click to collapse
         await userEvent.click(mobileButton);
@@ -284,7 +295,7 @@ describe('NavigationMenu React Integration', () => {
         render(<NavigationMenuComponent />);
         
         const nav = screen.getByTestId('navigation-menu');
-        expect(nav).toHaveAttribute('aria-orientation', 'vertical');
+        expect(nav).toHaveAttribute('role', 'navigation');
         
         const menuList = screen.getByTestId('menu-list');
         expect(menuList).toHaveAttribute('aria-orientation', 'vertical');

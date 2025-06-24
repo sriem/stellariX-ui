@@ -279,6 +279,9 @@ export function createStepper(
         connect: function <TFrameworkComponent>(adapter: any): TFrameworkComponent {
             return adapter.createComponent(this);
         },
+        destroy: () => {
+            logic.cleanup();
+        },
         ...helpers
     };
     

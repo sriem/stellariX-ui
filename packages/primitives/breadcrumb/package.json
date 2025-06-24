@@ -1,5 +1,5 @@
 {
-  "name": "@stellarix/breadcrumb",
+  "name": "@stellarix-ui/breadcrumb",
   "version": "0.0.0",
   "description": "Ultra-generic breadcrumb component for StellarIX UI",
   "keywords": [

@@ -3,10 +3,9 @@
  * A flexible and accessible navigation menu component
  */
 
-import type { ComponentCore, LogicLayer } from '@stellarix-ui/core';
+import type { ComponentCore } from '@stellarix-ui/core';
 import type { NavigationMenuState, NavigationMenuOptions, NavigationMenuEvents } from './types';
 import { createNavigationMenuState } from './state';
-import type { NavigationMenuStateStore } from './state';
 import { createNavigationMenuLogic } from './logic';
 
 // Re-export types
@@ -101,6 +100,9 @@ export function createNavigationMenu(options: NavigationMenuOptions = {}): Compo
                     version: '1.0.0'
                 }
             });
+        },
+        destroy: () => {
+            logic.cleanup();
         }
     };
 }

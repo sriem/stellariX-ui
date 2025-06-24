@@ -1,5 +1,5 @@
 {
-    "name": "@stellarix/date-picker",
+    "name": "@stellarix-ui/date-picker",
     "version": "0.0.1",
     "description": "Framework-agnostic date picker component for StellarIX UI",
     "type": "module",

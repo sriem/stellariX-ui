@@ -1,5 +1,5 @@
 {
-    "name": "@stellarix/slider",
+    "name": "@stellarix-ui/slider",
     "version": "0.0.1",
     "description": "Framework-agnostic slider component for StellarIX UI",
     "type": "module",

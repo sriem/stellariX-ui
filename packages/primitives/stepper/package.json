@@ -1,5 +1,5 @@
 {
-  "name": "@stellarix/stepper",
+  "name": "@stellarix-ui/stepper",
   "version": "0.0.1",
   "description": "Ultra-generic stepper component for StellarIX UI",
   "keywords": [

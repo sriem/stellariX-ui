@@ -39,6 +39,9 @@ describe('NavigationMenu Accessibility', () => {
     
     const createAccessibleNavigationMenu = (options = {}) => {
         const menu = createNavigationMenu({ items: sampleItems, ...options });
+        // Store options in menu for handlers
+        (menu as any).options = { items: sampleItems, ...options };
+        
         return reactAdapter.createComponent({
             state: menu.state,
             logic: menu.logic,
@@ -49,11 +52,12 @@ describe('NavigationMenu Accessibility', () => {
                     const isExpanded = state.expandedItemIds.includes(item.id);
                     
                     return (
-                        <li key={item.id}>
+                        <React.Fragment key={item.id}>
                             {hasChildren ? (
                                 <button
                                     {...getMenuItemA11yProps(state, item.id, hasChildren)}
-                                    {...createMenuItemHandlers(menu.state, menu.options, item.id)}
+                                    {...createMenuItemHandlers(menu.state, (menu as any).options, item.id)}
+                                    data-item-id={item.id}
                                     style={{
                                         padding: '8px 16px',
                                         border: 'none',
@@ -68,13 +72,15 @@ describe('NavigationMenu Accessibility', () => {
                             ) : (
                                 <a
                                     {...getMenuItemA11yProps(state, item.id, hasChildren)}
-                                    {...createMenuItemHandlers(menu.state, menu.options, item.id)}
+                                    {...createMenuItemHandlers(menu.state, (menu as any).options, item.id)}
+                                    data-item-id={item.id}
+                                    href={item.href}
                                     style={{
                                         padding: '8px 16px',
                                         textDecoration: 'none',
                                         color: item.active ? '#0066cc' : 'inherit',
                                         background: item.active ? '#e0e0e0' : 'transparent',
-                                        display: 'block',
+                                        display: 'inline-block',
                                         cursor: item.disabled ? 'not-allowed' : 'pointer',
                                         opacity: item.disabled ? 0.5 : 1,
                                     }}
@@ -84,18 +90,20 @@ describe('NavigationMenu Accessibility', () => {
                             )}
                             
                             {hasChildren && isExpanded && (
-                                <ul
+                                <div
                                     {...getSubmenuA11yProps(state, item.id)}
                                     style={{
-                                        listStyle: 'none',
+                                        position: 'absolute',
+                                        background: 'white',
+                                        border: '1px solid #ccc',
                                         padding: '4px 0',
                                         margin: '0 0 0 16px',
                                     }}
                                 >
                                     {item.children.map((child) => renderMenuItem(child, level + 1))}
-                                </ul>
+                                </div>
                             )}
-                        </li>
+                        </React.Fragment>
                     );
                 };
                 
@@ -117,19 +125,18 @@ describe('NavigationMenu Accessibility', () => {
                             </button>
                         )}
                         
-                        <ul
+                        <div
                             {...a11y.menuList}
                             style={{
                                 display: state.collapsed ? 'none' : 'flex',
                                 flexDirection: state.orientation === 'horizontal' ? 'row' : 'column',
-                                listStyle: 'none',
                                 padding: 0,
                                 margin: 0,
                                 gap: state.orientation === 'horizontal' ? '8px' : '0',
                             }}
                         >
                             {state.items.map((item) => renderMenuItem(item))}
-                        </ul>
+                        </div>
                     </nav>
                 );
             }
@@ -197,7 +204,7 @@ describe('NavigationMenu Accessibility', () => {
         
         const menubar = container.querySelector('[role="menubar"]');
         expect(menubar).toBeTruthy();
-        expect(menubar?.tagName).toBe('UL');
+        expect(menubar?.tagName).toBe('DIV');
         
         const menuitems = container.querySelectorAll('[role="menuitem"]');
         expect(menuitems.length).toBeGreaterThan(0);
@@ -277,11 +284,11 @@ describe('NavigationMenu Accessibility', () => {
         const { container } = render(<NavigationMenuComponent />);
         
         const activeLink = container.querySelector('[aria-current="page"]');
-        if (activeLink) {
-            const styles = window.getComputedStyle(activeLink);
-            // Active items should have sufficient contrast
-            expect(styles.color).toBe('rgb(0, 102, 204)'); // #0066cc
-            expect(styles.backgroundColor).toBe('rgb(224, 224, 224)'); // #e0e0e0
-        }
+        expect(activeLink).toBeTruthy();
+        
+        // Verify styles are applied
+        const element = activeLink as HTMLElement;
+        expect(element.style.color).toBe('#0066cc');
+        expect(element.style.background).toContain('#e0e0e0');
     });
 });

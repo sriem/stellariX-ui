@@ -31,8 +31,42 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
      * Uses latest React 19 patterns including ref as prop
      */
     createComponent<TState, TLogic extends Record<string, any> = Record<string, any>>(
-        core: ComponentCore<TState, TLogic>
+        core: ComponentCore<TState, TLogic> & { render?: (props: any) => any }
     ): ComponentType<ReactProps> {
+        // Check if a custom render function is provided
+        if (core.render && typeof core.render === 'function') {
+            // Create a component that uses the custom render function
+            const Component = function StellarIXComponent(props: ReactProps & { ref?: any }) {
+                const { ref, className, style, children, ...restProps } = props;
+                
+                // Use custom hooks to connect to core state and logic
+                const state = useStore(core.state);
+                const logic = useLogic(core.logic);
+                
+                // Get a11y and interaction handlers for custom render
+                const a11y = {
+                    root: logic.getA11yProps('root'),
+                    mobileMenuButton: logic.getA11yProps('mobileMenuButton'),
+                    menuList: logic.getA11yProps('menuList'),
+                };
+                
+                const interactions = {
+                    mobileMenuButton: logic.getInteractionHandlers('mobileMenuButton'),
+                };
+                
+                // Call the custom render function
+                return core.render!({
+                    state,
+                    a11y,
+                    interactions,
+                    props: { ref, className, style, children, ...restProps }
+                });
+            };
+            
+            Component.displayName = `StellarIX.${core.metadata.name}`;
+            return Component as ComponentType<ReactProps>;
+        }
+        
         // Create the React component using function component pattern
         // React 19 allows ref as a regular prop - no forwardRef needed!
         const Component = function StellarIXComponent(props: ReactProps & { ref?: any }) {

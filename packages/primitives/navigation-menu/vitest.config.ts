@@ -5,12 +5,13 @@ export default defineConfig({
     test: {
         environment: 'happy-dom',
         globals: true,
-        setupFiles: [],
+        setupFiles: ['./test/setup.ts'],
     },
     resolve: {
         alias: {
             '@stellarix-ui/core': resolve(__dirname, '../../core/src'),
             '@stellarix-ui/utils': resolve(__dirname, '../../utils/src'),
+            '@stellarix-ui/react': resolve(__dirname, '../../adapters/react/src'),
         },
     },
 });
