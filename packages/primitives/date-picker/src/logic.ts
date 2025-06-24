@@ -377,7 +377,8 @@ export function createDatePickerLogic(
         
         .withInteraction('cell', 'onClick', (currentState, event) => {
             const date = (event as any).date;
-            if (!date || state.isDateDisabled.get()(date)) {
+            const isDisabled = state.isDateDisabled.get();
+            if (!date || isDisabled(date)) {
                 return null;
             }
             
@@ -393,7 +394,8 @@ export function createDatePickerLogic(
         .withInteraction('cell', 'onMouseEnter', (currentState, event) => {
             if (currentState.mode === 'range' && currentState.startDate && !currentState.endDate) {
                 const date = (event as any).date;
-                if (date && !state.isDateDisabled.get()(date)) {
+                const isDisabled = state.isDateDisabled.get();
+                if (date && !isDisabled(date)) {
                     state.setHoveredDate(date);
                 }
             }

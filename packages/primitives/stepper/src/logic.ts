@@ -89,7 +89,6 @@ export function createStepperLogic(
         .withA11y('root', (currentState) => ({
             role: 'group',
             'aria-label': options.ariaLabel || 'Progress',
-            'aria-orientation': currentState.orientation,
             'aria-disabled': currentState.disabled ? 'true' : undefined,
         }))
         
@@ -98,8 +97,8 @@ export function createStepperLogic(
             role: 'list',
         }))
         
-        // Individual step
-        .withA11y('step', (currentState, { index }: { index: number }) => {
+        // Individual step - returns a function that takes index
+        .withA11y('step', (currentState) => (index: number) => {
             const step = currentState.steps[index];
             const status = getStepStatus(currentState, index);
             const accessible = isStepAccessible(currentState, index);
@@ -111,8 +110,8 @@ export function createStepperLogic(
             };
         })
         
-        // Step button/link
-        .withA11y('stepButton', (currentState, { index }: { index: number }) => {
+        // Step button/link - returns a function that takes index
+        .withA11y('stepButton', (currentState) => (index: number) => {
             const step = currentState.steps[index];
             const status = getStepStatus(currentState, index);
             const accessible = isStepAccessible(currentState, index);
@@ -130,18 +129,14 @@ export function createStepperLogic(
             };
         })
         
-        // Step label
-        .withA11y('stepLabel', (currentState, { index }: { index: number }) => {
-            const step = currentState.steps[index];
-            
-            return {
-                id: `step-${index}-label`,
-                'aria-hidden': 'true', // Label is included in button aria-label
-            };
-        })
+        // Step label - returns a function that takes index
+        .withA11y('stepLabel', () => (index: number) => ({
+            id: `step-${index}-label`,
+            'aria-hidden': 'true', // Label is included in button aria-label
+        }))
         
-        // Step description
-        .withA11y('stepDescription', (currentState, { index }: { index: number }) => ({
+        // Step description - returns a function that takes index
+        .withA11y('stepDescription', () => (index: number) => ({
             id: `step-${index}-description`,
         }))
         
@@ -282,7 +277,7 @@ export function createStepperLogic(
                 // Focus the element at the new index
                 const stepButtons = (event.target as HTMLElement)
                     .closest('[role="group"]')
-                    ?.querySelectorAll('[role="button"][data-testid*="step-button"]');
+                    ?.querySelectorAll('[role="button"]');
                     
                 if (stepButtons && stepButtons[newFocusIndex]) {
                     (stepButtons[newFocusIndex] as HTMLElement).focus();

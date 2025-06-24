@@ -3,8 +3,7 @@
  * A flexible and accessible navigation menu component
  */
 
-import { createPrimitive } from '@stellarix-ui/core';
-import type { LogicLayer } from '@stellarix-ui/core';
+import type { ComponentCore, LogicLayer } from '@stellarix-ui/core';
 import type { NavigationMenuState, NavigationMenuOptions, NavigationMenuEvents } from './types';
 import { createNavigationMenuState } from './state';
 import type { NavigationMenuStateStore } from './state';
@@ -24,22 +23,14 @@ export type {
 // Re-export helper functions for render usage
 export { getMenuItemA11yProps, getSubmenuA11yProps, createMenuItemHandlers } from './logic';
 
-/**
- * NavigationMenu component implementation
- */
-export interface NavigationMenuComponent {
-    state: NavigationMenuStateStore;
-    logic: LogicLayer<NavigationMenuState, NavigationMenuEvents>;
-    options: NavigationMenuOptions;
-    metadata?: any; // Full ComponentMetadata type from core
-}
+// Remove this interface as we'll use ComponentCore from @stellarix-ui/core
 
 /**
  * Creates a navigation menu component
  * @param options Component options
  * @returns Navigation menu component instance
  */
-export function createNavigationMenu(options: NavigationMenuOptions = {}): NavigationMenuComponent {
+export function createNavigationMenu(options: NavigationMenuOptions = {}): ComponentCore<NavigationMenuState, NavigationMenuEvents> {
     const state = createNavigationMenuState(options);
     const logic = createNavigationMenuLogic(state, options);
     
@@ -50,79 +41,9 @@ export function createNavigationMenu(options: NavigationMenuOptions = {}): Navig
     return {
         state,
         logic,
-        options,
         metadata: {
             name: 'NavigationMenu',
-            version: '0.0.0',
-            accessibility: {
-                role: 'navigation',
-                keyboardShortcuts: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter', 'Space', 'Escape', 'Home', 'End'],
-                ariaAttributes: ['aria-label', 'aria-orientation', 'aria-disabled', 'aria-expanded', 'aria-haspopup', 'aria-current'],
-                wcagLevel: 'AA' as const,
-                patterns: ['menu', 'menubar', 'navigation']
-            },
-            events: {
-                supported: ['click', 'mouseenter', 'mouseleave', 'focus', 'blur', 'keydown'],
-                required: [],
-                custom: {
-                    itemClick: {
-                        description: 'Fired when a menu item is clicked'
-                    },
-                    itemsChange: {
-                        description: 'Fired when menu items are updated'
-                    },
-                    activeChange: {
-                        description: 'Fired when active item changes'
-                    },
-                    expandedChange: {
-                        description: 'Fired when expanded items change'
-                    },
-                    collapsedChange: {
-                        description: 'Fired when collapsed state changes'
-                    }
-                }
-            },
-            structure: {
-                elements: {
-                    'root': {
-                        type: 'nav',
-                        role: 'navigation',
-                        optional: false
-                    },
-                    'mobileMenuButton': {
-                        type: 'button',
-                        role: 'button',
-                        optional: true
-                    },
-                    'menuList': {
-                        type: 'ul',
-                        role: 'menubar',
-                        optional: false
-                    },
-                    'menuItem': {
-                        type: 'li',
-                        role: 'menuitem',
-                        optional: false
-                    },
-                    'submenu': {
-                        type: 'ul',
-                        role: 'menu',
-                        optional: true
-                    }
-                }
-            }
-        }
-    };
-}
-
-/**
- * Creates NavigationMenu component core (for advanced usage)
- */
-export function createNavigationMenuCore(options: NavigationMenuOptions = {}) {
-    return createPrimitive<NavigationMenuState, NavigationMenuEvents, NavigationMenuOptions>('NavigationMenu', {
-        initialState: options,
-        logicConfig: options,
-        metadata: {
+            version: '1.0.0',
             accessibility: {
                 role: 'navigation',
                 keyboardShortcuts: ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter', 'Space', 'Escape', 'Home', 'End'],
@@ -131,24 +52,14 @@ export function createNavigationMenuCore(options: NavigationMenuOptions = {}) {
                 patterns: ['menu', 'menubar', 'navigation']
             },
             events: {
-                supported: ['click', 'mouseenter', 'mouseleave', 'focus', 'blur', 'keydown'],
+                supported: ['itemClick', 'itemsChange', 'activeChange', 'expandedChange', 'collapsedChange'],
                 required: [],
                 custom: {
-                    itemClick: {
-                        description: 'Fired when a menu item is clicked'
-                    },
-                    itemsChange: {
-                        description: 'Fired when menu items are updated'
-                    },
-                    activeChange: {
-                        description: 'Fired when active item changes'
-                    },
-                    expandedChange: {
-                        description: 'Fired when expanded items change'
-                    },
-                    collapsedChange: {
-                        description: 'Fired when collapsed state changes'
-                    }
+                    itemClick: { description: 'Fired when a menu item is clicked' },
+                    itemsChange: { description: 'Fired when menu items are updated' },
+                    activeChange: { description: 'Fired when active item changes' },
+                    expandedChange: { description: 'Fired when expanded items change' },
+                    collapsedChange: { description: 'Fired when collapsed state changes' }
                 }
             },
             structure: {
@@ -180,9 +91,22 @@ export function createNavigationMenuCore(options: NavigationMenuOptions = {}) {
                     }
                 }
             }
+        },
+        connect: (adapter: any) => {
+            return adapter.createComponent({
+                state,
+                logic,
+                metadata: {
+                    name: 'NavigationMenu',
+                    version: '1.0.0'
+                }
+            });
         }
-    });
+    };
 }
+
+// Export state store type
+export type { NavigationMenuStateStore } from './state';
 
 // Default export for convenience
 export default createNavigationMenu;

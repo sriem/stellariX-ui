@@ -81,8 +81,9 @@ export function createMenuLogic(
         
         // Search from current position to end
         for (let i = startIndex; i < currentItems.length; i++) {
-            if (!currentItems[i].disabled && 
-                currentItems[i].label.toLowerCase().startsWith(query)) {
+            const item = currentItems[i];
+            if (item && !item.disabled && 
+                item.label.toLowerCase().startsWith(query)) {
                 state.setActiveIndex(i);
                 return;
             }
@@ -90,8 +91,9 @@ export function createMenuLogic(
         
         // Wrap around to beginning
         for (let i = 0; i < startIndex; i++) {
-            if (!currentItems[i].disabled && 
-                currentItems[i].label.toLowerCase().startsWith(query)) {
+            const item = currentItems[i];
+            if (item && !item.disabled && 
+                item.label.toLowerCase().startsWith(query)) {
                 state.setActiveIndex(i);
                 return;
             }
@@ -100,14 +102,14 @@ export function createMenuLogic(
     
     // Create logic layer using the builder
     return new LogicLayerBuilder<MenuState, MenuEvents>()
-        .onEvent('open', (currentState, payload) => {
+        .onEvent('open', () => {
             state.setOpen(true);
             if (options.onOpen) {
                 options.onOpen();
             }
             return null;
         })
-        .onEvent('close', (currentState, payload) => {
+        .onEvent('close', () => {
             state.setOpen(false);
             state.clearSubmenuStack();
             state.setActiveIndex(-1);
@@ -117,33 +119,33 @@ export function createMenuLogic(
             }
             return null;
         })
-        .onEvent('select', (currentState, payload) => {
+        .onEvent('select', (_, payload) => {
             if (payload && payload.item) {
                 selectItem(payload.item);
             }
             return null;
         })
-        .onEvent('navigate', (currentState, payload) => {
+        .onEvent('navigate', (_, payload) => {
             if (payload && typeof payload.index === 'number') {
                 state.setActiveIndex(payload.index);
             }
             return null;
         })
-        .onEvent('search', (currentState, payload) => {
+        .onEvent('search', (_, payload) => {
             if (payload && payload.query) {
                 state.setSearchQuery(payload.query);
             }
             return null;
         })
-        .onEvent('focus', (currentState, payload) => {
+        .onEvent('focus', () => {
             state.setFocused(true);
             return null;
         })
-        .onEvent('blur', (currentState, payload) => {
+        .onEvent('blur', () => {
             state.setFocused(false);
             return null;
         })
-        .onEvent('keydown', (currentState, payload) => {
+        .onEvent('keydown', () => {
             // Additional keydown handling if needed
             return null;
         })
@@ -155,7 +157,7 @@ export function createMenuLogic(
             tabIndex: 0,
         }))
         // Menu container
-        .withA11y('menu', (state) => ({
+        .withA11y('menu', () => ({
             role: 'menu',
             'aria-labelledby': options.id ? `${options.id}-trigger` : undefined,
             id: options.id ? `${options.id}-menu` : undefined,
@@ -271,10 +273,10 @@ export function createMenuLogic(
             }
             return null;
         })
-        .withInteraction('menu', 'onFocus', (currentState, event: FocusEvent) => {
+        .withInteraction('menu', 'onFocus', () => {
             return 'focus';
         })
-        .withInteraction('menu', 'onBlur', (currentState, event: FocusEvent) => {
+        .withInteraction('menu', 'onBlur', (_, event: FocusEvent) => {
             // Check if focus is still within menu
             const relatedTarget = event.relatedTarget as HTMLElement;
             const currentTarget = event.currentTarget as HTMLElement;
@@ -296,7 +298,7 @@ export function createMenuLogic(
 export function handleMenuItemClick(
     state: MenuStateStore,
     logic: LogicLayer<MenuState, MenuEvents>,
-    currentState: MenuState,
+    _currentState: MenuState,
     itemId: string,
     event: MouseEvent
 ): void {
@@ -326,14 +328,15 @@ export function handleMenuItemClick(
  */
 export function handleMenuItemMouseEnter(
     state: MenuStateStore,
-    logic: LogicLayer<MenuState, MenuEvents>,
-    currentState: MenuState,
+    _logic: LogicLayer<MenuState, MenuEvents>,
+    _currentState: MenuState,
     itemId: string
 ): void {
     const currentItems = state.getCurrentItems();
     const itemIndex = currentItems.findIndex(i => i.id === itemId);
     
-    if (itemIndex !== -1 && !currentItems[itemIndex].disabled) {
+    const item = currentItems[itemIndex];
+    if (itemIndex !== -1 && item && !item.disabled) {
         state.setActiveIndex(itemIndex);
     }
 }

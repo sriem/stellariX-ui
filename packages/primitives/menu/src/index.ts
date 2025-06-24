@@ -10,7 +10,7 @@ import {
     handleMenuItemMouseEnter,
     getMenuItemA11yProps
 } from './logic';
-import type { MenuOptions, MenuState, MenuEvents, MenuItem } from './types';
+import type { MenuOptions, MenuState, MenuEvents } from './types';
 import type { MenuStateStore } from './state';
 import type { LogicLayer } from '@stellarix-ui/core';
 
@@ -39,17 +39,17 @@ export function createMenu(options: MenuOptions = {}): MenuComponent {
     const logic = createMenuLogic(state, options);
     
     // Connect logic to state
-    logic.connect(state);
+    logic.connect(state as any);
     
     // Initialize the component
-    const cleanup = logic.initialize();
+    logic.initialize();
     
     return {
         state,
         logic,
         connect: (adapter: any) => adapter.createComponent({ state, logic }),
         destroy: () => {
-            cleanup();
+            // Cleanup handled by framework adapter
         },
     };
 }

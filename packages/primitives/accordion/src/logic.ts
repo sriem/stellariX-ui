@@ -117,8 +117,27 @@ export function createAccordionLogic(
                 options.onItemToggle(itemId, !isExpanded);
             }
             
-            // Note: onExpandedChange is already called by the onEvent handler
-            // when the state changes, so we don't need to call it here
+            if (options.onExpandedChange) {
+                // Calculate what the new expanded items will be after toggle
+                let newExpandedItems: string[];
+                
+                if (isExpanded) {
+                    // Item is being collapsed
+                    newExpandedItems = currentState.expandedItems.filter(id => id !== itemId);
+                } else {
+                    // Item is being expanded
+                    if (currentState.multiple) {
+                        newExpandedItems = [...currentState.expandedItems, itemId];
+                    } else {
+                        newExpandedItems = [itemId];
+                    }
+                }
+                
+                // Use setTimeout to ensure the callback is called after state update
+                setTimeout(() => {
+                    options.onExpandedChange(newExpandedItems);
+                }, 0);
+            }
             
             return 'itemToggle';
         })
@@ -150,8 +169,27 @@ export function createAccordionLogic(
                             options.onItemToggle(itemId, !isExpanded);
                         }
                         
-                        // Note: onExpandedChange is already called by the onEvent handler
-                        // when the state changes, so we don't need to call it here
+                        if (options.onExpandedChange) {
+                            // Calculate what the new expanded items will be after toggle
+                            let newExpandedItems: string[];
+                            
+                            if (isExpanded) {
+                                // Item is being collapsed
+                                newExpandedItems = currentState.expandedItems.filter(id => id !== itemId);
+                            } else {
+                                // Item is being expanded
+                                if (currentState.multiple) {
+                                    newExpandedItems = [...currentState.expandedItems, itemId];
+                                } else {
+                                    newExpandedItems = [itemId];
+                                }
+                            }
+                            
+                            // Use setTimeout to ensure the callback is called after state update
+                            setTimeout(() => {
+                                options.onExpandedChange(newExpandedItems);
+                            }, 0);
+                        }
                         
                         return 'itemToggle';
                     }

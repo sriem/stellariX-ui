@@ -16,7 +16,7 @@ export function createDatePickerState(options: DatePickerOptions) {
         startDate: options.startDate || null,
         endDate: options.endDate || null,
         hoveredDate: null,
-        viewDate: options.value || options.startDate || new Date(),
+        viewDate: options.viewDate || options.value || options.startDate || new Date(),
         currentView: 'day',
         mode: options.mode || 'single',
         includeTime: options.includeTime || false,
@@ -87,32 +87,68 @@ export function createDatePickerState(options: DatePickerOptions) {
         
         nextMonth: () => {
             store.setState((prev) => {
-                const newDate = new Date(prev.viewDate);
-                newDate.setMonth(newDate.getMonth() + 1);
+                const year = prev.viewDate.getFullYear();
+                const month = prev.viewDate.getMonth();
+                const day = prev.viewDate.getDate();
+                
+                // Create new date for next month
+                const newDate = new Date(year, month + 1, 1);
+                
+                // Preserve day if possible
+                const daysInNewMonth = new Date(year, month + 2, 0).getDate();
+                newDate.setDate(Math.min(day, daysInNewMonth));
+                
                 return { ...prev, viewDate: newDate };
             });
         },
         
         prevMonth: () => {
             store.setState((prev) => {
-                const newDate = new Date(prev.viewDate);
-                newDate.setMonth(newDate.getMonth() - 1);
+                const year = prev.viewDate.getFullYear();
+                const month = prev.viewDate.getMonth();
+                const day = prev.viewDate.getDate();
+                
+                // Create new date for previous month
+                const newDate = new Date(year, month - 1, 1);
+                
+                // Preserve day if possible
+                const daysInNewMonth = new Date(year, month, 0).getDate();
+                newDate.setDate(Math.min(day, daysInNewMonth));
+                
                 return { ...prev, viewDate: newDate };
             });
         },
         
         nextYear: () => {
             store.setState((prev) => {
-                const newDate = new Date(prev.viewDate);
-                newDate.setFullYear(newDate.getFullYear() + 1);
+                const year = prev.viewDate.getFullYear();
+                const month = prev.viewDate.getMonth();
+                const day = prev.viewDate.getDate();
+                
+                // Create new date for next year
+                const newDate = new Date(year + 1, month, 1);
+                
+                // Preserve day if possible (handle leap year)
+                const daysInNewMonth = new Date(year + 1, month + 1, 0).getDate();
+                newDate.setDate(Math.min(day, daysInNewMonth));
+                
                 return { ...prev, viewDate: newDate };
             });
         },
         
         prevYear: () => {
             store.setState((prev) => {
-                const newDate = new Date(prev.viewDate);
-                newDate.setFullYear(newDate.getFullYear() - 1);
+                const year = prev.viewDate.getFullYear();
+                const month = prev.viewDate.getMonth();
+                const day = prev.viewDate.getDate();
+                
+                // Create new date for previous year
+                const newDate = new Date(year - 1, month, 1);
+                
+                // Preserve day if possible (handle leap year)
+                const daysInNewMonth = new Date(year - 1, month + 1, 0).getDate();
+                newDate.setDate(Math.min(day, daysInNewMonth));
+                
                 return { ...prev, viewDate: newDate };
             });
         },
@@ -296,44 +332,50 @@ export function createDatePickerState(options: DatePickerOptions) {
             return '';
         }),
         
-        isDateDisabled: store.derive(state => (date: Date) => {
-            // Check min/max dates
-            if (state.minDate && date < state.minDate) return true;
-            if (state.maxDate && date > state.maxDate) return true;
-            
-            // Check disabled dates array
-            const dateStr = date.toDateString();
-            if (state.disabledDates.some(d => d.toDateString() === dateStr)) return true;
-            
-            // Check custom disabled function
-            if (options.isDateDisabled) {
-                return options.isDateDisabled(date);
-            }
-            
-            return false;
-        }),
-        
-        isDateInRange: store.derive(state => (date: Date) => {
-            if (state.mode !== 'range' || !state.startDate) return false;
-            
-            const dateTime = date.getTime();
-            const startTime = state.startDate.getTime();
-            
-            if (state.endDate) {
-                const endTime = state.endDate.getTime();
-                return dateTime >= startTime && dateTime <= endTime;
-            } else if (state.hoveredDate) {
-                const hoverTime = state.hoveredDate.getTime();
+        isDateDisabled: {
+            get: () => (date: Date) => {
+                const currentState = store.getState();
+                // Check min/max dates
+                if (currentState.minDate && date < currentState.minDate) return true;
+                if (currentState.maxDate && date > currentState.maxDate) return true;
                 
-                if (startTime <= hoverTime) {
-                    return dateTime >= startTime && dateTime <= hoverTime;
-                } else {
-                    return dateTime >= hoverTime && dateTime <= startTime;
+                // Check disabled dates array
+                const dateStr = date.toDateString();
+                if (currentState.disabledDates.some(d => d.toDateString() === dateStr)) return true;
+                
+                // Check custom disabled function
+                if (options.isDateDisabled) {
+                    return options.isDateDisabled(date);
                 }
+                
+                return false;
             }
-            
-            return false;
-        })
+        },
+        
+        isDateInRange: {
+            get: () => (date: Date) => {
+                const currentState = store.getState();
+                if (currentState.mode !== 'range' || !currentState.startDate) return false;
+                
+                const dateTime = date.getTime();
+                const startTime = currentState.startDate.getTime();
+                
+                if (currentState.endDate) {
+                    const endTime = currentState.endDate.getTime();
+                    return dateTime >= startTime && dateTime <= endTime;
+                } else if (currentState.hoveredDate) {
+                    const hoverTime = currentState.hoveredDate.getTime();
+                    
+                    if (startTime <= hoverTime) {
+                        return dateTime >= startTime && dateTime <= hoverTime;
+                    } else {
+                        return dateTime >= hoverTime && dateTime <= startTime;
+                    }
+                }
+                
+                return false;
+            }
+        }
     };
 }
 

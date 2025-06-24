@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createNavigationMenu, createNavigationMenuCore } from './index';
+import { createNavigationMenu } from './index';
 import { getMenuItemA11yProps, createMenuItemHandlers } from './logic';
 import type { NavigationMenuItem } from './types';
 
@@ -30,6 +30,8 @@ describe('NavigationMenu', () => {
     describe('State Management', () => {
         it('should initialize with default state', () => {
             const menu = createNavigationMenu();
+            
+            // Get state directly since subscribe doesn't call immediately
             const state = menu.state.getState();
             
             expect(state.items).toEqual([]);
@@ -77,79 +79,139 @@ describe('NavigationMenu', () => {
             
             menu.state.setItems(sampleItems);
             
-            expect(menu.state.getState().items).toEqual(sampleItems);
-            expect(listener).toHaveBeenCalled();
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                items: sampleItems
+            }));
         });
         
         it('should update focused item', () => {
             const menu = createNavigationMenu({ items: sampleItems });
             
-            menu.state.setFocusedItemId('products');
-            expect(menu.state.getState().focusedItemId).toBe('products');
+            const listener = vi.fn();
+            menu.state.subscribe(listener);
+            listener.mockClear();
             
+            menu.state.setFocusedItemId('products');
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                focusedItemId: 'products'
+            }));
+            
+            listener.mockClear();
             menu.state.setFocusedItemId(null);
-            expect(menu.state.getState().focusedItemId).toBe(null);
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                focusedItemId: null
+            }));
         });
         
         it('should update active item', () => {
             const menu = createNavigationMenu({ items: sampleItems });
             
+            const listener = vi.fn();
+            menu.state.subscribe(listener);
+            listener.mockClear();
+            
             menu.state.setActiveItemId('about');
-            expect(menu.state.getState().activeItemId).toBe('about');
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                activeItemId: 'about'
+            }));
         });
         
         it('should toggle expanded items', () => {
             const menu = createNavigationMenu({ items: sampleItems });
             
-            menu.state.toggleExpanded('products');
-            expect(menu.state.getState().expandedItemIds).toContain('products');
+            const listener = vi.fn();
+            menu.state.subscribe(listener);
+            listener.mockClear();
             
             menu.state.toggleExpanded('products');
-            expect(menu.state.getState().expandedItemIds).not.toContain('products');
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                expandedItemIds: expect.arrayContaining(['products'])
+            }));
+            
+            listener.mockClear();
+            menu.state.toggleExpanded('products');
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                expandedItemIds: expect.not.arrayContaining(['products'])
+            }));
         });
         
         it('should expand and collapse items', () => {
             const menu = createNavigationMenu({ items: sampleItems });
             
+            const listener = vi.fn();
+            menu.state.subscribe(listener);
+            listener.mockClear();
+            
             menu.state.expandItem('products');
-            expect(menu.state.getState().expandedItemIds).toContain('products');
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                expandedItemIds: ['products']
+            }));
             
             // Expanding again should not duplicate
+            listener.mockClear();
             menu.state.expandItem('products');
+            // expandItem returns same state if already expanded, which means setState
+            // is called but with the same state object, so listener may or may not be called
+            // depending on implementation details. Let's just check the state is correct.
             expect(menu.state.getState().expandedItemIds).toEqual(['products']);
             
+            listener.mockClear();
             menu.state.collapseItem('products');
-            expect(menu.state.getState().expandedItemIds).not.toContain('products');
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                expandedItemIds: []
+            }));
         });
         
         it('should toggle collapsed state', () => {
             const menu = createNavigationMenu();
             
-            menu.state.toggleCollapsed();
-            expect(menu.state.getState().collapsed).toBe(true);
+            const listener = vi.fn();
+            menu.state.subscribe(listener);
+            listener.mockClear();
             
             menu.state.toggleCollapsed();
-            expect(menu.state.getState().collapsed).toBe(false);
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                collapsed: true
+            }));
+            
+            listener.mockClear();
+            menu.state.toggleCollapsed();
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                collapsed: false
+            }));
         });
         
         it('should update disabled state', () => {
             const menu = createNavigationMenu();
             
-            menu.state.setDisabled(true);
-            expect(menu.state.getState().disabled).toBe(true);
+            const listener = vi.fn();
+            menu.state.subscribe(listener);
+            listener.mockClear();
             
+            menu.state.setDisabled(true);
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                disabled: true
+            }));
+            
+            listener.mockClear();
             menu.state.setDisabled(false);
-            expect(menu.state.getState().disabled).toBe(false);
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                disabled: false
+            }));
         });
         
         it('should update item in nested structure', () => {
             const menu = createNavigationMenu({ items: sampleItems });
             
+            const listener = vi.fn();
+            menu.state.subscribe(listener);
+            listener.mockClear();
+            
             menu.state.updateItem('electronics', { label: 'Updated Electronics' });
             
-            const state = menu.state.getState();
-            const products = state.items.find(item => item.id === 'products');
-            const electronics = products?.children?.find(child => child.id === 'electronics');
+            const lastCall = listener.mock.calls[listener.mock.calls.length - 1][0];
+            const products = lastCall.items.find((item: NavigationMenuItem) => item.id === 'products');
+            const electronics = products?.children?.find((child: NavigationMenuItem) => child.id === 'electronics');
             
             expect(electronics?.label).toBe('Updated Electronics');
         });
@@ -161,12 +223,17 @@ describe('NavigationMenu', () => {
             menu.state.toggleExpanded('products');
             menu.state.setDisabled(true);
             
+            const listener = vi.fn();
+            menu.state.subscribe(listener);
+            listener.mockClear();
+            
             menu.state.reset();
             
-            const state = menu.state.getState();
-            expect(state.activeItemId).toBe('home');
-            expect(state.expandedItemIds).toEqual([]);
-            expect(state.disabled).toBe(false);
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                activeItemId: 'home',
+                expandedItemIds: [],
+                disabled: false
+            }));
         });
     });
     
@@ -183,7 +250,7 @@ describe('NavigationMenu', () => {
             
             expect(rootProps.role).toBe('navigation');
             expect(rootProps['aria-label']).toBe('Custom navigation');
-            expect(rootProps['aria-orientation']).toBe('vertical');
+            expect(rootProps['data-orientation']).toBe('vertical'); // Changed from aria-orientation
             expect(rootProps['aria-disabled']).toBe('true');
             expect(rootProps['data-collapsed']).toBe('true');
         });
@@ -205,6 +272,7 @@ describe('NavigationMenu', () => {
                 expandedItemIds: ['products']
             });
             
+            // Get state directly
             const state = menu.state.getState();
             
             // Parent item with children
@@ -238,6 +306,7 @@ describe('NavigationMenu', () => {
             
             interactions.onClick(event);
             
+            // Verify state change
             expect(menu.state.getState().collapsed).toBe(true);
             expect(onCollapsedChange).toHaveBeenCalledWith(true);
         });
@@ -251,7 +320,7 @@ describe('NavigationMenu', () => {
                 onActiveChange
             });
             
-            const handlers = createMenuItemHandlers(menu.state, menu.options, 'home');
+            const handlers = createMenuItemHandlers(menu.state, { onItemClick, onActiveChange }, 'home');
             const event = new MouseEvent('click');
             Object.defineProperty(event, 'preventDefault', { value: vi.fn() });
             
@@ -268,7 +337,7 @@ describe('NavigationMenu', () => {
                 onExpandedChange
             });
             
-            const handlers = createMenuItemHandlers(menu.state, menu.options, 'products');
+            const handlers = createMenuItemHandlers(menu.state, { onExpandedChange }, 'products');
             const event = new MouseEvent('click');
             const preventDefault = vi.fn();
             Object.defineProperty(event, 'preventDefault', { value: preventDefault });
@@ -276,6 +345,7 @@ describe('NavigationMenu', () => {
             handlers.onClick(event);
             
             expect(preventDefault).toHaveBeenCalled();
+            // Verify state change
             expect(menu.state.getState().expandedItemIds).toContain('products');
             expect(onExpandedChange).toHaveBeenCalledWith(['products']);
         });
@@ -288,7 +358,7 @@ describe('NavigationMenu', () => {
                 onItemClick
             });
             
-            const handlers = createMenuItemHandlers(menu.state, menu.options, 'home');
+            const handlers = createMenuItemHandlers(menu.state, { onItemClick }, 'home');
             const event = new MouseEvent('click');
             const preventDefault = vi.fn();
             Object.defineProperty(event, 'preventDefault', { value: preventDefault });
@@ -308,7 +378,7 @@ describe('NavigationMenu', () => {
             // Focus first item
             menu.state.setFocusedItemId('home');
             
-            const handlers = createMenuItemHandlers(menu.state, menu.options, 'home');
+            const handlers = createMenuItemHandlers(menu.state, {}, 'home');
             const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
             const preventDefault = vi.fn();
             Object.defineProperty(event, 'preventDefault', { value: preventDefault });
@@ -323,38 +393,50 @@ describe('NavigationMenu', () => {
             handlers.onKeyDown(event);
             
             expect(preventDefault).toHaveBeenCalled();
+            
+            // Verify focus change
             expect(menu.state.getState().focusedItemId).toBe('products');
         });
         
         it('should handle focus and blur events', () => {
             const menu = createNavigationMenu({ items: sampleItems });
             
-            const handlers = createMenuItemHandlers(menu.state, menu.options, 'products');
+            const handlers = createMenuItemHandlers(menu.state, {}, 'products');
+            
+            const listener = vi.fn();
+            menu.state.subscribe(listener);
+            listener.mockClear();
             
             // Focus event
             const focusEvent = new FocusEvent('focus');
             handlers.onFocus(focusEvent);
-            expect(menu.state.getState().focusedItemId).toBe('products');
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                focusedItemId: 'products'
+            }));
             
             // Blur event (leaving navigation)
+            listener.mockClear();
             const blurEvent = new FocusEvent('blur');
             Object.defineProperty(blurEvent, 'target', {
                 value: { closest: vi.fn().mockReturnValue(null) }
             });
             Object.defineProperty(blurEvent, 'relatedTarget', { value: null });
             handlers.onBlur(blurEvent);
-            expect(menu.state.getState().focusedItemId).toBe(null);
+            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+                focusedItemId: null
+            }));
         });
     });
     
     describe('Component Core', () => {
-        it('should create component core for advanced usage', () => {
-            const core = createNavigationMenuCore({ items: sampleItems });
+        it('should create component with metadata', () => {
+            const menu = createNavigationMenu({ items: sampleItems });
             
-            expect(core.metadata).toBeDefined();
-            expect(core.metadata.name).toBe('NavigationMenu');
-            expect(core.metadata.accessibility.role).toBe('navigation');
-            expect(core.metadata.accessibility.wcagLevel).toBe('AA');
+            expect(menu.metadata).toBeDefined();
+            expect(menu.metadata.name).toBe('NavigationMenu');
+            expect(menu.metadata.accessibility.role).toBe('navigation');
+            expect(menu.metadata.accessibility.wcagLevel).toBe('AA');
+            expect(menu.connect).toBeDefined();
         });
     });
 });

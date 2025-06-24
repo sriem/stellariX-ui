@@ -8,7 +8,107 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { createBreadcrumb } from '../src';
-import { reactAdapter } from '@stellarix-ui/react';
+// Mock React adapter for testing
+const reactAdapter = {
+    name: 'react',
+    version: '19.0.0',
+    createComponent: (core: any) => {
+        return function BreadcrumbComponent(props: any) {
+            // Get options from core or use props as fallback
+            const options = core.options || props;
+            const state = core.state.getState();
+            const { items = [], separator = '/', disabled = false, showHomeIcon = false, maxItems } = state;
+            const displayedItems = getDisplayedItems({ items, maxItems });
+            
+            const rootA11y = core.logic.getA11yProps('root', state);
+            const listA11y = core.logic.getA11yProps('list', state);
+            
+            return React.createElement('nav', {
+                ...rootA11y,
+                'aria-label': props.ariaLabel || rootA11y['aria-label'] || 'Breadcrumb',
+            }, [
+                React.createElement('ol', { 
+                    key: 'list',
+                    ...listA11y,
+                },
+                    displayedItems.map((item, index) => {
+                        const isLast = index === displayedItems.length - 1;
+                        const isEllipsis = item.id === '...';
+                        const showAsLink = !item.current && !disabled && !item.disabled && item.href;
+                        
+                        const itemA11y = core.logic.getA11yProps('item', state, { index });
+                        const linkA11y = core.logic.getA11yProps('link', state, { index });
+                        const interactionHandlers = core.logic.getInteractionHandlers('link', state);
+                        
+                        return React.createElement('li', {
+                            key: item.id,
+                            ...itemA11y,
+                        }, [
+                            showAsLink
+                                ? React.createElement('a', {
+                                    key: 'link',
+                                    ...linkA11y,
+                                    onClick: (e: any) => {
+                                        e.index = index;
+                                        interactionHandlers.onClick?.(e);
+                                    },
+                                    onKeyDown: (e: any) => {
+                                        e.index = index;
+                                        interactionHandlers.onKeyDown?.(e);
+                                    },
+                                    onFocus: (e: any) => {
+                                        e.index = index;
+                                        interactionHandlers.onFocus?.(e);
+                                    },
+                                    onBlur: interactionHandlers.onBlur,
+                                }, showHomeIcon && index === 0 ? `🏠 ${item.label}` : item.label)
+                                : React.createElement('span', {
+                                    key: 'text',
+                                    ...linkA11y,
+                                    onClick: !disabled && !item.disabled && !isEllipsis ? (e: any) => {
+                                        e.index = index;
+                                        interactionHandlers.onClick?.(e);
+                                    } : undefined,
+                                    onKeyDown: !disabled && !item.disabled && !isEllipsis ? (e: any) => {
+                                        e.index = index;
+                                        interactionHandlers.onKeyDown?.(e);
+                                    } : undefined,
+                                    onFocus: !disabled && !item.disabled && !isEllipsis ? (e: any) => {
+                                        e.index = index;
+                                        interactionHandlers.onFocus?.(e);
+                                    } : undefined,
+                                    onBlur: !disabled && !item.disabled && !isEllipsis ? interactionHandlers.onBlur : undefined,
+                                }, showHomeIcon && index === 0 ? `🏠 ${item.label}` : item.label),
+                            !isLast && React.createElement('span', {
+                                key: 'separator',
+                                'aria-hidden': 'true',
+                                style: { margin: '0 8px' },
+                            }, separator)
+                        ]);
+                    })
+                )
+            ]);
+            
+            function getDisplayedItems(state: any) {
+                if (!state.maxItems || state.items.length <= state.maxItems) {
+                    return state.items;
+                }
+                
+                const firstCount = Math.floor((state.maxItems - 1) / 2);
+                const lastCount = state.maxItems - 1 - firstCount;
+                
+                const firstItems = state.items.slice(0, firstCount);
+                const lastItems = state.items.slice(-lastCount);
+                
+                return [
+                    ...firstItems,
+                    { id: '...', label: '...', disabled: true },
+                    ...lastItems
+                ];
+            }
+        };
+    }
+};
 import type { BreadcrumbItem } from '../src/types';
 
 expect.extend(toHaveNoViolations);

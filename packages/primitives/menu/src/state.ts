@@ -59,7 +59,7 @@ export function createMenuState(options: MenuOptions = {}): MenuStateStore {
         searchQuery: '',
         searchTimeout: 0,
         focused: false,
-        selectedId: undefined,
+        selectedId: options.selectedId,
         submenuStack: [],
     };
     
@@ -98,7 +98,8 @@ export function createMenuState(options: MenuOptions = {}): MenuStateStore {
                 index = (index - 1 + len) % len;
             }
             
-            if (!items[index].disabled) {
+            const item = items[index];
+            if (item && !item.disabled) {
                 return index;
             }
             checked++;
@@ -209,7 +210,8 @@ export function createMenuState(options: MenuOptions = {}): MenuStateStore {
             
             // Find first enabled item
             for (let i = 0; i < currentItems.length; i++) {
-                if (!currentItems[i].disabled) {
+                const item = currentItems[i];
+                if (item && !item.disabled) {
                     store.setState((prev: any) => ({ ...prev, activeIndex: i }));
                     return;
                 }
@@ -223,7 +225,8 @@ export function createMenuState(options: MenuOptions = {}): MenuStateStore {
             
             // Find last enabled item
             for (let i = currentItems.length - 1; i >= 0; i--) {
-                if (!currentItems[i].disabled) {
+                const item = currentItems[i];
+                if (item && !item.disabled) {
                     store.setState((prev: any) => ({ ...prev, activeIndex: i }));
                     return;
                 }

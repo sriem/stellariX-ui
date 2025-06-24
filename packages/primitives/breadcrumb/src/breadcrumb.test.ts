@@ -177,40 +177,45 @@ describe('Breadcrumb Component', () => {
         ],
       });
       logic = createBreadcrumbLogic(state);
+      // Connect and initialize the logic layer
+      logic.connect(state);
+      logic.initialize();
     });
     
     describe('A11y Properties', () => {
       it('should provide correct root a11y props', () => {
-        const props = logic.getA11yProps('root', state.getState());
+        const props = logic.getA11yProps('root');
         
         expect(props.role).toBe('navigation');
         expect(props['aria-label']).toBe('Breadcrumb');
         expect(props['aria-disabled']).toBeUndefined();
         
         state.setDisabled(true);
-        const disabledProps = logic.getA11yProps('root', state.getState());
+        const disabledProps = logic.getA11yProps('root');
         expect(disabledProps['aria-disabled']).toBe('true');
       });
       
       it('should provide correct list a11y props', () => {
-        const props = logic.getA11yProps('list', state.getState());
+        const props = logic.getA11yProps('list');
         expect(props.role).toBe('list');
       });
       
       it('should provide correct item a11y props', () => {
-        const props = logic.getA11yProps('item', state.getState(), { index: 3 });
+        // Use the extended getA11yProps that supports state and index
+        const props = (logic as any).getA11yProps('item', state.getState(), { index: 3 });
         
         expect(props.role).toBe('listitem');
         expect(props['aria-current']).toBe('page');
         expect(props['aria-disabled']).toBeUndefined();
         
         // Non-current item
-        const nonCurrentProps = logic.getA11yProps('item', state.getState(), { index: 0 });
+        const nonCurrentProps = (logic as any).getA11yProps('item', state.getState(), { index: 0 });
         expect(nonCurrentProps['aria-current']).toBeUndefined();
       });
       
       it('should provide correct link a11y props', () => {
-        const props = logic.getA11yProps('link', state.getState(), { index: 0 });
+        // Use the extended getA11yProps that supports state and index
+        const props = (logic as any).getA11yProps('link', state.getState(), { index: 0 });
         
         expect(props.tabIndex).toBe(0);
         expect(props['aria-disabled']).toBeUndefined();
@@ -219,14 +224,14 @@ describe('Breadcrumb Component', () => {
         expect(props.role).toBeUndefined(); // Has href, so no button role
         
         // Current item
-        const currentProps = logic.getA11yProps('link', state.getState(), { index: 3 });
+        const currentProps = (logic as any).getA11yProps('link', state.getState(), { index: 3 });
         expect(currentProps['aria-current']).toBe('page');
         expect(currentProps.href).toBeUndefined(); // No href for current item
         expect(currentProps.role).toBe('button'); // No href, so button role
         
         // Disabled breadcrumb
         state.setDisabled(true);
-        const disabledProps = logic.getA11yProps('link', state.getState(), { index: 0 });
+        const disabledProps = (logic as any).getA11yProps('link', state.getState(), { index: 0 });
         expect(disabledProps.tabIndex).toBe(-1);
         expect(disabledProps['aria-disabled']).toBe('true');
         expect(disabledProps.href).toBeUndefined(); // No href when disabled
@@ -238,11 +243,13 @@ describe('Breadcrumb Component', () => {
         const onItemClick = vi.fn();
         const logicWithCallback = createBreadcrumbLogic(state, { onItemClick });
         
-        const event = new MouseEvent('click') as any;
-        event.index = 1;
-        event.preventDefault = vi.fn();
+        const event = {
+            type: 'click',
+            index: 1,
+            preventDefault: vi.fn(),
+        } as any;
         
-        const handlers = logicWithCallback.getInteractionHandlers('link', state.getState());
+        const handlers = logicWithCallback.getInteractionHandlers('link');
         handlers.onClick(event);
         
         expect(onItemClick).toHaveBeenCalledWith(state.getState().items[1], 1);
@@ -253,11 +260,13 @@ describe('Breadcrumb Component', () => {
         const onItemClick = vi.fn();
         const logicWithCallback = createBreadcrumbLogic(state, { onItemClick });
         
-        const event = new MouseEvent('click') as any;
-        event.index = 3; // Current item has no href
-        event.preventDefault = vi.fn();
+        const event = {
+            type: 'click',
+            index: 3, // Current item has no href
+            preventDefault: vi.fn(),
+        } as any;
         
-        const handlers = logicWithCallback.getInteractionHandlers('link', state.getState());
+        const handlers = logicWithCallback.getInteractionHandlers('link');
         handlers.onClick(event);
         
         expect(event.preventDefault).toHaveBeenCalled();
@@ -269,11 +278,13 @@ describe('Breadcrumb Component', () => {
         const onItemClick = vi.fn();
         const logicWithCallback = createBreadcrumbLogic(state, { onItemClick });
         
-        const event = new MouseEvent('click') as any;
-        event.index = 0;
-        event.preventDefault = vi.fn();
+        const event = {
+            type: 'click',
+            index: 0,
+            preventDefault: vi.fn(),
+        } as any;
         
-        const handlers = logicWithCallback.getInteractionHandlers('link', state.getState());
+        const handlers = logicWithCallback.getInteractionHandlers('link');
         handlers.onClick(event);
         
         expect(event.preventDefault).toHaveBeenCalled();
@@ -285,11 +296,13 @@ describe('Breadcrumb Component', () => {
         const onItemClick = vi.fn();
         const logicWithCallback = createBreadcrumbLogic(state, { onItemClick });
         
-        const event = new MouseEvent('click') as any;
-        event.index = 1;
-        event.preventDefault = vi.fn();
+        const event = {
+            type: 'click',
+            index: 1,
+            preventDefault: vi.fn(),
+        } as any;
         
-        const handlers = logicWithCallback.getInteractionHandlers('link', state.getState());
+        const handlers = logicWithCallback.getInteractionHandlers('link');
         handlers.onClick(event);
         
         expect(event.preventDefault).toHaveBeenCalled();
@@ -299,19 +312,22 @@ describe('Breadcrumb Component', () => {
     
     describe('Keyboard Navigation', () => {
       it('should navigate with arrow keys', () => {
-        const event = new KeyboardEvent('keydown', { key: 'ArrowRight' }) as any;
-        event.index = 0;
-        event.preventDefault = vi.fn();
-        event.target = {
-          closest: vi.fn().mockReturnValue({
-            querySelectorAll: vi.fn().mockReturnValue([
-              { focus: vi.fn() },
-              { focus: vi.fn() },
-              { focus: vi.fn() },
-              { focus: vi.fn() },
-            ]),
-          }),
-        };
+        const event = {
+          type: 'keydown',
+          key: 'ArrowRight',
+          index: 0,
+          preventDefault: vi.fn(),
+          target: {
+            closest: vi.fn().mockReturnValue({
+              querySelectorAll: vi.fn().mockReturnValue([
+                { focus: vi.fn() },
+                { focus: vi.fn() },
+                { focus: vi.fn() },
+                { focus: vi.fn() },
+              ]),
+            }),
+          },
+        } as any;
         
         const handlers = logic.getInteractionHandlers('link', state.getState());
         handlers.onKeyDown(event);
@@ -320,10 +336,13 @@ describe('Breadcrumb Component', () => {
         expect(state.getState().focusedIndex).toBe(1);
         
         // Arrow left
-        const leftEvent = new KeyboardEvent('keydown', { key: 'ArrowLeft' }) as any;
-        leftEvent.index = 2;
-        leftEvent.preventDefault = vi.fn();
-        leftEvent.target = event.target;
+        const leftEvent = {
+          type: 'keydown',
+          key: 'ArrowLeft',
+          index: 2,
+          preventDefault: vi.fn(),
+          target: event.target,
+        } as any;
         
         handlers.onKeyDown(leftEvent);
         expect(leftEvent.preventDefault).toHaveBeenCalled();
@@ -331,19 +350,22 @@ describe('Breadcrumb Component', () => {
       });
       
       it('should navigate to first/last with Home/End keys', () => {
-        const event = new KeyboardEvent('keydown', { key: 'End' }) as any;
-        event.index = 0;
-        event.preventDefault = vi.fn();
-        event.target = {
-          closest: vi.fn().mockReturnValue({
-            querySelectorAll: vi.fn().mockReturnValue([
-              { focus: vi.fn() },
-              { focus: vi.fn() },
-              { focus: vi.fn() },
-              { focus: vi.fn() },
-            ]),
-          }),
-        };
+        const event = {
+          type: 'keydown',
+          key: 'End',
+          index: 0,
+          preventDefault: vi.fn(),
+          target: {
+            closest: vi.fn().mockReturnValue({
+              querySelectorAll: vi.fn().mockReturnValue([
+                { focus: vi.fn() },
+                { focus: vi.fn() },
+                { focus: vi.fn() },
+                { focus: vi.fn() },
+              ]),
+            }),
+          },
+        } as any;
         
         const handlers = logic.getInteractionHandlers('link', state.getState());
         handlers.onKeyDown(event);
@@ -352,10 +374,13 @@ describe('Breadcrumb Component', () => {
         expect(state.getState().focusedIndex).toBe(3);
         
         // Home key
-        const homeEvent = new KeyboardEvent('keydown', { key: 'Home' }) as any;
-        homeEvent.index = 3;
-        homeEvent.preventDefault = vi.fn();
-        homeEvent.target = event.target;
+        const homeEvent = {
+          type: 'keydown',
+          key: 'Home',
+          index: 3,
+          preventDefault: vi.fn(),
+          target: event.target,
+        } as any;
         
         handlers.onKeyDown(homeEvent);
         expect(homeEvent.preventDefault).toHaveBeenCalled();
@@ -367,11 +392,14 @@ describe('Breadcrumb Component', () => {
         const logicWithCallback = createBreadcrumbLogic(state, { onItemClick });
         
         // Test Space key on item without href
-        const spaceEvent = new KeyboardEvent('keydown', { key: ' ' }) as any;
-        spaceEvent.index = 3; // Current item has no href
-        spaceEvent.preventDefault = vi.fn();
+        const spaceEvent = {
+          type: 'keydown',
+          key: ' ',
+          index: 3, // Current item has no href
+          preventDefault: vi.fn(),
+        } as any;
         
-        const handlers = logicWithCallback.getInteractionHandlers('link', state.getState());
+        const handlers = logicWithCallback.getInteractionHandlers('link');
         handlers.onKeyDown(spaceEvent);
         
         expect(spaceEvent.preventDefault).toHaveBeenCalled();
@@ -379,9 +407,12 @@ describe('Breadcrumb Component', () => {
         
         // Test Enter key
         onItemClick.mockClear();
-        const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' }) as any;
-        enterEvent.index = 3;
-        enterEvent.preventDefault = vi.fn();
+        const enterEvent = {
+          type: 'keydown',
+          key: 'Enter',
+          index: 3,
+          preventDefault: vi.fn(),
+        } as any;
         
         handlers.onKeyDown(enterEvent);
         expect(enterEvent.preventDefault).toHaveBeenCalled();
@@ -391,19 +422,22 @@ describe('Breadcrumb Component', () => {
       it('should skip disabled items during navigation', () => {
         state.updateItem('products', { disabled: true });
         
-        const event = new KeyboardEvent('keydown', { key: 'ArrowRight' }) as any;
-        event.index = 0;
-        event.preventDefault = vi.fn();
-        event.target = {
-          closest: vi.fn().mockReturnValue({
-            querySelectorAll: vi.fn().mockReturnValue([
-              { focus: vi.fn() },
-              { focus: vi.fn() },
-              { focus: vi.fn() },
-              { focus: vi.fn() },
-            ]),
-          }),
-        };
+        const event = {
+          type: 'keydown',
+          key: 'ArrowRight',
+          index: 0,
+          preventDefault: vi.fn(),
+          target: {
+            closest: vi.fn().mockReturnValue({
+              querySelectorAll: vi.fn().mockReturnValue([
+                { focus: vi.fn() },
+                { focus: vi.fn() },
+                { focus: vi.fn() },
+                { focus: vi.fn() },
+              ]),
+            }),
+          },
+        } as any;
         
         const handlers = logic.getInteractionHandlers('link', state.getState());
         handlers.onKeyDown(event);
@@ -415,8 +449,10 @@ describe('Breadcrumb Component', () => {
     
     describe('Focus Management', () => {
       it('should handle focus events', () => {
-        const focusEvent = new FocusEvent('focus') as any;
-        focusEvent.index = 2;
+        const focusEvent = {
+          type: 'focus',
+          index: 2,
+        } as any;
         
         const handlers = logic.getInteractionHandlers('link', state.getState());
         handlers.onFocus(focusEvent);
@@ -427,13 +463,15 @@ describe('Breadcrumb Component', () => {
       it('should handle blur events', () => {
         state.setFocusedIndex(2);
         
-        const blurEvent = new FocusEvent('blur') as any;
-        blurEvent.relatedTarget = null;
-        blurEvent.target = {
-          closest: vi.fn().mockReturnValue({
-            contains: vi.fn().mockReturnValue(false),
-          }),
-        };
+        const blurEvent = {
+          type: 'blur',
+          relatedTarget: null,
+          target: {
+            closest: vi.fn().mockReturnValue({
+              contains: vi.fn().mockReturnValue(false),
+            }),
+          },
+        } as any;
         
         const handlers = logic.getInteractionHandlers('link', state.getState());
         handlers.onBlur(blurEvent);
@@ -448,11 +486,13 @@ describe('Breadcrumb Component', () => {
         const breadcrumbNav = document.createElement('nav');
         breadcrumbNav.appendChild(relatedTarget);
         
-        const blurEvent = new FocusEvent('blur') as any;
-        blurEvent.relatedTarget = relatedTarget;
-        blurEvent.target = {
-          closest: vi.fn().mockReturnValue(breadcrumbNav),
-        };
+        const blurEvent = {
+          type: 'blur',
+          relatedTarget,
+          target: {
+            closest: vi.fn().mockReturnValue(breadcrumbNav),
+          },
+        } as any;
         
         const handlers = logic.getInteractionHandlers('link', state.getState());
         handlers.onBlur(blurEvent);
@@ -479,7 +519,7 @@ describe('Breadcrumb Component', () => {
         
         // The truncation logic is implemented in the UI layer
         // Logic layer should handle all items correctly
-        const props = truncatedLogic.getA11yProps('item', truncatedState.getState(), { index: 0 });
+        const props = (truncatedLogic as any).getA11yProps('item', truncatedState.getState(), { index: 0 });
         expect(props.role).toBe('listitem');
       });
     });

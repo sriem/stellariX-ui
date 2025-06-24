@@ -53,6 +53,8 @@ export interface MenuOptions {
     items?: MenuItem[];
     /** Initial open state */
     open?: boolean;
+    /** Initial selected item ID */
+    selectedId?: string;
     /** Component ID for ARIA */
     id?: string;
     /** Callback when menu opens */

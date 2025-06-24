@@ -38,16 +38,18 @@ const TestStepper = (props: any) => {
   }, [props.activeStep, stepper]);
   
   // Render simple UI
-  const rootA11y = stepper.logic.getA11yProps('root', state);
-  const listA11y = stepper.logic.getA11yProps('list', state);
+  const rootA11y = stepper.logic.getA11yProps('root');
+  const listA11y = stepper.logic.getA11yProps('list');
   
   return (
     <div {...rootA11y} data-testid="stepper-root">
       <ol {...listA11y} style={{ listStyle: 'none', display: 'flex', gap: '20px' }}>
         {state.steps.map((step, index) => {
-          const stepA11y = stepper.logic.getA11yProps('step', state, { index });
-          const buttonA11y = stepper.logic.getA11yProps('stepButton', state, { index });
-          const buttonHandlers = stepper.logic.getInteractionHandlers('stepButton', state);
+          const stepA11yGetter = stepper.logic.getA11yProps('step');
+          const stepA11y = stepA11yGetter(index);
+          const buttonA11yGetter = stepper.logic.getA11yProps('stepButton');
+          const buttonA11y = buttonA11yGetter(index);
+          const buttonHandlers = stepper.logic.getInteractionHandlers('stepButton');
           
           // Attach index to handlers
           const handlersWithIndex = Object.entries(buttonHandlers).reduce((acc, [key, handler]) => {

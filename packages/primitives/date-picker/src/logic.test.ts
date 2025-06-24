@@ -239,36 +239,40 @@ describe('DatePicker Logic', () => {
     });
     
     describe('Month Navigation', () => {
-        it('should handle previous month click', () => {
+        it('should handle previous month click', async () => {
             const onMonthChange = vi.fn();
             const stateWithCallback = createDatePickerState({ onMonthChange });
             const logicWithCallback = createDatePickerLogic(stateWithCallback, { onMonthChange });
+            
+            // Connect and initialize logic
+            logicWithCallback.connect(stateWithCallback);
+            logicWithCallback.initialize();
             
             const handlers = logicWithCallback.getInteractionHandlers('prevMonth');
             if (handlers.onClick) {
                 handlers.onClick(new MouseEvent('click'));
             }
             
-            // State updates happen, callback fires after timeout
-            setTimeout(() => {
-                expect(onMonthChange).toHaveBeenCalled();
-            }, 0);
+            // State updates are synchronous, callback should be called immediately
+            expect(onMonthChange).toHaveBeenCalled();
         });
         
-        it('should handle next month click', () => {
+        it('should handle next month click', async () => {
             const onMonthChange = vi.fn();
             const stateWithCallback = createDatePickerState({ onMonthChange });
             const logicWithCallback = createDatePickerLogic(stateWithCallback, { onMonthChange });
+            
+            // Connect and initialize logic
+            logicWithCallback.connect(stateWithCallback);
+            logicWithCallback.initialize();
             
             const handlers = logicWithCallback.getInteractionHandlers('nextMonth');
             if (handlers.onClick) {
                 handlers.onClick(new MouseEvent('click'));
             }
             
-            // State updates happen, callback fires after timeout
-            setTimeout(() => {
-                expect(onMonthChange).toHaveBeenCalled();
-            }, 0);
+            // State updates are synchronous, callback should be called immediately
+            expect(onMonthChange).toHaveBeenCalled();
         });
     });
     
@@ -291,6 +295,10 @@ describe('DatePicker Logic', () => {
             
             const rangeState = createDatePickerState(rangeOptions);
             const rangeLogic = createDatePickerLogic(rangeState, rangeOptions);
+            
+            // Connect and initialize logic
+            rangeLogic.connect(rangeState);
+            rangeLogic.initialize();
             
             rangeState.setDateRange(testDate, new Date('2024-01-20'));
             
@@ -322,6 +330,10 @@ describe('DatePicker Logic', () => {
             
             const disabledState = createDatePickerState(disabledOptions);
             const disabledLogic = createDatePickerLogic(disabledState, disabledOptions);
+            
+            // Connect and initialize logic
+            disabledLogic.connect(disabledState);
+            disabledLogic.initialize();
             
             const handlers = disabledLogic.getInteractionHandlers('cell');
             const event = Object.assign(new MouseEvent('click'), { date: testDate });

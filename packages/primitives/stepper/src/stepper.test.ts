@@ -383,22 +383,23 @@ describe('Stepper Component', () => {
       const state = stepper.state.getState();
       
       // Root props
-      const rootProps = stepper.logic.getA11yProps('root', state);
+      const rootProps = stepper.logic.getA11yProps('root');
       expect(rootProps.role).toBe('group');
       expect(rootProps['aria-label']).toBe('Custom Progress');
-      expect(rootProps['aria-orientation']).toBe('horizontal');
       
       // List props
-      const listProps = stepper.logic.getA11yProps('list', state);
+      const listProps = stepper.logic.getA11yProps('list');
       expect(listProps.role).toBe('list');
       
-      // Step props
-      const stepProps = stepper.logic.getA11yProps('step', state, { index: 0 });
+      // Step props - getA11yProps returns a function that takes index
+      const stepPropsGetter = stepper.logic.getA11yProps('step');
+      const stepProps = stepPropsGetter(0);
       expect(stepProps.role).toBe('listitem');
       expect(stepProps['aria-current']).toBe('step');
       
-      // Step button props
-      const buttonProps = stepper.logic.getA11yProps('stepButton', state, { index: 0 });
+      // Step button props - getA11yProps returns a function that takes index
+      const buttonPropsGetter = stepper.logic.getA11yProps('stepButton');
+      const buttonProps = buttonPropsGetter(0);
       expect(buttonProps.role).toBe('button');
       expect(buttonProps['aria-label']).toBe('Step 1: Step 1');
       expect(buttonProps.tabIndex).toBe(0);
@@ -412,10 +413,11 @@ describe('Stepper Component', () => {
       
       const state = stepper.state.getState();
       
-      const rootProps = stepper.logic.getA11yProps('root', state);
+      const rootProps = stepper.logic.getA11yProps('root');
       expect(rootProps['aria-disabled']).toBe('true');
       
-      const buttonProps = stepper.logic.getA11yProps('stepButton', state, { index: 0 });
+      const buttonPropsGetter = stepper.logic.getA11yProps('stepButton');
+      const buttonProps = buttonPropsGetter(0);
       expect(buttonProps.tabIndex).toBe(-1);
       expect(buttonProps['aria-disabled']).toBe('true');
     });

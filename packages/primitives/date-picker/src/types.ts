@@ -153,6 +153,12 @@ export interface DatePickerOptions {
     endDate?: Date | null;
     
     /**
+     * Initial view date for calendar
+     * @default value || startDate || new Date()
+     */
+    viewDate?: Date;
+    
+    /**
      * Selection mode
      * @default 'single'
      */

@@ -3,21 +3,30 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix-ui/core';
 import { createDatePickerState } from './state.js';
 import { createDatePickerLogic, generateCalendarGrid } from './logic.js';
 import type { DatePickerOptions, DatePickerState, DatePickerEvents } from './types.js';
+import type { ComponentCore } from '@stellarix-ui/core';
 
 /**
- * Creates a date picker component factory
+ * Creates a date picker component
  * @param options Component options
- * @returns Component factory
+ * @returns Component instance
  */
-export function createDatePicker(options: DatePickerOptions = {}) {
-    return createPrimitive<DatePickerState, DatePickerEvents, DatePickerOptions>('DatePicker', {
-        initialState: options,
-        logicConfig: options,
+export function createDatePicker(options: DatePickerOptions = {}): ComponentCore<DatePickerState, DatePickerEvents> {
+    const state = createDatePickerState(options);
+    const logic = createDatePickerLogic(state, options);
+    
+    // Connect logic to state
+    logic.connect(state);
+    logic.initialize();
+    
+    return {
+        state,
+        logic,
         metadata: {
+            name: 'DatePicker',
+            version: '1.0.0',
             accessibility: {
                 role: 'combobox',
                 keyboardShortcuts: [
@@ -42,11 +51,11 @@ export function createDatePicker(options: DatePickerOptions = {}) {
                 ],
                 required: [],
                 custom: {
-                    'dateSelect': 'Fired when a date is selected',
-                    'rangeChange': 'Fired when date range changes',
-                    'navigate': 'Fired on keyboard navigation',
-                    'viewChange': 'Fired when calendar view changes',
-                    'monthChange': 'Fired when displayed month changes'
+                    'dateSelect': { description: 'Fired when a date is selected' },
+                    'rangeChange': { description: 'Fired when date range changes' },
+                    'navigate': { description: 'Fired on keyboard navigation' },
+                    'viewChange': { description: 'Fired when calendar view changes' },
+                    'monthChange': { description: 'Fired when displayed month changes' }
                 }
             },
             structure: {
@@ -98,22 +107,18 @@ export function createDatePicker(options: DatePickerOptions = {}) {
                     }
                 }
             }
+        },
+        connect: (adapter: any) => {
+            return adapter.createComponent({
+                state,
+                logic,
+                metadata: {
+                    name: 'DatePicker',
+                    version: '1.0.0'
+                }
+            });
         }
-    });
-}
-
-/**
- * Create the component with actual implementation
- * This connects the state and logic layers
- */
-export function createDatePickerWithImplementation(options: DatePickerOptions = {}) {
-    const core = createDatePicker(options);
-    
-    // Attach the actual implementation
-    core.state = createDatePickerState(options);
-    core.logic = createDatePickerLogic(core.state as any, options);
-    
-    return core;
+    };
 }
 
 // Re-export types
@@ -135,4 +140,4 @@ export type { DatePickerStateStore } from './state.js';
 export { generateCalendarGrid } from './logic.js';
 
 // Default export for convenience
-export default createDatePickerWithImplementation;
+export default createDatePicker;

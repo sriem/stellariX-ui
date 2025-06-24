@@ -3,10 +3,9 @@
  * Ultra-generic stepper implementation that can be adapted to any framework
  */
 
-import { createComponent } from './component';
-import type { Component } from './component';
 import { createStepperState } from './state';
 import { createStepperLogic } from './logic';
+import type { ComponentCore } from '@stellarix-ui/core';
 import type { 
     StepperState, 
     StepperEvents, 
@@ -22,19 +21,16 @@ import type {
  */
 export function createStepper(
     options: StepperOptions = {}
-): Component<StepperState, StepperEvents> & StepperHelpers {
+): ComponentCore<StepperState, StepperEvents> & StepperHelpers {
     // Create state store
     const state = createStepperState(options);
     
     // Create logic layer
     const logic = createStepperLogic(state, options);
     
-    // Create base component
-    const component = createComponent({
-        id: options.id || 'stepper',
-        state,
-        logic,
-    });
+    // Connect logic to state
+    logic.connect(state);
+    logic.initialize();
     
     // Helper methods
     const helpers: StepperHelpers = {
@@ -42,11 +38,7 @@ export function createStepper(
          * Go to next step
          */
         async next(): Promise<boolean> {
-            const currentState = await new Promise<StepperState>(resolve => {
-                const unsubscribe = state.subscribe(resolve);
-                unsubscribe();
-            });
-            
+            const currentState = state.getState();
             const nextStep = currentState.activeStep + 1;
             
             if (nextStep >= currentState.steps.length) {
@@ -92,11 +84,7 @@ export function createStepper(
          * Go to previous step
          */
         async prev(): Promise<boolean> {
-            const currentState = await new Promise<StepperState>(resolve => {
-                const unsubscribe = state.subscribe(resolve);
-                unsubscribe();
-            });
-            
+            const currentState = state.getState();
             const prevStep = currentState.activeStep - 1;
             
             if (prevStep < 0) {
@@ -136,10 +124,7 @@ export function createStepper(
          * Go to specific step
          */
         async goToStep(step: number): Promise<boolean> {
-            const currentState = await new Promise<StepperState>(resolve => {
-                const unsubscribe = state.subscribe(resolve);
-                unsubscribe();
-            });
+            const currentState = state.getState();
             
             if (step === currentState.activeStep || step < 0 || step >= currentState.steps.length) {
                 return false;
@@ -263,8 +248,41 @@ export function createStepper(
         }
     };
     
-    // Return component with helper methods
-    return Object.assign(component, helpers);
+    // Create component core
+    const component: ComponentCore<StepperState, StepperEvents> & StepperHelpers = {
+        state,
+        logic,
+        metadata: {
+            name: 'Stepper',
+            version: '0.0.1',
+            accessibility: {
+                role: 'group',
+                wcagLevel: 'AA',
+                patterns: ['stepper'],
+                keyboardShortcuts: ['Arrow keys', 'Home', 'End', 'Enter', 'Space'],
+                ariaAttributes: ['aria-label', 'aria-current', 'aria-disabled', 'aria-invalid'],
+            },
+            events: {
+                supported: ['stepChange', 'stepClick', 'validationStart', 'validationComplete', 'complete'],
+                required: [],
+                custom: {},
+            },
+            structure: {
+                elements: {
+                    root: { type: 'div', role: 'group', optional: false },
+                    list: { type: 'ol', role: 'list', optional: false },
+                    step: { type: 'li', role: 'listitem', optional: false },
+                    stepButton: { type: 'button', role: 'button', optional: false },
+                },
+            },
+        },
+        connect: function <TFrameworkComponent>(adapter: any): TFrameworkComponent {
+            return adapter.createComponent(this);
+        },
+        ...helpers
+    };
+    
+    return component;
 }
 
 // Re-export types

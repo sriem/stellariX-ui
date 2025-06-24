@@ -6,7 +6,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createFileUpload } from './index';
-import { reactAdapter } from '@stellarix/react';
+import { reactAdapter } from '@stellarix-ui/react';
 
 // Helper to format file size
 const formatFileSize = (bytes: number) => {

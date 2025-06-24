@@ -1,5 +1,5 @@
 {
-    "name": "@stellarix/file-upload",
+    "name": "@stellarix-ui/file-upload",
     "version": "0.0.1",
     "description": "Framework-agnostic file upload component with drag and drop support for StellarIX UI",
     "type": "module",

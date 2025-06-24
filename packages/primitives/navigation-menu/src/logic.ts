@@ -2,21 +2,20 @@
  * NavigationMenu Component Logic
  * Business logic and event handling
  * 
- * 🚨 CRITICAL WARNING: NEVER call state.getState() in this file!
+ * 🚨 CRITICAL WARNING: Be careful with state.getState() usage!
  * 
  * ❌ FORBIDDEN PATTERNS:
- * - const currentState = state.getState(); // CAUSES INFINITE LOOPS!
- * - state.getState() inside event handlers
- * - state.getState() inside getA11yProps()
- * - state.getState() inside getInteractionHandlers()
+ * - state.getState() inside reactive contexts (subscriptions, derived state)
+ * - state.getState() inside getA11yProps() when used with LogicLayerBuilder
+ * - state.getState() inside getInteractionHandlers() when used with LogicLayerBuilder
  * 
- * ✅ CORRECT PATTERNS:
- * - Use (currentState, handleEvent) parameters in interactions
- * - Use (state) parameter in a11y functions
+ * ✅ SAFE PATTERNS:
+ * - state.getState() in event handlers (onClick, onKeyDown, etc) - NOT reactive
+ * - Use (currentState) parameter in a11y functions when provided by LogicLayerBuilder
  * - Call state setters directly: state.setActiveItemId(), state.toggleExpanded()
  * 
  * WHY: Calling state.getState() in reactive contexts creates circular dependencies
- * that cause infinite loops and crash the application.
+ * that cause infinite loops. Event handlers are safe because they're not reactive.
  */
 
 import { createLogicLayer } from '@stellarix-ui/core';
@@ -94,9 +93,10 @@ export function createNavigationMenuLogic(
             root: (currentState) => ({
                 role: 'navigation',
                 'aria-label': options.ariaLabel || 'Main navigation',
-                'aria-orientation': currentState.orientation,
+                // aria-orientation is not valid on nav elements, only on menubar/menu
                 'aria-disabled': currentState.disabled ? 'true' : undefined,
                 'data-collapsed': currentState.collapsed ? 'true' : undefined,
+                'data-orientation': currentState.orientation, // Use data attribute instead
             }),
             
             mobileMenuButton: (currentState) => ({
@@ -223,6 +223,7 @@ export function createMenuItemHandlers(
     
     return {
         onClick: (event: MouseEvent) => {
+            // Get state directly - this is safe in event handlers
             const currentState = state.getState();
             const item = findItemById(currentState.items, itemId);
             
@@ -237,9 +238,8 @@ export function createMenuItemHandlers(
                 state.toggleExpanded(itemId);
                 
                 if (options.onExpandedChange) {
-                    const newExpandedIds = currentState.expandedItemIds.includes(itemId)
-                        ? currentState.expandedItemIds.filter(id => id !== itemId)
-                        : [...currentState.expandedItemIds, itemId];
+                    // Get the updated expanded IDs after state change
+                    const newExpandedIds = state.getState().expandedItemIds;
                     options.onExpandedChange(newExpandedIds);
                 }
             } else {
@@ -271,6 +271,7 @@ export function createMenuItemHandlers(
         },
         
         onMouseEnter: (event: MouseEvent) => {
+            // Get state directly
             const currentState = state.getState();
             if (currentState.disabled || currentState.trigger === 'click') return;
             
@@ -287,13 +288,15 @@ export function createMenuItemHandlers(
             hoverTimeout = setTimeout(() => {
                 state.expandItem(itemId);
                 if (options.onExpandedChange) {
-                    const expandedIds = state.getState().expandedItemIds;
-                    options.onExpandedChange(expandedIds);
+                    // Get the updated expanded IDs after state change
+                    const newExpandedIds = state.getState().expandedItemIds;
+                    options.onExpandedChange(newExpandedIds);
                 }
             }, 150);
         },
         
         onMouseLeave: (event: MouseEvent) => {
+            // Get state directly
             const currentState = state.getState();
             if (currentState.disabled || currentState.trigger === 'click') return;
             
@@ -307,13 +310,15 @@ export function createMenuItemHandlers(
             hoverTimeout = setTimeout(() => {
                 state.collapseItem(itemId);
                 if (options.onExpandedChange) {
-                    const expandedIds = state.getState().expandedItemIds;
-                    options.onExpandedChange(expandedIds);
+                    // Get the updated expanded IDs after state change
+                    const newExpandedIds = state.getState().expandedItemIds;
+                    options.onExpandedChange(newExpandedIds);
                 }
             }, 300);
         },
         
         onKeyDown: (event: KeyboardEvent) => {
+            // Get state directly
             const currentState = state.getState();
             if (currentState.disabled) return;
             

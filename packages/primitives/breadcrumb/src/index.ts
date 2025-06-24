@@ -3,11 +3,10 @@
  * Ultra-generic breadcrumb implementation that can be adapted to any framework
  */
 
-import { createPrimitive } from '@stellarix-ui/core';
-import type { ComponentCore } from '@stellarix-ui/core';
 import { createBreadcrumbState } from './state';
 import { createBreadcrumbLogic } from './logic';
 import type { BreadcrumbState, BreadcrumbEvents, BreadcrumbOptions } from './types';
+import type { ComponentCore } from '@stellarix-ui/core';
 
 /**
  * Creates a breadcrumb component
@@ -16,11 +15,22 @@ import type { BreadcrumbState, BreadcrumbEvents, BreadcrumbOptions } from './typ
  */
 export function createBreadcrumb(
     options: BreadcrumbOptions = {}
-): ComponentCore<BreadcrumbState, BreadcrumbEvents> {
-    const core = createPrimitive<BreadcrumbState, BreadcrumbEvents, BreadcrumbOptions>('Breadcrumb', {
-        initialState: options,
-        logicConfig: options,
+): ComponentCore<BreadcrumbState, BreadcrumbEvents> & { options: BreadcrumbOptions } {
+    const state = createBreadcrumbState(options);
+    const logic = createBreadcrumbLogic(state, options);
+    
+    // Connect logic to state
+    logic.connect(state);
+    logic.initialize();
+    
+    const core: ComponentCore<BreadcrumbState, BreadcrumbEvents> & { options: BreadcrumbOptions } = {
+        id: options.id || 'breadcrumb',
+        state,
+        logic,
+        options, // Store options for adapter access
         metadata: {
+            name: 'Breadcrumb',
+            version: '1.0.0',
             accessibility: {
                 role: 'navigation',
                 label: 'Breadcrumb',
@@ -29,38 +39,47 @@ export function createBreadcrumb(
                 patterns: ['navigation']
             },
             events: {
-                supported: ['click', 'keydown'],
+                supported: ['itemClick', 'itemsChange', 'itemFocus', 'keyNavigation'],
                 required: [],
-                custom: {}
+                custom: {
+                    itemClick: { description: 'Fired when an item is clicked' },
+                    itemsChange: { description: 'Fired when items are updated' },
+                    itemFocus: { description: 'Fired when a breadcrumb item receives focus' },
+                    keyNavigation: { description: 'Fired when keyboard navigation occurs' }
+                }
             },
             structure: {
                 elements: {
                     'root': {
                         type: 'nav',
-                        role: 'navigation'
+                        role: 'navigation',
+                        optional: false
                     },
                     'list': {
                         type: 'ol',
-                        role: 'list'
+                        role: 'list',
+                        optional: false
                     },
                     'item': {
                         type: 'li',
-                        role: 'listitem'
+                        role: 'listitem',
+                        optional: false
+                    },
+                    'link': {
+                        type: 'a',
+                        role: 'link',
+                        optional: false
                     }
                 }
             }
+        },
+        connect: (adapter: any) => {
+            return adapter.createComponent(core);
+        },
+        destroy: () => {
+            logic.cleanup();
         }
-    });
-    
-    // Create state store
-    const state = createBreadcrumbState(options);
-    
-    // Create logic layer
-    const logic = createBreadcrumbLogic(state, options);
-    
-    // Attach state and logic to core
-    core.state = state;
-    core.logic = logic;
+    };
     
     return core;
 }
