@@ -514,9 +514,10 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                         
                         // Clear button (if clearable and has value)
                         ...(clearable && selectState.value ? [
-                            createElement('button', {
+                            createElement('span', {
                                 key: 'clear',
-                                type: 'button',
+                                role: 'button',
+                                tabIndex: 0,
                                 'data-part': 'clear',
                                 ...clearA11y,
                                 ...reactClearHandlers,
@@ -526,7 +527,8 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                                     border: 'none',
                                     padding: '2px',
                                     cursor: 'pointer',
-                                    marginLeft: '8px'
+                                    marginLeft: '8px',
+                                    display: 'inline-block'
                                 }
                             }, '×')
                         ] : []),

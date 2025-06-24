@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import '@testing-library/jest-dom';
@@ -79,7 +79,7 @@ describe('Select Accessibility', () => {
         expect(combobox).toHaveTextContent('Apple');
     });
     
-    it('should have proper ARIA attributes when open', () => {
+    it('should have proper ARIA attributes when open', async () => {
         const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
@@ -87,7 +87,9 @@ describe('Select Accessibility', () => {
         const combobox = getByRole('combobox');
         
         // Open the dropdown
-        combobox.click();
+        await act(async () => {
+            combobox.click();
+        });
         
         expect(combobox).toHaveAttribute('aria-expanded', 'true');
         
@@ -107,7 +109,7 @@ describe('Select Accessibility', () => {
         expect(disabledOption).toHaveAttribute('aria-disabled', 'true');
     });
     
-    it('should support keyboard navigation', () => {
+    it('should support keyboard navigation', async () => {
         const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
@@ -115,14 +117,16 @@ describe('Select Accessibility', () => {
         const combobox = getByRole('combobox');
         
         // Component should be keyboard focusable
-        combobox.focus();
+        await act(async () => {
+            combobox.focus();
+        });
         expect(document.activeElement).toBe(combobox);
         
         // Should have tabindex
         expect(combobox).toHaveAttribute('tabindex', '0');
     });
     
-    it('should announce selected value to screen readers', () => {
+    it('should announce selected value to screen readers', async () => {
         const select = createSelect({
             options: mockOptions,
             value: 'banana'
@@ -136,7 +140,9 @@ describe('Select Accessibility', () => {
         expect(combobox).toHaveTextContent('Banana');
         
         // When opened, selected option should have aria-selected
-        combobox.click();
+        await act(async () => {
+            combobox.click();
+        });
         const selectedOption = getByRole('option', { name: 'Banana' });
         expect(selectedOption).toHaveAttribute('aria-selected', 'true');
     });
@@ -225,7 +231,7 @@ describe('Select Accessibility', () => {
         expect(results).toHaveNoViolations();
     }, 30000);
     
-    it('should properly handle aria-activedescendant for keyboard navigation', () => {
+    it('should properly handle aria-activedescendant for keyboard navigation', async () => {
         const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
@@ -233,11 +239,15 @@ describe('Select Accessibility', () => {
         const combobox = getByRole('combobox');
         
         // Open dropdown
-        combobox.click();
+        await act(async () => {
+            combobox.click();
+        });
         
         // Navigate with keyboard
-        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
-        combobox.dispatchEvent(event);
+        await act(async () => {
+            const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+            combobox.dispatchEvent(event);
+        });
         
         // Should have aria-activedescendant pointing to highlighted option
         expect(combobox).toHaveAttribute('aria-activedescendant');
@@ -253,12 +263,14 @@ describe('Select Accessibility', () => {
         const { container, getByRole } = render(
             <form>
                 <label htmlFor="searchable-select">Searchable Fruit Select</label>
-                <SelectComponent id="searchable-select" />
+                <SelectComponent id="searchable-select" searchable="true" />
             </form>
         );
         
         const combobox = getByRole('combobox');
-        combobox.click();
+        await act(async () => {
+            combobox.click();
+        });
         
         // Should have search input
         const searchBox = getByRole('searchbox');
@@ -281,7 +293,7 @@ describe('Select Accessibility', () => {
         // Actual high contrast testing would be done with visual regression tests
     });
     
-    it('should properly handle focus management', () => {
+    it('should properly handle focus management', async () => {
         const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
         
@@ -289,15 +301,21 @@ describe('Select Accessibility', () => {
         const combobox = getByRole('combobox');
         
         // Focus the combobox
-        combobox.focus();
+        await act(async () => {
+            combobox.focus();
+        });
         expect(document.activeElement).toBe(combobox);
         
         // Open dropdown
-        combobox.click();
+        await act(async () => {
+            combobox.click();
+        });
         
         // Focus should remain on combobox while navigating options
-        const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
-        combobox.dispatchEvent(event);
+        await act(async () => {
+            const event = new KeyboardEvent('keydown', { key: 'ArrowDown' });
+            combobox.dispatchEvent(event);
+        });
         
         expect(document.activeElement).toBe(combobox);
     });
@@ -313,7 +331,7 @@ describe('Select Accessibility', () => {
         const { container } = render(
             <form>
                 <label htmlFor="clearable-select">Clearable Select</label>
-                <SelectComponent id="clearable-select" />
+                <SelectComponent id="clearable-select" clearable="true" />
             </form>
         );
         
