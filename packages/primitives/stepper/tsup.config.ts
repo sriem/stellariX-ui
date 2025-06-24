@@ -8,6 +8,7 @@ export default defineConfig({
   treeshake: true,
   sourcemap: true,
   minify: true,
+  target: 'es2022',
   external: [
     '@stellarix-ui/core',
     '@stellarix-ui/utils',
