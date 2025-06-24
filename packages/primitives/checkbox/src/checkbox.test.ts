@@ -558,11 +558,10 @@ describe('Checkbox Logic', () => {
             const logicWithCallback = createCheckboxLogic(state, { onChange });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
+            const interactions = logicWithCallback.getInteractionHandlers('root');
             
-            logicWithCallback.handleEvent('change', {
-                checked: true,
-                previousChecked: false
-            });
+            // Test by triggering the click interaction which calls onChange
+            interactions.onClick(mockEvent as MouseEvent);
             
             expect(onChange).toHaveBeenCalledWith(true);
         });
@@ -572,8 +571,10 @@ describe('Checkbox Logic', () => {
             const logicWithCallback = createCheckboxLogic(state, { onFocus });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
+            const interactions = logicWithCallback.getInteractionHandlers('root');
             
-            logicWithCallback.handleEvent('focus', { event: mockFocusEvent as FocusEvent });
+            // Test by triggering the focus interaction
+            interactions.onFocus(mockFocusEvent as FocusEvent);
             
             expect(onFocus).toHaveBeenCalledWith(mockFocusEvent);
         });
@@ -583,8 +584,10 @@ describe('Checkbox Logic', () => {
             const logicWithCallback = createCheckboxLogic(state, { onBlur });
             logicWithCallback.connect(state);
             logicWithCallback.initialize();
+            const interactions = logicWithCallback.getInteractionHandlers('root');
             
-            logicWithCallback.handleEvent('blur', { event: mockFocusEvent as FocusEvent });
+            // Test by triggering the blur interaction
+            interactions.onBlur(mockFocusEvent as FocusEvent);
             
             expect(onBlur).toHaveBeenCalledWith(mockFocusEvent);
         });

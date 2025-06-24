@@ -3,8 +3,9 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import '@testing-library/jest-dom';
 import { createCheckboxWithImplementation } from '../src';
 import { reactAdapter } from '@stellarix-ui/react';
 import type { CheckboxOptions } from '../src/types';
@@ -35,7 +36,9 @@ describe('Checkbox React Integration', () => {
         expect(element).toHaveAttribute('aria-checked', 'false');
         
         // Click to check
-        fireEvent.click(element);
+        act(() => {
+            fireEvent.click(element);
+        });
         
         await waitFor(() => {
             expect(element.checked).toBe(true);
@@ -44,7 +47,9 @@ describe('Checkbox React Integration', () => {
         });
         
         // Click to uncheck
-        fireEvent.click(element);
+        act(() => {
+            fireEvent.click(element);
+        });
         
         await waitFor(() => {
             expect(element.checked).toBe(false);
@@ -79,7 +84,9 @@ describe('Checkbox React Integration', () => {
         expect(element).toHaveAttribute('aria-disabled', 'true');
         
         // Should not trigger onChange when disabled
-        fireEvent.click(element);
+        act(() => {
+            fireEvent.click(element);
+        });
         expect(onChange).not.toHaveBeenCalled();
     });
     
@@ -96,14 +103,18 @@ describe('Checkbox React Integration', () => {
         expect(document.activeElement).toBe(element);
         
         // Press Space to toggle
-        fireEvent.keyDown(element, { key: ' ', code: 'Space' });
+        act(() => {
+            fireEvent.keyDown(element, { key: ' ', code: 'Space' });
+        });
         
         await waitFor(() => {
             expect(onChange).toHaveBeenCalledWith(true);
         });
         
         // Press Space again to toggle back
-        fireEvent.keyDown(element, { key: ' ', code: 'Space' });
+        act(() => {
+            fireEvent.keyDown(element, { key: ' ', code: 'Space' });
+        });
         
         await waitFor(() => {
             expect(onChange).toHaveBeenCalledWith(false);
@@ -120,13 +131,17 @@ describe('Checkbox React Integration', () => {
         const element = screen.getByTestId('test-checkbox');
         
         // Focus event
-        fireEvent.focus(element);
+        act(() => {
+            fireEvent.focus(element);
+        });
         await waitFor(() => {
             expect(onFocus).toHaveBeenCalled();
         });
         
         // Blur event
-        fireEvent.blur(element);
+        act(() => {
+            fireEvent.blur(element);
+        });
         await waitFor(() => {
             expect(onBlur).toHaveBeenCalled();
         });
@@ -143,7 +158,9 @@ describe('Checkbox React Integration', () => {
         const uncontrolledElement = screen.getByTestId('uncontrolled') as HTMLInputElement;
         
         // Should manage its own state
-        fireEvent.click(uncontrolledElement);
+        act(() => {
+            fireEvent.click(uncontrolledElement);
+        });
         await waitFor(() => {
             expect(uncontrolledElement.checked).toBe(true);
         });
@@ -164,7 +181,9 @@ describe('Checkbox React Integration', () => {
         const controlledElement = screen.getByTestId('controlled') as HTMLInputElement;
         
         // Should sync with external state
-        fireEvent.click(controlledElement);
+        act(() => {
+            fireEvent.click(controlledElement);
+        });
         await waitFor(() => {
             expect(controlledElement.checked).toBe(true);
         });
@@ -231,7 +250,9 @@ describe('Checkbox React Integration', () => {
         render(<CheckboxComponent data-testid="test-checkbox" />);
         const element = screen.getByTestId('test-checkbox');
         
-        fireEvent.keyDown(element, { key: ' ', code: 'Space' });
+        act(() => {
+            fireEvent.keyDown(element, { key: ' ', code: 'Space' });
+        });
         
         // Should not trigger change
         await waitFor(() => {

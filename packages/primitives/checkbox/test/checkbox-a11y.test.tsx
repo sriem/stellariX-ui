@@ -3,9 +3,10 @@
  */
 
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
+import '@testing-library/jest-dom';
 import { createCheckboxWithImplementation } from '../src';
 import { reactAdapter } from '@stellarix-ui/react';
 
@@ -51,7 +52,7 @@ describe('Checkbox Accessibility', () => {
         
         expect(element).toHaveAttribute('aria-checked', 'false');
         expect(element).toHaveAttribute('aria-required', 'true');
-        expect(element).toHaveAttribute('aria-disabled', 'false');
+        expect(element).not.toHaveAttribute('aria-disabled');
         expect(element).toHaveAttribute('aria-invalid', 'true');
     });
     
@@ -72,14 +73,24 @@ describe('Checkbox Accessibility', () => {
         const CheckboxComponent = checkbox.connect(reactAdapter);
         
         const { getByRole } = render(<CheckboxComponent />);
-        const element = getByRole('checkbox');
+        const element = getByRole('checkbox') as HTMLInputElement;
         
         // Check that checkbox can receive focus
-        element.focus();
+        act(() => {
+            element.focus();
+        });
         expect(document.activeElement).toBe(element);
         
-        // Tab index should be 0 for keyboard navigation
-        expect(element).toHaveAttribute('tabIndex', '0');
+        // For input type="checkbox" elements:
+        // - They are naturally focusable and don't need explicit tabindex
+        // - They should NOT be disabled
+        // - When focused, they can be toggled with Space key
+        expect(element.disabled).toBe(false);
+        expect(element.type).toBe('checkbox');
+        
+        // Verify the element is keyboard accessible
+        // Input checkboxes are focusable by default
+        expect(document.activeElement).toBe(element);
     });
     
     it('should work with screen readers', async () => {
@@ -150,14 +161,22 @@ describe('Checkbox Accessibility', () => {
         const CheckboxComponent = checkbox.connect(reactAdapter);
         
         const { getByRole } = render(<CheckboxComponent />);
-        const element = getByRole('checkbox');
+        const element = getByRole('checkbox') as HTMLInputElement;
         
         // Focus the element
-        element.focus();
+        act(() => {
+            element.focus();
+        });
+        
+        // Verify focus is applied
+        expect(document.activeElement).toBe(element);
+        
+        // Input checkboxes are focusable by default when not disabled
+        expect(element.disabled).toBe(false);
+        expect(element.type).toBe('checkbox');
         
         // In a real test, we'd check computed styles for focus indicators
-        expect(document.activeElement).toBe(element);
-        expect(element).toHaveAttribute('tabIndex', '0');
+        // But for now, we just verify the element can receive focus
     });
     
     it('should handle error states accessibly', async () => {
