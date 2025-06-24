@@ -330,7 +330,7 @@ export function createSelectLogic(
                     options.onChange(null, null);
                 }
                 
-                return 'change';
+                return null;
             }
             
             return null;

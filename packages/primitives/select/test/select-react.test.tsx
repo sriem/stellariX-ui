@@ -373,7 +373,7 @@ describe('Select React Integration', () => {
         });
         const SelectComponent = select.connect(reactAdapter);
         
-        render(<SelectComponent />);
+        render(<SelectComponent clearable={true} />);
         
         // Should show clear button when value is selected
         const clearButton = screen.getByRole('button', { name: /clear/i });
@@ -382,7 +382,7 @@ describe('Select React Integration', () => {
         fireEvent.click(clearButton);
         
         await waitFor(() => {
-            expect(onChange).toHaveBeenCalledWith(null);
+            expect(onChange).toHaveBeenCalledWith(null, null);
         });
     });
 });

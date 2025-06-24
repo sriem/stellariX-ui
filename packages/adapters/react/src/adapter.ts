@@ -407,13 +407,45 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
             // Handle Select component (compound component with trigger + listbox + options)
             if (core.metadata.name === 'Select') {
                 const selectState = state as any;
+                const clearable = (restProps as any).clearable || (core as any).options?.clearable;
+                const searchable = (restProps as any).searchable || (core as any).options?.searchable;
                 
                 // Get A11y props and handlers for each element
                 const triggerA11y = logic.getA11yProps('trigger');
                 const triggerHandlers = logic.getInteractionHandlers('trigger');
+                
+                // Convert interaction handlers to React event format
+                const reactTriggerHandlers = Object.fromEntries(
+                    Object.entries(triggerHandlers).map(([event, handler]) => [
+                        event,
+                        (e: any) => {
+                            // Call the handler and trigger the returned event if any
+                            const result = (handler as Function)(e);
+                            if (result && typeof result === 'string') {
+                                logic.handleEvent(result, e);
+                            }
+                        }
+                    ])
+                );
                 const listboxA11y = logic.getA11yProps('listbox');
                 const clearA11y = logic.getA11yProps('clear');
                 const clearHandlers = logic.getInteractionHandlers('clear');
+                
+                // Convert clear handlers to React format
+                const reactClearHandlers = Object.fromEntries(
+                    Object.entries(clearHandlers).map(([event, handler]) => [
+                        event,
+                        (e: any) => {
+                            const result = (handler as Function)(e);
+                            if (result && typeof result === 'string') {
+                                logic.handleEvent(result, e);
+                            }
+                        }
+                    ])
+                );
+                
+                // Generate listbox ID for aria-controls
+                const listboxId = triggerA11y?.['aria-controls'] || `listbox-${Date.now()}`;
                 
                 // Get options from state
                 const options = selectState.filteredOptions || selectState.options || [];
@@ -428,9 +460,18 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                         'data-part': 'trigger',
                         type: 'button',
                         ...triggerA11y,
-                        ...triggerHandlers,
+                        ...reactTriggerHandlers,
+                        // Override with proper ARIA attributes
+                        'aria-expanded': selectState.open ? 'true' : 'false',
+                        'aria-controls': listboxId,
+                        'aria-activedescendant': selectState.open && selectState.highlightedIndex >= 0 ? 
+                            `${listboxId}-option-${selectState.highlightedIndex}` : undefined,
                         disabled: selectState.disabled,
                         'aria-readonly': selectState.readonly,
+                        // Pass through aria-label and aria-labelledby from props
+                        'aria-label': (restProps as any)['aria-label'],
+                        'aria-labelledby': (restProps as any)['aria-labelledby'],
+                        'aria-describedby': (restProps as any)['aria-describedby'],
                         className: `${className || ''} select-trigger`,
                         style: {
                             display: 'flex',
@@ -445,19 +486,40 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             ...style
                         }
                     }, [
-                        // Display value or placeholder
-                        createElement('span', {
-                            key: 'value'
-                        }, selectedOption ? selectedOption.label : selectState.placeholder || 'Select an option'),
+                        // Display value or placeholder (or search input if searchable)
+                        searchable ? 
+                            createElement('input', {
+                                key: 'search',
+                                type: 'search',
+                                role: 'searchbox',
+                                placeholder: selectedOption ? selectedOption.label : selectState.placeholder || 'Search options...',
+                                value: selectState.searchQuery || '',
+                                onChange: (e: any) => {
+                                    const searchHandlers = logic.getInteractionHandlers('search');
+                                    if (searchHandlers.onChange) {
+                                        searchHandlers.onChange({ target: { value: e.target.value } });
+                                    }
+                                },
+                                style: {
+                                    border: 'none',
+                                    outline: 'none',
+                                    background: 'transparent',
+                                    flex: 1,
+                                    minWidth: 0
+                                }
+                            }) :
+                            createElement('span', {
+                                key: 'value'
+                            }, selectedOption ? selectedOption.label : selectState.placeholder || 'Select an option'),
                         
                         // Clear button (if clearable and has value)
-                        ...((restProps as any).clearable && selectState.value ? [
+                        ...(clearable && selectState.value ? [
                             createElement('button', {
                                 key: 'clear',
                                 type: 'button',
                                 'data-part': 'clear',
                                 ...clearA11y,
-                                ...clearHandlers,
+                                ...reactClearHandlers,
                                 'aria-label': 'Clear selection',
                                 style: {
                                     background: 'none',
@@ -489,6 +551,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             key: 'listbox',
                             'data-part': 'listbox',
                             ...listboxA11y,
+                            id: listboxId,
                             style: {
                                 position: 'absolute',
                                 top: '100%',
@@ -516,7 +579,10 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                                     event,
                                     (e: any) => {
                                         e.optionIndex = index;
-                                        (handler as Function)(e);
+                                        const result = (handler as Function)(e);
+                                        if (result && typeof result === 'string') {
+                                            logic.handleEvent(result, { option, index, event: e });
+                                        }
                                     }
                                 ])
                             );
@@ -526,6 +592,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                                 'data-part': 'option',
                                 ...optionA11yProps,
                                 ...optionHandlersWithIndex,
+                                id: `${listboxId}-option-${index}`,
                                 style: {
                                     padding: '8px 12px',
                                     cursor: option.disabled ? 'not-allowed' : 'pointer',
