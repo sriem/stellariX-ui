@@ -9,7 +9,7 @@
  * - state.getState() inside withInteraction callbacks // 🚨 INFINITE LOOP!
  * - state.getState() inside onEvent handlers // 🚨 INFINITE LOOP!
  * - state.getState() inside withA11y functions // 🚨 INFINITE LOOP!
- * - using createComponentLogic (causes complex circular deps) [DEPRECATED - DO NOT USE]
+ * - using createComponentLogic (causes complex circular deps)
  * 
  * ✅✅✅ CORRECT PATTERNS - LEARNED FROM CHECKBOX SUCCESS:
  * - Use LogicLayerBuilder pattern for clean implementation
