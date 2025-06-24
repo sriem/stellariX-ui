@@ -355,9 +355,6 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                         dialogA11y.role = 'dialog';
                     }
                     
-                    // Debug: log what we're getting
-                    // console.log('Dialog a11y props:', dialogA11y);
-                    
                     return createElement(
                         'div',
                         {
@@ -405,6 +402,154 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                         ]
                     );
                 }
+            }
+            
+            // Handle Select component (compound component with trigger + listbox + options)
+            if (core.metadata.name === 'Select') {
+                const selectState = state as any;
+                
+                // Get A11y props and handlers for each element
+                const triggerA11y = logic.getA11yProps('trigger');
+                const triggerHandlers = logic.getInteractionHandlers('trigger');
+                const listboxA11y = logic.getA11yProps('listbox');
+                const clearA11y = logic.getA11yProps('clear');
+                const clearHandlers = logic.getInteractionHandlers('clear');
+                
+                // Get options from state
+                const options = selectState.filteredOptions || selectState.options || [];
+                const selectedOption = options.find((opt: any) => opt.value === selectState.value);
+                
+                const elements = [];
+                
+                // Trigger button
+                elements.push(
+                    createElement('button', {
+                        key: 'trigger',
+                        'data-part': 'trigger',
+                        type: 'button',
+                        ...triggerA11y,
+                        ...triggerHandlers,
+                        disabled: selectState.disabled,
+                        'aria-readonly': selectState.readonly,
+                        className: `${className || ''} select-trigger`,
+                        style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: '8px 12px',
+                            border: '1px solid #ccc',
+                            borderRadius: '4px',
+                            backgroundColor: selectState.disabled ? '#f5f5f5' : 'white',
+                            cursor: selectState.disabled ? 'not-allowed' : 'pointer',
+                            minWidth: '200px',
+                            ...style
+                        }
+                    }, [
+                        // Display value or placeholder
+                        createElement('span', {
+                            key: 'value'
+                        }, selectedOption ? selectedOption.label : selectState.placeholder || 'Select an option'),
+                        
+                        // Clear button (if clearable and has value)
+                        ...((restProps as any).clearable && selectState.value ? [
+                            createElement('button', {
+                                key: 'clear',
+                                type: 'button',
+                                'data-part': 'clear',
+                                ...clearA11y,
+                                ...clearHandlers,
+                                'aria-label': 'Clear selection',
+                                style: {
+                                    background: 'none',
+                                    border: 'none',
+                                    padding: '2px',
+                                    cursor: 'pointer',
+                                    marginLeft: '8px'
+                                }
+                            }, '×')
+                        ] : []),
+                        
+                        // Dropdown arrow
+                        createElement('span', {
+                            key: 'arrow',
+                            'aria-hidden': 'true',
+                            style: {
+                                marginLeft: '8px',
+                                transform: selectState.open ? 'rotate(180deg)' : 'rotate(0deg)',
+                                transition: 'transform 0.2s'
+                            }
+                        }, '▼')
+                    ])
+                );
+                
+                // Listbox (only when open)
+                if (selectState.open && options.length > 0) {
+                    elements.push(
+                        createElement('ul', {
+                            key: 'listbox',
+                            'data-part': 'listbox',
+                            ...listboxA11y,
+                            style: {
+                                position: 'absolute',
+                                top: '100%',
+                                left: 0,
+                                right: 0,
+                                backgroundColor: 'white',
+                                border: '1px solid #ccc',
+                                borderTop: 'none',
+                                borderRadius: '0 0 4px 4px',
+                                maxHeight: '200px',
+                                overflowY: 'auto',
+                                listStyle: 'none',
+                                margin: 0,
+                                padding: 0,
+                                zIndex: 1000
+                            }
+                        }, options.map((option: any, index: number) => {
+                            const optionA11y = logic.getA11yProps('option');
+                            const optionA11yProps = typeof optionA11y === 'function' ? optionA11y(index) : {};
+                            const optionHandlers = logic.getInteractionHandlers('option');
+                            
+                            // Create option handlers with index
+                            const optionHandlersWithIndex = Object.fromEntries(
+                                Object.entries(optionHandlers).map(([event, handler]) => [
+                                    event,
+                                    (e: any) => {
+                                        e.optionIndex = index;
+                                        (handler as Function)(e);
+                                    }
+                                ])
+                            );
+                            
+                            return createElement('li', {
+                                key: option.value,
+                                'data-part': 'option',
+                                ...optionA11yProps,
+                                ...optionHandlersWithIndex,
+                                style: {
+                                    padding: '8px 12px',
+                                    cursor: option.disabled ? 'not-allowed' : 'pointer',
+                                    backgroundColor: index === selectState.highlightedIndex ? '#f0f0f0' : 
+                                                   option.value === selectState.value ? '#e6f3ff' : 'white',
+                                    color: option.disabled ? '#999' : 'black',
+                                    borderBottom: index < options.length - 1 ? '1px solid #f0f0f0' : 'none'
+                                }
+                            }, option.label);
+                        }))
+                    );
+                }
+                
+                // Wrap in container
+                return createElement('div', {
+                    ...domProps,
+                    ref,
+                    style: {
+                        position: 'relative',
+                        display: 'inline-block',
+                        ...style
+                    },
+                    className
+                }, elements);
             }
             
             // Void elements (input, br, hr, etc.) can't have children
