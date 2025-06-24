@@ -56,6 +56,10 @@ export function createDialogWithImplementation(options: DialogOptions = {}) {
     core.state = createDialogState(options);
     core.logic = createDialogLogic(core.state as any, options);
     
+    // Connect and initialize the logic layer
+    core.logic.connect(core.state as any);
+    core.logic.initialize();
+    
     return core;
 }
 

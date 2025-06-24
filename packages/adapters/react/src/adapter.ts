@@ -147,6 +147,77 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                 if ('pattern' in restProps) componentSpecificProps.pattern = (restProps as any).pattern;
             }
             
+            // Handle Dialog component
+            if (core.metadata.name === 'Dialog') {
+                // Only render if dialog is open
+                if (state && typeof state === 'object' && 'open' in state && !(state as any).open) {
+                    return null;
+                }
+                
+                // For dialog, we need to render both backdrop and dialog content
+                if ((state as any).open) {
+                    const backdropA11y = logic.getA11yProps('backdrop');
+                    const backdropHandlers = logic.getInteractionHandlers('backdrop');
+                    const dialogA11y = logic.getA11yProps('dialog');
+                    const dialogHandlers = logic.getInteractionHandlers('dialog');
+                    
+                    // Ensure dialog has proper role
+                    if (!dialogA11y.role) {
+                        dialogA11y.role = 'dialog';
+                    }
+                    
+                    // Debug: log what we're getting
+                    // console.log('Dialog a11y props:', dialogA11y);
+                    
+                    return createElement(
+                        'div',
+                        {
+                            style: { position: 'fixed', inset: 0, zIndex: 9999 }
+                        },
+                        [
+                            // Backdrop
+                            createElement('div', {
+                                key: 'backdrop',
+                                'data-part': 'backdrop',
+                                role: 'presentation',
+                                ...backdropA11y,
+                                ...backdropHandlers,
+                                style: { 
+                                    position: 'absolute', 
+                                    inset: 0, 
+                                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                    ...(restProps as any).backdropStyle
+                                },
+                                className: (restProps as any).backdropClassName
+                            }),
+                            // Dialog
+                            createElement(
+                                'div',
+                                {
+                                    key: 'dialog',
+                                    ...domProps,
+                                    ...componentSpecificProps,
+                                    ...dialogA11y,
+                                    ...dialogHandlers,
+                                    ref,
+                                    className,
+                                    style: {
+                                        position: 'relative',
+                                        backgroundColor: 'white',
+                                        padding: '20px',
+                                        maxWidth: '500px',
+                                        margin: '50px auto',
+                                        borderRadius: '8px',
+                                        ...style
+                                    }
+                                },
+                                children
+                            )
+                        ]
+                    );
+                }
+            }
+            
             // Void elements (input, br, hr, etc.) can't have children
             const isVoidElement = ['input', 'br', 'hr', 'img', 'area', 'base', 'col', 'embed', 'link', 'meta', 'param', 'source', 'track', 'wbr'].includes(rootElement);
             

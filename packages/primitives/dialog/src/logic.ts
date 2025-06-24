@@ -188,15 +188,27 @@ export function createDialogLogic(
         })
         
         // Dialog accessibility props
-        .withA11y('dialog', (state) => ({
-            role: state.role,
-            'aria-modal': 'true',
-            'aria-label': options.ariaLabel,
-            'aria-labelledby': options.ariaLabelledBy,
-            'aria-describedby': options.ariaDescribedBy,
-            'data-state': state.open ? 'open' : 'closed',
-            tabIndex: -1,
-        }))
+        .withA11y('dialog', (state) => {
+            const a11yProps: Record<string, any> = {
+                role: state.role,
+                'aria-modal': 'true',
+                'data-state': state.open ? 'open' : 'closed',
+                tabIndex: -1,
+            };
+            
+            // Only add aria attributes if they have values
+            if (options.ariaLabel) {
+                a11yProps['aria-label'] = options.ariaLabel;
+            }
+            if (options.ariaLabelledBy) {
+                a11yProps['aria-labelledby'] = options.ariaLabelledBy;
+            }
+            if (options.ariaDescribedBy) {
+                a11yProps['aria-describedby'] = options.ariaDescribedBy;
+            }
+            
+            return a11yProps;
+        })
         
         // Backdrop accessibility props
         .withA11y('backdrop', (state) => ({
