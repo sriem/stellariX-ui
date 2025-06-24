@@ -3,8 +3,8 @@
  * Handles interactions and business logic for the date picker component
  */
 
-import { LogicLayerBuilder } from '@stellarix/core';
-import { generateComponentId } from '@stellarix/utils';
+import { LogicLayerBuilder } from '@stellarix-ui/core';
+import { generateComponentId } from '@stellarix-ui/utils';
 import type { DatePickerState, DatePickerEvents, DatePickerOptions, CalendarGrid, CalendarWeek, CalendarCell } from './types.js';
 import type { DatePickerStateStore } from './state.js';
 

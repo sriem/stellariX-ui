@@ -28,8 +28,8 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@stellarix/core': resolve(__dirname, 'packages/core/src'),
-            '@stellarix/utils': resolve(__dirname, 'packages/utils/src'),
+            '@stellarix-ui/core': resolve(__dirname, 'packages/core/src'),
+            '@stellarix-ui/utils': resolve(__dirname, 'packages/utils/src'),
             '@stellarix/react': resolve(__dirname, 'packages/adapters/react/src'),
             '@stellarix-ui/core': resolve(__dirname, 'packages/core/src'),
             '@stellarix-ui/utils': resolve(__dirname, 'packages/utils/src'),

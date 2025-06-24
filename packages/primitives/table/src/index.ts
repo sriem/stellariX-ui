@@ -6,7 +6,7 @@
 import { createTableState } from './state';
 import { createTableLogic, tableUtils } from './logic';
 import type { TableOptions, TableState, TableEvents } from './types';
-import type { ComponentCore } from '@stellarix/core';
+import type { ComponentCore } from '@stellarix-ui/core';
 
 /**
  * Creates a table component

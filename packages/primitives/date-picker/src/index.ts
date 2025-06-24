@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createDatePickerState } from './state.js';
 import { createDatePickerLogic, generateCalendarGrid } from './logic.js';
 import type { DatePickerOptions, DatePickerState, DatePickerEvents } from './types.js';

@@ -3,7 +3,7 @@
  * Manages the state for the date picker component
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { DatePickerState, DatePickerOptions } from './types.js';
 
 /**

@@ -3,9 +3,9 @@
  * Handles interactions and business logic for the file upload component
  */
 
-import { LogicLayerBuilder } from '@stellarix/core';
-import type { LogicLayer } from '@stellarix/core';
-import { generateComponentId } from '@stellarix/utils';
+import { LogicLayerBuilder } from '@stellarix-ui/core';
+import type { LogicLayer } from '@stellarix-ui/core';
+import { generateComponentId } from '@stellarix-ui/utils';
 import type { FileUploadState, FileUploadEvents, FileUploadOptions } from './types';
 import type { FileUploadStateStore } from './state';
 

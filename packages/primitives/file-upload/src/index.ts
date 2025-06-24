@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createFileUploadState } from './state';
 import { createFileUploadLogic } from './logic';
 import type { FileUploadOptions, FileUploadState, FileUploadEvents } from './types';

@@ -27,8 +27,8 @@
         "framework-agnostic"
     ],
     "dependencies": {
-        "@stellarix/core": "workspace:*",
-        "@stellarix/utils": "workspace:*"
+        "@stellarix-ui/core": "workspace:*",
+        "@stellarix-ui/utils": "workspace:*"
     },
     "devDependencies": {
         "tsup": "^8.0.0",

@@ -3,7 +3,7 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
+import { createPrimitive } from '@stellarix-ui/core';
 import { createTemplateState } from './state';
 import { createTemplateLogic } from './logic';
 import type { TemplateOptions, TemplateState, TemplateEvents } from './types';

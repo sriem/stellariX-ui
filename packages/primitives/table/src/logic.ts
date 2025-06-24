@@ -3,9 +3,9 @@
  * Handles interactions and business logic for the table component
  */
 
-import { LogicLayerBuilder } from '@stellarix/core';
-import { generateComponentId } from '@stellarix/utils';
-import type { LogicLayer } from '@stellarix/core';
+import { LogicLayerBuilder } from '@stellarix-ui/core';
+import { generateComponentId } from '@stellarix-ui/utils';
+import type { LogicLayer } from '@stellarix-ui/core';
 import type { TableState, TableEvents, TableOptions, ColumnDef } from './types';
 import type { TableStateStore } from './state';
 

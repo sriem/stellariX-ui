@@ -3,7 +3,7 @@
  * Manages the state for the file upload component
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { FileUploadState, FileUploadOptions } from './types';
 
 /**

@@ -121,6 +121,11 @@ cp -r ../../templates/component-template ./select
 cd select
 ```
 
+🚨 **CRITICAL**: After copying, IMMEDIATELY check and fix:
+1. Remove the nested `component-template` folder if it gets copied
+2. Ensure all imports use `@stellarix-ui/*` NOT `@stellarix/*`
+3. Update package.json name to match component
+
 ### Step 2: Replace Placeholders
 Use your editor's find & replace:
 - `Template` → `YourComponent` (PascalCase, e.g., `Select`)
@@ -221,12 +226,12 @@ it('should handle click interaction', () => {
 // ✅ CORRECT - use wrapper pattern for state management:
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { createComponentWithImplementation } from './index';
+import { createComponent } from './index'; // NO MORE WithImplementation!
 import { reactAdapter } from '@stellarix-ui/react';
 
 // Create wrapper to manage individual instances
 const ComponentWrapper = React.forwardRef((props: any, ref: any) => {
-  const [component] = React.useState(() => createComponentWithImplementation(props));
+  const [component] = React.useState(() => createComponent(props));
   const Component = React.useMemo(() => component.connect(reactAdapter), [component]);
   
   // Update component state when props change
@@ -322,6 +327,14 @@ fix(dialog): prevent focus trap memory leak
 ## 🎯 Reference Implementations
 
 Use these components as perfect examples:
+
+### ✅ Table (Complex Component Success)
+Location: `./table/`
+- Complex state with sorting, pagination, selection
+- Helper methods using getState() safely
+- Proper callback propagation in state methods
+- Full test coverage with 34 tests passing
+- Comprehensive Storybook with all features
 
 ### ✅ Checkbox (100% Success - 30/30 tests)
 Location: `./checkbox/`
@@ -485,12 +498,12 @@ import { create[Component] } from '@stellarix-ui/[component-name]';
 import { reactAdapter } from '@stellarix-ui/react';
 
 // Create component instance
-const [component] = create[Component]({
+const component = create[Component]({
   // options
-});
+}); // NO array destructuring!
 
 // Connect to React
-const React[Component] = [component].connect(reactAdapter);
+const React[Component] = component.connect(reactAdapter);
 
 // Use in your app
 function App() {

@@ -202,17 +202,23 @@ interface FrameworkAdapter {
 
 ### Component Creation Pattern
 
-**IMPORTANT**: We're moving towards a single factory pattern. Instead of having separate `createComponent` and `createComponentWithImplementation` functions, use a unified approach:
+**IMPORTANT**: We use a single factory pattern. No more `createComponentWithImplementation`:
 
 ```typescript
-// Preferred: Single factory pattern
-import { createButton } from '@stellarix/button';
-import { reactAdapter } from '@stellarix/react';
+// ✅ CORRECT: Single factory pattern
+import { createButton } from '@stellarix-ui/button';
+import { reactAdapter } from '@stellarix-ui/react';
 
-// The factory handles both cases internally
+// Single factory creates complete component
 const button = createButton(options);
 const ReactButton = button.connect(reactAdapter);
 ```
+
+**CRITICAL**: Component factory MUST:
+1. Create state and logic internally
+2. Connect logic to state
+3. Call `logic.initialize()`
+4. Return ComponentCore interface with state, logic, metadata, and connect method
 
 This simplifies the API and reduces cognitive load. The factory function internally determines whether to use a default implementation or a custom one based on the provided options.
 
@@ -264,7 +270,7 @@ packages/primitives/[component]/
 - **Bundler module resolution**: Compatible with Vite, webpack, esbuild, etc.
 - **verbatimModuleSyntax**: Replaces deprecated `importsNotUsedAsValues`
 - **ESM-first**: Modern module syntax with proper tree-shaking
-- **Path aliases**: `@stellarix/core`, `@stellarix/utils` (no -ui suffix)
+- **Path aliases**: `@stellarix-ui/core`, `@stellarix-ui/utils` (ALWAYS use -ui suffix)
 
 ### Latest Framework Patterns
 1. **React 19 Adapter**:
@@ -552,20 +558,23 @@ pnpm changeset publish
 - All packages are published under the `stellarix-ui` npm organization
 
 ### Package Naming Convention
-All packages follow the `@stellarix/[package-name]` convention:
-- `@stellarix/button` ✅ (NOT `@stellarix/primitives-button`)
-- `@stellarix/react` ✅ (NOT `@stellarix/adapter-react`)
-- `@stellarix/themes` ✅ (single themes package)
+🚨 **CRITICAL UPDATE**: All packages MUST use `@stellarix-ui/[package-name]` (with -ui suffix):
+- `@stellarix-ui/button` ✅ (NOT `@stellarix/button`)
+- `@stellarix-ui/react` ✅ (NOT `@stellarix/react`)
+- `@stellarix-ui/core` ✅ (NOT `@stellarix/core`)
+- `@stellarix-ui/utils` ✅ (NOT `@stellarix/utils`)
+
+**EXCEPTION**: New components being created can use `@stellarix/[name]` temporarily but should be migrated.
 
 ### Example Changeset Workflow
 
 ```bash
 # 1. Implement new Select component
-pnpm --filter=@stellarix/select test
+pnpm --filter=@stellarix-ui/select test
 
 # 2. Create changeset
 pnpm changeset
-# Select: @stellarix/select
+# Select: @stellarix-ui/select
 # Type: minor
 # Summary: "Add Select component with search and keyboard navigation"
 
@@ -698,6 +707,26 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
    ```
    
    **WHY**: The core setState expects either a full state object or a function updater. Partial objects cause the state to lose all other fields, resulting in NaN/undefined errors. This pattern has caused critical failures 5+ times and MUST be prevented.
+   
+   **🚨 EXCEPTION for Helper Methods**: 
+   Helper methods that compute derived values are SAFE to use getState() because they are NOT in reactive contexts:
+   ```typescript
+   // ✅ SAFE in helper methods (synchronous, non-reactive):
+   getSelectedRowIds: () => {
+       const currentState = store.getState();
+       return Object.keys(currentState.selection).filter(id => currentState.selection[id]);
+   }
+   
+   // ✅ SAFE for computed values:
+   getTotalPages: () => {
+       const currentState = store.getState();
+       return Math.ceil(currentState.data.length / currentState.pagination.pageSize);
+   }
+   ```
+   
+   **CRITICAL DISTINCTION**:
+   - Helper methods: Called imperatively by user code = SAFE
+   - Event handlers/interactions: Called reactively by framework = FORBIDDEN
 
    **🚨🚨🚨 NO-OP setState CIRCULAR SUBSCRIPTION PREVENTION**:
    - **FORBIDDEN**: NEVER use `state.setState((prev) => ({ ...prev }))` to trigger subscribers
