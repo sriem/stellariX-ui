@@ -683,6 +683,33 @@ Context7 MCP provides access to latest framework documentation. **Always use 100
    
    **WHY**: The core setState expects either a full state object or a function updater. Partial objects cause the state to lose all other fields, resulting in NaN/undefined errors. This pattern has caused critical failures 5+ times and MUST be prevented.
 
+   **🚨🚨🚨 NO-OP setState CIRCULAR SUBSCRIPTION PREVENTION**:
+   - **FORBIDDEN**: NEVER use `state.setState((prev) => ({ ...prev }))` to trigger subscribers
+   - **FORBIDDEN**: NEVER use no-op setState calls like `setState((prev) => prev)`
+   - **FORBIDDEN**: NEVER create temporary subscriptions with forced state updates
+   - **FORBIDDEN**: NEVER use setTimeout + subscribe + setState patterns
+   
+   **❌❌❌ FORBIDDEN PATTERN (Causes Browser Freeze)**:
+   ```typescript
+   // This pattern from accordion bug causes infinite loops:
+   setTimeout(() => {
+     const unsubscribe = state.subscribe(callback);
+     state.setState((prev) => ({ ...prev })); // 🚨 CIRCULAR!
+     unsubscribe();
+   }, 0);
+   ```
+   
+   **✅ CORRECT PATTERN**:
+   ```typescript
+   // Calculate the new state and call callbacks directly:
+   const newValue = calculateNewState(currentState);
+   if (options.onChange) {
+     options.onChange(newValue);
+   }
+   ```
+   
+   **WHY**: No-op setState triggers ALL subscribers, causing circular dependencies and infinite loops that freeze the browser. This caused the accordion Storybook freeze and MUST be prevented.
+
 3. **Memory Leaks**:
    - Always cleanup subscriptions
    - Always remove event listeners

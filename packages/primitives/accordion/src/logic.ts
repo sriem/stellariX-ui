@@ -45,20 +45,23 @@ export function createAccordionLogic(
             }
             
             if (options.onExpandedChange) {
-                // Use setTimeout to ensure state is updated
-                setTimeout(() => {
-                    // Subscribe once to get the updated state
-                    let called = false;
-                    const unsubscribe = state.subscribe((newState) => {
-                        if (!called) {
-                            called = true;
-                            options.onExpandedChange(newState.expandedItems);
-                        }
-                    });
-                    // Trigger the subscription by doing a no-op state update
-                    state.setState((prev) => ({ ...prev }));
-                    unsubscribe();
-                }, 0);
+                // Calculate what the new expanded items will be
+                const isCurrentlyExpanded = currentState.expandedItems.includes(itemId);
+                let newExpandedItems: string[];
+                
+                if (isCurrentlyExpanded) {
+                    // Item is being collapsed
+                    newExpandedItems = currentState.expandedItems.filter(id => id !== itemId);
+                } else {
+                    // Item is being expanded
+                    if (currentState.multiple) {
+                        newExpandedItems = [...currentState.expandedItems, itemId];
+                    } else {
+                        newExpandedItems = [itemId];
+                    }
+                }
+                
+                options.onExpandedChange(newExpandedItems);
             }
             
             return null;
@@ -129,10 +132,8 @@ export function createAccordionLogic(
                     }
                 }
                 
-                // Call the callback after state update
-                setTimeout(() => {
-                    options.onExpandedChange(newExpandedItems);
-                }, 0);
+                // Call the callback directly with calculated state
+                options.onExpandedChange(newExpandedItems);
             }
             
             return 'itemToggle';
@@ -180,10 +181,8 @@ export function createAccordionLogic(
                                 }
                             }
                             
-                            // Call the callback after state update
-                            setTimeout(() => {
-                                options.onExpandedChange(newExpandedItems);
-                            }, 0);
+                            // Call the callback directly with calculated state
+                            options.onExpandedChange(newExpandedItems);
                         }
                         
                         return 'itemToggle';

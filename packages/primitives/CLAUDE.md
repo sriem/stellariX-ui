@@ -54,6 +54,51 @@ store.setState((prev: any) => ({
 - NEVER in tests: `expect(state.getState())`
 - NEVER in Storybook: `component.state.getState()`
 
+### 🚨🚨🚨 NO-OP setState INFINITE LOOP PREVENTION
+
+**ULTRA-CRITICAL**: NEVER use no-op setState to trigger subscribers!
+
+```typescript
+// ❌❌❌ FORBIDDEN - CAUSES INFINITE LOOPS:
+state.setState((prev) => ({ ...prev })); // 🚨 TRIGGERS ALL SUBSCRIBERS!
+store.setState((prev) => prev);          // 🚨 INFINITE LOOP!
+
+// ❌❌❌ FORBIDDEN PATTERN FROM ACCORDION BUG:
+setTimeout(() => {
+    const unsubscribe = state.subscribe((newState) => {
+        callback(newState.items);
+    });
+    state.setState((prev) => ({ ...prev })); // 🚨 CIRCULAR SUBSCRIPTION!
+    unsubscribe();
+}, 0);
+
+// ✅✅✅ CORRECT - CALCULATE AND CALL DIRECTLY:
+// If you need the updated state after an action:
+if (options.onExpandedChange) {
+    // Calculate what the new state will be
+    const newExpandedItems = isExpanded 
+        ? currentState.expandedItems.filter(id => id !== itemId)
+        : currentState.multiple 
+            ? [...currentState.expandedItems, itemId]
+            : [itemId];
+    
+    // Call callback directly with calculated state
+    options.onExpandedChange(newExpandedItems);
+}
+```
+
+**WHY**: No-op setState calls trigger ALL subscribers, which can cause:
+- Infinite loops when subscribers update state
+- Circular dependencies between components
+- Browser freezing in Storybook
+- Stack overflow errors
+
+**LESSONS FROM ACCORDION BUG**:
+1. NEVER use setState just to trigger subscribers
+2. NEVER create temporary subscriptions with no-op updates
+3. ALWAYS calculate the new state value directly
+4. ALWAYS call callbacks with calculated values, not by forcing state updates
+
 ### 🚨 Critical Primitive-Specific Rules
 - **ALWAYS** use LogicLayerBuilder pattern for all component logic implementations
 - **ALWAYS** handle event payload extraction: `const event = payload?.event ? payload.event : payload`
