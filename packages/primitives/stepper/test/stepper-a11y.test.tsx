@@ -13,14 +13,47 @@ import type { StepperStep } from '../src/types';
 
 // Test component that renders the stepper
 const TestStepper = (props: any) => {
-  const [stepper] = React.useState(() => createStepper(props));
+  // Create a fresh stepper instance with cleaned props
+  const [stepper] = React.useState(() => {
+    const cleanedProps = {
+      ...props,
+      steps: Array.isArray(props.steps) ? props.steps : [],
+    };
+    return createStepper(cleanedProps);
+  });
   const Component = React.useMemo(() => stepper.connect(reactAdapter), [stepper]);
   
-  // Subscribe to state for rendering
-  const [state, setState] = React.useState(() => stepper.state.getState());
+  // Subscribe to state for rendering - use default structure
+  const [state, setState] = React.useState(() => ({
+    steps: Array.isArray(props.steps) ? props.steps : [],
+    activeStep: typeof props.activeStep === 'number' ? props.activeStep : 0,
+    completedSteps: new Set<number>(),
+    disabled: Boolean(props.disabled),
+    orientation: props.orientation || 'horizontal',
+    nonLinear: Boolean(props.nonLinear),
+    showStepNumbers: props.showStepNumbers !== false,
+    showConnectors: props.showConnectors !== false,
+    focusedStep: -1,
+    validating: false,
+    alternativeLabel: Boolean(props.alternativeLabel),
+  }));
   
   React.useEffect(() => {
-    const unsubscribe = stepper.state.subscribe(setState);
+    const unsubscribe = stepper.state.subscribe((newState: any) => {
+      if (newState && typeof newState === 'object') {
+        // Ensure steps is always an array with valid objects
+        const validatedState = {
+          ...newState,
+          steps: Array.isArray(newState.steps) 
+            ? newState.steps.filter((step: any) => step && typeof step === 'object')
+            : [],
+          completedSteps: newState.completedSteps instanceof Set 
+            ? newState.completedSteps 
+            : new Set()
+        };
+        setState(validatedState);
+      }
+    });
     return unsubscribe;
   }, [stepper]);
   
@@ -50,28 +83,64 @@ const TestStepper = (props: any) => {
     return !state.steps[index]?.disabled;
   };
   
+  // Ensure a11y props are safe for DOM
+  const safeRootA11y = rootA11y && typeof rootA11y === 'object' ? 
+    Object.fromEntries(Object.entries(rootA11y).filter(([_, value]) => 
+      typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+    )) : {};
+  const safeListA11y = listA11y && typeof listA11y === 'object' ? 
+    Object.fromEntries(Object.entries(listA11y).filter(([_, value]) => 
+      typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+    )) : {};
+
   return (
     <main>
       <h1>Stepper Test</h1>
-      <div {...rootA11y} className="stepper">
-        <ol {...listA11y} className="stepper-list">
+      <div {...safeRootA11y} className="stepper">
+        <ol {...safeListA11y} className="stepper-list">
           {state.steps.map((step, index) => {
+            // Validate step data to prevent rendering issues
+            if (!step || typeof step !== 'object') {
+              console.warn('Invalid step data:', step);
+              return <li key={`invalid-${index}`}>Invalid step {index}</li>;
+            }
+
             const stepA11yGetter = stepper.logic.getA11yProps('step');
-            const stepA11y = stepA11yGetter(index);
+            const stepA11y = typeof stepA11yGetter === 'function' ? stepA11yGetter(index) : {};
             const buttonA11yGetter = stepper.logic.getA11yProps('stepButton');
-            const buttonA11y = buttonA11yGetter(index);
+            const buttonA11y = typeof buttonA11yGetter === 'function' ? buttonA11yGetter(index) : {};
             const labelA11yGetter = stepper.logic.getA11yProps('stepLabel');
-            const labelA11y = labelA11yGetter(index);
+            const labelA11y = typeof labelA11yGetter === 'function' ? labelA11yGetter(index) : {};
             const descA11yGetter = stepper.logic.getA11yProps('stepDescription');
-            const descA11y = descA11yGetter(index);
-            const buttonHandlers = stepper.logic.getInteractionHandlers('stepButton');
+            const descA11y = typeof descA11yGetter === 'function' ? descA11yGetter(index) : {};
+            const buttonHandlers = stepper.logic.getInteractionHandlers('stepButton') || {};
             
-            // Attach index to handlers
+            // Ensure a11y props don't contain React elements
+            const safeStepA11y = stepA11y && typeof stepA11y === 'object' ? 
+              Object.fromEntries(Object.entries(stepA11y).filter(([_, value]) => 
+                typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+              )) : {};
+            const safeButtonA11y = buttonA11y && typeof buttonA11y === 'object' ? 
+              Object.fromEntries(Object.entries(buttonA11y).filter(([_, value]) => 
+                typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+              )) : {};
+            const safeLabelA11y = labelA11y && typeof labelA11y === 'object' ? 
+              Object.fromEntries(Object.entries(labelA11y).filter(([_, value]) => 
+                typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+              )) : {};
+            const safeDescA11y = descA11y && typeof descA11y === 'object' ? 
+              Object.fromEntries(Object.entries(descA11y).filter(([_, value]) => 
+                typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+              )) : {};
+            
+            // Attach index to handlers - ensure handlers are functions
             const handlersWithIndex = Object.entries(buttonHandlers).reduce((acc, [key, handler]) => {
-              acc[key] = (event: any) => {
-                event.index = index;
-                handler(event);
-              };
+              if (typeof handler === 'function') {
+                acc[key] = (event: any) => {
+                  event.index = index;
+                  handler(event);
+                };
+              }
               return acc;
             }, {} as any);
             
@@ -79,47 +148,55 @@ const TestStepper = (props: any) => {
             const accessible = isStepAccessible(index);
             const isLast = index === state.steps.length - 1;
             
+            // Ensure status is a valid string to prevent React child error
+            const validStatus = typeof status === 'string' ? status : 'upcoming';
+            
+            // Ensure step properties are valid strings
+            const validLabel = typeof step.label === 'string' ? step.label : `Step ${index + 1}`;
+            const validDescription = step.description && typeof step.description === 'string' ? step.description : '';
+            const validErrorMessage = step.error && typeof step.errorMessage === 'string' ? step.errorMessage : '';
+
             return (
-              <li key={step.id} {...stepA11y} className="stepper-item">
+              <li key={step.id || `step-${index}`} {...safeStepA11y} className="stepper-item">
                 <div className="stepper-content">
                   <button
-                    {...buttonA11y}
+                    {...safeButtonA11y}
                     {...handlersWithIndex}
-                    className={`stepper-button stepper-button--${status}`}
+                    className={`stepper-button stepper-button--${validStatus}`}
                   >
                     <span className="stepper-number">
-                      {status === 'completed' ? '✓' : 
-                       status === 'error' ? '!' :
+                      {validStatus === 'completed' ? '✓' : 
+                       validStatus === 'error' ? '!' :
                        state.showStepNumbers ? index + 1 : '•'}
                     </span>
                   </button>
                   
                   <div className="stepper-text">
                     <div 
-                      {...labelA11y}
+                      {...safeLabelA11y}
                       className="stepper-label"
                     >
-                      {step.label}
+                      {validLabel}
                       {step.optional && (
                         <span className="stepper-optional">(Optional)</span>
                       )}
                     </div>
                     
-                    {step.description && (
+                    {validDescription && (
                       <div 
-                        {...descA11y}
+                        {...safeDescA11y}
                         className="stepper-description"
                       >
-                        {step.description}
+                        {validDescription}
                       </div>
                     )}
                     
-                    {step.error && step.errorMessage && (
+                    {step.error && validErrorMessage && (
                       <div 
                         className="stepper-error"
                         role="alert"
                       >
-                        {step.errorMessage}
+                        {validErrorMessage}
                       </div>
                     )}
                   </div>

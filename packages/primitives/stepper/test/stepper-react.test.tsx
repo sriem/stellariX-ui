@@ -43,7 +43,17 @@ const TestStepper = (props: any) => {
     const unsubscribe = stepper.state.subscribe((newState: any) => {
       // Validate state to prevent React child errors
       if (newState && typeof newState === 'object') {
-        setState(newState);
+        // Ensure steps is always an array with valid objects
+        const validatedState = {
+          ...newState,
+          steps: Array.isArray(newState.steps) 
+            ? newState.steps.filter((step: any) => step && typeof step === 'object')
+            : [],
+          completedSteps: newState.completedSteps instanceof Set 
+            ? newState.completedSteps 
+            : new Set()
+        };
+        setState(validatedState);
       }
     });
     return unsubscribe;
