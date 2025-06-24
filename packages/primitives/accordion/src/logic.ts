@@ -117,24 +117,8 @@ export function createAccordionLogic(
                 options.onItemToggle(itemId, !isExpanded);
             }
             
-            if (options.onExpandedChange) {
-                // Calculate what the new expanded items will be
-                let newExpandedItems: string[];
-                if (isExpanded) {
-                    // Item was expanded, now it will be collapsed
-                    newExpandedItems = currentState.expandedItems.filter(id => id !== itemId);
-                } else {
-                    // Item was collapsed, now it will be expanded
-                    if (currentState.multiple) {
-                        newExpandedItems = [...currentState.expandedItems, itemId];
-                    } else {
-                        newExpandedItems = [itemId];
-                    }
-                }
-                
-                // Call the callback directly with calculated state
-                options.onExpandedChange(newExpandedItems);
-            }
+            // Note: onExpandedChange is already called by the onEvent handler
+            // when the state changes, so we don't need to call it here
             
             return 'itemToggle';
         })
@@ -166,24 +150,8 @@ export function createAccordionLogic(
                             options.onItemToggle(itemId, !isExpanded);
                         }
                         
-                        if (options.onExpandedChange) {
-                            // Calculate what the new expanded items will be
-                            let newExpandedItems: string[];
-                            if (isExpanded) {
-                                // Item was expanded, now it will be collapsed
-                                newExpandedItems = currentState.expandedItems.filter(id => id !== itemId);
-                            } else {
-                                // Item was collapsed, now it will be expanded
-                                if (currentState.multiple) {
-                                    newExpandedItems = [...currentState.expandedItems, itemId];
-                                } else {
-                                    newExpandedItems = [itemId];
-                                }
-                            }
-                            
-                            // Call the callback directly with calculated state
-                            options.onExpandedChange(newExpandedItems);
-                        }
+                        // Note: onExpandedChange is already called by the onEvent handler
+                        // when the state changes, so we don't need to call it here
                         
                         return 'itemToggle';
                     }

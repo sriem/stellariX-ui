@@ -186,14 +186,6 @@ const AccordionWrapper: React.FC<{
     });
   });
 
-  // Safe state sync without infinite loops
-  React.useEffect(() => {
-    const unsubscribe = accordion.state.subscribe((state) => {
-      setExpandedItems(state.expandedItems);
-    });
-    return unsubscribe;
-  }, [accordion]);
-
   const handleToggle = (itemId: string) => {
     const isExpanded = expandedItems.includes(itemId);
     // Safely update state without using broken logic.handleEvent
