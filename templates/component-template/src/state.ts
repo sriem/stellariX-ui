@@ -3,7 +3,7 @@
  * Ultra-generic state implementation
  */
 
-import { createComponentState } from '@stellarix/core';
+import { createComponentState } from '@stellarix-ui/core';
 import type { TemplateState, TemplateOptions } from './types';
 
 /**
@@ -12,7 +12,7 @@ import type { TemplateState, TemplateOptions } from './types';
 export interface TemplateStateStore {
     // Core state methods
     getState: () => TemplateState;
-    setState: (updates: Partial<TemplateState>) => void;
+    setState: (updater: (prev: TemplateState) => TemplateState) => void;
     subscribe: (listener: (state: TemplateState) => void) => () => void;
     derive: <U>(selector: (state: TemplateState) => U) => {
         get: () => U;
@@ -52,26 +52,25 @@ export function createTemplateState(options: TemplateOptions = {}): TemplateStat
         
         // Convenience setters
         setActive: (active: boolean) => {
-            store.setState({ active });
+            store.setState((prev) => ({ ...prev, active }));
         },
         
         setValue: (value: string) => {
-            store.setState({ value });
+            store.setState((prev) => ({ ...prev, value }));
         },
         
         setDisabled: (disabled: boolean) => {
-            store.setState({ disabled });
+            store.setState((prev) => ({ ...prev, disabled }));
         },
         
         // Toggle active state
         toggle: () => {
-            const currentState = store.getState();
-            store.setState({ active: !currentState.active });
+            store.setState((prev) => ({ ...prev, active: !prev.active }));
         },
         
         // Reset to initial state
         reset: () => {
-            store.setState(initialState);
+            store.setState(() => initialState);
         },
         
         // Computed properties

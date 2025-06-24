@@ -5,12 +5,12 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { createComponentWithImplementation } from './index';
+import { createTemplate } from './index';
 import { reactAdapter } from '@stellarix-ui/react';
 
 // Create a wrapper component that creates individual Component instances
 const ComponentWrapper = React.forwardRef((props: any, ref: any) => {
-  const [component] = React.useState(() => createComponentWithImplementation(props));
+  const [component] = React.useState(() => createTemplate(props));
   const Component = React.useMemo(() => component.connect(reactAdapter), [component]);
   
   // Update the component's state when props change

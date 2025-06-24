@@ -3,21 +3,30 @@
  * Main entry point and public API
  */
 
-import { createPrimitive } from '@stellarix/core';
 import { createTemplateState } from './state';
 import { createTemplateLogic } from './logic';
 import type { TemplateOptions, TemplateState, TemplateEvents } from './types';
+import type { ComponentCore } from '@stellarix-ui/core';
 
 /**
- * Creates a template component factory
+ * Creates a template component
  * @param options Component options
- * @returns Component factory
+ * @returns Component instance
  */
-export function createTemplate(options: TemplateOptions = {}) {
-    return createPrimitive<TemplateState, TemplateEvents, TemplateOptions>('Template', {
-        initialState: options,
-        logicConfig: options,
+export function createTemplate(options: TemplateOptions = {}): ComponentCore<TemplateState, TemplateEvents> {
+    const state = createTemplateState(options);
+    const logic = createTemplateLogic(state, options);
+    
+    // Connect logic to state
+    logic.connect(state);
+    logic.initialize();
+    
+    return {
+        state,
+        logic,
         metadata: {
+            name: 'Template',
+            version: '1.0.0',
             accessibility: {
                 role: 'button', // Update based on component type
                 keyboardShortcuts: ['Enter', 'Space'],
@@ -39,22 +48,18 @@ export function createTemplate(options: TemplateOptions = {}) {
                     }
                 }
             }
+        },
+        connect: (adapter: any) => {
+            return adapter.createComponent({
+                state,
+                logic,
+                metadata: {
+                    name: 'Template',
+                    version: '1.0.0'
+                }
+            });
         }
-    });
-}
-
-/**
- * Create the component with actual implementation
- * This connects the state and logic layers
- */
-export function createTemplateWithImplementation(options: TemplateOptions = {}) {
-    const core = createTemplate(options);
-    
-    // Attach the actual implementation
-    core.state = createTemplateState(options);
-    core.logic = createTemplateLogic(core.state as any, options);
-    
-    return core;
+    };
 }
 
 // Re-export types
@@ -68,4 +73,4 @@ export type {
 export type { TemplateStateStore } from './state';
 
 // Default export for convenience
-export default createTemplateWithImplementation;
+export default createTemplate;
