@@ -28,7 +28,7 @@ export function createTemplate(options: TemplateOptions = {}): ComponentCore<Tem
             name: 'Template',
             version: '1.0.0',
             accessibility: {
-                role: 'button', // Update based on component type
+                role: 'button',
                 keyboardShortcuts: ['Enter', 'Space'],
                 ariaAttributes: ['aria-disabled', 'aria-pressed', 'aria-label'],
                 wcagLevel: 'AA',
@@ -42,7 +42,7 @@ export function createTemplate(options: TemplateOptions = {}): ComponentCore<Tem
             structure: {
                 elements: {
                     'root': {
-                        type: 'div', // Update based on component type
+                        type: 'div',
                         role: 'button',
                         optional: false
                     }
@@ -58,6 +58,9 @@ export function createTemplate(options: TemplateOptions = {}): ComponentCore<Tem
                     version: '1.0.0'
                 }
             });
+        },
+        destroy: () => {
+            logic.cleanup();
         }
     };
 }

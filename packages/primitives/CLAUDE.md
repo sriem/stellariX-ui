@@ -107,6 +107,10 @@ if (options.onExpandedChange) {
 - **ALWAYS** test interactions via callbacks, not state inspection
 - **ALWAYS** use subscription pattern in Storybook: useState + useEffect + subscribe
 - **ALWAYS** use function updater pattern for setState: `store.setState((prev) => ({ ...prev, field: value }))`
+- **ALWAYS** implement destroy method on ComponentCore: `destroy: () => { logic.cleanup(); }`
+- **ALWAYS** connect and initialize logic in tests: `logic.connect(state); logic.initialize();`
+- **ALWAYS** use correct package naming: `@stellarix-ui/*` NOT `@stellarix/*`
+- **NEVER** use `aria-orientation` on elements with `role="group"` or `role="nav"`
 
 ## 📋 Component Creation Process
 
@@ -432,6 +436,38 @@ export function createButton(options) { ... }
 4. They violate our clean code principles
 
 **REMEMBER**: If you feel you need a comment, refactor the code to be clearer instead!
+
+## 🧪 Common Test Fixes From Experience
+
+### Jest-DOM Matchers
+If tests fail with "Invalid Chai property: toHaveAttribute":
+```typescript
+// Add to test setup or at top of test file:
+import '@testing-library/jest-dom';
+```
+
+### React Integration Test Patterns
+For complex components that need custom rendering:
+```typescript
+// In component's index.ts, pass render function to options:
+const render = options.render || defaultRender;
+
+// In React adapter, check for render function:
+if (core.options?.render) {
+    return core.options.render(core);
+}
+```
+
+### TypeScript Strict Mode Fixes
+With `noUncheckedIndexedAccess`:
+```typescript
+// Always check array access:
+const item = array[index];
+if (!item) return null;
+
+// Or use optional chaining:
+array[index]?.property
+```
 
 ## 🚫 Common Pitfalls to Avoid
 

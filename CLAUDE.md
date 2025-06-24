@@ -93,14 +93,16 @@ pnpm --filter=@stellarix-ui/[package] build       # Verify build works
 1. pnpm test              # All tests MUST pass
 2. pnpm lint              # No linting errors allowed  
 3. pnpm typecheck         # TypeScript MUST compile
-4. Create Storybook story # REQUIRED: Show ALL features and edge cases
-5. pnpm changeset         # Create changeset describing your changes
-6. TodoWrite update       # Mark current task as completed
-7. Update activeContext   # Document what was just completed
-8. git add . && git commit -m "feat: [component/feature description]"
+4. pnpm build             # Build process MUST succeed
+5. Create Storybook story # REQUIRED: Show ALL features and edge cases
+6. pnpm changeset         # Create changeset describing your changes
+7. TodoWrite update       # Mark current task as completed
+8. Update activeContext   # Document what was just completed
+9. git add . && git commit -m "feat: [component/feature description]"
 
 # NEVER skip testing - this is a hard requirement
 # NEVER commit without all checks passing
+# NEVER skip the build check - components must build successfully
 # NEVER skip creating stories - visual testing is mandatory
 # NEVER skip changesets - version tracking is critical
 ```
