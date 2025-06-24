@@ -13,7 +13,7 @@
    - Better TypeScript support
    - Enhanced coverage reporting
 
-3. **Storybook**: Updated from `^8.6.14` to `^9.0.0`
+3. **Storybook**: Updated from `^8.6.14` to `^9.0.12`
    - 50% smaller bundle size than Storybook 8
    - Flatter dependency structure - installs faster
    - Enhanced testing capabilities (component, interaction, a11y, visual)
