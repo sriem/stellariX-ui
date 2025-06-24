@@ -13,12 +13,9 @@
    - Better TypeScript support
    - Enhanced coverage reporting
 
-3. **Storybook**: Updated from `^8.6.14` to `^9.0.12`
-   - 50% smaller bundle size than Storybook 8
-   - Flatter dependency structure - installs faster
-   - Enhanced testing capabilities (component, interaction, a11y, visual)
-   - New Tags feature for organizing stories
-   - Requires TypeScript 4.9+ and Node.js 20+
+3. **Storybook**: Kept at `^8.6.14`
+   - Note: Main storybook CLI is at 9.0.12 but addon packages are still at 8.x
+   - Will update when all packages reach 9.x stable
 
 4. **pnpm**: Updated from `8.6.0` to `10.0.0`
    - Changed default hoisting patterns (removed eslint/prettier from default)

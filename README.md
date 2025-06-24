@@ -335,7 +335,7 @@ We use the latest stable versions of all tools:
 
 - **Vite 6.3.5** - Lightning-fast build tool with Environment API
 - **Vitest 3.2.4** - Next-gen testing with improved browser mode
-- **Storybook 9.0.12** - 50% smaller, faster component development
+- **Storybook 8.6.14** - Component development environment
 - **TypeScript 5.7** - Ultra-strict mode with bundler resolution
 - **ESLint 9** - Flat config for modern JavaScript
 - **pnpm 10.0.0** - Fastest package manager with workspace support
