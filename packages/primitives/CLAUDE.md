@@ -99,7 +99,7 @@ if (options.onExpandedChange) {
 3. ALWAYS calculate the new state value directly
 4. ALWAYS call callbacks with calculated values, not by forcing state updates
 
-### 🚨🚨🚨 TEST ISOLATION CRITICAL LESSONS
+### 🚨🚨🚨 TEST ISOLATION CRITICAL LESSONS (UPDATED 2025-01-25)
 
 **FROM STEPPER TEST DEBUGGING SESSION (2025-01-24)**:
 
@@ -185,10 +185,18 @@ afterEach(() => {
 3. **ALWAYS filter props to ensure only primitive values reach DOM**
 4. **ALWAYS cleanup timers and subscriptions between tests**
 5. **ALWAYS test both individually AND in full suite to catch isolation issues**
+6. **ALWAYS create fresh component instances in test wrappers**
+7. **ALWAYS use act() for React state updates in tests**
+
+**STEPPER TEST ISOLATION SUCCESS (2025-01-25)**:
+- **Individual**: 56/56 tests pass when run alone
+- **Full Suite**: 26 tests fail with React child errors
+- **Root Cause**: Test pollution from other components
+- **Solution**: Defensive programming in React adapter + fresh instances
 
 ### 🚨🚨🚨 SELECT COMPONENT REACT ADAPTER SUCCESS (2025-01-24)
 
-**MAJOR BREAKTHROUGH**: Successfully fixed Select component React adapter integration, achieving **96.03% test pass rate**!
+**MAJOR BREAKTHROUGH**: Successfully fixed Select component React adapter integration, achieving **96.5% test pass rate**!
 
 **PROGRESS MADE**:
 - **Before**: 927/983 tests passing (94.3%) with ~56 failing tests
