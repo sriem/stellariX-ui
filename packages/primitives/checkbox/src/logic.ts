@@ -36,48 +36,6 @@ export function createCheckboxLogic(
 ): LogicLayer<CheckboxState, CheckboxEvents> {
     // Create a simpler logic layer using the builder approach
     return new LogicLayerBuilder<CheckboxState, CheckboxEvents>()
-        .onEvent('change', (currentState, payload: any) => {
-            // For change events, the payload might be the new checked value or an event
-            // If it's an explicit payload with checked value, use that
-            // Otherwise use the current state (since we just updated it)
-            let newChecked = currentState.checked;
-            
-            if (payload && typeof payload === 'object' && 'checked' in payload) {
-                newChecked = payload.checked;
-            }
-            
-            // Call user callback if provided
-            if (options.onChange) {
-                options.onChange(newChecked);
-            }
-            return null;
-        })
-        .onEvent('focus', (currentState, payload: any) => {
-            // Update focus state
-            state.setFocused(true);
-            
-            // Call user callback if provided - extract event from payload if needed
-            if (options.onFocus) {
-                const event = payload && payload.event ? payload.event : payload;
-                options.onFocus(event);
-            }
-            return null;
-        })
-        .onEvent('blur', (currentState, payload: any) => {
-            // Update focus state
-            state.setFocused(false);
-            
-            // Call user callback if provided - extract event from payload if needed
-            if (options.onBlur) {
-                const event = payload && payload.event ? payload.event : payload;
-                options.onBlur(event);
-            }
-            return null;
-        })
-        .onEvent('keydown', (currentState, payload: { event: KeyboardEvent }) => {
-            // Handle any additional keydown logic if needed
-            return null;
-        })
         .withA11y('root', (state) => ({
             role: 'checkbox',
             'aria-checked': state.checked === 'indeterminate' ? 'mixed' : state.checked,
@@ -107,8 +65,13 @@ export function createCheckboxLogic(
             // Toggle the checkbox using state method
             state.setChecked(newChecked);
             
-            // Return the event type to trigger (will call onChange with newChecked)
-            return 'change';
+            // Call user callback directly (don't rely on event forwarding)
+            if (options.onChange) {
+                options.onChange(newChecked);
+            }
+            
+            // Return null (no additional events)
+            return null;
         })
         .withInteraction('root', 'onKeyDown', (currentState, event: KeyboardEvent) => {
             // Prevent interaction if disabled
@@ -132,16 +95,34 @@ export function createCheckboxLogic(
                 // Update the checkbox state
                 state.setChecked(newChecked);
                 
-                // Return the event type to trigger (will call onChange with newChecked)
-                return 'change';
+                // Call user callback directly (don't rely on event forwarding)
+                if (options.onChange) {
+                    options.onChange(newChecked);
+                }
             }
             return null;
         })
         .withInteraction('root', 'onFocus', (currentState, event: FocusEvent) => {
-            return 'focus';
+            // Update focus state
+            state.setFocused(true);
+            
+            // Call user callback if provided
+            if (options.onFocus) {
+                options.onFocus(event);
+            }
+            
+            return null;
         })
         .withInteraction('root', 'onBlur', (currentState, event: FocusEvent) => {
-            return 'blur';
+            // Update focus state
+            state.setFocused(false);
+            
+            // Call user callback if provided
+            if (options.onBlur) {
+                options.onBlur(event);
+            }
+            
+            return null;
         })
         .build();
 }

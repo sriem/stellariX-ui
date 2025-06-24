@@ -81,7 +81,96 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
 
             // Get accessibility props for the root element
             const a11yProps = logic.getA11yProps('root');
-            const interactionHandlers = logic.getInteractionHandlers('root');
+            
+            // Get interaction handlers - special handling for Checkbox to avoid core bug
+            let interactionHandlers: Record<string, Function> = {};
+            if (core.metadata.name === 'Checkbox') {
+                // Custom checkbox interaction handlers to bypass broken core getInteractionHandlers
+                interactionHandlers = {
+                    onClick: (event: MouseEvent) => {
+                        if (state && typeof state === 'object' && 'disabled' in state && (state as any).disabled) {
+                            event.preventDefault();
+                            return;
+                        }
+                        
+                        // Calculate new checked state
+                        const currentChecked = state && typeof state === 'object' && 'checked' in state ? (state as any).checked : false;
+                        let newChecked: boolean;
+                        if (currentChecked === 'indeterminate') {
+                            newChecked = true;
+                        } else {
+                            newChecked = !currentChecked;
+                        }
+                        
+                        // Update state directly
+                        if (core.state && 'setChecked' in core.state) {
+                            (core.state as any).setChecked(newChecked);
+                        }
+                        
+                        // Call onChange callback
+                        const options = (core as any).options || {};
+                        if (options.onChange) {
+                            options.onChange(newChecked);
+                        }
+                    },
+                    onKeyDown: (event: KeyboardEvent) => {
+                        if (state && typeof state === 'object' && 'disabled' in state && (state as any).disabled) {
+                            return;
+                        }
+                        
+                        if (event.code === 'Space') {
+                            event.preventDefault();
+                            
+                            // Calculate new checked state
+                            const currentChecked = state && typeof state === 'object' && 'checked' in state ? (state as any).checked : false;
+                            let newChecked: boolean;
+                            if (currentChecked === 'indeterminate') {
+                                newChecked = true;
+                            } else {
+                                newChecked = !currentChecked;
+                            }
+                            
+                            // Update state directly
+                            if (core.state && 'setChecked' in core.state) {
+                                (core.state as any).setChecked(newChecked);
+                            }
+                            
+                            // Call onChange callback
+                            const options = (core as any).options || {};
+                            if (options.onChange) {
+                                options.onChange(newChecked);
+                            }
+                        }
+                    },
+                    onFocus: (event: FocusEvent) => {
+                        // Update focus state
+                        if (core.state && 'setFocused' in core.state) {
+                            (core.state as any).setFocused(true);
+                        }
+                        
+                        // Call onFocus callback
+                        const options = (core as any).options || {};
+                        if (options.onFocus) {
+                            options.onFocus(event);
+                        }
+                    },
+                    onBlur: (event: FocusEvent) => {
+                        // Update focus state
+                        if (core.state && 'setFocused' in core.state) {
+                            (core.state as any).setFocused(false);
+                        }
+                        
+                        // Call onBlur callback
+                        const options = (core as any).options || {};
+                        if (options.onBlur) {
+                            options.onBlur(event);
+                        }
+                    }
+                };
+            } else {
+                // Use normal interaction handlers for other components
+                interactionHandlers = logic.getInteractionHandlers('root');
+            }
 
             // Create the element with filtered props
             // Remove internal props that shouldn't be passed to DOM
@@ -122,10 +211,22 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                         componentSpecificProps.checked = checkedValue === true;
                         componentSpecificProps['aria-checked'] = checkedValue === 'indeterminate' ? 'mixed' : (checkedValue ? 'true' : 'false');
                     }
-                    if ('indeterminate' in state && (state as any).indeterminate) {
+                    if ('checked' in state && (state as any).checked === 'indeterminate') {
                         componentSpecificProps['aria-checked'] = 'mixed';
-                        // Note: indeterminate property needs to be set via ref, but we can set the attribute
-                        componentSpecificProps.indeterminate = true;
+                        // Set indeterminate property via ref callback since it can't be set via attributes
+                        const originalRef = ref;
+                        componentSpecificProps.ref = (element: HTMLInputElement | null) => {
+                            if (element) {
+                                element.indeterminate = true;
+                            }
+                            if (originalRef) {
+                                if (typeof originalRef === 'function') {
+                                    originalRef(element);
+                                } else {
+                                    originalRef.current = element;
+                                }
+                            }
+                        };
                     }
                     if ('disabled' in state && (state as any).disabled) {
                         componentSpecificProps.disabled = true;
@@ -275,6 +376,9 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
             // Void elements (input, br, hr, etc.) can't have children
             const isVoidElement = ['input', 'br', 'hr', 'img', 'area', 'base', 'col', 'embed', 'link', 'meta', 'param', 'source', 'track', 'wbr'].includes(rootElement);
             
+            // Use custom ref if set in componentSpecificProps, otherwise use original ref
+            const finalRef = componentSpecificProps.ref || ref;
+            
             return createElement(
                 rootElement,
                 {
@@ -283,7 +387,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                     ...a11yProps,
                     ...interactionHandlers,
                     role: rootRole,
-                    ref, // Direct ref prop (React 19)
+                    ref: finalRef, // Use custom ref if available
                     className,
                     style,
                 },

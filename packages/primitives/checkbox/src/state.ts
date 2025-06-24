@@ -53,8 +53,8 @@ export function createCheckboxState(options: CheckboxOptions = {}): CheckboxStat
         disabled: options.disabled ?? false,
         focused: false,
         required: options.required ?? false,
-        error: false,
-        errorMessage: undefined,
+        error: options.error ?? false,
+        errorMessage: options.errorMessage,
     };
     
     // Create the core state store
