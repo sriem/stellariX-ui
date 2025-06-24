@@ -14,7 +14,7 @@
 
 StellarIX UI isn't just another headless component library. It's a **developer experience revolution** that prioritizes your happiness while delivering true framework independence through an ultra-generic three-layer architecture.
 
-> 🤖 **Note**: This project is primarily developed by Anthropic's Claude Code, monitored and guided by Sergej Riemann. The architecture and implementation showcase state-of-the-art AI-assisted development patterns.
+> 🤖 **Note**: This code is completely vibe coded with Anthropic's Claude Code on Max Plan ($200), guided and monitored by Sergej Riemann. The architecture and implementation showcase state-of-the-art AI-assisted development patterns.
 
 ### 🎯 DX-First Philosophy
 
@@ -304,7 +304,7 @@ stellariX-ui/
 ### Prerequisites
 
 - Node.js 20+ (for latest features)
-- pnpm 9+ (for workspace support)
+- pnpm 10.0.0 (for workspace support)
 - TypeScript 5.7+ knowledge
 
 ### Getting Started
@@ -328,6 +328,20 @@ pnpm test
 pnpm lint
 pnpm typecheck
 ```
+
+### State-of-the-Art 2025 Development Stack
+
+We use the latest stable versions of all tools:
+
+- **Vite 6.3.5** - Lightning-fast build tool with Environment API
+- **Vitest 3.2.4** - Next-gen testing with improved browser mode
+- **Storybook 9.0.12** - 50% smaller, faster component development
+- **TypeScript 5.7** - Ultra-strict mode with bundler resolution
+- **ESLint 9** - Flat config for modern JavaScript
+- **pnpm 10.0.0** - Fastest package manager with workspace support
+- **React 19** - Latest with ref as prop, useActionState
+- **Vue 3.5+** - Composition API with useTemplateRef
+- **Svelte 5** - Revolutionary runes system
 
 ### Development Workflow
 
@@ -403,16 +417,16 @@ We love contributions! StellarIX UI is built with a strong focus on developer ex
 - **Ask Questions**: Open discussions for architecture decisions
 - **Have Fun**: If it's not enjoyable, we're doing it wrong
 
-See our [Contributing Guide](CONTRIBUTING.md) for detailed instructions.
+See our contribution philosophy above for guidelines on how to contribute.
 
 ## 📚 Documentation
 
-- **[Component Docs](https://stellarix-ui.dev)** - Interactive component documentation
-- **[API Reference](https://stellarix-ui.dev/api)** - Detailed API documentation
 - **[Architecture Guide](./memory-bank/architecture.md)** - Deep dive into our design
 - **[Memory Bank](./memory-bank/)** - Project context and decisions
+- **[Component Creation Guide](./templates/COMPONENT_CREATION_GUIDE.md)** - How to create new components
+- **[AI Development Plan](./AI-AGENT-DEVELOPMENT-PLAN.md)** - Complete 45-task implementation plan
 
-## 🏆 Sponsors
+## 🏆 Support the Project
 
 StellarIX UI is an MIT-licensed open source project. If you'd like to support the project:
 
@@ -420,11 +434,10 @@ StellarIX UI is an MIT-licensed open source project. If you'd like to support th
 - 🐛 Report bugs
 - 💡 Suggest features
 - 🤝 Submit PRs
-- ☕ [Buy us a coffee](https://github.com/sponsors/stellarix-ui)
 
 ## 📄 License
 
-MIT © [StellarIX UI Contributors](https://github.com/stellarix-ui/stellarix-ui/graphs/contributors)
+MIT © [StellarIX UI Contributors](https://github.com/sriem/stellariX-ui/graphs/contributors)
 
 ---
 
@@ -433,8 +446,5 @@ MIT © [StellarIX UI Contributors](https://github.com/stellarix-ui/stellarix-ui/
 </p>
 
 <p align="center">
-  <a href="https://stellarix-ui.dev">Website</a> •
-  <a href="https://github.com/stellarix-ui/stellarix-ui">GitHub</a> •
-  <a href="https://twitter.com/stellarixui">Twitter</a> •
-  <a href="https://discord.gg/stellarixui">Discord</a>
+  <a href="https://github.com/sriem/stellariX-ui">GitHub Repository</a>
 </p>
