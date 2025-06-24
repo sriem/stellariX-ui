@@ -4,17 +4,54 @@
  */
 
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createInputWithImplementation } from './index';
 import { reactAdapter } from '@stellarix-ui/react';
 
-// Create the React input component
-const input = createInputWithImplementation();
-const Input = input.connect(reactAdapter);
+// Create a wrapper component that creates individual Input instances
+const InputWrapper = React.forwardRef((props: any, ref: any) => {
+  const [input] = React.useState(() => createInputWithImplementation(props));
+  const Input = React.useMemo(() => input.connect(reactAdapter), [input]);
+  
+  // Update the component's state when props change
+  React.useEffect(() => {
+    if (props.disabled !== undefined) {
+      input.state.setDisabled(props.disabled);
+    }
+  }, [props.disabled, input]);
+  
+  React.useEffect(() => {
+    if (props.readonly !== undefined) {
+      input.state.setReadonly(props.readonly);
+    }
+  }, [props.readonly, input]);
+  
+  React.useEffect(() => {
+    if (props.required !== undefined) {
+      input.state.setRequired(props.required);
+    }
+  }, [props.required, input]);
+  
+  React.useEffect(() => {
+    if (props.error !== undefined) {
+      input.state.setError(props.error);
+    }
+  }, [props.error, input]);
+  
+  React.useEffect(() => {
+    if (props.value !== undefined) {
+      input.state.setValue(props.value);
+    }
+  }, [props.value, input]);
+  
+  return <Input ref={ref} {...props} />;
+});
 
-const meta: Meta<typeof Input> = {
+InputWrapper.displayName = 'Input';
+
+const meta: Meta<typeof InputWrapper> = {
   title: 'Primitives/Input',
-  component: Input,
+  component: InputWrapper,
   parameters: {
     layout: 'padded',
     docs: {
@@ -60,7 +97,7 @@ A versatile input component supporting various types, sizes, and states.
     },
     value: {
       control: 'text',
-      description: 'Input value',
+      description: 'InputWrapper value',
     },
     disabled: {
       control: 'boolean',
@@ -111,7 +148,7 @@ export const WithValue: Story = {
   },
 };
 
-// Input Types
+// InputWrapper Types
 export const Email: Story = {
   args: {
     type: 'email',
@@ -208,13 +245,13 @@ export const Error: Story = {
 };
 
 // Interactive Examples
-export const ControlledInput: Story = {
+export const ControlledInputWrapper: Story = {
   render: (args) => {
     const [value, setValue] = React.useState('');
     
     return (
       <div>
-        <Input 
+        <InputWrapperWrapper 
           {...args}
           value={value}
           onChange={(e) => {
@@ -254,7 +291,7 @@ export const WithValidation: Story = {
         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
           Email Address
         </label>
-        <Input 
+        <InputWrapper 
           type="email"
           placeholder="email@example.com"
           value={value}
@@ -290,7 +327,7 @@ export const LoginForm: Story = {
           <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
             Email
           </label>
-          <Input
+          <InputWrapper
             type="email"
             placeholder="email@example.com"
             required
@@ -303,7 +340,7 @@ export const LoginForm: Story = {
           <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
             Password
           </label>
-          <Input
+          <InputWrapper
             type="password"
             placeholder="Enter password"
             required
@@ -333,38 +370,38 @@ export const LoginForm: Story = {
 export const Showcase: Story = {
   render: () => (
     <div style={{ padding: '2rem' }}>
-      <h2 style={{ marginBottom: '2rem' }}>Input Component Showcase</h2>
+      <h2 style={{ marginBottom: '2rem' }}>InputWrapper Component Showcase</h2>
       
       <section style={{ marginBottom: '3rem' }}>
-        <h3 style={{ marginBottom: '1rem' }}>Input Types</h3>
+        <h3 style={{ marginBottom: '1rem' }}>InputWrapper Types</h3>
         <div style={{ display: 'grid', gap: '1rem', maxWidth: '400px' }}>
-          <Input type="text" placeholder="Text input" />
-          <Input type="email" placeholder="Email input" />
-          <Input type="password" placeholder="Password input" />
-          <Input type="number" placeholder="Number input" />
-          <Input type="search" placeholder="Search input" />
-          <Input type="tel" placeholder="Phone input" />
-          <Input type="url" placeholder="URL input" />
+          <InputWrapper type="text" placeholder="Text input" />
+          <InputWrapper type="email" placeholder="Email input" />
+          <InputWrapper type="password" placeholder="Password input" />
+          <InputWrapper type="number" placeholder="Number input" />
+          <InputWrapper type="search" placeholder="Search input" />
+          <InputWrapper type="tel" placeholder="Phone input" />
+          <InputWrapper type="url" placeholder="URL input" />
         </div>
       </section>
       
       <section style={{ marginBottom: '3rem' }}>
         <h3 style={{ marginBottom: '1rem' }}>Sizes</h3>
         <div style={{ display: 'grid', gap: '1rem', maxWidth: '400px' }}>
-          <Input size="sm" placeholder="Small input" />
-          <Input size="md" placeholder="Medium input" />
-          <Input size="lg" placeholder="Large input" />
+          <InputWrapper size="sm" placeholder="Small input" />
+          <InputWrapper size="md" placeholder="Medium input" />
+          <InputWrapper size="lg" placeholder="Large input" />
         </div>
       </section>
       
       <section style={{ marginBottom: '3rem' }}>
         <h3 style={{ marginBottom: '1rem' }}>States</h3>
         <div style={{ display: 'grid', gap: '1rem', maxWidth: '400px' }}>
-          <Input placeholder="Normal input" />
-          <Input disabled placeholder="Disabled input" />
-          <Input readonly value="Read-only value" />
-          <Input required placeholder="Required field *" />
-          <Input error errorMessage="This field has an error" placeholder="Error state" />
+          <InputWrapper placeholder="Normal input" />
+          <InputWrapper disabled placeholder="Disabled input" />
+          <InputWrapper readonly value="Read-only value" />
+          <InputWrapper required placeholder="Required field *" />
+          <InputWrapper error errorMessage="This field has an error" placeholder="Error state" />
         </div>
       </section>
     </div>
@@ -391,7 +428,7 @@ export const StressTest: Story = {
     
     return (
       <div style={{ padding: '2rem' }}>
-        <h3 style={{ marginBottom: '1rem' }}>Performance Test: 50 Inputs</h3>
+        <h3 style={{ marginBottom: '1rem' }}>Performance Test: 50 InputWrappers</h3>
         <div style={{ 
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
@@ -403,10 +440,10 @@ export const StressTest: Story = {
           padding: '1rem'
         }}>
           {Array.from({ length: 50 }, (_, i) => (
-            <Input
+            <InputWrapper
               key={i}
               size="sm"
-              placeholder={`Input ${i + 1}`}
+              placeholder={`InputWrapper ${i + 1}`}
               value={values[i] || ''}
               onChange={(e) => setValues(prev => ({ ...prev, [i]: e.target.value }))}
             />

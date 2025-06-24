@@ -107,6 +107,60 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                 }
             }
             
+            // Handle Checkbox component
+            if (core.metadata.name === 'Checkbox' && rootElement === 'input') {
+                // Get options from core if available
+                const options = (core as any).options || {};
+                
+                // Essential checkbox properties
+                componentSpecificProps.type = 'checkbox';
+                
+                // Map state properties to DOM attributes
+                if (state && typeof state === 'object') {
+                    if ('checked' in state) {
+                        const checkedValue = (state as any).checked;
+                        componentSpecificProps.checked = checkedValue === true;
+                        componentSpecificProps['aria-checked'] = checkedValue === 'indeterminate' ? 'mixed' : (checkedValue ? 'true' : 'false');
+                    }
+                    if ('indeterminate' in state && (state as any).indeterminate) {
+                        componentSpecificProps['aria-checked'] = 'mixed';
+                        // Note: indeterminate property needs to be set via ref, but we can set the attribute
+                        componentSpecificProps.indeterminate = true;
+                    }
+                    if ('disabled' in state && (state as any).disabled) {
+                        componentSpecificProps.disabled = true;
+                        componentSpecificProps['aria-disabled'] = 'true';
+                    }
+                    if ('required' in state && (state as any).required) {
+                        componentSpecificProps.required = true;
+                        componentSpecificProps['aria-required'] = 'true';
+                    }
+                    if ('error' in state && (state as any).error) {
+                        componentSpecificProps['aria-invalid'] = 'true';
+                    }
+                }
+                
+                // Pass through component options
+                if (options.name) componentSpecificProps.name = options.name;
+                if (options.id) componentSpecificProps.id = options.id;
+                if (options.value) componentSpecificProps.value = options.value;
+                
+                // Override with runtime props from restProps
+                if ('name' in restProps) componentSpecificProps.name = (restProps as any).name;
+                if ('id' in restProps) componentSpecificProps.id = (restProps as any).id;
+                if ('value' in restProps) componentSpecificProps.value = (restProps as any).value;
+                if ('required' in restProps) {
+                    componentSpecificProps.required = (restProps as any).required;
+                    componentSpecificProps['aria-required'] = (restProps as any).required ? 'true' : 'false';
+                }
+                
+                // Add onChange to prevent React warnings about controlled components
+                componentSpecificProps.onChange = () => {
+                    // The actual logic is handled by onClick interaction
+                    // This just prevents React warnings
+                };
+            }
+            
             if (core.metadata.name === 'Input' && rootElement === 'input') {
                 // Get options from core if available
                 const options = (core as any).options || {};

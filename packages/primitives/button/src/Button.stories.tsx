@@ -4,17 +4,36 @@
  */
 
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createButtonWithImplementation } from './index';
 import { reactAdapter } from '@stellarix-ui/react';
 
-// Create the React button component
-const button = createButtonWithImplementation();
-const Button = button.connect(reactAdapter);
+// Create a wrapper component that creates individual Button instances
+const ButtonWrapper = React.forwardRef((props: any, ref: any) => {
+  const [button] = React.useState(() => createButtonWithImplementation(props));
+  const Button = React.useMemo(() => button.connect(reactAdapter), [button]);
+  
+  // Update the component's state when props change
+  React.useEffect(() => {
+    if (props.disabled !== undefined) {
+      button.state.setDisabled(props.disabled);
+    }
+  }, [props.disabled, button]);
+  
+  React.useEffect(() => {
+    if (props.loading !== undefined) {
+      button.state.setLoading(props.loading);
+    }
+  }, [props.loading, button]);
+  
+  return <Button ref={ref} {...props} />;
+});
 
-const meta: Meta<typeof Button> = {
+ButtonWrapper.displayName = 'Button';
+
+const meta: Meta<typeof ButtonWrapper> = {
   title: 'Primitives/Button',
-  component: Button,
+  component: ButtonWrapper,
   parameters: {
     layout: 'padded',
     docs: {
@@ -148,7 +167,7 @@ export const WithClickHandler: Story = {
     
     return (
       <div>
-        <Button 
+        <ButtonWrapper 
           {...args}
           onClick={() => {
             setClickCount(prev => prev + 1);
@@ -169,28 +188,28 @@ export const Showcase: Story = {
       <div>
         <h3 style={{ marginBottom: '1rem' }}>Variants</h3>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <Button variant="primary">Primary</Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="outline">Outline</Button>
-          <Button variant="ghost">Ghost</Button>
+          <ButtonWrapper variant="primary">Primary</Button>
+          <ButtonWrapper variant="secondary">Secondary</Button>
+          <ButtonWrapper variant="outline">Outline</Button>
+          <ButtonWrapper variant="ghost">Ghost</Button>
         </div>
       </div>
       
       <div>
         <h3 style={{ marginBottom: '1rem' }}>Sizes</h3>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <Button size="sm">Small</Button>
-          <Button size="md">Medium</Button>
-          <Button size="lg">Large</Button>
+          <ButtonWrapper size="sm">Small</Button>
+          <ButtonWrapper size="md">Medium</Button>
+          <ButtonWrapper size="lg">Large</Button>
         </div>
       </div>
       
       <div>
         <h3 style={{ marginBottom: '1rem' }}>States</h3>
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <Button>Normal</Button>
-          <Button disabled>Disabled</Button>
-          <Button loading>Loading</Button>
+          <ButtonWrapper>Normal</Button>
+          <ButtonWrapper disabled>Disabled</Button>
+          <ButtonWrapper loading>Loading</Button>
         </div>
       </div>
 
@@ -199,10 +218,10 @@ export const Showcase: Story = {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
           {(['primary', 'secondary', 'outline', 'ghost'] as const).map(variant => (
             <React.Fragment key={variant}>
-              <Button variant={variant} size="sm">{variant} sm</Button>
-              <Button variant={variant} size="md">{variant} md</Button>
-              <Button variant={variant} size="lg">{variant} lg</Button>
-              <Button variant={variant} disabled>{variant} disabled</Button>
+              <ButtonWrapper variant={variant} size="sm">{variant} sm</Button>
+              <ButtonWrapper variant={variant} size="md">{variant} md</Button>
+              <ButtonWrapper variant={variant} size="lg">{variant} lg</Button>
+              <ButtonWrapper variant={variant} disabled>{variant} disabled</Button>
             </React.Fragment>
           ))}
         </div>
@@ -222,7 +241,7 @@ export const KeyboardNavigation: Story = {
       </p>
       
       {[1, 2, 3, 4].map((num) => (
-        <Button 
+        <ButtonWrapper 
           key={num} 
           onClick={() => alert(`Button ${num} clicked!`)}
         >
@@ -230,7 +249,7 @@ export const KeyboardNavigation: Story = {
         </Button>
       ))}
       
-      <Button disabled>
+      <ButtonWrapper disabled>
         Disabled button (Not focusable)
       </Button>
     </div>
@@ -260,7 +279,7 @@ export const StressTest: Story = {
           borderRadius: '4px'
         }}>
           {Array.from({ length: 100 }, (_, index) => (
-            <Button
+            <ButtonWrapper
               key={index}
               size="sm"
               variant={index % 4 === 0 ? 'primary' : index % 4 === 1 ? 'secondary' : index % 4 === 2 ? 'outline' : 'ghost'}

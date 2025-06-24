@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { createContainerWithImplementation } from './index';
 import { reactAdapter } from '@stellarix-ui/react';
 

@@ -54,6 +54,9 @@ export function createCheckboxWithImplementation(options: CheckboxOptions = {}) 
     core.state = createCheckboxState(options);
     core.logic = createCheckboxLogic(core.state as any, options);
     
+    // Store options for adapter access
+    (core as any).options = options;
+    
     return core;
 }
 

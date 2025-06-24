@@ -8,10 +8,13 @@ const config: StorybookConfig = {
   stories: [
     // Load all stories from our primitives packages
     '../packages/primitives/**/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
+    '../packages/primitives/**/stories/**/*.stories.@(js|jsx|ts|tsx|mdx)',
     // Load any stories from adapters
     '../packages/adapters/**/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
     // Load stories from themes package
     '../packages/themes/**/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
+    // Explicitly exclude templates directory
+    '!../templates/**/*.stories.@(js|jsx|ts|tsx|mdx)',
   ],
 
   addons: [getAbsolutePath("@storybook/addon-a11y"), getAbsolutePath("@storybook/addon-docs")],
