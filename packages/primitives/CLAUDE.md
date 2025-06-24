@@ -99,6 +99,169 @@ if (options.onExpandedChange) {
 3. ALWAYS calculate the new state value directly
 4. ALWAYS call callbacks with calculated values, not by forcing state updates
 
+### 🚨🚨🚨 TEST ISOLATION CRITICAL LESSONS
+
+**FROM STEPPER TEST DEBUGGING SESSION (2025-01-24)**:
+
+**PROBLEM**: Stepper integration tests pass individually (56/56) but fail in full test suite with "Objects are not valid as a React child" error.
+
+**ROOT CAUSE**: Test pollution between components when run in full suite. React tries to render objects as children due to cross-component state contamination.
+
+**DEFENSIVE PROGRAMMING SOLUTIONS APPLIED**:
+
+1. **Defensive Test Component State Initialization**:
+```typescript
+// ✅ ALWAYS validate and coerce prop types:
+const [state, setState] = React.useState(() => ({
+    steps: Array.isArray(props.steps) ? props.steps : [],
+    activeStep: typeof props.activeStep === 'number' ? props.activeStep : 0,
+    completedSteps: new Set<number>(),
+    disabled: Boolean(props.disabled),
+    // ... ensure all types are correct
+}));
+```
+
+2. **Safe Rendering with Validation**:
+```typescript
+// ✅ ALWAYS validate data before rendering:
+{state.steps.map((step, index) => {
+    // Validate step data to prevent rendering issues
+    if (!step || typeof step !== 'object') {
+        console.warn('Invalid step data:', step);
+        return <li key={`invalid-${index}`}>Invalid step {index}</li>;
+    }
+    
+    // Ensure all values are safe for DOM
+    const validStatus = typeof status === 'string' ? status : 'upcoming';
+    const validLabel = typeof step.label === 'string' ? step.label : `Step ${index + 1}`;
+    
+    return (
+        <li key={step.id || `step-${index}`}>
+            {/* Safe rendering with validated data */}
+        </li>
+    );
+})}
+```
+
+3. **Safe A11y Props Filtering**:
+```typescript
+// ✅ ALWAYS filter a11y props to prevent React element injection:
+const safeA11y = a11yProps && typeof a11yProps === 'object' ? 
+    Object.fromEntries(Object.entries(a11yProps).filter(([_, value]) => 
+        typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+    )) : {};
+```
+
+4. **State Subscription Validation**:
+```typescript
+// ✅ ALWAYS validate state before setting:
+React.useEffect(() => {
+    const unsubscribe = state.subscribe((newState: any) => {
+        if (newState && typeof newState === 'object') {
+            setState(newState);
+        }
+    });
+    return unsubscribe;
+}, []);
+```
+
+5. **Test Cleanup**:
+```typescript
+// ✅ ALWAYS cleanup between tests:
+afterEach(() => {
+    vi.clearAllTimers();
+});
+```
+
+**KEY INSIGHTS**:
+- **Test isolation failures are often due to shared instances or global state pollution**
+- **React rendering errors can cascade from other components in full test suites**
+- **Defensive programming prevents test pollution even when root cause is external**
+- **Individual test success + full suite failure = test isolation issue**
+
+**PREVENTION STRATEGIES**:
+1. **ALWAYS validate all props and state data in test components**
+2. **ALWAYS use defensive type checking before rendering**
+3. **ALWAYS filter props to ensure only primitive values reach DOM**
+4. **ALWAYS cleanup timers and subscriptions between tests**
+5. **ALWAYS test both individually AND in full suite to catch isolation issues**
+
+### 🚀 SINGLE FACTORY PATTERN MIGRATION LESSONS
+
+**FROM SELECT COMPONENT REFACTORING (2025-01-24)**:
+
+**MIGRATION**: Successfully migrated from dual factory pattern to modern single factory pattern.
+
+**OLD PATTERN (DEPRECATED)**:
+```typescript
+// ❌ OLD: Dual factory pattern
+export function createSelect(options) { /* basic core */ }
+export function createSelectWithImplementation(options) { 
+    const core = createSelect(options);
+    core.state = createSelectState(options);
+    core.logic = createSelectLogic(core.state, options);
+    return core;
+}
+```
+
+**NEW PATTERN (RECOMMENDED)**:
+```typescript
+// ✅ NEW: Single factory pattern with helpers
+export function createSelect(options = {}): ComponentCore<State, Events> & Helpers {
+    const state = createSelectState(options);
+    const logic = createSelectLogic(state, options);
+    
+    logic.connect(state);
+    logic.initialize();
+    
+    const helpers = {
+        open: () => state.setOpen(true),
+        close: () => state.setOpen(false),
+        // ... other helper methods
+    };
+    
+    return {
+        state,
+        logic,
+        metadata: { /* component metadata */ },
+        connect: (adapter) => adapter.createComponent(this),
+        destroy: () => logic.cleanup(),
+        ...helpers
+    };
+}
+```
+
+**MIGRATION STEPS**:
+1. **Remove dual factory functions** - Delete `createComponentWithImplementation`
+2. **Add helper methods interface** - Define all utility methods in types
+3. **Update onChange signatures** - Modern callbacks pass (value, data) not just value
+4. **Fix all test expectations** - Update tests to expect new callback signatures
+5. **Add @testing-library/jest-dom** - Import for DOM matchers in tests
+
+**CALLBACK SIGNATURE MODERNIZATION**:
+```typescript
+// ❌ OLD: onChange only passes value
+onChange?: (value: string) => void;
+options.onChange(value);
+
+// ✅ NEW: onChange passes value and full object
+onChange?: (value: string, option: SelectOption | null) => void;
+options.onChange(value, option);
+```
+
+**TEST MIGRATION REQUIREMENTS**:
+1. **Replace all function calls**: `createSelectWithImplementation` → `createSelect`
+2. **Update callback expectations**: `expect(onChange).toHaveBeenCalledWith(value)` → `expect(onChange).toHaveBeenCalledWith(value, option)`
+3. **Add DOM matcher imports**: `import '@testing-library/jest-dom';`
+4. **Update test descriptions**: Remove references to "implementation" pattern
+
+**MIGRATION BENEFITS**:
+- **Simpler API**: One function instead of two
+- **Better DX**: Helper methods available immediately
+- **Consistency**: All components use same pattern
+- **Type Safety**: Better TypeScript support with helper methods
+- **Future-Proof**: Easier to extend with new capabilities
+
 ### 🚨 Critical Primitive-Specific Rules
 - **ALWAYS** use LogicLayerBuilder pattern for all component logic implementations
 - **ALWAYS** handle event payload extraction: `const event = payload?.event ? payload.event : payload`

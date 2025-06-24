@@ -199,10 +199,15 @@ export function createStepper(
         },
         
         /**
-         * Get step status
+         * Get step status - now takes current state as parameter to avoid getState() calls
          */
-        getStepStatus(step: number): StepStatus {
-            const currentState = state.getState();
+        getStepStatus(step: number, currentState?: any): StepStatus {
+            // If no state provided, this is a safe helper method context
+            if (!currentState) {
+                // Only use getState() in helper methods where it's safe
+                currentState = state.getState();
+            }
+            
             const stepData = currentState.steps[step];
             
             if (stepData?.error) {

@@ -46,7 +46,7 @@ describe('Select Logic', () => {
             expect(listener).toHaveBeenCalledWith(
                 expect.objectContaining({ value: 'banana' })
             );
-            expect(options.onChange).toHaveBeenCalledWith('banana');
+            expect(options.onChange).toHaveBeenCalledWith('banana', null);
         });
 
         it('should handle open event', () => {
@@ -159,7 +159,7 @@ describe('Select Logic', () => {
                     open: false
                 })
             );
-            expect(options.onChange).toHaveBeenCalledWith('banana');
+            expect(options.onChange).toHaveBeenCalledWith('banana', mockOptions[1]);
         });
 
         it('should not select disabled option', () => {
@@ -338,7 +338,7 @@ describe('Select Logic', () => {
 
             interactions.onKeyDown(mockEvent);
 
-            expect(options.onChange).toHaveBeenCalledWith('banana');
+            expect(options.onChange).toHaveBeenCalledWith('banana', mockOptions[1]);
         });
 
         it('should handle Arrow Down to navigate', () => {
@@ -474,7 +474,7 @@ describe('Select Logic', () => {
 
             interactions.onClick(mockEvent); // Click banana
 
-            expect(options.onChange).toHaveBeenCalledWith('banana');
+            expect(options.onChange).toHaveBeenCalledWith('banana', mockOptions[1]);
             expect(listener).toHaveBeenCalledWith(
                 expect.objectContaining({ value: 'banana' })
             );
@@ -540,7 +540,7 @@ describe('Select Logic', () => {
             interactions.onClick(mockEvent);
 
             expect(mockEvent.stopPropagation).toHaveBeenCalled();
-            expect(options.onChange).toHaveBeenCalledWith(null);
+            expect(options.onChange).toHaveBeenCalledWith(null, null);
             expect(listener).toHaveBeenCalledWith(
                 expect.objectContaining({ value: null })
             );

@@ -1,17 +1,13 @@
 /**
  * Select Accessibility Tests
- * 
- * NOTE: These tests are currently skipped because the React adapter needs to be updated
- * to handle compound components like Select. The Select component has multiple elements
- * (trigger, listbox, options) that need special rendering logic in the adapter.
- * 
- * TODO: Update React adapter to handle compound components with multiple elements
+ * Tests for WCAG compliance with the new single factory pattern
  */
 
 import React from 'react';
 import { render } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
+import '@testing-library/jest-dom';
 import { createSelect } from '../src';
 import { reactAdapter } from '@stellarix-ui/react';
 import type { SelectOption } from '../src/types';
@@ -25,7 +21,7 @@ const mockOptions: SelectOption[] = [
     { value: 'disabled', label: 'Disabled Option', disabled: true }
 ];
 
-describe.skip('Select Accessibility', () => {
+describe('Select Accessibility', () => {
     beforeEach(() => {
         // Silence console warnings for testing
         const originalConsoleWarn = console.warn;

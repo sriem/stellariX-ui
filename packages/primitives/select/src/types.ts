@@ -125,7 +125,7 @@ export interface SelectOptions {
     /**
      * Callback when selected value changes
      */
-    onChange?: (value: string | null) => void;
+    onChange?: (value: string | null, option: SelectOption | null) => void;
     
     /**
      * Callback when component receives focus
@@ -211,6 +211,61 @@ export interface SelectEvents {
         direction: 'up' | 'down' | 'first' | 'last';
         index: number;
     };
+}
+
+/**
+ * Helper methods returned by createSelect
+ */
+export interface SelectHelpers {
+    /**
+     * Open the dropdown
+     */
+    open: () => void;
+    
+    /**
+     * Close the dropdown
+     */
+    close: () => void;
+    
+    /**
+     * Toggle the dropdown
+     */
+    toggle: () => void;
+    
+    /**
+     * Select an option
+     */
+    selectOption: (value: string) => void;
+    
+    /**
+     * Clear the selection
+     */
+    clear: () => void;
+    
+    /**
+     * Set search query
+     */
+    search: (query: string) => void;
+    
+    /**
+     * Navigate to option by index
+     */
+    navigateToOption: (index: number) => void;
+    
+    /**
+     * Get the currently selected option
+     */
+    getSelectedOption: () => SelectOption | null;
+    
+    /**
+     * Check if an option is selected
+     */
+    isOptionSelected: (value: string) => boolean;
+    
+    /**
+     * Get filtered options based on search
+     */
+    getFilteredOptions: () => SelectOption[];
 }
 
 /**

@@ -1,16 +1,12 @@
 /**
- * Select React Integration Test
- * 
- * NOTE: These tests are currently skipped because the React adapter needs to be updated
- * to handle compound components like Select. The Select component has multiple elements
- * (trigger, listbox, options) that need special rendering logic in the adapter.
- * 
- * TODO: Update React adapter to handle compound components with multiple elements
+ * Select React Integration Tests
+ * Tests for React adapter integration with the new single factory pattern
  */
 
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
+import '@testing-library/jest-dom';
 import { createSelect } from '../src';
 import { reactAdapter } from '@stellarix-ui/react';
 import type { SelectOptions, SelectOption } from '../src/types';
@@ -24,7 +20,7 @@ const mockOptions: SelectOption[] = [
     { value: 'disabled', label: 'Disabled Option', disabled: true }
 ];
 
-describe.skip('Select React Integration', () => {
+describe('Select React Integration', () => {
     it('should render with React adapter', () => {
         const select = createSelect({ options: mockOptions });
         const SelectComponent = select.connect(reactAdapter);
@@ -38,7 +34,7 @@ describe.skip('Select React Integration', () => {
     });
     
     it('should display placeholder when no value is selected', () => {
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             placeholder: 'Choose a fruit'
         });
@@ -52,7 +48,7 @@ describe.skip('Select React Integration', () => {
     
     it('should open dropdown on click', async () => {
         const onOpen = vi.fn();
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             onOpen
         });
@@ -72,7 +68,7 @@ describe.skip('Select React Integration', () => {
     
     it('should close dropdown on Escape key', async () => {
         const onClose = vi.fn();
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             onClose
         });
@@ -98,7 +94,7 @@ describe.skip('Select React Integration', () => {
     
     it('should handle value selection', async () => {
         const onChange = vi.fn();
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             onChange
         });
@@ -158,7 +154,7 @@ describe.skip('Select React Integration', () => {
     
     it('should select highlighted option on Enter key', async () => {
         const onChange = vi.fn();
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             onChange
         });
@@ -185,7 +181,7 @@ describe.skip('Select React Integration', () => {
     
     it('should handle search functionality', async () => {
         const onSearch = vi.fn();
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             searchable: true,
             onSearch
@@ -216,7 +212,7 @@ describe.skip('Select React Integration', () => {
             currentValue = value;
         });
         
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             value: currentValue,
             onChange
@@ -236,7 +232,7 @@ describe.skip('Select React Integration', () => {
         });
         
         // Rerender with new value
-        const select2 = createSelectWithImplementation({ 
+        const select2 = createSelect({ 
             options: mockOptions,
             value: currentValue,
             onChange
@@ -250,7 +246,7 @@ describe.skip('Select React Integration', () => {
     
     it('should handle disabled state', () => {
         const onChange = vi.fn();
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             disabled: true,
             onChange
@@ -270,7 +266,7 @@ describe.skip('Select React Integration', () => {
     
     it('should handle readonly state', () => {
         const onChange = vi.fn();
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             value: 'apple',
             readonly: true,
@@ -292,7 +288,7 @@ describe.skip('Select React Integration', () => {
     
     it('should not select disabled options', async () => {
         const onChange = vi.fn();
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             onChange
         });
@@ -344,7 +340,7 @@ describe.skip('Select React Integration', () => {
     it('should handle focus and blur events', async () => {
         const onFocus = vi.fn();
         const onBlur = vi.fn();
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             onFocus,
             onBlur
@@ -369,7 +365,7 @@ describe.skip('Select React Integration', () => {
     
     it('should handle clearable functionality', async () => {
         const onChange = vi.fn();
-        const select = createSelectWithImplementation({ 
+        const select = createSelect({ 
             options: mockOptions,
             value: 'apple',
             clearable: true,

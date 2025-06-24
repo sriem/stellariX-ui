@@ -26,7 +26,7 @@ export function createSelectLogic(
             
             state.setValue(value);
             if (options.onChange) {
-                options.onChange(value);
+                options.onChange(value, option);
             }
             
             return null;
@@ -100,7 +100,7 @@ export function createSelectLogic(
                 state.selectOption(option);
                 
                 if (options.onChange) {
-                    options.onChange(option.value);
+                    options.onChange(option.value, option);
                 }
             }
             
@@ -189,7 +189,7 @@ export function createSelectLogic(
                     } else {
                         const option = state.selectHighlighted();
                         if (option && options.onChange) {
-                            options.onChange(option.value);
+                            options.onChange(option.value, option);
                         }
                         return 'optionSelect';
                     }
@@ -302,7 +302,7 @@ export function createSelectLogic(
                 state.selectOption(option);
                 
                 if (options.onChange) {
-                    options.onChange(option.value);
+                    options.onChange(option.value, option);
                 }
                 
                 return 'optionSelect';
@@ -327,7 +327,7 @@ export function createSelectLogic(
                 state.clearSelection();
                 
                 if (options.onChange) {
-                    options.onChange(null);
+                    options.onChange(null, null);
                 }
                 
                 return 'change';
