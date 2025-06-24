@@ -9,18 +9,18 @@ import { createAccordionWithImplementation } from './index';
 import { reactAdapter } from '@stellarix-ui/react';
 import type { AccordionOptions } from './types';
 
-// Create the React accordion component
+// Create accordion component safely for each story instance
 const createAccordionComponent = (options?: AccordionOptions) => {
   const accordion = createAccordionWithImplementation(options);
   return accordion.connect(reactAdapter);
 };
 
-// Default accordion for stories
-const Accordion = createAccordionComponent();
+// Dummy component for Meta typing
+const DummyAccordion = createAccordionComponent();
 
-const meta: Meta<typeof Accordion> = {
+const meta: Meta<typeof DummyAccordion> = {
   title: 'Primitives/Accordion',
-  component: Accordion,
+  component: DummyAccordion,
   parameters: {
     layout: 'padded',
     docs: {
@@ -159,7 +159,7 @@ const AccordionItem: React.FC<{
   );
 };
 
-// Wrapper component to manage accordion state
+// Safe wrapper component to prevent infinite loops
 const AccordionWrapper: React.FC<{
   options?: AccordionOptions;
   items: Array<{ id: string; title: string; content: React.ReactNode; disabled?: boolean; icon?: React.ReactNode }>;
@@ -168,14 +168,14 @@ const AccordionWrapper: React.FC<{
 }> = ({ options = {}, items, onExpandedChange, onItemToggle }) => {
   const [expandedItems, setExpandedItems] = React.useState<string[]>(options.expandedItems || []);
   
-  // Create accordion with options
-  const accordion = React.useMemo(() => {
+  // Create accordion with safe pattern - create once per component instance
+  const [accordion] = React.useState(() => {
     return createAccordionWithImplementation({
       ...options,
-      expandedItems,
+      expandedItems: options.expandedItems || [],
       items: items.map(item => ({
         id: item.id,
-        expanded: expandedItems.includes(item.id),
+        expanded: (options.expandedItems || []).includes(item.id),
         disabled: item.disabled,
       })),
       onExpandedChange: (newExpandedItems) => {
@@ -184,9 +184,9 @@ const AccordionWrapper: React.FC<{
       },
       onItemToggle,
     });
-  }, []);
+  });
 
-  // Subscribe to state changes
+  // Safe state sync without infinite loops
   React.useEffect(() => {
     const unsubscribe = accordion.state.subscribe((state) => {
       setExpandedItems(state.expandedItems);
@@ -196,7 +196,18 @@ const AccordionWrapper: React.FC<{
 
   const handleToggle = (itemId: string) => {
     const isExpanded = expandedItems.includes(itemId);
-    accordion.logic.handleEvent('itemToggle', { itemId, expanded: !isExpanded });
+    // Safely update state without using broken logic.handleEvent
+    if (accordion.state && 'toggleItem' in accordion.state) {
+      (accordion.state as any).toggleItem(itemId);
+    } else {
+      // Fallback: update expanded items directly
+      const newExpandedItems = isExpanded 
+        ? expandedItems.filter(id => id !== itemId)
+        : [...expandedItems, itemId];
+      setExpandedItems(newExpandedItems);
+      onExpandedChange?.(newExpandedItems);
+      onItemToggle?.(itemId, !isExpanded);
+    }
   };
 
   return (
