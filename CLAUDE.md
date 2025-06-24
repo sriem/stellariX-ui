@@ -397,6 +397,22 @@ packages/primitives/[component]/
 2. **TypeScript Enhancement**: Standardizing TypeScript 5.0+ configurations
 3. **React Adapter**: Completing the React adapter implementation
 
+## 🚨 ABSOLUTE RULE: NO INLINE COMMENTS
+
+**ZERO TOLERANCE**: NO inline comments allowed in ANY code files!
+
+This includes:
+- NO `// temporary comments`  
+- NO `// TODO: fix later`
+- NO `// NOTE: important`
+- NO `// Updated for X`
+- NO `// Changed to Y`
+- NO explanatory comments after code
+
+**ONLY ALLOWED**: JSDoc for public API documentation.
+
+If you feel you need a comment, refactor the code to be clearer instead!
+
 ## 📖 Framework Pattern Guides
 
 Detailed guides for each framework's latest patterns:

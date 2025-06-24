@@ -9,15 +9,12 @@ export const stellarLight: Theme = {
     name: 'stellar-light',
     mode: 'light',
     colors: {
-        // Base colors - Clean and sophisticated
         background: 'hsl(0, 0%, 100%)',
         foreground: 'hsl(222.2, 84%, 4.9%)',
         
-        // Component colors - Subtle depth
         card: 'hsl(0, 0%, 100%)',
         cardForeground: 'hsl(222.2, 84%, 4.9%)',
         
-        // Interactive colors - Modern vibrant palette with depth
         primary: 'hsl(237.7, 85.6%, 62%)',
         primaryForeground: 'hsl(0, 0%, 100%)',
         primaryHover: 'hsl(237.5, 77.8%, 56%)',
@@ -27,7 +24,6 @@ export const stellarLight: Theme = {
         secondaryHover: 'hsl(262.8, 76.3%, 50.6%)',
         secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
-        // Semantic colors - WCAG AA compliant
         destructive: '#dc2626',
         destructiveForeground: '#ffffff',
         destructiveHover: '#b91c1c',
@@ -45,7 +41,6 @@ export const stellarLight: Theme = {
         infoHover: '#1d4ed8',
         infoHoverForeground: '#ffffff',
         
-        // UI colors - Refined grays with blue undertones
         muted: 'hsl(210, 40%, 96.1%)',
         mutedForeground: 'hsl(215.4, 19%, 35%)',
         accent: 'hsl(210, 40%, 95.1%)',
@@ -56,7 +51,6 @@ export const stellarLight: Theme = {
         input: 'hsl(214.3, 31.8%, 91.4%)',
         ring: 'hsl(237.7, 85.6%, 67.5%)',
         
-        // Special effects
         gradient: {
             from: '#6366f1',
             via: '#8b5cf6',
@@ -157,7 +151,6 @@ export const stellarLight: Theme = {
         xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
         '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
         inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
-        // Special shadows - More sophisticated
         card: '0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04)',
         button: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
         dropdown: '0 10px 20px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04)',
@@ -242,15 +235,12 @@ export const stellarDark: Theme = {
     name: 'stellar-dark',
     mode: 'dark',
     colors: {
-        // Base colors - Deep sophisticated dark
         background: 'hsl(222.2, 84%, 4.9%)',
         foreground: 'hsl(210, 40%, 98%)',
         
-        // Component colors - Layered depth
         card: 'hsl(222.2, 47.4%, 11.2%)',
         cardForeground: 'hsl(210, 40%, 98%)',
         
-        // Interactive colors - Vibrant in dark mode
         primary: 'hsl(237.5, 86%, 73.7%)',
         primaryForeground: 'hsl(222.2, 84%, 4.9%)',
         primaryHover: 'hsl(237.7, 85.6%, 67.5%)',
@@ -260,7 +250,6 @@ export const stellarDark: Theme = {
         secondaryHover: 'hsl(262.1, 83.3%, 57.8%)',
         secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
-        // Semantic colors
         destructive: '#f87171',
         destructiveForeground: '#0f172a',
         destructiveHover: '#ef4444',
@@ -278,7 +267,6 @@ export const stellarDark: Theme = {
         infoHover: '#3b82f6',
         infoHoverForeground: '#ffffff',
         
-        // UI colors - Sophisticated dark palette
         muted: 'hsl(217.2, 32.6%, 17.5%)',
         mutedForeground: 'hsl(215, 20.2%, 65.1%)',
         accent: 'hsl(217.2, 32.6%, 17.5%)',
@@ -289,7 +277,6 @@ export const stellarDark: Theme = {
         input: 'hsl(217.2, 32.6%, 17.5%)',
         ring: 'hsl(237.5, 86%, 73.7%)',
         
-        // Special effects
         gradient: {
             from: '#818cf8',
             via: '#a78bfa',

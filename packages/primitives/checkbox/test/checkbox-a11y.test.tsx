@@ -246,7 +246,6 @@ describe('Checkbox Accessibility', () => {
         
         rerender(<CheckedComponent />);
         
-        // Updated state should be announced
         expect(getByRole('checkbox')).toHaveAttribute('aria-checked', 'true');
     });
 });

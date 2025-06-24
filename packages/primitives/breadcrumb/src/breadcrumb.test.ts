@@ -97,7 +97,7 @@ describe('Breadcrumb Component', () => {
       const updatedItem = state.getState().items.find(item => item.id === 'about');
       expect(updatedItem?.label).toBe('About Us');
       expect(updatedItem?.current).toBe(true);
-      expect(updatedItem?.href).toBe('/about'); // Other properties preserved
+      expect(updatedItem?.href).toBe('/about');
     });
     
     it('should set current item by id', () => {

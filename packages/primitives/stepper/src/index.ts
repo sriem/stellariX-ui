@@ -11,7 +11,6 @@ import type {
     StepperState, 
     StepperEvents, 
     StepperOptions, 
-    StepperStep,
     StepStatus,
     StepperHelpers
 } from './types';

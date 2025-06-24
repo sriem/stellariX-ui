@@ -238,21 +238,44 @@ primary: 'hsl(237.7, 85.6%, 67.5%)',
 primary: '#6366f1',
 ```
 
+## 🚨🚨🚨 ABSOLUTE RULE: NO INLINE COMMENTS
+
+**THIS IS A ZERO-TOLERANCE RULE**: Absolutely NO inline comments are allowed in ANY file within the themes package!
+
+### ❌❌❌ COMPLETELY FORBIDDEN:
+```typescript
+// The following are ALL violations:
+primary: 'hsl(237.7, 85.6%, 62%)', // Darkened for 4.5:1 contrast ❌
+success: '#059669', // WCAG AA compliant ❌
+background: '#ffffff', // Pure white background ❌
+// TODO: Add more color variations ❌
+// NOTE: This follows Material Design ❌
+// Updated for better contrast ❌
+```
+
+### ✅✅✅ ONLY ALLOWED:
+```typescript
+// Clean code with NO comments:
+primary: 'hsl(237.7, 85.6%, 62%)',
+success: '#059669',
+background: '#ffffff',
+
+// JSDoc for PUBLIC APIs only:
+/**
+ * Creates a theme configuration
+ * @param options - Theme options
+ * @returns Theme object
+ */
+export function createTheme(options) { ... }
+```
+
+**ZERO inline comments** - No exceptions, no "temporary" comments!
+
 ### Code Style for Themes
 - NO inline comments explaining color adjustments
 - NO implementation notes in theme files
 - Document color decisions in PR/commit messages
 - Keep theme files clean and readable
-
-```typescript
-// ❌ AVOID:
-primary: 'hsl(237.7, 85.6%, 62%)',  // Darkened for 4.5:1 contrast
-success: '#059669',  // WCAG AA compliant
-
-// ✅ PREFERRED:
-primary: 'hsl(237.7, 85.6%, 62%)',
-success: '#059669',
-```
 
 ### 2. **Sophisticated Shadow System**
 Modern themes need layered shadows for depth:

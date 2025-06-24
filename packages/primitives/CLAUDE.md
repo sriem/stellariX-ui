@@ -371,23 +371,54 @@ export const Showcase = {
 
 ## 📝 Code Style Guidelines
 
-### Clean Code Practices
-- NO inline comments explaining code changes (e.g., `// Updated for WCAG compliance`)
-- NO implementation notes in production code
-- Keep code self-documenting through clear naming
-- Use JSDoc comments only for public APIs
-- Place explanatory comments in PR descriptions, not code
+### 🚨🚨🚨 ABSOLUTE RULE: NO INLINE COMMENTS
 
-### Example:
+**THIS IS A ZERO-TOLERANCE RULE**: Absolutely NO inline comments are allowed in ANY file within the primitives directory!
+
+#### ❌❌❌ COMPLETELY FORBIDDEN:
 ```typescript
-// ❌ AVOID:
-primary: 'hsl(237.7, 85.6%, 62%)',  // Darkened for 4.5:1 contrast
-success: '#059669',  // Updated for WCAG AA compliance
-
-// ✅ PREFERRED:
-primary: 'hsl(237.7, 85.6%, 62%)',
-success: '#059669',
+// The following are ALL violations:
+dts: false, // Temporarily disable DTS to get build working ❌
+primary: 'hsl(237.7, 85.6%, 62%)', // Darkened for contrast ❌
+setState({ field: value }); // Update state ❌
+// TODO: Fix this later ❌
+// NOTE: This is important ❌
+// FIXME: Known issue ❌
+// Updated for WCAG compliance ❌
+// Changed to fix bug ❌
 ```
+
+#### ✅✅✅ ONLY ALLOWED:
+```typescript
+// Clean code with NO comments:
+dts: false,
+primary: 'hsl(237.7, 85.6%, 62%)',
+setState({ field: value });
+
+// JSDoc for PUBLIC APIs only:
+/**
+ * Creates a button component
+ * @param options - Configuration options
+ * @returns Component instance
+ */
+export function createButton(options) { ... }
+```
+
+### Clean Code Practices
+- **ZERO inline comments** - No exceptions, no "temporary" comments
+- **NO implementation notes** in any code
+- **NO TODO/FIXME/NOTE comments** - Use issue tracker instead
+- Keep code self-documenting through clear naming
+- Use JSDoc comments ONLY for public API documentation
+- Place ALL explanations in PR descriptions or documentation files
+
+### WHY THIS RULE EXISTS:
+1. Comments become outdated and misleading
+2. They clutter the code
+3. They indicate the code isn't self-explanatory
+4. They violate our clean code principles
+
+**REMEMBER**: If you feel you need a comment, refactor the code to be clearer instead!
 
 ## 🚫 Common Pitfalls to Avoid
 

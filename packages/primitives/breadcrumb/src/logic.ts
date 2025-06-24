@@ -32,7 +32,6 @@ export function getDisplayedItems(state: BreadcrumbState) {
         return state.items;
     }
     
-    // Truncate items in the middle
     const firstCount = Math.floor((state.maxItems - 1) / 2);
     const lastCount = state.maxItems - 1 - firstCount;
     
@@ -101,8 +100,6 @@ export function createBreadcrumbLogic(
         
         // Individual breadcrumb items
         .withA11y('item', (currentState) => {
-            // Note: We'll need to handle item-specific props differently
-            // as LogicLayerBuilder doesn't support additional parameters
             return {
                 role: 'listitem',
             };
@@ -110,8 +107,6 @@ export function createBreadcrumbLogic(
         
         // Links within items
         .withA11y('link', (currentState) => {
-            // Note: We'll need to handle link-specific props differently
-            // as LogicLayerBuilder doesn't support additional parameters
             return {
                 tabIndex: currentState.disabled ? -1 : 0,
             };

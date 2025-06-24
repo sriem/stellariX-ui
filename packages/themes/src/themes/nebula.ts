@@ -9,15 +9,12 @@ export const nebulaLight: Theme = {
     name: 'nebula-light',
     mode: 'light',
     colors: {
-        // Base colors - Clean futuristic canvas
         background: 'hsl(0, 0%, 98%)',
         foreground: 'hsl(239.5, 29.4%, 12.7%)',
         
-        // Component colors - Crisp surfaces
         card: 'hsl(0, 0%, 100%)',
         cardForeground: 'hsl(239.5, 29.4%, 12.7%)',
         
-        // Interactive colors - Deep tech blues
         primary: 'hsl(203.8, 69.7%, 26.1%)',
         primaryForeground: 'hsl(0, 0%, 100%)',
         primaryHover: 'hsl(203.8, 69.7%, 19.4%)',
@@ -27,7 +24,6 @@ export const nebulaLight: Theme = {
         secondaryHover: 'hsl(207.3, 56.1%, 36.5%)',
         secondaryHoverForeground: 'hsl(0, 0%, 100%)',
         
-        // Semantic colors - Vibrant (WCAG AA compliant)
         destructive: '#d62828',
         destructiveForeground: '#ffffff',
         destructiveHover: '#c42020',
@@ -45,7 +41,6 @@ export const nebulaLight: Theme = {
         infoHover: '#006090',
         infoHoverForeground: '#ffffff',
         
-        // UI colors - Tech grays
         muted: 'hsl(0, 0%, 94.1%)',
         mutedForeground: 'hsl(0, 0%, 25%)',
         accent: 'hsl(0, 0%, 91%)',

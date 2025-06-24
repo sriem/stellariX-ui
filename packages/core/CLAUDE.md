@@ -167,6 +167,41 @@ expect(mockCallback).toHaveBeenCalledWith('test');
    - Always remove event listeners
    - Properly cleanup derived stores
 
+## 🚨🚨🚨 ABSOLUTE RULE: NO INLINE COMMENTS
+
+**THIS IS A ZERO-TOLERANCE RULE**: Absolutely NO inline comments are allowed in ANY file within the core package!
+
+### ❌❌❌ COMPLETELY FORBIDDEN:
+```typescript
+// The following are ALL violations:
+dts: false, // Temporarily disable DTS to get build working ❌
+primary: 'hsl(237.7, 85.6%, 62%)', // Darkened for contrast ❌
+setState({ field: value }); // Update state ❌
+// TODO: Fix this later ❌
+// NOTE: This is important ❌
+// FIXME: Known issue ❌
+// Updated for WCAG compliance ❌
+// Changed to fix bug ❌
+```
+
+### ✅✅✅ ONLY ALLOWED:
+```typescript
+// Clean code with NO comments:
+dts: false,
+primary: 'hsl(237.7, 85.6%, 62%)',
+setState({ field: value });
+
+// JSDoc for PUBLIC APIs only:
+/**
+ * Creates a state store
+ * @param initialState - Initial state
+ * @returns State store instance
+ */
+export function createStateStore(initialState) { ... }
+```
+
+**ZERO inline comments** - No exceptions, no "temporary" comments!
+
 ## ✅ Core Development Checklist
 
 Before considering core changes complete:

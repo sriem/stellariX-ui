@@ -33,7 +33,6 @@
 import React, { useState, useCallback, FormEvent } from 'react';
 import { createDialogWithImplementation } from '../src';
 
-// NOTE: In a real application, you would import the adapter like this:
 // import { reactAdapter } from '@stellarix-ui/react';
 // For this example, we'll create a simple mock adapter
 const reactAdapter = {

@@ -7,7 +7,7 @@ import { createPrimitive } from '@stellarix-ui/core';
 import type { ComponentCore } from '@stellarix-ui/core';
 import { createBreadcrumbState } from './state';
 import { createBreadcrumbLogic } from './logic';
-import type { BreadcrumbState, BreadcrumbEvents, BreadcrumbOptions, BreadcrumbItem } from './types';
+import type { BreadcrumbState, BreadcrumbEvents, BreadcrumbOptions } from './types';
 
 /**
  * Creates a breadcrumb component

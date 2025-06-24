@@ -283,6 +283,39 @@ useEffect(() => {
 }, []);
 ```
 
+## 🚨🚨🚨 ABSOLUTE RULE: NO INLINE COMMENTS
+
+**THIS IS A ZERO-TOLERANCE RULE**: Absolutely NO inline comments are allowed in ANY file within the adapters package!
+
+### ❌❌❌ COMPLETELY FORBIDDEN:
+```typescript
+// The following are ALL violations:
+const adapter = createAdapter(); // Create the adapter ❌
+optimize: false, // TODO: Add optimizations ❌
+return component; // Return the component ❌
+// FIXME: Memory leak here ❌
+// NOTE: React 19 pattern ❌
+// Changed for compatibility ❌
+```
+
+### ✅✅✅ ONLY ALLOWED:
+```typescript
+// Clean code with NO comments:
+const adapter = createAdapter();
+optimize: false,
+return component;
+
+// JSDoc for PUBLIC APIs only:
+/**
+ * Creates a React adapter
+ * @param options - Adapter options
+ * @returns Framework adapter
+ */
+export function createReactAdapter(options) { ... }
+```
+
+**ZERO inline comments** - No exceptions, no "temporary" comments!
+
 ## ✅ Adapter Development Checklist
 
 Before considering an adapter complete:
