@@ -7,7 +7,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import React, { useState, useEffect } from 'react';
 import { createCardWithImplementation } from '../src';
 import { reactAdapter } from '@stellarix-ui/react';
-import { themes, themeToCSSVariables } from '@stellarix-ui/themes';
+import { themes, themeToCSSVariables } from '@stellarix/themes';
 
 const meta = {
     title: 'Themed/Card',
@@ -89,15 +89,26 @@ const ThemedCard = ({
     ...options 
 }: any) => {
     const [selected, setSelected] = useState(options.selected || false);
+    const [isHovered, setIsHovered] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
     
-    const cardFactory = createCardWithImplementation({
+    const [cardFactory] = useState(() => createCardWithImplementation({
         ...options,
         variant: 'simple', // We'll apply our own styling
         selected,
         onSelectionChange: setSelected,
-    });
+    }));
     
-    const Card = cardFactory.connect(reactAdapter);
+    const Card = React.useMemo(() => cardFactory.connect(reactAdapter), [cardFactory]);
+    
+    // Subscribe to state changes safely
+    React.useEffect(() => {
+        const unsubscribe = cardFactory.state.subscribe((state) => {
+            setIsHovered(state.hovered);
+            setIsFocused(state.focused);
+        });
+        return unsubscribe;
+    }, [cardFactory]);
     
     // Variant styles using CSS variables
     const variantStyles = {
@@ -124,8 +135,6 @@ const ThemedCard = ({
     };
     
     const currentVariant = variantStyles[variant as keyof typeof variantStyles] || variantStyles.simple;
-    const isHovered = cardFactory.state.getState().hovered;
-    const isFocused = cardFactory.state.getState().focused;
     
     // Effect classes
     const effectClasses = [
