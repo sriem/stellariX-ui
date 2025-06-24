@@ -115,13 +115,22 @@ export function createAccordionLogic(
             }
             
             if (options.onExpandedChange) {
-                // Get updated expanded items after toggle
+                // Calculate what the new expanded items will be
+                let newExpandedItems: string[];
+                if (isExpanded) {
+                    // Item was expanded, now it will be collapsed
+                    newExpandedItems = currentState.expandedItems.filter(id => id !== itemId);
+                } else {
+                    // Item was collapsed, now it will be expanded
+                    if (currentState.multiple) {
+                        newExpandedItems = [...currentState.expandedItems, itemId];
+                    } else {
+                        newExpandedItems = [itemId];
+                    }
+                }
+                
+                // Call the callback after state update
                 setTimeout(() => {
-                    let newExpandedItems: string[] = [];
-                    const unsubscribe = state.subscribe((newState) => {
-                        newExpandedItems = newState.expandedItems;
-                    });
-                    unsubscribe();
                     options.onExpandedChange(newExpandedItems);
                 }, 0);
             }
@@ -157,13 +166,22 @@ export function createAccordionLogic(
                         }
                         
                         if (options.onExpandedChange) {
-                            // Get updated expanded items after toggle
+                            // Calculate what the new expanded items will be
+                            let newExpandedItems: string[];
+                            if (isExpanded) {
+                                // Item was expanded, now it will be collapsed
+                                newExpandedItems = currentState.expandedItems.filter(id => id !== itemId);
+                            } else {
+                                // Item was collapsed, now it will be expanded
+                                if (currentState.multiple) {
+                                    newExpandedItems = [...currentState.expandedItems, itemId];
+                                } else {
+                                    newExpandedItems = [itemId];
+                                }
+                            }
+                            
+                            // Call the callback after state update
                             setTimeout(() => {
-                                let newExpandedItems: string[] = [];
-                                const unsubscribe = state.subscribe((newState) => {
-                                    newExpandedItems = newState.expandedItems;
-                                });
-                                unsubscribe();
                                 options.onExpandedChange(newExpandedItems);
                             }, 0);
                         }

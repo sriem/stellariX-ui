@@ -227,7 +227,7 @@ describe('Accordion Logic', () => {
         expect(handlers).toHaveProperty('onBlur');
     });
     
-    it('should handle trigger click', (done) => {
+    it('should handle trigger click', async () => {
         const listener = vi.fn();
         stateStore.subscribe(listener);
         
@@ -240,15 +240,14 @@ describe('Accordion Logic', () => {
         
         handlers.onClick?.(mockEvent);
         
-        // Small timeout to allow for async callback execution
-        setTimeout(() => {
-            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
-                expandedItems: ['item1']
-            }));
-            expect(mockOnItemToggle).toHaveBeenCalledWith('item1', true);
-            expect(mockOnExpandedChange).toHaveBeenCalledWith(['item1']);
-            done();
-        }, 50);
+        // Wait for next tick to allow for async callback execution
+        await new Promise(resolve => setTimeout(resolve, 10));
+        
+        expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+            expandedItems: ['item1']
+        }));
+        expect(mockOnItemToggle).toHaveBeenCalledWith('item1', true);
+        expect(mockOnExpandedChange).toHaveBeenCalledWith(['item1']);
     });
     
     it('should not trigger click on disabled accordion', () => {
@@ -298,7 +297,7 @@ describe('Accordion Logic', () => {
         }));
     });
     
-    it('should handle keyboard navigation', (done) => {
+    it('should handle keyboard navigation', async () => {
         const handlers = logic.getInteractionHandlers('trigger');
         const listener = vi.fn();
         stateStore.subscribe(listener);
@@ -313,13 +312,13 @@ describe('Accordion Logic', () => {
         
         handlers.onKeyDown?.(enterEvent);
         
-        setTimeout(() => {
-            expect(enterEvent.preventDefault).toHaveBeenCalled();
-            expect(listener).toHaveBeenCalledWith(expect.objectContaining({
-                expandedItems: ['item1']
-            }));
-            done();
-        }, 50);
+        // Wait for next tick to allow for async callback execution
+        await new Promise(resolve => setTimeout(resolve, 10));
+        
+        expect(enterEvent.preventDefault).toHaveBeenCalled();
+        expect(listener).toHaveBeenCalledWith(expect.objectContaining({
+            expandedItems: ['item1']
+        }));
     });
     
     it('should handle arrow key navigation', () => {
