@@ -139,7 +139,7 @@ export function createAccordionLogic(
             switch (event.key) {
                 case 'Enter':
                 case ' ':
-                case 'Space':
+                case 'Space': {
                     event.preventDefault();
                     const item = currentState.items[currentIndex];
                     if (!item.disabled) {
@@ -171,6 +171,7 @@ export function createAccordionLogic(
                         return 'itemToggle';
                     }
                     break;
+                }
                     
                 case 'ArrowDown':
                     event.preventDefault();
@@ -202,7 +203,7 @@ export function createAccordionLogic(
                     }
                     break;
                     
-                case 'Home':
+                case 'Home': {
                     event.preventDefault();
                     // Find first non-disabled item
                     const firstItem = currentState.items.find(item => !item.disabled);
@@ -213,8 +214,9 @@ export function createAccordionLogic(
                         return 'navigate';
                     }
                     break;
+                }
                     
-                case 'End':
+                case 'End': {
                     event.preventDefault();
                     // Find last non-disabled item
                     const lastItem = [...currentState.items].reverse().find(item => !item.disabled);
@@ -225,6 +227,7 @@ export function createAccordionLogic(
                         return 'navigate';
                     }
                     break;
+                }
             }
             
             return null;

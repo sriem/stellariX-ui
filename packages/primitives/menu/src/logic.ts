@@ -222,7 +222,7 @@ export function createMenuLogic(
                     return 'navigate';
                     
                 case 'Enter':
-                case ' ':
+                case ' ': {
                     event.preventDefault();
                     const activeItem = state.getActiveItem();
                     if (activeItem && !activeItem.disabled) {
@@ -236,8 +236,9 @@ export function createMenuLogic(
                         }
                     }
                     break;
+                }
                     
-                case 'ArrowRight':
+                case 'ArrowRight': {
                     event.preventDefault();
                     const currentItem = state.getActiveItem();
                     if (currentItem?.items && !currentItem.disabled) {
@@ -245,6 +246,7 @@ export function createMenuLogic(
                         state.navigateToFirst();
                     }
                     break;
+                }
                     
                 case 'ArrowLeft':
                 case 'Escape':
