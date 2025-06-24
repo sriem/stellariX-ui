@@ -13,23 +13,30 @@
    - Better TypeScript support
    - Enhanced coverage reporting
 
-3. **pnpm**: Updated from `8.6.0` to `10.0.0`
+3. **Storybook**: Updated from `^8.6.14` to `^9.0.0`
+   - 50% smaller bundle size than Storybook 8
+   - Flatter dependency structure - installs faster
+   - Enhanced testing capabilities (component, interaction, a11y, visual)
+   - New Tags feature for organizing stories
+   - Requires TypeScript 4.9+ and Node.js 20+
+
+4. **pnpm**: Updated from `8.6.0` to `10.0.0`
    - Changed default hoisting patterns (removed eslint/prettier from default)
    - Better monorepo support
    - Improved performance
 
-4. **Node.js**: Updated minimum version from `>=18` to `>=20`
+5. **Node.js**: Updated minimum version from `>=18` to `>=20`
    - Node.js 18 EOL is April 2025
    - Better performance and native features
+   - Required for Storybook 9
 
-5. **Package Name**: Changed from `@stellarix/ui` to `@stellarix-ui/monorepo`
+6. **Package Name**: Changed from `@stellarix/ui` to `@stellarix-ui/monorepo`
    - Consistent with the rest of the packages
 
 ## Already Using Latest Versions ✅
 - **React 19**: Latest with ref as prop, useActionState, use hook
 - **TypeScript 5.7**: Latest with bundler module resolution
 - **ESLint 9**: Latest with flat config support
-- **Storybook 8.6**: Latest with improved accessibility testing
 - **Turbo 2.0**: Latest with new terminal UI and watch mode
 - **Svelte 5**: Latest with revolutionary runes system
 - **Vue 3.5**: Latest with improved Composition API
@@ -47,6 +54,13 @@ The vitest.config.ts may need updates:
 - Check for breaking changes in configuration
 - Update test globals if needed
 - Consider new browser mode features
+
+### Storybook 9 Migration
+Storybook 9 has breaking changes:
+- TypeScript < 4.9 no longer supported (we have 5.7 ✓)
+- Node.js 20+ required (we updated to 20 ✓)
+- Many packages consolidated into core
+- Run `npx storybook@latest upgrade` to migrate configuration
 
 ### ESLint 9 Flat Config
 Already using ESLint 9, but ensure flat config is properly set up:
