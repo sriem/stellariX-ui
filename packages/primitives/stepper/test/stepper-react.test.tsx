@@ -22,7 +22,7 @@ const TestStepper = (props: any) => {
     };
     return createStepper(cleanedProps);
   });
-  const Component = React.useMemo(() => stepper.connect(reactAdapter), [stepper]);
+  const StepperComponent = React.useMemo(() => stepper.connect(reactAdapter), [stepper]);
   
   // Subscribe to state for rendering - use default structure that matches state.ts
   const [state, setState] = React.useState(() => ({
@@ -87,85 +87,9 @@ const TestStepper = (props: any) => {
     )) : {};
   
   return (
-    <div {...safeRootA11y} data-testid="stepper-root">
-      <ol {...safeListA11y} style={{ listStyle: 'none', display: 'flex', gap: '20px' }}>
-        {state.steps.map((step, index) => {
-          try {
-            // Validate step data to prevent rendering issues
-            if (!step || typeof step !== 'object') {
-              console.warn('Invalid step data:', step);
-              return <li key={`invalid-${index}`}>Invalid step {index}</li>;
-            }
-            
-            const stepA11yGetter = stepper.logic.getA11yProps('step');
-            const stepA11y = typeof stepA11yGetter === 'function' ? stepA11yGetter(index) : {};
-            const buttonA11yGetter = stepper.logic.getA11yProps('stepButton');
-            const buttonA11y = typeof buttonA11yGetter === 'function' ? buttonA11yGetter(index) : {};
-            
-            // Ensure a11y props don't contain React elements
-            const safeStepA11y = stepA11y && typeof stepA11y === 'object' ? 
-              Object.fromEntries(Object.entries(stepA11y).filter(([_, value]) => 
-                typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
-              )) : {};
-            const safeButtonA11y = buttonA11y && typeof buttonA11y === 'object' ? 
-              Object.fromEntries(Object.entries(buttonA11y).filter(([_, value]) => 
-                typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
-              )) : {};
-            const buttonHandlers = stepper.logic.getInteractionHandlers('stepButton') || {};
-            
-            // Attach index to handlers - ensure handlers are functions
-            const handlersWithIndex = Object.entries(buttonHandlers).reduce((acc, [key, handler]) => {
-              if (typeof handler === 'function') {
-                acc[key] = (event: any) => {
-                  event.index = index;
-                  handler(event);
-                };
-              }
-              return acc;
-            }, {} as any);
-            
-            const status = stepper.getStepStatus(index, state);
-            
-            // Ensure status is a valid string to prevent React child error
-            const validStatus = typeof status === 'string' ? status : 'upcoming';
-            
-            // Ensure step.label is a valid string
-            const validLabel = typeof step.label === 'string' ? step.label : `Step ${index + 1}`;
-            
-            // Ensure step.errorMessage is a valid string if present
-            const validErrorMessage = step.error && typeof step.errorMessage === 'string' ? step.errorMessage : '';
-            
-            return (
-              <li key={step.id || `step-${index}`} {...safeStepA11y}>
-                <button
-                  {...safeButtonA11y}
-                  {...handlersWithIndex}
-                  data-testid={`step-${index}`}
-                  data-status={validStatus}
-                  style={{
-                    padding: '10px',
-                    borderRadius: '50%',
-                    width: '40px',
-                    height: '40px',
-                    border: validStatus === 'active' ? '2px solid blue' : '1px solid gray',
-                    backgroundColor: validStatus === 'completed' ? 'green' : 'white',
-                    color: validStatus === 'completed' ? 'white' : 'black',
-                  }}
-                >
-                  {validStatus === 'completed' ? '✓' : index + 1}
-                </button>
-                <span>{validLabel}</span>
-                {step.error && validErrorMessage && (
-                  <span data-testid={`error-${index}`}>{validErrorMessage}</span>
-                )}
-              </li>
-            );
-          } catch (error) {
-            console.error('Error rendering step:', error);
-            return <li key={`error-${index}`}>Error rendering step {index}</li>;
-          }
-        })}
-      </ol>
+    <>
+      {/* Use the React adapter component */}
+      <StepperComponent {...props} />
       
       {/* Navigation controls for testing */}
       <div style={{ marginTop: '20px' }}>
@@ -179,7 +103,7 @@ const TestStepper = (props: any) => {
           Reset
         </button>
       </div>
-    </div>
+    </>
   );
 };
 
