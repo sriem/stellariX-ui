@@ -241,12 +241,12 @@ export function createClientComponent<P extends object>(
 export function useStellarIXAction<TState, TResult>(
     action: (prevState: TState, formData: FormData) => Promise<TResult>,
     initialState: TState,
-    permalink?: string
+    _permalink?: string
 ) {
     // This would use React 19's useActionState when available
     // For now, we'll provide a type-safe interface
     // In React 19: import { useActionState } from 'react';
-    // return useActionState(action, initialState, permalink);
+    // return useActionState(action, initialState, _permalink);
     return [initialState, action, false] as const;
 }
 
