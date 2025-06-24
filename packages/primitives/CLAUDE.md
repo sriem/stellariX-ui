@@ -163,18 +163,46 @@ it('should handle click interaction', () => {
 });
 ```
 
-### Step 6: Storybook Pattern
+### Step 6: Create Storybook Story
+
+#### Story File Creation
+```bash
+# The template now includes Component.stories.tsx
+# Just update the placeholders as you did with other files
+```
+
+#### Story Pattern
 ```typescript
-// ✅ CORRECT - use subscription pattern:
-const [componentState, setComponentState] = useState(() => component.state.getState());
-useEffect(() => {
-  const unsubscribe = component.state.subscribe(setComponentState);
-  return unsubscribe;
-}, []);
+// ✅ CORRECT - use wrapper pattern for state management:
+import React from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { createComponentWithImplementation } from './index';
+import { reactAdapter } from '@stellarix-ui/react';
+
+// Create wrapper to manage individual instances
+const ComponentWrapper = React.forwardRef((props: any, ref: any) => {
+  const [component] = React.useState(() => createComponentWithImplementation(props));
+  const Component = React.useMemo(() => component.connect(reactAdapter), [component]);
+  
+  // Update component state when props change
+  React.useEffect(() => {
+    if (props.value !== undefined) {
+      component.state.setValue(props.value);
+    }
+  }, [props.value, component]);
+  
+  return <Component ref={ref} {...props} />;
+});
 
 // ❌ FORBIDDEN - causes infinite loops:
-const state = component.state.getState(); // NEVER DO THIS!
+const state = component.state.getState(); // NEVER DO THIS IN STORIES!
 ```
+
+#### Required Story Sections
+1. **Basic Stories**: Default, WithValue, Disabled, Loading, Error
+2. **Interactive Example**: Shows state changes
+3. **Showcase Story**: Grid of all variations
+4. **Accessibility Story**: Demonstrates a11y features
 
 ### Step 7: Run Tests with Timeout Protection
 ```bash

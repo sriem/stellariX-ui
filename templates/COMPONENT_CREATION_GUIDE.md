@@ -25,7 +25,13 @@ This guide explains how to create new components using the component template.
    - Update `logic.ts` with event handlers and interactions
    - Update `index.ts` metadata (role, element type, etc.)
 
-5. **Run tests**:
+5. **Create Storybook story**:
+   - Update `src/Component.stories.tsx` with your component name
+   - Replace placeholders just like other files
+   - Add component-specific stories and props
+   - Include all variations and edge cases
+
+6. **Run tests**:
    ```bash
    timeout 30s pnpm test
    ```
@@ -36,12 +42,14 @@ This guide explains how to create new components using the component template.
 - [ ] State management in `state.ts`
 - [ ] Logic layer in `logic.ts`
 - [ ] Metadata updated in `index.ts`
+- [ ] Storybook story created in `Component.stories.tsx`
 - [ ] All tests passing
 - [ ] No circular dependencies
 - [ ] No framework-specific code
 - [ ] Accessibility props implemented
 - [ ] Event handlers working
 - [ ] Package builds successfully
+- [ ] Story shows all variations and edge cases
 
 ## Common Patterns
 
@@ -120,11 +128,19 @@ cd packages/primitives/input
 # - Add value handling in state
 # - Add input/change events in logic
 
-# 6. Test
+# 6. Create Storybook story
+# - Update Component.stories.tsx → Input.stories.tsx
+# - Add input-specific stories (placeholder, disabled, error states)
+
+# 7. Test
 timeout 30s pnpm test
 
-# 7. Build
+# 8. Build
 timeout 30s pnpm build
+
+# 9. View in Storybook
+pnpm storybook
+# Navigate to Primitives/Input
 ```
 
 ## Troubleshooting

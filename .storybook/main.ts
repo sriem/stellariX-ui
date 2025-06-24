@@ -1,4 +1,8 @@
+import { createRequire } from "node:module";
+import { dirname, join } from "node:path";
 import type { StorybookConfig } from '@storybook/react-vite';
+
+const require = createRequire(import.meta.url);
 
 const config: StorybookConfig = {
   stories: [
@@ -9,27 +13,25 @@ const config: StorybookConfig = {
     // Load stories from themes package
     '../packages/themes/**/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
   ],
-  addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-a11y',
-    '@storybook/addon-interactions',
-  ],
+
+  addons: [getAbsolutePath("@storybook/addon-a11y"), getAbsolutePath("@storybook/addon-docs")],
+
   framework: {
-    name: '@storybook/react-vite',
+    name: getAbsolutePath("@storybook/react-vite"),
     options: {},
   },
+
   typescript: {
     // Use react-docgen for better monorepo support
     reactDocgen: 'react-docgen',
     check: false,
   },
-  docs: {
-    autodocs: 'tag',
-  },
+
   // Core configuration
   core: {
     disableTelemetry: true,
   },
+
   // Vite configuration
   async viteFinal(config) {
     // Ensure proper module resolution for our monorepo
@@ -39,13 +41,17 @@ const config: StorybookConfig = {
         ...config.resolve,
         alias: {
           ...config.resolve?.alias,
-          '@stellarix/core': '/packages/core/src',
-          '@stellarix/utils': '/packages/utils/src',
-          '@stellarix/react': '/packages/adapters/react/src',
+          '@stellarix-ui/core': '/packages/core/src',
+          '@stellarix-ui/utils': '/packages/utils/src',
+          '@stellarix-ui/react': '/packages/adapters/react/src',
         },
       },
     };
-  },
+  }
 };
 
 export default config;
+
+function getAbsolutePath(value: string): any {
+  return dirname(require.resolve(join(value, "package.json")));
+}
