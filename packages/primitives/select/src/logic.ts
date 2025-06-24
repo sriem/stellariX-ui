@@ -152,7 +152,7 @@ export function createSelectLogic(
         .withA11y('option', (state) => (index: number) => ({
             role: 'option',
             id: `${componentId}-option-${index}`,
-            'aria-selected': state.filteredOptions[index]?.value === state.value,
+            'aria-selected': index === state.highlightedIndex,
             'aria-disabled': state.filteredOptions[index]?.disabled || false
         }))
         
