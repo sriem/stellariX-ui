@@ -111,7 +111,7 @@ describe('Select React Integration', () => {
         fireEvent.click(appleOption);
         
         await waitFor(() => {
-            expect(onChange).toHaveBeenCalledWith('apple');
+            expect(onChange).toHaveBeenCalledWith('apple', expect.objectContaining({ value: 'apple', label: 'Apple' }));
             expect(trigger).toHaveTextContent('Apple');
             expect(trigger).toHaveAttribute('aria-expanded', 'false');
         });
@@ -174,7 +174,7 @@ describe('Select React Integration', () => {
         fireEvent.keyDown(trigger, { key: 'Enter', code: 'Enter' });
         
         await waitFor(() => {
-            expect(onChange).toHaveBeenCalledWith('banana');
+            expect(onChange).toHaveBeenCalledWith('banana', expect.objectContaining({ value: 'banana', label: 'Banana' }));
             expect(trigger).toHaveTextContent('Banana');
         });
     });
@@ -228,7 +228,7 @@ describe('Select React Integration', () => {
         fireEvent.click(screen.getByText('Orange'));
         
         await waitFor(() => {
-            expect(onChange).toHaveBeenCalledWith('orange');
+            expect(onChange).toHaveBeenCalledWith('orange', expect.objectContaining({ value: 'orange', label: 'Orange' }));
         });
         
         // Rerender with new value

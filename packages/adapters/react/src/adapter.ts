@@ -468,8 +468,10 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             `${listboxId}-option-${selectState.highlightedIndex}` : undefined,
                         disabled: selectState.disabled,
                         'aria-readonly': selectState.readonly,
-                        // Pass through aria-label and aria-labelledby from props
-                        'aria-label': (restProps as any)['aria-label'],
+                        // Pass through aria-label and aria-labelledby from props or provide default
+                        'aria-label': (restProps as any)['aria-label'] || 
+                                     (selectedOption ? `Selected: ${selectedOption.label}` : 
+                                      selectState.placeholder || 'Select an option'),
                         'aria-labelledby': (restProps as any)['aria-labelledby'],
                         'aria-describedby': (restProps as any)['aria-describedby'],
                         className: `${className || ''} select-trigger`,
@@ -495,10 +497,8 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                                 placeholder: selectedOption ? selectedOption.label : selectState.placeholder || 'Search options...',
                                 value: selectState.searchQuery || '',
                                 onChange: (e: any) => {
-                                    const searchHandlers = logic.getInteractionHandlers('search');
-                                    if (searchHandlers.onChange) {
-                                        searchHandlers.onChange({ target: { value: e.target.value } });
-                                    }
+                                    // Trigger search event through logic
+                                    logic.handleEvent('search', { query: e.target.value });
                                 },
                                 style: {
                                     border: 'none',
@@ -617,6 +617,165 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                     },
                     className
                 }, elements);
+            }
+            
+            // Handle Stepper component (compound component with steps, buttons, connectors)
+            if (core.metadata.name === 'Stepper') {
+                const stepperState = state as any;
+                
+                // Get A11y props and handlers for stepper elements
+                const rootA11y = logic.getA11yProps('root');
+                const listA11y = logic.getA11yProps('list');
+                
+                // Filter A11y props to ensure no React elements leak through
+                const safeRootA11y = rootA11y && typeof rootA11y === 'object' ? 
+                    Object.fromEntries(Object.entries(rootA11y).filter(([_, value]) => 
+                        typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+                    )) : {};
+                const safeListA11y = listA11y && typeof listA11y === 'object' ? 
+                    Object.fromEntries(Object.entries(listA11y).filter(([_, value]) => 
+                        typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+                    )) : {};
+                
+                // Generate step elements
+                const stepElements = (stepperState.steps || []).map((step: any, index: number) => {
+                    // Validate step data to prevent rendering issues
+                    if (!step || typeof step !== 'object') {
+                        console.warn('Invalid step data:', step);
+                        return createElement('li', { key: `invalid-${index}` }, `Invalid step ${index}`);
+                    }
+                    
+                    // Get A11y props for step and button
+                    const stepA11yGetter = logic.getA11yProps('step');
+                    const stepA11y = typeof stepA11yGetter === 'function' ? stepA11yGetter(index) : {};
+                    const buttonA11yGetter = logic.getA11yProps('stepButton');
+                    const buttonA11y = typeof buttonA11yGetter === 'function' ? buttonA11yGetter(index) : {};
+                    
+                    // Filter A11y props to prevent React elements
+                    const safeStepA11y = stepA11y && typeof stepA11y === 'object' ? 
+                        Object.fromEntries(Object.entries(stepA11y).filter(([_, value]) => 
+                            typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+                        )) : {};
+                    const safeButtonA11y = buttonA11y && typeof buttonA11y === 'object' ? 
+                        Object.fromEntries(Object.entries(buttonA11y).filter(([_, value]) => 
+                            typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+                        )) : {};
+                    
+                    // Get interaction handlers for step button
+                    const buttonHandlers = logic.getInteractionHandlers('stepButton') || {};
+                    
+                    // Convert interaction handlers to React format with index
+                    const reactButtonHandlers = Object.fromEntries(
+                        Object.entries(buttonHandlers).map(([event, handler]) => [
+                            event,
+                            (e: any) => {
+                                e.index = index;
+                                const result = (handler as Function)(e);
+                                if (result && typeof result === 'string') {
+                                    logic.handleEvent(result, e);
+                                }
+                            }
+                        ])
+                    );
+                    
+                    // Get step status using helper method
+                    const getStepStatus = (core as any).getStepStatus;
+                    const status = typeof getStepStatus === 'function' ? getStepStatus(index, stepperState) : 'upcoming';
+                    const validStatus = typeof status === 'string' ? status : 'upcoming';
+                    
+                    // Ensure step properties are valid for rendering
+                    const validLabel = typeof step.label === 'string' ? step.label : `Step ${index + 1}`;
+                    const validErrorMessage = step.error && typeof step.errorMessage === 'string' ? step.errorMessage : '';
+                    
+                    // Create step content based on status
+                    const stepContent = validStatus === 'completed' ? '✓' : (index + 1).toString();
+                    
+                    return createElement('li', {
+                        key: step.id || `step-${index}`,
+                        ...safeStepA11y,
+                        'data-part': 'step',
+                        style: {
+                            display: stepperState.orientation === 'vertical' ? 'block' : 'inline-block',
+                            marginRight: stepperState.orientation === 'horizontal' ? '20px' : '0',
+                            marginBottom: stepperState.orientation === 'vertical' ? '20px' : '0'
+                        }
+                    }, [
+                        // Step button
+                        createElement('button', {
+                            key: 'button',
+                            ...safeButtonA11y,
+                            ...reactButtonHandlers,
+                            'data-part': 'step-button',
+                            'data-testid': `step-${index}`,
+                            'data-status': validStatus,
+                            disabled: stepperState.disabled || step.disabled,
+                            style: {
+                                padding: '10px',
+                                borderRadius: '50%',
+                                width: '40px',
+                                height: '40px',
+                                border: validStatus === 'active' ? '2px solid #007acc' : '1px solid #ccc',
+                                backgroundColor: validStatus === 'completed' ? '#28a745' : 
+                                                validStatus === 'error' ? '#dc3545' : 'white',
+                                color: validStatus === 'completed' || validStatus === 'error' ? 'white' : '#333',
+                                cursor: stepperState.disabled || step.disabled ? 'not-allowed' : 'pointer'
+                            }
+                        }, stepContent),
+                        
+                        // Step label
+                        validLabel && createElement('span', {
+                            key: 'label',
+                            'data-part': 'step-label',
+                            style: {
+                                marginLeft: '10px',
+                                fontWeight: validStatus === 'active' ? 'bold' : 'normal',
+                                color: validStatus === 'error' ? '#dc3545' : 
+                                       validStatus === 'active' ? '#007acc' : '#333'
+                            }
+                        }, validLabel),
+                        
+                        // Error message if present
+                        step.error && validErrorMessage && createElement('span', {
+                            key: 'error',
+                            'data-part': 'step-error',
+                            'data-testid': `error-${index}`,
+                            style: {
+                                display: 'block',
+                                color: '#dc3545',
+                                fontSize: '12px',
+                                marginTop: '5px'
+                            }
+                        }, validErrorMessage)
+                    ]);
+                });
+                
+                // Return stepper container with step list
+                return createElement('div', {
+                    ...domProps,
+                    ...safeRootA11y,
+                    ref,
+                    className,
+                    style: {
+                        display: 'block',
+                        ...style
+                    },
+                    'data-part': 'stepper',
+                    'data-testid': 'stepper-root'
+                }, [
+                    createElement('ol', {
+                        key: 'steps',
+                        ...safeListA11y,
+                        'data-part': 'step-list',
+                        style: {
+                            listStyle: 'none',
+                            display: 'flex',
+                            flexDirection: stepperState.orientation === 'vertical' ? 'column' : 'row',
+                            gap: '20px',
+                            margin: 0,
+                            padding: 0
+                        }
+                    }, stepElements)
+                ]);
             }
             
             // Void elements (input, br, hr, etc.) can't have children
