@@ -1,4 +1,5 @@
 packages:
   - 'packages/*'
   - 'packages/primitives/*'
-  - 'packages/adapters/*' 
+  - 'packages/adapters/*'
+  - 'packages/test-suite/*' 
