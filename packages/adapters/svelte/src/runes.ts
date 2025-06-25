@@ -63,7 +63,12 @@ export function createStateBindings<T extends Record<string, any>>(store: Store<
   }
   
   return {
-    get state() { return reactiveState; },
+    get state() { 
+      // Return the current state as a plain object for easier testing
+      // while maintaining reactivity through the proxy
+      const currentState = store.getState();
+      return currentState;
+    },
     update,
     reset
   };
