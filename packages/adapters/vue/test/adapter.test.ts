@@ -15,11 +15,17 @@ const createMockCore = (name: string, customState = {}, customLogic = {}) => ({
         name,
         structure: {
             elements: {
-                root: { type: 'div', role: 'generic' }
+                root: { 
+                    type: name === 'Button' ? 'button' : 
+                          name === 'Input' ? 'input' : 'div', 
+                    role: name === 'Button' ? 'button' : 
+                          name === 'Input' ? 'textbox' : 'generic' 
+                }
             }
         },
         accessibility: {
-            role: 'generic'
+            role: name === 'Button' ? 'button' : 
+                  name === 'Input' ? 'textbox' : 'generic'
         }
     },
     state: {

@@ -154,10 +154,13 @@ export const vueAdapter: FrameworkAdapter<Component> = {
                 class: String,
                 style: [String, Object] as PropType<string | Record<string, any>>,
                 
-                // Accessibility props
+                // Accessibility props (both kebab-case and camelCase for compatibility)
                 'aria-label': String,
                 'aria-labelledby': String,
                 'aria-describedby': String,
+                'ariaLabel': String,
+                'ariaLabelledby': String, 
+                'ariaDescribedby': String,
                 
                 // Component-specific props
                 type: String, // For Button, Input
@@ -182,8 +185,9 @@ export const vueAdapter: FrameworkAdapter<Component> = {
                 // Additional accessibility
                 role: String,
                 
-                // Test props
-                'data-testid': String
+                // Test props (both kebab-case and camelCase for compatibility)
+                'data-testid': String,
+                'dataTestid': String
             },
             emits: {
                 // V-model events
@@ -209,6 +213,7 @@ export const vueAdapter: FrameworkAdapter<Component> = {
             },
             setup(props, { emit, slots, attrs }) {
                 const config = inject(STELLARIX_CONFIG_KEY, {});
+                
                 
                 // Set up reactive integration with StellarIX core
                 const { state, logic } = useStellarIXComponent(core, {
@@ -320,6 +325,7 @@ export const vueAdapter: FrameworkAdapter<Component> = {
                 // Get component structure
                 const rootElement = structure.elements.root?.type || 'div';
                 const rootRole = structure.elements.root?.role || accessibility.role;
+                
 
                 // Return the render function for Vue component
                 return () => {
@@ -594,14 +600,15 @@ export const vueAdapter: FrameworkAdapter<Component> = {
                     }
 
                     // Override with explicit props (highest priority) - force override
+                    // Note: Vue converts kebab-case props to camelCase in setup()
                     const explicitPropsToForce = {
                         'class': props.class,
                         'style': props.style,
                         'id': props.id,
-                        'data-testid': props['data-testid'],
-                        'aria-label': props['aria-label'],
-                        'aria-labelledby': props['aria-labelledby'],
-                        'aria-describedby': props['aria-describedby'],
+                        'data-testid': props.dataTestid || attrs['data-testid'],
+                        'aria-label': props.ariaLabel || attrs['aria-label'],
+                        'aria-labelledby': props.ariaLabelledby || attrs['aria-labelledby'],
+                        'aria-describedby': props.ariaDescribedby || attrs['aria-describedby'],
                         'role': props.role
                     };
                     
@@ -609,16 +616,6 @@ export const vueAdapter: FrameworkAdapter<Component> = {
                     Object.entries(explicitPropsToForce).forEach(([propName, propValue]) => {
                         if (propValue !== undefined && propValue !== null) {
                             componentProps[propName] = propValue;
-                            
-                            // Debug logging for key props
-                            if (propName === 'aria-label' && hasExplicitAriaLabel) {
-                                // Force override a11y props
-                                componentProps['aria-label'] = propValue;
-                            }
-                            if (propName === 'data-testid' && hasExplicitDataTestId) {
-                                // Force override data-testid
-                                componentProps['data-testid'] = propValue;
-                            }
                         }
                     });
 

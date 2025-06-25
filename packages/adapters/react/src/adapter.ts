@@ -371,46 +371,44 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                         {
                             style: { position: 'fixed', inset: 0, zIndex: 9999 }
                         },
-                        [
-                            // Backdrop
-                            createElement('div', {
-                                key: 'backdrop',
-                                'data-part': 'backdrop',
-                                role: 'presentation',
-                                ...backdropA11y,
-                                ...backdropHandlers,
-                                style: { 
-                                    position: 'absolute', 
-                                    inset: 0, 
-                                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                                    ...(restProps as any).backdropStyle
-                                },
-                                className: (restProps as any).backdropClassName
-                            }),
-                            // Dialog
-                            createElement(
-                                'div',
-                                {
-                                    key: 'dialog',
-                                    ...domProps,
-                                    ...componentSpecificProps,
-                                    ...dialogA11y,
-                                    ...dialogHandlers,
-                                    ref,
-                                    className,
-                                    style: {
-                                        position: 'relative',
-                                        backgroundColor: 'white',
-                                        padding: '20px',
-                                        maxWidth: '500px',
-                                        margin: '50px auto',
-                                        borderRadius: '8px',
-                                        ...style
-                                    }
-                                },
-                                children
-                            )
-                        ]
+                        // Backdrop
+                        createElement('div', {
+                            key: 'backdrop',
+                            'data-part': 'backdrop',
+                            role: 'presentation',
+                            ...backdropA11y,
+                            ...backdropHandlers,
+                            style: { 
+                                position: 'absolute', 
+                                inset: 0, 
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                ...(restProps as any).backdropStyle
+                            },
+                            className: (restProps as any).backdropClassName
+                        }),
+                        // Dialog
+                        createElement(
+                            'div',
+                            {
+                                key: 'dialog',
+                                ...domProps,
+                                ...componentSpecificProps,
+                                ...dialogA11y,
+                                ...dialogHandlers,
+                                ref,
+                                className,
+                                style: {
+                                    position: 'relative',
+                                    backgroundColor: 'white',
+                                    padding: '20px',
+                                    maxWidth: '500px',
+                                    margin: '50px auto',
+                                    borderRadius: '8px',
+                                    ...style
+                                }
+                            },
+                            children
+                        )
                     );
                 }
             }
@@ -499,7 +497,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             minWidth: '200px',
                             ...style
                         }
-                    }, [
+                    },
                         // Display value or placeholder (or search input if searchable and open)
                         (searchable && selectState.open) ? 
                             createElement('input', {
@@ -525,25 +523,23 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             }, selectedOption ? selectedOption.label : selectState.placeholder || 'Select an option'),
                         
                         // Clear button (if clearable and has value)
-                        ...(clearable && selectState.value ? [
-                            createElement('span', {
-                                key: 'clear',
-                                role: 'button',
-                                tabIndex: 0,
-                                'data-part': 'clear',
-                                ...clearA11y,
-                                ...reactClearHandlers,
-                                'aria-label': 'Clear selection',
-                                style: {
-                                    background: 'none',
-                                    border: 'none',
-                                    padding: '2px',
-                                    cursor: 'pointer',
-                                    marginLeft: '8px',
-                                    display: 'inline-block'
-                                }
-                            }, '×')
-                        ] : []),
+                        clearable && selectState.value && createElement('span', {
+                            key: 'clear',
+                            role: 'button',
+                            tabIndex: 0,
+                            'data-part': 'clear',
+                            ...clearA11y,
+                            ...reactClearHandlers,
+                            'aria-label': 'Clear selection',
+                            style: {
+                                background: 'none',
+                                border: 'none',
+                                padding: '2px',
+                                cursor: 'pointer',
+                                marginLeft: '8px',
+                                display: 'inline-block'
+                            }
+                        }, '×'),
                         
                         // Dropdown arrow
                         createElement('span', {
@@ -555,7 +551,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                                 transition: 'transform 0.2s'
                             }
                         }, '▼')
-                    ])
+                    )
                 );
                 
                 // Listbox (only when open)
@@ -629,7 +625,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                         ...style
                     },
                     className
-                }, elements);
+                }, ...elements);
             }
             
             // Handle Menu component (compound component with items, sections, separators)
@@ -678,7 +674,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             role: 'group',
                             'data-part': 'section',
                             'aria-labelledby': item.headerId || `section-header-${index}`
-                        }, [
+                        },
                             // Section header
                             item.label && createElement('div', {
                                 key: 'header',
@@ -696,7 +692,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             ...(item.items || []).map((subItem: any, subIndex: number) => 
                                 renderMenuItem(subItem, `${index}-${subIndex}`, logic, menuState)
                             )
-                        ]);
+                        );
                     }
                     
                     // Regular menu item
@@ -714,7 +710,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                         ...style
                     },
                     'data-part': 'menu-container'
-                }, [
+                },
                     createElement('ul', {
                         key: 'menu',
                         ...safeMenuA11y,
@@ -730,8 +726,8 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                             minWidth: '200px'
                         }
-                    }, menuItems)
-                ]);
+                    }, ...menuItems)
+                );
             }
             
             // Handle Tabs component (compound component with tab list and panels)
@@ -831,7 +827,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                         ...style
                     },
                     'data-part': 'tabs'
-                }, [
+                },
                     // Tab list
                     createElement('div', {
                         key: 'tablist',
@@ -843,10 +839,10 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             borderBottom: '1px solid #e0e0e0',
                             backgroundColor: '#f9f9f9'
                         }
-                    }, tabButtons),
+                    }, ...tabButtons),
                     // Tab panels
                     ...tabPanels
-                ]);
+                );
             }
             
             // Handle Popover component with portal rendering
@@ -1004,7 +1000,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             marginRight: stepperState.orientation === 'horizontal' ? '20px' : '0',
                             marginBottom: stepperState.orientation === 'vertical' ? '20px' : '0'
                         }
-                    }, [
+                    },
                         // Step button
                         createElement('button', {
                             key: 'button',
@@ -1051,7 +1047,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                                 marginTop: '5px'
                             }
                         }, validErrorMessage)
-                    ]);
+                    );
                 });
                 
                 // Return stepper container with step list
@@ -1066,7 +1062,7 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                     },
                     'data-part': 'stepper',
                     'data-testid': 'stepper-root'
-                }, [
+                },
                     createElement('ol', {
                         key: 'steps',
                         ...safeListA11y,
@@ -1079,8 +1075,8 @@ export const reactAdapter: FrameworkAdapter<ComponentType<any>> = {
                             margin: 0,
                             padding: 0
                         }
-                    }, stepElements)
-                ]);
+                    }, ...stepElements)
+                );
             }
             
             // Void elements (input, br, hr, etc.) can't have children
@@ -1308,7 +1304,7 @@ function renderMenuItem(item: any, index: number | string, logic: any, menuState
             alignItems: 'center',
             gap: '8px'
         }
-    }, [
+    },
         // Icon if present
         item.icon && createElement('span', {
             key: 'icon',
@@ -1340,7 +1336,7 @@ function renderMenuItem(item: any, index: number | string, logic: any, menuState
             'data-part': 'menu-item-submenu-indicator',
             style: { flex: '0 0 auto' }
         }, '▶')
-    ]);
+    );
 }
 
 /**

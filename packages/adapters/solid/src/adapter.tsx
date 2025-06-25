@@ -218,7 +218,7 @@ export const solidAdapter: FrameworkAdapter<Component<any>> = {
 
       if (componentName === 'Dialog') {
         return (
-          <Show when={state().open}>
+          <Show when={state().open && !isServer}>
             <Portal>
               <div style={{ position: 'fixed', inset: 0, 'z-index': 9999 }}>
                 <div
@@ -657,7 +657,7 @@ export const solidAdapter: FrameworkAdapter<Component<any>> = {
 
       if (componentName === 'Popover') {
         return (
-          <Show when={state().open}>
+          <Show when={state().open && !isServer}>
             <Portal>
               <div
                 {...others}
@@ -690,7 +690,7 @@ export const solidAdapter: FrameworkAdapter<Component<any>> = {
         const tooltipState = state() as any;
         
         return (
-          <Show when={tooltipState.visible}>
+          <Show when={tooltipState.visible && !isServer}>
             <Portal>
               <div
                 {...others}
@@ -784,14 +784,16 @@ export const solidAdapter: FrameworkAdapter<Component<any>> = {
           
           if (stateObj.checked === 'indeterminate') {
             checkboxProps['aria-checked'] = 'mixed';
-            onMount(() => {
-              if (local.ref) {
-                const element = typeof local.ref === 'function' ? null : local.ref;
-                if (element && 'indeterminate' in element) {
-                  (element as HTMLInputElement).indeterminate = true;
+            if (!isServer) {
+              onMount(() => {
+                if (local.ref) {
+                  const element = typeof local.ref === 'function' ? null : local.ref;
+                  if (element && 'indeterminate' in element) {
+                    (element as HTMLInputElement).indeterminate = true;
+                  }
                 }
-              }
-            });
+              });
+            }
           } else {
             checkboxProps['aria-checked'] = stateObj.checked ? 'true' : 'false';
           }

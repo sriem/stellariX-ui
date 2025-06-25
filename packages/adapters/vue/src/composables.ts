@@ -15,6 +15,7 @@ import {
     toRef,
     toRefs,
     unref,
+    shallowRef,
     shallowReactive,
     type Ref,
     type ComputedRef,
@@ -33,11 +34,12 @@ import type { VueComposableReturn, VueEventHandler } from './types';
 export function useStellarIXState<TState>(
     coreState: TState
 ): Ref<UnwrapRef<TState>> {
-    // For objects, use reactive to allow deep mutations
-    // For primitives, use ref
+    // Use shallowRef for better performance and avoid readonly violations
+    // Based on VueUse patterns for large data structures
     if (coreState && typeof coreState === 'object' && !Array.isArray(coreState)) {
-        const reactiveState = reactive({ ...coreState as Record<string, any> });
-        return ref(reactiveState) as Ref<UnwrapRef<TState>>;
+        // Create a writable reactive copy of the state
+        const stateRef = shallowRef({ ...coreState as Record<string, any> });
+        return stateRef as Ref<UnwrapRef<TState>>;
     } else {
         return ref(coreState) as Ref<UnwrapRef<TState>>;
     }
@@ -211,11 +213,24 @@ export function useStellarIXComponent<TState, TLogic extends Record<string, any>
 ) {
     const { modelKey = 'modelValue', lifecycleOptions = {} } = options;
     
-    // Set up reactive state - handle both Store interface and plain state
+    // Set up reactive state - handle both Store interface and plain state  
     const initialState = typeof core.state === 'object' && 'getState' in core.state 
         ? core.state.getState() 
         : core.state;
     const state = useStellarIXState(initialState);
+    
+    // Set up reactive sync with core state if it's a store
+    if (typeof core.state === 'object' && 'subscribe' in core.state && typeof core.state.subscribe === 'function') {
+        // Subscribe to core state changes and update local state
+        core.state.subscribe((newState: any) => {
+            // Use Object.assign to update the existing ref value instead of replacing it
+            if (state.value && typeof state.value === 'object') {
+                Object.assign(state.value, newState);
+            } else {
+                state.value = newState as UnwrapRef<TState>;
+            }
+        });
+    }
     
     // Set up logic integration
     const logic = useStellarIXLogic(core.logic);
