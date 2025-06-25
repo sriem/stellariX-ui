@@ -151,3 +151,104 @@ export type ReactEffectCleanup = () => void;
  * Used by useMemo, useCallback, useEffect
  */
 export type ReactDependencies = ReadonlyArray<any>;
+
+/**
+ * Collection interface for React Aria patterns
+ */
+export interface ReactCollection<T> {
+    /** The number of items in the collection */
+    size: number;
+    
+    /** Get all keys in the collection */
+    getKeys(): string[];
+    
+    /** Get an item by its key */
+    getItem(key: string): T | null;
+    
+    /** Get an item by index */
+    at(index: number): T | null;
+    
+    /** Get the key before the given key */
+    getKeyBefore(key: string): string | null;
+    
+    /** Get the key after the given key */
+    getKeyAfter(key: string): string | null;
+    
+    /** Get the first key */
+    getFirstKey(): string | null;
+    
+    /** Get the last key */
+    getLastKey(): string | null;
+}
+
+/**
+ * Portal container function type
+ */
+export type ReactPortalContainer = (element: ReactNode) => ReactNode;
+
+/**
+ * Compound component type
+ */
+export type ReactCompoundComponent<T, K extends Record<string, ComponentType<any>>> = 
+    ComponentType<T> & K;
+
+/**
+ * Enhanced ref type that supports React 19 patterns
+ */
+export type ReactEnhancedRef<T> = 
+    | ((instance: T | null) => void)
+    | { current: T | null }
+    | null;
+
+/**
+ * Accessibility props interface
+ */
+export interface ReactA11yProps {
+    'aria-label'?: string;
+    'aria-labelledby'?: string;
+    'aria-describedby'?: string;
+    'aria-details'?: string;
+    'aria-expanded'?: boolean | 'true' | 'false';
+    'aria-haspopup'?: boolean | 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog' | 'true' | 'false';
+    'aria-controls'?: string;
+    'aria-pressed'?: boolean | 'true' | 'false' | 'mixed';
+    'aria-selected'?: boolean | 'true' | 'false';
+    'aria-checked'?: boolean | 'true' | 'false' | 'mixed';
+    'aria-disabled'?: boolean | 'true' | 'false';
+    'aria-readonly'?: boolean | 'true' | 'false';
+    'aria-required'?: boolean | 'true' | 'false';
+    'aria-invalid'?: boolean | 'true' | 'false';
+    'aria-live'?: 'off' | 'polite' | 'assertive';
+    'aria-atomic'?: boolean | 'true' | 'false';
+    'aria-busy'?: boolean | 'true' | 'false';
+    'aria-current'?: boolean | 'page' | 'step' | 'location' | 'date' | 'time' | 'true' | 'false';
+    'aria-hidden'?: boolean | 'true' | 'false';
+    role?: string;
+    id?: string;
+    tabIndex?: number;
+}
+
+/**
+ * Extended React props with StellarIX enhancements
+ */
+export interface ReactStellarIXProps extends ReactProps, ReactA11yProps {
+    /** Component-specific data attributes */
+    'data-part'?: string;
+    'data-testid'?: string;
+    'data-state'?: string;
+    'data-disabled'?: boolean;
+    'data-selected'?: boolean;
+    'data-expanded'?: boolean;
+    'data-pressed'?: boolean;
+    'data-checked'?: boolean;
+    
+    /** Event handlers with React 19 patterns */
+    onPress?: (event: any) => void;
+    onPressStart?: (event: any) => void;
+    onPressEnd?: (event: any) => void;
+    onFocusChange?: (isFocused: boolean) => void;
+    onHoverChange?: (isHovered: boolean) => void;
+    onSelectionChange?: (selection: any) => void;
+    onExpandedChange?: (isExpanded: boolean) => void;
+    onValueChange?: (value: any) => void;
+}

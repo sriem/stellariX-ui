@@ -18,5 +18,7 @@ StellarIX UI is a framework-agnostic headless component library that provides a 
   - Use 10000 tokens for comprehensive coverage
   - Check official library documentation first
   - Prioritize factual, documented solutions
+- Wenn du je in ein fehler in deiner implementierung bekommst verlasse dich nicht auf dein wissen benutze context7 MCP zum den fehler zu analysieren
+- Wenn du je in ein fehler in deiner implementierung bekommst verlasse dich nicht NUR  auf dein wissen sondern  benutze context7 MCP zum den fehler zu analysieren und ihn dan in verbindung mit deinem Wissen zu beheben 
 
 [... rest of the existing content remains unchanged ...]
