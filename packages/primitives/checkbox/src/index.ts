@@ -60,6 +60,9 @@ export function createCheckboxWithImplementation(options: CheckboxOptions = {}) 
     return core;
 }
 
+// Test alias for factory function
+export const createCheckboxFactory = createCheckboxWithImplementation;
+
 // Re-export types
 export type { 
     CheckboxOptions, 

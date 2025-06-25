@@ -68,6 +68,9 @@ export function createToggleWithImplementation(options: ToggleOptions = {}) {
     return core;
 }
 
+// Test alias for factory function
+export const createToggleFactory = createToggleWithImplementation;
+
 // Re-export types
 export type { 
     ToggleOptions, 

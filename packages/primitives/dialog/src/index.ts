@@ -63,6 +63,9 @@ export function createDialogWithImplementation(options: DialogOptions = {}) {
     return core;
 }
 
+// Test alias for factory function
+export const createDialogFactory = createDialogWithImplementation;
+
 // Re-export types
 export type { 
     DialogState, 

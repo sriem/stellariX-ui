@@ -15,6 +15,7 @@ import {
   type Component,
   type JSX
 } from 'solid-js';
+import { isServer } from 'solid-js/web';
 import { Dynamic } from 'solid-js/web';
 import type {
   ComponentCore,

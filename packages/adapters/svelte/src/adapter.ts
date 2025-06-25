@@ -72,8 +72,8 @@ export const svelteAdapter: FrameworkAdapter<SvelteComponentType> = {
         // Inject core for internal use
         $$stellarix_core: core,
         
-        // State bindings
-        $$state: stateBindings,
+        // State bindings - expose state directly for test compatibility
+        $$state: stateBindings.state,
         
         // Component lifecycle
         $destroy: () => {

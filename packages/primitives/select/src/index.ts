@@ -163,6 +163,10 @@ export function createSelect(
     return component;
 }
 
+// Test aliases for factory functions
+export const createSelectWithImplementation = createSelect;
+export const createSelectFactory = createSelect;
+
 // Re-export types
 export type {
     SelectState,

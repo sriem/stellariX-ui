@@ -48,6 +48,9 @@ export function createButtonWithImplementation(options: ButtonOptions = {}) {
     return core;
 }
 
+// Test alias for factory function
+export const createButtonFactory = createButtonWithImplementation;
+
 // Re-export types
 export type { ButtonOptions, ButtonState, ButtonEvents, ButtonProps } from './types.js';
 export type { ButtonStateStore } from './state.js';

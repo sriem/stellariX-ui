@@ -17,6 +17,29 @@ export function createStateBindings<T extends Record<string, any>>(store: Store<
   
   let currentState = store.getState();
   
+  // Create a reactive proxy that always returns the latest state
+  const reactiveState = new Proxy({} as T, {
+    get(target, prop) {
+      const latestState = store.getState();
+      return latestState[prop as keyof T];
+    },
+    set(target, prop, value) {
+      store.setState((prevState) => ({
+        ...prevState,
+        [prop]: value
+      }));
+      return true;
+    },
+    has(target, prop) {
+      const latestState = store.getState();
+      return prop in latestState;
+    },
+    ownKeys(target) {
+      const latestState = store.getState();
+      return Object.keys(latestState);
+    }
+  });
+  
   // Subscribe to store changes
   const unsubscribe = store.subscribe((newState) => {
     currentState = newState;
@@ -40,7 +63,7 @@ export function createStateBindings<T extends Record<string, any>>(store: Store<
   }
   
   return {
-    get state() { return currentState; },
+    get state() { return reactiveState; },
     update,
     reset
   };

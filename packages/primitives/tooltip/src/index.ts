@@ -32,13 +32,44 @@ export function createTooltip(options: TooltipOptions = {}) {
     // Create logic layer
     const logic = createTooltipLogic(state, options);
     
+    // Connect and initialize the logic
+    logic.connect(state);
+    logic.initialize();
+    
     // Create and return component core
-    return new ComponentCore({
+    return {
         state,
         logic,
+        metadata: {
+            name: 'Tooltip',
+            accessibility: {
+                role: 'tooltip',
+                wcagLevel: 'AA',
+                keyboardShortcuts: ['Escape'],
+                ariaAttributes: ['aria-describedby', 'role']
+            },
+            events: {
+                supported: ['show', 'hide', 'focus', 'blur'],
+                required: [],
+                custom: {}
+            },
+            structure: {
+                elements: {
+                    root: { type: 'div', role: 'tooltip', optional: false }
+                }
+            }
+        },
+        connect: (adapter: any) => adapter.createComponent(this),
+        destroy: () => logic.cleanup(),
         options
-    });
+    };
 }
+
+/**
+ * Creates a tooltip component with implementation (alias for tests)
+ */
+export const createTooltipWithImplementation = createTooltip;
+export const createTooltipFactory = createTooltip;
 
 /**
  * Tooltip component type

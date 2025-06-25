@@ -88,6 +88,14 @@ export function createTabsLogic(
             'aria-orientation': state.orientation,
             'aria-disabled': state.disabled ? 'true' : undefined
         }))
+        // Individual tab a11y props (for test compatibility)
+        .withA11y('tab', (state) => (tabIndex: number) => {
+            return getTabA11yProps(state, tabIndex);
+        })
+        // Tab panel a11y props (for test compatibility)
+        .withA11y('tabPanel', (state) => (tabId: string) => {
+            return getTabPanelA11yProps(state, tabId);
+        })
         // Root element interaction handlers
         .withInteraction('root', 'onClick', (currentState, event: MouseEvent) => {
             // This will be used for delegation pattern in framework adapters

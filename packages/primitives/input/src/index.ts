@@ -68,6 +68,9 @@ export function createInputWithImplementation(options: InputOptions = {}) {
     return core;
 }
 
+// Test alias for factory function
+export const createInputFactory = createInputWithImplementation;
+
 // Re-export types
 export type { 
     InputOptions, 
