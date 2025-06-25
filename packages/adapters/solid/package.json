@@ -1,0 +1,75 @@
+{
+  "name": "@stellarix-ui/solid",
+  "version": "0.0.1",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf dist",
+    "dev": "tsup --watch",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome check --apply-unsafe ./src",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "@stellarix-ui/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.5.3",
+    "@solid-primitives/props": "^3.1.11",
+    "@solidjs/testing-library": "^0.8.10",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@types/node": "^20.10.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "c8": "^9.0.0",
+    "esbuild-plugin-solid": "^0.6.0",
+    "happy-dom": "^12.10.3",
+    "solid-js": "^1.8.23",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vite": "^5.0.0",
+    "vite-plugin-solid": "^2.10.2",
+    "vitest": "^2.0.0"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.8.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "stellarix",
+    "ui",
+    "components",
+    "solid",
+    "solid-js",
+    "headless",
+    "accessible",
+    "framework-agnostic"
+  ],
+  "author": "StellarIX Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stellarix/stellarix-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stellarix/stellarix-ui/issues"
+  },
+  "homepage": "https://github.com/stellarix/stellarix-ui#readme"
+}
