@@ -223,7 +223,7 @@ importers:
         version: 4.0.4(svelte@5.34.7)(vite@5.4.19(@types/node@20.19.1))
       '@testing-library/svelte':
         specifier: ^5.0.0
-        version: 5.2.8(svelte@5.34.7)(vite@5.4.19(@types/node@20.19.1))(vitest@1.6.1(@types/node@20.19.1)(@vitest/ui@2.1.9)(happy-dom@16.8.1)(jsdom@23.2.0))
+        version: 5.2.8(svelte@5.34.7)(vite@5.4.19(@types/node@20.19.1))(vitest@1.6.1(@types/node@20.19.1)(@vitest/ui@2.1.9(vitest@3.2.4))(happy-dom@16.8.1)(jsdom@23.2.0))
       '@types/node':
         specifier: ^20.8.0
         version: 20.19.1
@@ -241,7 +241,7 @@ importers:
         version: 5.4.19(@types/node@20.19.1)
       vitest:
         specifier: ^1.0.0
-        version: 1.6.1(@types/node@20.19.1)(@vitest/ui@2.1.9)(happy-dom@16.8.1)(jsdom@23.2.0)
+        version: 1.6.1(@types/node@20.19.1)(@vitest/ui@2.1.9(vitest@3.2.4))(happy-dom@16.8.1)(jsdom@23.2.0)
 
   packages/adapters/vue:
     dependencies:
@@ -1081,6 +1081,9 @@ importers:
         specifier: workspace:*
         version: link:../../adapters/vue
     devDependencies:
+      '@solidjs/testing-library':
+        specifier: ^0.8.10
+        version: 0.8.10(solid-js@1.9.7)
       '@testing-library/dom':
         specifier: ^10.0.0
         version: 10.4.0
@@ -1108,6 +1111,9 @@ importers:
       '@vitest/ui':
         specifier: ^2.0.4
         version: 2.1.9(vitest@2.1.9)
+      '@vue/test-utils':
+        specifier: ^2.4.0
+        version: 2.4.6
       happy-dom:
         specifier: ^15.0.0
         version: 15.11.7
@@ -6353,13 +6359,13 @@ snapshots:
       '@types/react': 19.1.8
       '@types/react-dom': 19.1.6(@types/react@19.1.8)
 
-  '@testing-library/svelte@5.2.8(svelte@5.34.7)(vite@5.4.19(@types/node@20.19.1))(vitest@1.6.1(@types/node@20.19.1)(@vitest/ui@2.1.9)(happy-dom@16.8.1)(jsdom@23.2.0))':
+  '@testing-library/svelte@5.2.8(svelte@5.34.7)(vite@5.4.19(@types/node@20.19.1))(vitest@1.6.1(@types/node@20.19.1)(@vitest/ui@2.1.9(vitest@3.2.4))(happy-dom@16.8.1)(jsdom@23.2.0))':
     dependencies:
       '@testing-library/dom': 10.4.0
       svelte: 5.34.7
     optionalDependencies:
       vite: 5.4.19(@types/node@20.19.1)
-      vitest: 1.6.1(@types/node@20.19.1)(@vitest/ui@2.1.9)(happy-dom@16.8.1)(jsdom@23.2.0)
+      vitest: 1.6.1(@types/node@20.19.1)(@vitest/ui@2.1.9(vitest@3.2.4))(happy-dom@16.8.1)(jsdom@23.2.0)
 
   '@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0)':
     dependencies:
@@ -6745,7 +6751,7 @@ snapshots:
       sirv: 3.0.1
       tinyglobby: 0.2.14
       tinyrainbow: 1.2.0
-      vitest: 2.1.9(@types/node@20.19.1)(@vitest/ui@2.1.9)(happy-dom@12.10.3)(jsdom@23.2.0)
+      vitest: 2.1.9(@types/node@22.15.32)(@vitest/ui@2.1.9)(happy-dom@16.8.1)(jsdom@22.1.0)
 
   '@vitest/ui@2.1.9(vitest@3.2.4)':
     dependencies:
@@ -9450,7 +9456,7 @@ snapshots:
     optionalDependencies:
       vite: 5.4.19(@types/node@20.19.1)
 
-  vitest@1.6.1(@types/node@20.19.1)(@vitest/ui@2.1.9)(happy-dom@16.8.1)(jsdom@23.2.0):
+  vitest@1.6.1(@types/node@20.19.1)(@vitest/ui@2.1.9(vitest@3.2.4))(happy-dom@16.8.1)(jsdom@23.2.0):
     dependencies:
       '@vitest/expect': 1.6.1
       '@vitest/runner': 1.6.1

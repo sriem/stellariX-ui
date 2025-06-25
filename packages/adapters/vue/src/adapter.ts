@@ -301,26 +301,6 @@ export const vueAdapter: FrameworkAdapter<Component> = {
                     }
                 });
 
-                // Enhanced event handlers with emit integration
-                const createEventHandler = (eventName: string, emitEvent?: string) => {
-                    return (event: Event) => {
-                        // Call core logic
-                        const result = logic.handleEvent(eventName, event);
-                        
-                        // Emit Vue event
-                        if (emitEvent) {
-                            emit(emitEvent as any, event);
-                        }
-                        
-                        // Call prop callback if provided
-                        const propHandler = (props as any)[`on${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`];
-                        if (propHandler && typeof propHandler === 'function') {
-                            propHandler(event);
-                        }
-                        
-                        return result;
-                    };
-                };
 
                 // Get component structure
                 const rootElement = structure.elements.root?.type || 'div';
@@ -337,30 +317,32 @@ export const vueAdapter: FrameworkAdapter<Component> = {
                     const hasExplicitAriaLabel = props['aria-label'] !== undefined;
                     const hasExplicitDataTestId = props['data-testid'] !== undefined;
 
-                    // Convert interaction handlers to Vue event format
+                    // Convert interaction handlers to Vue event format with proper emit
                     const vueHandlers: Record<string, any> = {};
                     if (interactionHandlers && typeof interactionHandlers === 'object') {
                         Object.entries(interactionHandlers).forEach(([event, handler]) => {
-                            if (typeof handler === 'function') {
+                            if (typeof handler === 'function' && typeof event === 'string') {
                                 // Convert onEvent to Vue event format
                                 const vueEvent = event.replace(/^on/, '').toLowerCase();
-                                vueHandlers[`on${vueEvent.charAt(0).toUpperCase()}${vueEvent.slice(1)}`] = (vueEvent: Event) => {
-                                    const result = handler(vueEvent);
+                                const eventHandlerName = `on${vueEvent.charAt(0).toUpperCase()}${vueEvent.slice(1)}`;
+                                
+                                vueHandlers[eventHandlerName] = (domEvent: Event) => {
+                                    // Call the core interaction handler
+                                    const result = handler(domEvent);
                                     
-                                    // Handle the result and call core logic
-                                    if (result && typeof result === 'string') {
-                                        // Extract the base event name from result like "focus-root" -> "focus"
-                                        const baseEventName = result.split('-')[0];
-                                        if (baseEventName) {
-                                            logic.handleEvent(baseEventName, vueEvent);
-                                        }
-                                    } else {
-                                        // Fallback: use the original event name
-                                        const baseEventName = event.replace(/^on/, '').toLowerCase();
-                                        if (baseEventName) {
-                                            logic.handleEvent(baseEventName, vueEvent);
-                                        }
+                                    // Call core logic
+                                    logic.handleEvent(vueEvent, domEvent);
+                                    
+                                    // Emit Vue event for testing and v-model
+                                    emit(vueEvent as any, domEvent);
+                                    
+                                    // Call prop callback if provided
+                                    const propCallback = (props as any)[eventHandlerName];
+                                    if (propCallback && typeof propCallback === 'function') {
+                                        propCallback(domEvent);
                                     }
+                                    
+                                    return result;
                                 };
                             }
                         });
@@ -434,7 +416,7 @@ export const vueAdapter: FrameworkAdapter<Component> = {
                         
                         const allOptions = selectState.options || [];
                         const filteredOptions = selectState.filteredOptions || allOptions;
-                        const selectedOption = allOptions.find((opt: any) => opt.value === selectState.value);
+                        const selectedOption = allOptions.find((opt: any) => opt && opt.value === selectState.value);
                         
                         const elements = [];
                         

@@ -93,6 +93,7 @@ export function useStellarIXLogic<TLogic extends Record<string, any>>(
                 
                 Object.entries(handlers).forEach(([event, handler]) => {
                     // Convert to Vue event format (e.g., onClick -> @click)
+                    if (typeof event !== 'string') return;
                     const vueEvent = event.replace(/^on/, '').toLowerCase();
                     vueHandlers[vueEvent] = (vueEvent: Event) => {
                         if (typeof handler === 'function') {
