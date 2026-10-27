@@ -15,7 +15,7 @@ This example demonstrates how to use StellarIX UI's headless components with Tai
 
 ### Prerequisites
 
-- Node.js 20+
+- Node.js 24.22.1+ (LTS)
 - pnpm 9+
 - Basic knowledge of Tailwind CSS
 

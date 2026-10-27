@@ -325,7 +325,7 @@ stellariX-ui/
 
 ### Prerequisites
 
-- Node.js 20+ (for latest features)
+- Node.js 24.22.1+ (LTS, see `.nvmrc`)
 - pnpm 10.0.0 (for workspace support)
 - TypeScript 5.7+ knowledge
 

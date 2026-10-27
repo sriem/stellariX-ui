@@ -39,7 +39,7 @@ This document provides a comprehensive, step-by-step development plan that an AI
 
 Before starting development, verify:
 - [ ] Git repository is clean (or changes are committed)
-- [ ] Node.js 18+ and pnpm are installed
+- [ ] Node.js 24.22.1+ and pnpm are installed
 - [ ] All memory-bank files have been reviewed
 - [ ] Current plan.md reflects complete requirements
 - [ ] Ultra-generic architecture requirements are understood

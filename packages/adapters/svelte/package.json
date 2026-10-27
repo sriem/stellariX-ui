@@ -35,7 +35,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@testing-library/svelte": "^5.0.0",
-    "@types/node": "^20.8.0",
+    "@types/node": "^24.19.2",
     "svelte": "^5.0.0",
     "tsup": "^8.0.1",
     "typescript": "^5.2.2",
