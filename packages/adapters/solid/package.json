@@ -50,7 +50,7 @@
     "solid-js": "^1.8.0"
   },
   "engines": {
-    "node": "^24.22.1"
+    "node": ">=18"
   },
   "keywords": [
     "stellarix",
